@@ -41,6 +41,6 @@ public class MsgDetailBean implements IMsgItem {
 
     @Override
     public int getItemType() {
-        return TYPE_AD_OR_SPORT;
+        return TYPE_COMMUNIQUE;
     }
 }

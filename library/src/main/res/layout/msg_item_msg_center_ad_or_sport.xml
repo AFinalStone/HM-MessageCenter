@@ -2,66 +2,85 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/uikit_bg_item_ripple"
     android:clickable="true"
     android:focusable="true"
-    android:orientation="vertical"
-    android:padding="15dip">
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/msg_bg_msg_center_item_time"
+        android:gravity="center"
+        android:minHeight="20dp"
+        android:minWidth="80dp"
+        android:text="04-09 17:25"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textFontSize_11" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="22dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/uikit_bg_item_ripple"
+        android:orientation="vertical"
+        android:padding="15dip">
 
-        <ImageView
-            android:id="@+id/iv_icon"
-            android:layout_width="22dp"
-            android:layout_height="22dp" />
-
-        <TextView
-            android:id="@+id/tv_title"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="22dp"
-            android:layout_marginLeft="10dp"
-            android:ellipsize="end"
-            android:textColor="#ff222222"
-            android:textSize="@dimen/textFontSize_15" />
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/iv_icon"
+                android:layout_width="22dp"
+                android:layout_height="22dp" />
 
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="22dp"
+                android:layout_marginLeft="10dp"
+                android:ellipsize="end"
+                android:textColor="#ff222222"
+                android:textSize="@dimen/textFontSize_15" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_marginTop="15dp"
-        android:scaleType="centerCrop" />
+        </LinearLayout>
 
-    <View
-        style="@style/UikitDivider.Horizontal"
-        android:layout_marginTop="26dp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="21dp"
-        android:layout_marginTop="11dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="21dp"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:text="查看详情"
-            android:textColor="#ff222222"
-            android:textSize="@dimen/textFontSize_15" />
 
         <ImageView
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:src="@mipmap/uikit_ic_arrow_right" />
-    </LinearLayout>
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginTop="15dp"
+            android:scaleType="centerCrop" />
 
+        <View
+            style="@style/UikitDivider.Horizontal"
+            android:layout_marginTop="26dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="21dp"
+            android:layout_marginTop="11dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="21dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:text="查看详情"
+                android:textColor="#ff222222"
+                android:textSize="@dimen/textFontSize_15" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@mipmap/uikit_ic_arrow_right" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

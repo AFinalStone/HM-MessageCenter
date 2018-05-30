@@ -72,6 +72,7 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
                 mPresenter.getMsgList();
             }
         });
+        mRefreshLayout.autoRefresh();
     }
 
     @Override

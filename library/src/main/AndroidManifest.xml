@@ -19,6 +19,10 @@
             android:name=".business.HelpCenterActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".business.message.view.MsgCenterActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
