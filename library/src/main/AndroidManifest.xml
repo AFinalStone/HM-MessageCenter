@@ -1,21 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.hm.iou.msg" >
+    package="com.hm.iou.msg">
 
-    <application
-        >
-
-        <activity android:name=".business.feedback.view.HistoryFeedbackActivity"
+    <application>
+        <activity
+            android:name=".business.feedback.view.HistoryFeedbackActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            />
-
-        <activity android:name=".business.feedback.view.FeedbackDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".business.feedback.view.FeedbackDetailActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            />
-
-        <activity android:name=".business.feedback.view.FeedbackActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".business.feedback.view.FeedbackActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
+<<<<<<< HEAD
             android:screenOrientation="portrait"
             />
 
@@ -24,6 +23,13 @@
             android:screenOrientation="portrait"
             />
 
+=======
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".business.message.view.MsgCenterActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
+>>>>>>> cccefb18e17dfd48899c833f58c11f9e5bab793c
     </application>
 
 </manifest>

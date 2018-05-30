@@ -118,6 +118,13 @@
       "aclass": "com.hm.iou.msg.business.feedback.view.FeedbackDetailActivity"
     }
   ],
+  "webview": [
+    {
+      "url": "hmiou://m.54jietiao.com/webview/index?title=*&url=*&showtitle=*&showdivider=*&showtitlebar=*",
+      "iclass": "",
+      "aclass": "com.hm.iou.base.webview.BaseWebviewActivity"
+    }
+  ],
   "calculator": [
     {
       "url": "hmiou://m.54jietiao.com/calculator/index",

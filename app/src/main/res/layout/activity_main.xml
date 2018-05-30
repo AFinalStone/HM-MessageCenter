@@ -4,30 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hm.iou.msg.demo.MainActivity"
     android:orientation="vertical"
-    >
+    tools:context="com.hm.iou.msg.demo.MainActivity">
 
 
     <Button
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="login"
-        />
+        android:text="login" />
 
     <Button
         android:id="@+id/btn_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="test"
-        />
+        android:text="test" />
 
     <Button
         android:id="@+id/btn_feedback"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="反馈"
-        />
+        android:text="反馈" />
+
+    <Button
+        android:id="@+id/btn_msgCenter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="消息中心" />
 
 </LinearLayout>
