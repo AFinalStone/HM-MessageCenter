@@ -1,2 +1,4 @@
 <resources>
+    <string name="messagecenter_msg_center">消息中心</string>
+    <string name="messagecenter_no_msg">暂无消息</string>
 </resources>

@@ -1,0 +1,135 @@
+{
+  "splash": [
+    {
+      "url": "hmiou://m.54jietiao.com/splash?url=*",
+      "iclass": "",
+      "aclass": "com.hm.iou.hmreceipt.ui.activity.SplashActivity"
+    }
+  ],
+  "login": [
+    {
+      "url": "hmiou://m.54jietiao.com/login/selecttype",
+      "iclass": "",
+      "aclass": "com.hm.iou.loginmodule.business.type.SelectLoginTypeActivity"
+    }
+  ],
+  "city": [
+    {
+      "url": "hmiou://m.54jietiao.com/city/index",
+      "iclass": "",
+      "aclass": "com.hm.iou.cityselect.CitySelectActivity"
+    }
+  ],
+  "main": [
+    {
+      "url": "hmiou://m.54jietiao.com/main/index?url=*",
+      "iclass": "",
+      "aclass": "com.hm.iou.hmreceipt.ui.activity.MainActivity"
+    }
+  ],
+  "news": [
+    {
+      "url": "hmiou://m.54jietiao.com/news/index",
+      "iclass": "",
+      "aclass": "com.hm.iou.news.business.index.NewsIndexFragment"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/news/detail?news_id=*&url=*&showtitle=*",
+      "iclass": "",
+      "aclass": "com.hm.iou.news.business.detail.NewsDetailActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/news/favorite",
+      "iclass": "",
+      "aclass": "com.hm.iou.news.business.list.view.NewsFavoriteActivity"
+    }
+  ],
+  "person": [
+    {
+      "url": "hmiou://m.54jietiao.com/person/index",
+      "iclass": "",
+      "aclass": "com.hm.iou.hmreceipt.person.business.view.PersonalCenterActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/person/modify_nickname_sex",
+      "iclass": "",
+      "aclass": "com.hm.iou.hmreceipt.person.business.view.ModifyNicknameAndSexActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/person/modify_income",
+      "iclass": "",
+      "aclass": "com.hm.iou.hmreceipt.ui.activity.personal.MyIncomeActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/person/modify_pwd",
+      "iclass": "",
+      "aclass": "com.hm.iou.hmreceipt.person.business.view.ModifyPasswordActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/person/unbind_weixin",
+      "iclass": "",
+      "aclass": "com.hm.iou.hmreceipt.person.business.view.UnbindWeixinActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/person/change_mobile",
+      "iclass": "",
+      "aclass": "com.hm.iou.hmreceipt.person.business.view.ChangeMobileVerifyActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/person/change_mobile_complete?pwd=*",
+      "iclass": "",
+      "aclass": "com.hm.iou.hmreceipt.person.business.view.ChangeMobileCompleteActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/person/change_email",
+      "iclass": "",
+      "aclass": "com.hm.iou.hmreceipt.person.business.view.ChangeEmailVerifyActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/person/change_email_complete?sn=*",
+      "iclass": "",
+      "aclass": "com.hm.iou.hmreceipt.person.business.view.ChangeEmailCompleteActivity"
+    }
+  ],
+  "message": [
+    {
+      "url": "hmiou://m.54jietiao.com/message/index",
+      "iclass": "",
+      "aclass": "com.hm.iou.hmreceipt.ui.activity.MessageCenterActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/message/helpcenter",
+      "iclass": "",
+      "aclass": "com.hm.iou.msg.business.HelpCenterActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/message/feedback?type=*",
+      "iclass": "",
+      "aclass": "com.hm.iou.msg.business.feedback.view.FeedbackActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/message/feedback_history",
+      "iclass": "",
+      "aclass": "com.hm.iou.msg.business.feedback.view.HistoryFeedbackActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/message/feedback_detail?feedback_id=*",
+      "iclass": "",
+      "aclass": "com.hm.iou.msg.business.feedback.view.FeedbackDetailActivity"
+    }
+  ],
+  "webview": [
+    {
+      "url": "hmiou://m.54jietiao.com/webview/index?title=*&url=*&showtitle=*&showdivider=*&showtitlebar=*",
+      "iclass": "",
+      "aclass": "com.hm.iou.base.webview.BaseWebviewActivity"
+    }
+  ],
+  "calculator": [
+    {
+      "url": "hmiou://m.54jietiao.com/calculator/index",
+      "iclass": "",
+      "aclass": "com.hm.iou.calculator.business.view.CalculatorMainActivity"
+    }
+  ]
+}
