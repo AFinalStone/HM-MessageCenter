@@ -16,9 +16,8 @@
         android:id="@+id/fl_webview_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/topbar"
         android:layout_above="@+id/ll_feedback_bottom"
-        >
+        android:layout_below="@id/topbar">
 
     </FrameLayout>
 
@@ -41,30 +40,27 @@
         android:id="@+id/ll_feedback_bottom"
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:background="#ffffff"
-        android:paddingTop="8dip"
+        android:orientation="horizontal"
         android:paddingBottom="8dip"
-        >
+        android:paddingTop="8dip">
 
-        <Button
+        <TextView
             android:id="@+id/tv_feedback"
             style="@style/UikitButton.Bottom"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="意见反馈"
-            />
+            android:text="意见反馈" />
 
-        <Button
+        <TextView
             android:id="@+id/tv_feedbackHistory"
             style="@style/UikitButton.Bottom"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="历史反馈"
-            />
+            android:text="历史反馈" />
 
     </LinearLayout>
 

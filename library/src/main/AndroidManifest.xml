@@ -14,22 +14,11 @@
         <activity
             android:name=".business.feedback.view.FeedbackActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-<<<<<<< HEAD
-            android:screenOrientation="portrait"
-            />
-
-        <activity android:name=".business.HelpCenterActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            />
-
-=======
             android:screenOrientation="portrait" />
         <activity
-            android:name=".business.message.view.MsgCenterActivity"
+            android:name=".business.HelpCenterActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
->>>>>>> cccefb18e17dfd48899c833f58c11f9e5bab793c
     </application>
 
 </manifest>
