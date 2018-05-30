@@ -139,7 +139,7 @@ public class FeedbackPresenter extends MvpActivityPresenter<FeedbackContract.Vie
                     @Override
                     public void handleResult(FileUploadResult fileUploadResult) {
                         mView.dismissLoadingView();
-                        mUploadFileUrlList.add(fileUploadResult.getFilePath());
+                        mUploadFileUrlList.add(fileUploadResult.getFileId());
 
                         if (pos < mTotalFileSize - 1) {
                             File file = new File(mFileList.get(pos + 1).replace("file://", ""));

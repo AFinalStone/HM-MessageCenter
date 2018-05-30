@@ -1,5 +1,7 @@
 package com.hm.iou.msg.bean;
 
+import java.util.List;
+
 /**
  * Created by hjy on 2018/5/29.
  */
@@ -10,7 +12,7 @@ public class FeedbackDetailBean {
     private int status;
     private String recordTime;
     private String content;
-    private String pics;
+    private List<String> pics;
 
     private String answerTime;
     private String answer;
@@ -48,11 +50,11 @@ public class FeedbackDetailBean {
         this.content = content;
     }
 
-    public String getPics() {
+    public List<String> getPics() {
         return pics;
     }
 
-    public void setPics(String pics) {
+    public void setPics(List<String> pics) {
         this.pics = pics;
     }
 
