@@ -1,5 +1,6 @@
 package com.hm.iou.msg.api;
 
+import com.hm.iou.msg.bean.AddFeedbackReqBean;
 import com.hm.iou.msg.bean.FeedbackDetailBean;
 import com.hm.iou.msg.bean.FeedbackListItemBean;
 import com.hm.iou.network.HttpReqManager;
@@ -33,4 +34,15 @@ public class MsgApi {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public static Flowable<BaseResponse<Object>> sendFeedback(int kind, String content, String pics, String userId) {
+        AddFeedbackReqBean reqBean = new AddFeedbackReqBean();
+        reqBean.setKind(kind);
+        reqBean.setContent(content);
+        reqBean.setPics(pics);
+        reqBean.setCustomerId(userId);
+        return getService().sendFeedback(reqBean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+    }
 }

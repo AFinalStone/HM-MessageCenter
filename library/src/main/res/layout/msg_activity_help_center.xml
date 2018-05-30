@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/uikit_main_bg_color">
+
+    <com.hm.iou.uikit.HMTopBarView
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/uikit_topbar_height"
+        app:titleBackground="@color/transparent" />
+
+
+    <FrameLayout
+        android:id="@+id/fl_webview_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topbar"
+        android:layout_above="@+id/ll_feedback_bottom"
+        >
+
+    </FrameLayout>
+
+    <ProgressBar
+        android:id="@+id/pb_webview"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/topbar"
+        android:progressDrawable="@drawable/base_webview_load_progress"
+        android:visibility="gone" />
+
+    <com.hm.iou.uikit.HMLoadingView
+        android:id="@+id/lv_webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"></com.hm.iou.uikit.HMLoadingView>
+
+    <LinearLayout
+        android:id="@+id/ll_feedback_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="#ffffff"
+        android:paddingTop="8dip"
+        android:paddingBottom="8dip"
+        >
+
+        <Button
+            android:id="@+id/tv_feedback"
+            style="@style/UikitButton.Bottom"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="意见反馈"
+            />
+
+        <Button
+            android:id="@+id/tv_feedbackHistory"
+            style="@style/UikitButton.Bottom"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="历史反馈"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

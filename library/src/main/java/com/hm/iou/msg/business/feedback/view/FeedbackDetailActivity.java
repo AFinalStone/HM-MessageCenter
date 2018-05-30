@@ -15,8 +15,11 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.hm.iou.base.BaseActivity;
+import com.hm.iou.base.photo.SelectPicDialog;
+import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
+import com.hm.iou.msg.bean.FeedbackDetailBean;
 import com.hm.iou.msg.business.feedback.FeedbackDetailContract;
 import com.hm.iou.msg.business.feedback.HistoryFeedbackContract;
 import com.hm.iou.msg.business.feedback.presenter.FeedbackDetailPresenter;
@@ -171,6 +174,15 @@ public class FeedbackDetailActivity extends BaseActivity<FeedbackDetailPresenter
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         QuestionImageAdapter adapter = new QuestionImageAdapter(urlList);
         mRecyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                String url = (String) adapter.getItem(position);
+                Logger.d("click item:" + url);
+                SelectPicDialog.createDialog(FeedbackDetailActivity.this, url, null)
+                        .show();
+            }
+        });
     }
 
     @Override

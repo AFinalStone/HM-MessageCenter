@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.hm.iou.msg.business.HelpCenterActivity;
 import com.hm.iou.msg.business.feedback.view.FeedbackActivity;
 import com.hm.iou.msg.business.feedback.view.HistoryFeedbackActivity;
 import com.hm.iou.network.HttpReqManager;
@@ -42,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_feedback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, FeedbackActivity.class));
+                //startActivity(new Intent(MainActivity.this, FeedbackActivity.class));
+                startActivity(new Intent(MainActivity.this, HelpCenterActivity.class));
             }
         });
     }
@@ -50,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
     private void login() {
         String pwd = MD5.hexdigest("123456".getBytes());
         MobileLoginReqBean reqBean = new MobileLoginReqBean();
-        reqBean.setMobile("13045717870");
-        reqBean.setQueryPswd("1234");
+        reqBean.setMobile("15967132742");
+        reqBean.setQueryPswd(pwd);
         HttpReqManager.getInstance().getService(JietiaoService.class)
                 .mobileLogin(reqBean)
                 .subscribeOn(Schedulers.io())

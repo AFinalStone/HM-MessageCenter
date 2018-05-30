@@ -1,11 +1,11 @@
 package com.hm.iou.msg.business.feedback.view;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.hm.iou.base.BaseActivity;
-import com.hm.iou.base.file.FileApi;
 import com.hm.iou.base.photo.CompressPictureUtil;
 import com.hm.iou.base.photo.PhotoUtil;
 import com.hm.iou.logger.Logger;
@@ -22,20 +21,28 @@ import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.feedback.FeedbackContract;
 import com.hm.iou.msg.business.feedback.presenter.FeedbackPresenter;
+import com.hm.iou.msg.dict.FeedbackKind;
 import com.hm.iou.tools.ImageLoader;
 import com.hm.iou.uikit.HMTopBarView;
+import com.hm.iou.uikit.dialog.IOSActionSheetItem;
+import com.hm.iou.uikit.dialog.IOSActionSheetTitleDialog;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by hjy on 2018/5/29.
  */
 
 public class FeedbackActivity  extends BaseActivity<FeedbackPresenter> implements FeedbackContract.View  {
+
+    public static final String EXTRA_KEY_TYPE = "type";
 
     private static final int REQ_CODE_CAMERA = 101;
     private static final int REQ_CODE_PHOTO = 102;
@@ -55,6 +62,16 @@ public class FeedbackActivity  extends BaseActivity<FeedbackPresenter> implement
 
     private FeedbackImageAdapter mAdapter;
 
+    private FeedbackKind[] mFeedbackKindArr = new FeedbackKind[] {
+            FeedbackKind.FlashWrong,
+            FeedbackKind.DataWrong,
+            FeedbackKind.NoCode,
+            FeedbackKind.IouFail,
+            FeedbackKind.Else
+    };
+
+    private String mFeedbackType;
+
     @Override
     protected int getLayoutId() {
         return R.layout.msg_activity_feedback;
@@ -67,15 +84,28 @@ public class FeedbackActivity  extends BaseActivity<FeedbackPresenter> implement
 
     @Override
     protected void initEventAndData(Bundle bundle) {
+        mFeedbackType = getIntent().getStringExtra(EXTRA_KEY_TYPE);
+        if (bundle != null) {
+            mFeedbackType = bundle.getString(EXTRA_KEY_TYPE);
+        }
+
         mTopBarView.setRightText("发送");
+        mTopBarView.getStatusBarPlaceHolder().setVisibility(View.GONE);
         mTopBarView.setOnMenuClickListener(new HMTopBarView.OnTopBarMenuClickListener() {
             @Override
             public void onClickTextMenu() {
-
+                mPresenter.sendFeedback(mEtContent.getText().toString(), mAdapter.getData());
             }
 
             @Override
             public void onClickImageMenu() {
+            }
+        });
+
+        RxTextView.textChanges(mEtContent).subscribe(new Consumer<CharSequence>() {
+            @Override
+            public void accept(CharSequence charSequence) throws Exception {
+                mTvNumber.setText(charSequence.length() + "");
             }
         });
 
@@ -100,6 +130,20 @@ public class FeedbackActivity  extends BaseActivity<FeedbackPresenter> implement
                 }
             }
         });
+
+        try {
+            int type = Integer.valueOf(mFeedbackType);
+            mPresenter.setFeedbackType(type);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            mPresenter.setFeedbackType(FeedbackKind.FlashWrong.getValue());
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(EXTRA_KEY_TYPE, mFeedbackType);
     }
 
     @Override
@@ -126,6 +170,38 @@ public class FeedbackActivity  extends BaseActivity<FeedbackPresenter> implement
                 mAdapter.addImage("file://" + file.getAbsolutePath());
             }
         });
+    }
+
+    @OnClick(value = {R2.id.linearLayout_type})
+    void onClick(View v) {
+        if (v.getId() == R.id.linearLayout_type) {
+            showFeedbackTypeDialog();
+        }
+    }
+
+    private void showFeedbackTypeDialog() {
+        IOSActionSheetTitleDialog.Builder builder = new IOSActionSheetTitleDialog.Builder(this);
+        for (FeedbackKind kind : mFeedbackKindArr) {
+            builder.addSheetItem(IOSActionSheetItem.create(kind.getDesc()).setItemClickListener(new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Logger.d("click pos = " + which );
+                    int type = mFeedbackKindArr[which].getValue();
+                    mPresenter.setFeedbackType(type);
+                }
+            }));
+        }
+        builder.show();
+    }
+
+    @Override
+    public void showTopFeedbackType(String typeStr) {
+        mTvTopType.setText(typeStr);
+    }
+
+    @Override
+    public void showBottomFeedbackType(String typeStr) {
+        mTvType.setText(typeStr);
     }
 
     class FeedbackImageAdapter extends BaseQuickAdapter<String, BaseViewHolder> {

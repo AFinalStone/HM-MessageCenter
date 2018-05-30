@@ -13,11 +13,16 @@ public interface FeedbackContract {
 
     interface View extends BaseContract.BaseView {
 
+        void showTopFeedbackType(String typeStr);
+
+        void showBottomFeedbackType(String typeStr);
     }
 
     interface Presenter extends BaseContract.BasePresenter {
 
+        void setFeedbackType(int type);
 
+        void sendFeedback(String content, List<String> urlList);
     }
 
 }

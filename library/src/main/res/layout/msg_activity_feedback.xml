@@ -4,12 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    >
 
     <com.hm.iou.uikit.HMTopBarView
         android:id="@+id/topbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/uikit_topbar_height"
+        android:layout_height="48dip"
         app:titleText="意见反馈"
         />
 
@@ -32,24 +34,35 @@
         android:background="#EEEEEE"
         />
 
-    <EditText
-        android:id="@+id/et_mContent"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="0dip"
         android:layout_weight="1"
-        android:background="@null"
-        android:gravity="left|top"
-        android:hint="请填写5-200个字的问题描述，以便我们更好的帮你处理结果"
-        android:minHeight="186dp"
-        android:paddingBottom="11dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:maxLength="200"
-        android:lineSpacingMultiplier="1.3"
-        android:paddingTop="11dp"
-        android:textColor="#ff222222"
-        android:textColorHint="#ffa3a3a3"
-        android:textSize="@dimen/textFontSize_15" />
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        >
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/et_mContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="left|top"
+                android:hint="请填写5-200个字的问题描述，以便我们更好的帮你处理结果"
+                android:minHeight="186dp"
+                android:paddingBottom="11dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:maxLength="200"
+                android:lineSpacingMultiplier="1.3"
+                android:paddingTop="11dp"
+                android:textColor="#ff222222"
+                android:textColorHint="#ffa3a3a3"
+                android:textSize="@dimen/textFontSize_15" />
+        </ScrollView>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

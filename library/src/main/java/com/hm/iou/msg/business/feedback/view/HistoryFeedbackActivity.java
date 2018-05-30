@@ -15,6 +15,7 @@ import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.feedback.HistoryFeedbackContract;
 import com.hm.iou.msg.business.feedback.presenter.HistoryFeedbackPresenter;
+import com.hm.iou.router.Router;
 import com.hm.iou.uikit.HMGrayDividerItemDecoration;
 import com.hm.iou.uikit.HMLoadMoreView;
 import com.hm.iou.uikit.HMLoadingView;
@@ -83,10 +84,10 @@ public class HistoryFeedbackActivity extends BaseActivity<HistoryFeedbackPresent
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(HistoryFeedbackActivity.this, FeedbackDetailActivity.class);
                 IFeedbackListItem item = (IFeedbackListItem) adapter.getItem(position);
-                intent.putExtra(FeedbackDetailActivity.EXTRA_KEY_ID, item.getFeedbackId());
-                startActivity(intent);
+                Router.getInstance().buildWithUrl("hmiou://m.54jietiao.com/message/feedback_detail")
+                        .withString("feedback_id", item.getFeedbackId())
+                        .navigation(HistoryFeedbackActivity.this);
             }
         });
         //显示正在加载中

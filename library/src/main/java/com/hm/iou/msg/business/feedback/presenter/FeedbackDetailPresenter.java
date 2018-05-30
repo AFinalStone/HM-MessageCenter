@@ -104,13 +104,20 @@ public class FeedbackDetailPresenter extends MvpActivityPresenter<FeedbackDetail
         mView.showQuestionTime(formatTime(data.getRecordTime()));
         mView.showFeedbackQuestion(data.getContent());
 
-        List<String> list = new ArrayList<>();
-        list.add(userInfo.getAvatarUrl());
-        list.add(userInfo.getAvatarUrl());
-        list.add(userInfo.getAvatarUrl());
-        list.add(userInfo.getAvatarUrl());
-        list.add(userInfo.getAvatarUrl());
-        mView.showFeedbackImageList(list);
+        String pics = data.getPics();
+        if (TextUtils.isEmpty(pics)) {
+            mView.showFeedbackImageList(null);
+        } else {
+            String[] arr = pics.split(",");
+            List<String> urlList = new ArrayList<>();
+            for (String url : arr) {
+                if (TextUtils.isEmpty(url) || !url.startsWith("http")) {
+                    continue;
+                }
+                urlList.add(url);
+            }
+            mView.showFeedbackImageList(urlList);
+        }
 
         //已处理
         if (data.getStatus() == 3) {

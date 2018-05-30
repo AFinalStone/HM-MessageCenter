@@ -20,6 +20,22 @@ public enum FeedbackKind {
         this.desc = desc;
     }
 
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
     public static String getDescByValue(int value) {
         FeedbackKind[] arr = FeedbackKind.values();
         for (FeedbackKind kind : arr) {
