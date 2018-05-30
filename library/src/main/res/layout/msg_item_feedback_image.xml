@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+    <com.hm.iou.uikit.ShapedImageView
+        android:id="@+id/iv_feedback_image"
+        android:layout_width="74dip"
+        android:layout_height="74dp"
+        android:scaleType="centerCrop"
+        app:shape_mode="round_rect"
+        app:round_radius="3dip"
+        android:layout_marginRight="16dip"
+        android:layout_marginTop="12dip"
+        android:src="@drawable/msg_bg_feedback_item_pic"
+        />
+
+    <ImageView
+        android:id="@+id/iv_delete"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/msg_ic_img_delete"
+        android:layout_alignTop="@id/iv_feedback_image"
+        android:layout_alignRight="@id/iv_feedback_image"
+        android:layout_marginRight="-7dip"
+        android:layout_marginTop="-7dip"
+        android:visibility="gone"
+        />
+
+
+</RelativeLayout>

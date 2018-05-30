@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffffff">
+
+    <com.hm.iou.uikit.HMTopBarView
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/uikit_topbar_height"
+        app:titleText="反馈详情"
+        />
+
+    <com.hm.iou.uikit.HMLoadingView
+        android:id="@+id/lv_feedback_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topbar"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_feedback_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/topbar"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="16dip"
+            android:paddingRight="16dip"
+            android:paddingTop="18dip"
+            android:paddingBottom="18dip"
+            >
+
+            <TextView
+                android:id="@+id/tv_feedback_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="#ff999999"
+                android:textSize="11sp"
+                android:layout_weight="1"
+                tools:text="#收不到验证码"
+                />
+
+            <TextView
+                android:id="@+id/tv_feedback_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已处理"
+                android:textColor="#ffa3a3a3"
+                android:textSize="11sp"
+                android:layout_gravity="right"
+                />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dip"
+            >
+
+            <com.hm.iou.uikit.ShapedImageView
+                android:id="@+id/iv_feedback_header"
+                android:layout_width="32dip"
+                android:layout_height="32dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/uikit_icon_header_unknow"
+                app:shape_mode="circle" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_toRightOf="@id/iv_feedback_header"
+                android:layout_alignTop="@id/iv_feedback_header"
+                android:layout_alignBottom="@id/iv_feedback_header"
+                android:layout_marginLeft="10dip"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="我"
+                    android:textColor="#ff222222"
+                    android:textSize="12sp"
+                    />
+
+                <TextView
+                    android:id="@+id/iv_feedback_mytime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="#ff999999"
+                    android:textSize="11sp"
+                    android:layout_alignParentBottom="true"
+                    tools:text="2018-04-09 17:25"
+                    />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_feedback_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#ff222222"
+            android:textSize="14sp"
+            android:paddingLeft="16dip"
+            android:paddingTop="20dip"
+            android:paddingRight="16dip"
+            tools:text="收不到验证码"
+            />
+
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerView_feedback_img"
+            android:layout_marginLeft="16dip"
+            >
+        </android.support.v7.widget.RecyclerView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginLeft="16dip"
+            android:layout_marginTop="19dip"
+            android:background="#eeeeee"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_feedback_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/ll_feedback_question"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dip"
+            android:layout_marginTop="24dip"
+            >
+
+            <ImageView
+                android:id="@+id/iv_feedback_logo"
+                android:layout_width="32dip"
+                android:layout_height="32dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/msg_logo"
+                />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_toRightOf="@id/iv_feedback_logo"
+                android:layout_alignTop="@id/iv_feedback_logo"
+                android:layout_alignBottom="@id/iv_feedback_logo"
+                android:layout_marginLeft="10dip"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="借条管家"
+                    android:textColor="#ff222222"
+                    android:textSize="12sp"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_feedback_answer_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="#ff999999"
+                    android:textSize="11sp"
+                    android:layout_alignParentBottom="true"
+                    tools:text="2018-04-09 17:25"
+                    />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_feedback_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#ff222222"
+            android:textSize="14sp"
+            android:paddingLeft="16dip"
+            android:paddingRight="16dip"
+            android:layout_marginTop="12dip"
+            tools:text="已电话沟通解决"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_feedback_noreply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="暂无回复"
+        android:textColor="#ffa3a3a3"
+        android:textSize="14sp"
+        android:layout_below="@id/ll_feedback_question"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dip"
+        />
+
+</RelativeLayout>
