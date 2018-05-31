@@ -121,6 +121,9 @@ public class FeedbackDetailPresenter extends MvpActivityPresenter<FeedbackDetail
     }
 
     private String formatTime(String timeStr) {
+        if (timeStr == null) {
+            return "";
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             Date date = sdf.parse(timeStr);
