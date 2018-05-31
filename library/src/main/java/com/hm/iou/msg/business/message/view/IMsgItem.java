@@ -1,5 +1,7 @@
 package com.hm.iou.msg.business.message.view;
 
+import android.support.annotation.DrawableRes;
+
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 /**
@@ -11,15 +13,53 @@ public interface IMsgItem extends MultiItemEntity {
     int TYPE_AD_OR_SPORT = 0;       //广告或者活动
     int TYPE_COMMUNIQUE = 1;       //官方公告
 
+    /**
+     * 是否已读
+     *
+     * @return
+     */
+    boolean getMsgReadState();
+
+    /**
+     * 获取消息的icon
+     *
+     * @return
+     */
+    @DrawableRes
     int getMsgIcon();
 
+    /**
+     * 消息标题
+     *
+     * @return
+     */
     String getMsgTitle();
 
-    String getMsgContent();
+    /**
+     * 获取时间
+     *
+     * @return
+     */
+    String getMsgTime();
 
-    String getMsgSubContent();
+    /**
+     * 获取官方公告简介
+     *
+     * @return
+     */
+    String getCommuniqueIntro();
 
+    /**
+     * 消息图片
+     *
+     * @return
+     */
     String getMsgImage();
 
+    /**
+     * 具体链接地址
+     *
+     * @return
+     */
     String getMsgDetailLinkUrl();
 }

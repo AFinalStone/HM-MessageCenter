@@ -2,6 +2,7 @@ package com.hm.iou.msg.bean;
 
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.business.message.view.IMsgItem;
+import com.hm.iou.msg.dict.MsgType;
 
 /**
  * Created by syl on 2018/5/30.
@@ -22,79 +23,73 @@ public class MsgDetailBean implements IMsgItem {
     private String title;
     private String infoLinkUrl;
 
-    public int getType() {
-        return type;
+    //官方公告
+    private boolean isRead = false;//是否阅览过
+    private String communiqueIntro;//官方公告简介
+
+    public MsgDetailBean() {
     }
 
-    public void setType(int type) {
+    public MsgDetailBean(int type, int autoId, String imageUrl, String title, String infoLinkUrl, boolean isRead, String communiqueIntro) {
         this.type = type;
-    }
-
-    public int getAutoId() {
-        return autoId;
-    }
-
-    public void setAutoId(int autoId) {
         this.autoId = autoId;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getInfoLinkUrl() {
-        return infoLinkUrl;
-    }
-
-    public void setInfoLinkUrl(String infoLinkUrl) {
         this.infoLinkUrl = infoLinkUrl;
+        this.isRead = isRead;
+        this.communiqueIntro = communiqueIntro;
     }
 
+    @Override
+    public boolean getMsgReadState() {
+        return isRead;
+    }
 
     @Override
     public int getMsgIcon() {
-        return R.mipmap.msg_logo;
+        if (MsgType.Sport.getValue() == type) {
+            return R.mipmap.msg_icon_ad_or_sport;
+        }
+        if (MsgType.Advertisement.getValue() == type) {
+            return R.mipmap.msg_icon_ad_or_sport;
+        }
+        if (MsgType.TopNews.getValue() == type) {
+            return R.mipmap.msg_icon_ad_or_sport;
+        }
+        return R.mipmap.msg_icon_communique;
     }
+
 
     @Override
     public String getMsgTitle() {
-        return "标题：";
+        return MsgType.getDescByValue(type) + "：" + title;
     }
 
     @Override
-    public String getMsgContent() {
-        return "3月4日22点-3月5日06点，进行系统升级，可能会 出现“服务器繁忙”等异常提示，特此公告。";
+    public String getCommuniqueIntro() {
+        return communiqueIntro;
     }
 
     @Override
-    public String getMsgSubContent() {
-        return " 客服微信号：jietiaoguanjia2018 ";
+    public String getMsgTime() {
+        return "04-09 21:05";
     }
 
     @Override
     public String getMsgImage() {
-        return "https://upload-images.jianshu.io/upload_images/972352-aa122442f6568954.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/341";
+        return imageUrl;
     }
 
     @Override
     public String getMsgDetailLinkUrl() {
-        return "https://www.jianshu.com/p/b343fcff51b0";
+        return infoLinkUrl;
     }
 
     @Override
     public int getItemType() {
-        return TYPE_COMMUNIQUE;
+        if (MsgType.CommuniqueIntro.getValue() == type) {
+            return TYPE_COMMUNIQUE;
+        }
+        return TYPE_AD_OR_SPORT;
     }
 }

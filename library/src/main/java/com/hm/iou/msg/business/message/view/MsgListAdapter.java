@@ -1,5 +1,6 @@
 package com.hm.iou.msg.business.message.view;
 
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
@@ -26,14 +27,29 @@ public class MsgListAdapter extends BaseMultiItemQuickAdapter<IMsgItem, BaseView
 
     @Override
     protected void convert(BaseViewHolder helper, IMsgItem item) {
-        if (helper.getItemViewType() == TYPE_COMMUNIQUE) {
-            helper.setText(R.id.tv_content, item.getMsgContent());
-            helper.setText(R.id.tv_subContent, item.getMsgSubContent());
-        }
+
         helper.setImageResource(R.id.iv_icon, item.getMsgIcon());
         helper.setText(R.id.tv_title, item.getMsgTitle());
         ImageLoader.getInstance(mContext).displayImage(item.getMsgImage(), (ImageView) helper.getView(R.id.imageView),
-                R.drawable.msg_bg_feedback_item_pic, R.drawable.msg_bg_feedback_item_pic);
+                R.drawable.msg_bg_msg_center_item_pic, R.drawable.msg_bg_msg_center_item_pic);
+
+        if (helper.getItemViewType() == TYPE_AD_OR_SPORT) {
+            if (TextUtils.isEmpty(item.getMsgTime())) {
+                helper.setGone(R.id.tv_time, true);
+                helper.setText(R.id.tv_time, item.getMsgTime());
+            } else {
+                helper.setGone(R.id.tv_time, false);
+            }
+            if (item.getMsgReadState()) {
+                helper.setVisible(R.id.iv_noRead, false);
+            } else {
+                helper.setVisible(R.id.iv_noRead, true);
+            }
+            return;
+        }
+        if (helper.getItemViewType() == TYPE_COMMUNIQUE) {
+            helper.setText(R.id.tv_intro, item.getCommuniqueIntro());
+        }
     }
 
 }
