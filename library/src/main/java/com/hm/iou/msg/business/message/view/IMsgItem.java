@@ -11,13 +11,13 @@ public interface IMsgItem extends MultiItemEntity {
     int TYPE_AD_OR_SPORT = 0;       //广告或者活动
     int TYPE_COMMUNIQUE = 1;       //官方公告
 
-    int getIcon();
+    int getMsgIcon();
 
-    String getTitle();
+    String getMsgTitle();
 
-    String getContent();
+    String getMsgContent();
 
-    String getSubContent();
+    String getMsgSubContent();
 
     String getMsgImage();
 

@@ -27,11 +27,11 @@ public class MsgListAdapter extends BaseMultiItemQuickAdapter<IMsgItem, BaseView
     @Override
     protected void convert(BaseViewHolder helper, IMsgItem item) {
         if (helper.getItemViewType() == TYPE_COMMUNIQUE) {
-            helper.setText(R.id.tv_content, item.getContent());
-            helper.setText(R.id.tv_subContent, item.getSubContent());
+            helper.setText(R.id.tv_content, item.getMsgContent());
+            helper.setText(R.id.tv_subContent, item.getMsgSubContent());
         }
-        helper.setImageResource(R.id.iv_icon, item.getIcon());
-        helper.setText(R.id.tv_title, item.getTitle());
+        helper.setImageResource(R.id.iv_icon, item.getMsgIcon());
+        helper.setText(R.id.tv_title, item.getMsgTitle());
         ImageLoader.getInstance(mContext).displayImage(item.getMsgImage(), (ImageView) helper.getView(R.id.imageView),
                 R.drawable.msg_bg_feedback_item_pic, R.drawable.msg_bg_feedback_item_pic);
     }

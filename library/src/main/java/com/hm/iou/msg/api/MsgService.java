@@ -3,6 +3,7 @@ package com.hm.iou.msg.api;
 import com.hm.iou.msg.bean.AddFeedbackReqBean;
 import com.hm.iou.msg.bean.FeedbackDetailBean;
 import com.hm.iou.msg.bean.FeedbackListItemBean;
+import com.hm.iou.msg.bean.MsgDetailBean;
 import com.hm.iou.sharedata.model.BaseResponse;
 
 import java.util.List;
@@ -27,5 +28,8 @@ public interface MsgService {
 
     @POST("/api/iou/user/v1/addComplain")
     Flowable<BaseResponse<Object>> sendFeedback(@Body AddFeedbackReqBean reqBean);
+
+    @GET("/api/message/messageCenter/v1/getMessages")
+    Flowable<BaseResponse<List<MsgDetailBean>>> getMessages();
 
 }

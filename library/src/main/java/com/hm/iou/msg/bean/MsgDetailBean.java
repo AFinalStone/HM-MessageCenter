@@ -8,24 +8,78 @@ import com.hm.iou.msg.business.message.view.IMsgItem;
  */
 public class MsgDetailBean implements IMsgItem {
 
+    /**
+     * type : 3
+     * autoId : 280
+     * imageUrl : http://iou-steward.oss-cn-hangzhou.aliyuncs.com/contentCollect/20180530183241
+     * title : 因为拍了一张照片，这名女子被警察逮捕了，引起全国关
+     * infoLinkUrl : https://www.toutiao.com/a6561254954655285774/
+     */
+
+    private int type;
+    private int autoId;
+    private String imageUrl;
+    private String title;
+    private String infoLinkUrl;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getAutoId() {
+        return autoId;
+    }
+
+    public void setAutoId(int autoId) {
+        this.autoId = autoId;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getInfoLinkUrl() {
+        return infoLinkUrl;
+    }
+
+    public void setInfoLinkUrl(String infoLinkUrl) {
+        this.infoLinkUrl = infoLinkUrl;
+    }
+
 
     @Override
-    public int getIcon() {
+    public int getMsgIcon() {
         return R.mipmap.msg_logo;
     }
 
     @Override
-    public String getTitle() {
+    public String getMsgTitle() {
         return "标题：";
     }
 
     @Override
-    public String getContent() {
+    public String getMsgContent() {
         return "3月4日22点-3月5日06点，进行系统升级，可能会 出现“服务器繁忙”等异常提示，特此公告。";
     }
 
     @Override
-    public String getSubContent() {
+    public String getMsgSubContent() {
         return " 客服微信号：jietiaoguanjia2018 ";
     }
 
