@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private void login() {
         String pwd = MD5.hexdigest("123456".getBytes());
         MobileLoginReqBean reqBean = new MobileLoginReqBean();
-        reqBean.setMobile("15967132742");
+        reqBean.setMobile("15267163669");
         reqBean.setQueryPswd(pwd);
         HttpReqManager.getInstance().getService(JietiaoService.class)
                 .mobileLogin(reqBean)

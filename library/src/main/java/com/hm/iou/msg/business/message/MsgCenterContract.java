@@ -15,7 +15,7 @@ public class MsgCenterContract {
     public interface View extends BaseContract.BaseView {
 
         /**
-         * 显示更多资讯列表数据
+         * 显示消息数据列表
          *
          * @param list
          */
@@ -26,9 +26,18 @@ public class MsgCenterContract {
          * 隐藏下拉刷新View
          */
         void hidePullDownRefresh();
+
+        /**
+         * 显示加载失败
+         */
+        void showDataEmpty();
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
+        /**
+         * 初始化
+         */
+        void init();
 
         /**
          * 获取消息列表

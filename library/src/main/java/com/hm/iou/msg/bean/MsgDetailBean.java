@@ -4,10 +4,12 @@ import com.hm.iou.msg.R;
 import com.hm.iou.msg.business.message.view.IMsgItem;
 import com.hm.iou.msg.dict.MsgType;
 
+import java.io.Serializable;
+
 /**
  * Created by syl on 2018/5/30.
  */
-public class MsgDetailBean implements IMsgItem {
+public class MsgDetailBean implements IMsgItem, Serializable {
 
     /**
      * type : 3

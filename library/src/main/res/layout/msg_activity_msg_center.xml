@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <com.hm.iou.uikit.HMTopBarView
+        android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/uikit_topbar_height"
         app:titleText="@string/messagecenter_msg_center" />
@@ -14,6 +15,7 @@
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/topBar"
         app:srlAccentColor="@android:color/white"
         app:srlEnableLoadMore="false"
         app:srlEnablePreviewInEditMode="true"
@@ -30,12 +32,44 @@
                 android:layout_height="40dip" />
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_msgList"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:overScrollMode="never" />
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_msgList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/ll_data_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="84dp"
+                    android:layout_height="93dp"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/msg_icon_empty" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="21dp"
+                    android:text="@string/messagecenter_no_msg"
+                    android:textColor="#ffbbbbbb"
+                    android:textSize="@dimen/textFontSize_18" />
+
+            </LinearLayout>
+        </RelativeLayout>
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-</LinearLayout>
+
+
+</RelativeLayout>
 

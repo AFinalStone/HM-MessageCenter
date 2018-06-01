@@ -17,6 +17,7 @@ import com.hm.iou.msg.business.message.MsgCenterContract;
 import com.hm.iou.msg.business.message.MsgCenterPresenter;
 import com.hm.iou.router.Router;
 import com.hm.iou.uikit.HMGrayDividerItemDecoration;
+import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -35,6 +36,8 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
     RecyclerView mRvMsgList;
     @BindView(R2.id.refreshLayout)
     SmartRefreshLayout mRefreshLayout;
+    @BindView(R2.id.ll_data_empty)
+    LinearLayout mllDataEmpty;
 
     MsgListAdapter mAdapter;
 
@@ -51,12 +54,10 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
     @Override
     protected void initEventAndData(Bundle bundle) {
         mAdapter = new MsgListAdapter();
-        mAdapter.setHeaderAndEmpty(true);
         mAdapter.bindToRecyclerView(mRvMsgList);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
         mRvMsgList.addItemDecoration(new HMGrayDividerItemDecoration(mContext, LinearLayout.VERTICAL));
-        mAdapter.setEmptyView(R.layout.msg_item_msg_center_empty);
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
 
             @Override
@@ -72,11 +73,14 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
                 mPresenter.getMsgList();
             }
         });
+        mPresenter.init();
         mRefreshLayout.autoRefresh();
     }
 
     @Override
     public void showMsgList(List<IMsgItem> list) {
+        mllDataEmpty.setVisibility(View.GONE);
+        mRvMsgList.setVisibility(View.VISIBLE);
         mAdapter.addData(list);
     }
 
@@ -84,4 +88,11 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
     public void hidePullDownRefresh() {
         mRefreshLayout.finishRefresh();
     }
+
+    @Override
+    public void showDataEmpty() {
+        mRvMsgList.setVisibility(View.GONE);
+        mllDataEmpty.setVisibility(View.VISIBLE);
+    }
+
 }
