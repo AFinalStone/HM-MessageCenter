@@ -24,7 +24,7 @@ public interface MsgService {
     Flowable<BaseResponse<List<FeedbackListItemBean>>> getHistoryFeedbackList();
 
     @POST("/api/iou/user/v1/selectComplainById")
-    Flowable<BaseResponse<FeedbackDetailBean>> getFeedbackDetail(@Query("recordId") String recordId);
+    Flowable<BaseResponse<FeedbackDetailBean>> getFeedbackDetail(@Query("autoId") String recordId);
 
     @POST("/api/iou/user/v1/addComplain")
     Flowable<BaseResponse<Object>> sendFeedback(@Body AddFeedbackReqBean reqBean);

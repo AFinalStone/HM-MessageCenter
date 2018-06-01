@@ -14,17 +14,17 @@ import java.util.Date;
 
 public class FeedbackListItemBean implements IFeedbackListItem {
 
-    private String id;
+    private String autoId;
     private String content;
     private String recordTime;
     private int status;
 
-    public String getId() {
-        return id;
+    public String getAutoId() {
+        return autoId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setAutoId(String autoId) {
+        this.autoId = autoId;
     }
 
     public String getContent() {
@@ -58,7 +58,7 @@ public class FeedbackListItemBean implements IFeedbackListItem {
 
     @Override
     public String getFeedbackId() {
-        return id;
+        return autoId;
     }
 
     @Override
