@@ -11,6 +11,8 @@ import com.hm.iou.tools.TimeUtil;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -83,6 +85,7 @@ public class DataUtil {
                 }
             }
         }
+        listSort(list);
         return list;
     }
 
@@ -130,6 +133,29 @@ public class DataUtil {
         } else {
             return false;
         }
+    }
+
+    private static void listSort(List<MsgDetailBean> list) {
+        final TimeUtil timeUtil = TimeUtil.getInstance(TimeUtil.SimpleDateFormatEnum.DateFormatForApi);
+        Collections.sort(list, new Comparator<MsgDetailBean>() {
+            @Override
+            public int compare(MsgDetailBean msg01, MsgDetailBean msg02) {
+                try {
+                    long time01 = timeUtil.getTimeInLong(msg01.getPushDate());
+                    long time02 = timeUtil.getTimeInLong(msg02.getPushDate());
+                    if (time01 > time02) {
+                        return -1;
+                    } else if (time01 < time02) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return 0;
+            }
+        });
     }
 
 }

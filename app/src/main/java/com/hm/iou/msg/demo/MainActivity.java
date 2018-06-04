@@ -64,8 +64,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_getMsgCenterNoReadNum).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault()
-                        .post(new CommBizEvent("getMsgCenterNoReadNum", "获取消息中心未读消息数量"));
+                EventBusHelper.postEventBusGetMsgNoReadNum(true);
             }
         });
     }
@@ -104,10 +103,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvenBusMsgCenterNoRead(CommBizEvent commBizEvent) {
-        if (MsgCenterAppLike.EXTRA_KEY_GET_MSG_LIST_SUCCESS.equals(commBizEvent.key)) {
+        if (MsgCenterAppLike.EXTRA_KEY_GET_MSG_NO_READ_NUM_SUCCESS.equals(commBizEvent.key)) {
             ToastUtil.showMessage(this, "未读消息数量：" + commBizEvent.content);
         }
     }
-
 
 }

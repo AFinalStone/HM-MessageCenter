@@ -23,8 +23,8 @@ import io.reactivex.functions.Consumer;
  */
 public class MsgCenterAppLike {
 
-    public static final String EXTRA_KEY_GET_MSG_LIST_SUCCESS = "getMsgCenterNoReadNumSuccess";
     public static final String EXTRA_KEY_GET_MSG_NO_READ_NUM = "getMsgCenterNoReadNum";
+    public static final String EXTRA_KEY_GET_MSG_NO_READ_NUM_SUCCESS = "getMsgCenterNoReadNumSuccess";
 
     private Disposable mListDisposable;
 
@@ -78,7 +78,12 @@ public class MsgCenterAppLike {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvenBusGetMsgCenterNoRead(CommBizEvent commBizEvent) {
         if (EXTRA_KEY_GET_MSG_NO_READ_NUM.equals(commBizEvent.key)) {
-            getMsgCenterNoReadNum();
+            if ("true".equals(commBizEvent.content)) {
+                getMsgCenterNoReadNum();
+            } else {
+                int numNoRead = DataUtil.getNoReadMsgNum(mContext);
+                EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
+            }
         }
     }
 
