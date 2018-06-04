@@ -32,4 +32,10 @@
         android:layout_height="wrap_content"
         android:text="消息中心" />
 
+    <Button
+        android:id="@+id/btn_getMsgCenterNoReadNum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="获取消息中心未读消息数量" />
+
 </LinearLayout>

@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.hm.iou.base.BaseBizAppLike;
 import com.hm.iou.logger.Logger;
+import com.hm.iou.msg.MsgCenterAppLike;
 import com.hm.iou.network.HttpReqManager;
 import com.hm.iou.network.HttpRequestConfig;
 import com.hm.iou.router.Router;
@@ -25,6 +26,8 @@ public class JietiaoApplication extends Application {
         appLike.onCreate(this);
         appLike.initServer("http://192.168.1.254", "http://192.168.1.254",
                 "http://192.168.1.254");
+        MsgCenterAppLike msgCenterAppLike = new MsgCenterAppLike();
+        msgCenterAppLike.onCreate(this);
     }
 
     private void initNetwork() {

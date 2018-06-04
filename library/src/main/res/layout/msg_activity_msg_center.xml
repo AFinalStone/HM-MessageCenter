@@ -53,7 +53,7 @@
                 <ImageView
                     android:layout_width="84dp"
                     android:layout_height="93dp"
-                    android:scaleType="centerInside"
+                    android:scaleType="fitCenter"
                     android:src="@mipmap/msg_icon_empty" />
 
 

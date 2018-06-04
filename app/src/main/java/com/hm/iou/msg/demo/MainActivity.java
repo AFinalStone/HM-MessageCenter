@@ -5,16 +5,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.hm.iou.msg.MsgCenterAppLike;
 import com.hm.iou.msg.business.HelpCenterActivity;
 import com.hm.iou.msg.business.feedback.view.FeedbackActivity;
 import com.hm.iou.msg.business.feedback.view.HistoryFeedbackActivity;
 import com.hm.iou.msg.business.message.view.MsgCenterActivity;
 import com.hm.iou.network.HttpReqManager;
 import com.hm.iou.sharedata.UserManager;
+import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.hm.iou.sharedata.model.UserInfo;
 import com.hm.iou.tools.ToastUtil;
 import com.sina.weibo.sdk.utils.MD5;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -26,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        EventBus.getDefault().register(this);
         findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,6 +61,19 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, MsgCenterActivity.class));
             }
         });
+        findViewById(R.id.btn_getMsgCenterNoReadNum).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault()
+                        .post(new CommBizEvent("getMsgCenterNoReadNum", "获取消息中心未读消息数量"));
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private void login() {
@@ -82,5 +101,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvenBusMsgCenterNoRead(CommBizEvent commBizEvent) {
+        if (MsgCenterAppLike.EXTRA_KEY_GET_MSG_LIST_SUCCESS.equals(commBizEvent.key)) {
+            ToastUtil.showMessage(this, "未读消息数量：" + commBizEvent.content);
+        }
+    }
+
 
 }

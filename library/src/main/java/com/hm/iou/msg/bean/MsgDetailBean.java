@@ -3,6 +3,7 @@ package com.hm.iou.msg.bean;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.business.message.view.IMsgItem;
 import com.hm.iou.msg.dict.MsgType;
+import com.hm.iou.tools.TimeUtil;
 
 import java.io.Serializable;
 
@@ -21,6 +22,7 @@ public class MsgDetailBean implements IMsgItem, Serializable {
 
     private int type;
     private int autoId;
+    private String pushDate;
     private String imageUrl;
     private String title;
     private String infoLinkUrl;
@@ -29,16 +31,63 @@ public class MsgDetailBean implements IMsgItem, Serializable {
     private boolean isRead = false;//是否阅览过
     private String communiqueIntro;//官方公告简介
 
-    public MsgDetailBean() {
+    public int getType() {
+        return type;
     }
 
-    public MsgDetailBean(int type, int autoId, String imageUrl, String title, String infoLinkUrl, boolean isRead, String communiqueIntro) {
+    public void setType(int type) {
         this.type = type;
+    }
+
+    public int getAutoId() {
+        return autoId;
+    }
+
+    public void setAutoId(int autoId) {
         this.autoId = autoId;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public String getPushDate() {
+        return pushDate;
+    }
+
+    public void setPushDate(String pushDate) {
+        this.pushDate = pushDate;
+    }
+
+    public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getInfoLinkUrl() {
+        return infoLinkUrl;
+    }
+
+    public void setInfoLinkUrl(String infoLinkUrl) {
         this.infoLinkUrl = infoLinkUrl;
-        this.isRead = isRead;
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
+    }
+
+    public void setCommuniqueIntro(String communiqueIntro) {
         this.communiqueIntro = communiqueIntro;
     }
 
@@ -56,7 +105,7 @@ public class MsgDetailBean implements IMsgItem, Serializable {
             return R.mipmap.msg_icon_ad_or_sport;
         }
         if (MsgType.TopNews.getValue() == type) {
-            return R.mipmap.msg_icon_ad_or_sport;
+            return R.mipmap.msg_icon_news_or_top;
         }
         return R.mipmap.msg_icon_communique;
     }
@@ -74,7 +123,7 @@ public class MsgDetailBean implements IMsgItem, Serializable {
 
     @Override
     public String getMsgTime() {
-        return "04-09 21:05";
+        return pushDate.replaceAll("-", ".");
     }
 
     @Override

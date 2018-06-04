@@ -21,6 +21,12 @@ public class MsgCenterContract {
          */
         void showMsgList(List<IMsgItem> list);
 
+        /**
+         * 更新条目样式
+         *
+         * @param position
+         */
+        void refreshItem(int position);
 
         /**
          * 隐藏下拉刷新View
@@ -43,6 +49,13 @@ public class MsgCenterContract {
          * 获取消息列表
          */
         void getMsgList();
+
+        /**
+         * 标记为已读
+         *
+         * @param position 条目位置
+         */
+        void markHaveRead(int position);
 
     }
 }

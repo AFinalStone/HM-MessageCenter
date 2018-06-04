@@ -1,6 +1,5 @@
 package com.hm.iou.msg.business.message.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,9 +14,7 @@ import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.message.MsgCenterContract;
 import com.hm.iou.msg.business.message.MsgCenterPresenter;
-import com.hm.iou.router.Router;
 import com.hm.iou.uikit.HMGrayDividerItemDecoration;
-import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -64,6 +61,7 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 IMsgItem item = (IMsgItem) adapter.getItem(position);
                 NavigationHelper.ToMsgDetail(mContext, item.getMsgDetailLinkUrl());
+                mPresenter.markHaveRead(position);
             }
         });
         //设置下拉刷新监听
@@ -81,7 +79,12 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
     public void showMsgList(List<IMsgItem> list) {
         mllDataEmpty.setVisibility(View.GONE);
         mRvMsgList.setVisibility(View.VISIBLE);
-        mAdapter.addData(list);
+        mAdapter.setNewData(list);
+    }
+
+    @Override
+    public void refreshItem(int position) {
+        mAdapter.notifyItemChanged(position);
     }
 
     @Override

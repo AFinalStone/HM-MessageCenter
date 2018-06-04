@@ -43,6 +43,7 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_centerInParent="true"
+                    android:background="@drawable/uikit_bg_pic_loading_place"
                     android:scaleType="fitCenter" />
 
                 <com.hm.iou.uikit.ShapedImageView

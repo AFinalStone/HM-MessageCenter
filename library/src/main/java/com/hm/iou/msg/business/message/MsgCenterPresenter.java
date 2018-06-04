@@ -6,21 +6,17 @@ import android.support.annotation.NonNull;
 import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
+import com.hm.iou.msg.DataUtil;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.MsgDetailBean;
-import com.hm.iou.msg.business.message.view.IMsgItem;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.hm.iou.tools.ToastUtil;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Flowable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * 获取消息
@@ -67,7 +63,7 @@ public class MsgCenterPresenter extends MvpActivityPresenter<MsgCenterContract.V
                         if (mMsgListData.isEmpty()) {
                             mView.showDataEmpty();
                         } else {
-                            DataUtil.cacheMsgList(mContext, mMsgListData);
+                            DataUtil.setMsgListToCache(mContext, mMsgListData);
                             mView.showMsgList((ArrayList) mMsgListData);
                         }
                         mView.hidePullDownRefresh();
@@ -89,6 +85,13 @@ public class MsgCenterPresenter extends MvpActivityPresenter<MsgCenterContract.V
                         return false;
                     }
                 });
+    }
+
+    @Override
+    public void markHaveRead(int position) {
+        mMsgListData.get(position).setRead(true);
+        DataUtil.setMsgListToCache(mContext, mMsgListData);
+        mView.refreshItem(position);
     }
 }
 
