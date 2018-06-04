@@ -62,6 +62,7 @@
                 android:layout_height="22dp"
                 android:layout_marginLeft="10dp"
                 android:ellipsize="end"
+                android:singleLine="true"
                 android:textColor="#ff222222"
                 android:textSize="@dimen/textFontSize_15" />
 

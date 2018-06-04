@@ -35,10 +35,10 @@ public class MsgListAdapter extends BaseMultiItemQuickAdapter<IMsgItem, BaseView
 
         if (helper.getItemViewType() == TYPE_AD_OR_SPORT) {
             if (TextUtils.isEmpty(item.getMsgTime())) {
-                helper.setGone(R.id.tv_time, true);
-                helper.setText(R.id.tv_time, item.getMsgTime());
-            } else {
                 helper.setGone(R.id.tv_time, false);
+            } else {
+                helper.setText(R.id.tv_time, item.getMsgTime());
+                helper.setGone(R.id.tv_time, true);
             }
             if (item.getMsgReadState()) {
                 helper.setVisible(R.id.iv_noRead, false);
