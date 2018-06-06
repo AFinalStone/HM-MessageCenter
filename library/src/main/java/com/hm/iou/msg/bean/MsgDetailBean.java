@@ -21,7 +21,7 @@ public class MsgDetailBean implements IMsgItem, Serializable {
      */
 
     private int type;
-    private int autoId;
+    private String autoId;
     private String pushDate;
     private String imageUrl;
     private String title;
@@ -39,11 +39,11 @@ public class MsgDetailBean implements IMsgItem, Serializable {
         this.type = type;
     }
 
-    public int getAutoId() {
+    public String getAutoId() {
         return autoId;
     }
 
-    public void setAutoId(int autoId) {
+    public void setAutoId(String autoId) {
         this.autoId = autoId;
     }
 

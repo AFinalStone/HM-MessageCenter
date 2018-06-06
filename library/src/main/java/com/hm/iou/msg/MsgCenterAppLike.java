@@ -2,8 +2,10 @@ package com.hm.iou.msg;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.api.MsgApi;
+import com.hm.iou.msg.bean.CommuniqueMsgBean;
 import com.hm.iou.msg.bean.MsgDetailBean;
 import com.hm.iou.sharedata.event.CommBizEvent;
 
@@ -25,6 +27,7 @@ public class MsgCenterAppLike {
 
     public static final String EXTRA_KEY_GET_MSG_NO_READ_NUM = "getMsgCenterNoReadNum";
     public static final String EXTRA_KEY_GET_MSG_NO_READ_NUM_SUCCESS = "getMsgCenterNoReadNumSuccess";
+    public static final String EXTRA_KEY_INSTER_COMMUNIQUE_MSG = "InsertCommuniqueMsg";
 
     private Disposable mListDisposable;
 
@@ -75,14 +78,37 @@ public class MsgCenterAppLike {
                 });
     }
 
+    /**
+     * 获取消息中心未读消息数量
+     *
+     * @param -commBizEvent.key    == getMsgCenterNoReadNum
+     * @param -commBizEvent.cotent ture的时候从服务端获取最新的消息，否则直接从缓存中获取
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvenBusGetMsgCenterNoRead(CommBizEvent commBizEvent) {
+    public void onEvenBusgetMsgCenterNoReadNum(CommBizEvent commBizEvent) {
         if (EXTRA_KEY_GET_MSG_NO_READ_NUM.equals(commBizEvent.key)) {
             if ("true".equals(commBizEvent.content)) {
                 getMsgCenterNoReadNum();
             } else {
                 int numNoRead = DataUtil.getNoReadMsgNum(mContext);
                 EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
+            }
+        }
+    }
+
+    /**
+     * 把官方公告插入到缓存中
+     *
+     * @param -commBizEvent.key    == InsertCommuniqueMsg
+     * @param -commBizEvent.cotent CommuniqueMsgBean对象的json字符串
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvenBusInsertCommuniqueMsg(CommBizEvent commBizEvent) {
+        if (EXTRA_KEY_INSTER_COMMUNIQUE_MSG.equals(commBizEvent.key)) {
+            try {
+                CommuniqueMsgBean communiqueMsgBean = new Gson().fromJson(commBizEvent.content, CommuniqueMsgBean.class);
+                DataUtil.addCommuniqueMsgToCache(mContext, communiqueMsgBean);
+            } catch (Exception e) {
             }
         }
     }

@@ -4,7 +4,9 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.hm.iou.logger.Logger;
+import com.hm.iou.msg.bean.CommuniqueMsgBean;
 import com.hm.iou.msg.bean.MsgDetailBean;
+import com.hm.iou.msg.dict.MsgType;
 import com.hm.iou.tools.ACache;
 import com.hm.iou.tools.TimeUtil;
 
@@ -56,7 +58,7 @@ public class DataUtil {
      * @param context
      * @param list
      */
-    public static void addMsgListToCache(Context context, List<MsgDetailBean> list) {
+    public static synchronized void addMsgListToCache(Context context, List<MsgDetailBean> list) {
         if (list == null || list.isEmpty()) {
             return;
         }
@@ -64,6 +66,26 @@ public class DataUtil {
         listCache.addAll(list);
         ACache cache = ACache.get(context.getApplicationContext());
         cache.put(MSGCENTER_KEY_LIST, (ArrayList) list);
+    }
+
+    /**
+     * 添加官方公告到缓存中
+     *
+     * @param context
+     * @param communiqueMsgBean
+     */
+    public static void addCommuniqueMsgToCache(Context context, CommuniqueMsgBean communiqueMsgBean) {
+        if (communiqueMsgBean == null) {
+            return;
+        }
+        MsgDetailBean msgDetailBean = new MsgDetailBean();
+        msgDetailBean.setPushDate(communiqueMsgBean.getPublishTime());
+        msgDetailBean.setCommuniqueIntro(communiqueMsgBean.getContent());
+        msgDetailBean.setAutoId(communiqueMsgBean.getNoticeId());
+        msgDetailBean.setType(MsgType.CommuniqueIntro.getValue());
+        List<MsgDetailBean> list = new ArrayList<>();
+        list.add(msgDetailBean);
+        addMsgListToCache(context, list);
     }
 
     /**
