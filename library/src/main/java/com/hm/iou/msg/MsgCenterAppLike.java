@@ -27,7 +27,6 @@ public class MsgCenterAppLike {
 
     public static final String EXTRA_KEY_GET_MSG_NO_READ_NUM = "getMsgCenterNoReadNum";
     public static final String EXTRA_KEY_GET_MSG_NO_READ_NUM_SUCCESS = "getMsgCenterNoReadNumSuccess";
-    public static final String EXTRA_KEY_INSTER_COMMUNIQUE_MSG = "InsertCommuniqueMsg";
 
     private Disposable mListDisposable;
 
@@ -49,7 +48,7 @@ public class MsgCenterAppLike {
     }
 
     public void onDestroy() {
-        DataUtil.clearMsgListCache(mContext);
+        CacheDataUtil.clearMsgListCache();
         EventBus.getDefault().unregister(this);
     }
 
@@ -65,14 +64,14 @@ public class MsgCenterAppLike {
                 .subscribe(new Consumer<List<MsgDetailBean>>() {
                     @Override
                     public void accept(List<MsgDetailBean> list) throws Exception {
-                        DataUtil.addMsgListToCache(mContext, list);
-                        int numNoRead = DataUtil.getNoReadMsgNum(mContext);
+                        CacheDataUtil.addMsgListToCache(list);
+                        long numNoRead = CacheDataUtil.getNoReadMsgNum();
                         EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        int numNoRead = DataUtil.getNoReadMsgNum(mContext);
+                        long numNoRead = CacheDataUtil.getNoReadMsgNum();
                         EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
                     }
                 });
@@ -90,28 +89,10 @@ public class MsgCenterAppLike {
             if ("true".equals(commBizEvent.content)) {
                 getMsgCenterNoReadNum();
             } else {
-                int numNoRead = DataUtil.getNoReadMsgNum(mContext);
+                long numNoRead = CacheDataUtil.getNoReadMsgNum();
                 EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
             }
         }
     }
-
-    /**
-     * 把官方公告插入到缓存中
-     *
-     * @param -commBizEvent.key    == InsertCommuniqueMsg
-     * @param -commBizEvent.cotent CommuniqueMsgBean对象的json字符串
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvenBusInsertCommuniqueMsg(CommBizEvent commBizEvent) {
-        if (EXTRA_KEY_INSTER_COMMUNIQUE_MSG.equals(commBizEvent.key)) {
-            try {
-                CommuniqueMsgBean communiqueMsgBean = new Gson().fromJson(commBizEvent.content, CommuniqueMsgBean.class);
-                DataUtil.addCommuniqueMsgToCache(mContext, communiqueMsgBean);
-            } catch (Exception e) {
-            }
-        }
-    }
-
 
 }

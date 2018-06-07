@@ -66,10 +66,18 @@
                     android:textSize="@dimen/textFontSize_18" />
 
             </LinearLayout>
+
+
         </RelativeLayout>
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
+    <com.hm.iou.uikit.HMLoadingView
+        android:id="@+id/loading_init"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topBar"
+        android:background="@color/uikit_background" />
 
 </RelativeLayout>
 

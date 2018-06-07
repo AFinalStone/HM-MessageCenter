@@ -1,9 +1,10 @@
 package com.hm.iou.msg.bean;
 
+import android.text.TextUtils;
+
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.business.message.view.IMsgItem;
 import com.hm.iou.msg.dict.MsgType;
-import com.hm.iou.tools.TimeUtil;
 
 import java.io.Serializable;
 
@@ -26,10 +27,9 @@ public class MsgDetailBean implements IMsgItem, Serializable {
     private String imageUrl;
     private String title;
     private String infoLinkUrl;
-
-    //官方公告
-    private boolean isRead = false;//是否阅览过
     private String communiqueIntro;//官方公告简介
+
+    private boolean isRead = false;//是否阅览过
 
     public int getType() {
         return type;
@@ -123,7 +123,10 @@ public class MsgDetailBean implements IMsgItem, Serializable {
 
     @Override
     public String getMsgTime() {
-        return pushDate.replaceAll("-", ".");
+        if (!TextUtils.isEmpty(pushDate)) {
+            return pushDate.replaceAll("-", ".");
+        }
+        return "";
     }
 
     @Override

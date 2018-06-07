@@ -9,6 +9,7 @@ import com.hm.iou.network.HttpReqManager;
 import com.hm.iou.network.HttpRequestConfig;
 import com.hm.iou.router.Router;
 import com.hm.iou.sharedata.UserManager;
+import com.orm.SugarContext;
 
 /**
  * Created by hjy on 18/5/11.<br>
@@ -22,6 +23,7 @@ public class JietiaoApplication extends Application {
         Router.init(this);
         Logger.init(this, true);
         initNetwork();
+        SugarContext.init(this);
         BaseBizAppLike appLike = new BaseBizAppLike();
         appLike.onCreate(this);
         appLike.initServer("http://192.168.1.254", "http://192.168.1.254",

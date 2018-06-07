@@ -15,6 +15,7 @@ import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.message.MsgCenterContract;
 import com.hm.iou.msg.business.message.MsgCenterPresenter;
 import com.hm.iou.uikit.HMGrayDividerItemDecoration;
+import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -35,6 +36,8 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
     SmartRefreshLayout mRefreshLayout;
     @BindView(R2.id.ll_data_empty)
     LinearLayout mllDataEmpty;
+    @BindView(R2.id.loading_init)
+    HMLoadingView mLoadingInit;
 
     MsgListAdapter mAdapter;
 
@@ -72,7 +75,27 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
             }
         });
         mPresenter.init();
-        mRefreshLayout.autoRefresh();
+    }
+
+    @Override
+    public void showInitLoading() {
+        mLoadingInit.setVisibility(View.VISIBLE);
+        mLoadingInit.showDataLoading();
+    }
+
+    @Override
+    public void showInitLoadingFailed(String failedMsg) {
+        mLoadingInit.showDataFail(failedMsg, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.init();
+            }
+        });
+    }
+
+    @Override
+    public void hideInitLoading() {
+        mLoadingInit.setVisibility(View.GONE);
     }
 
     @Override
@@ -88,6 +111,11 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
     }
 
     @Override
+    public void showPullDownRefresh() {
+        mRefreshLayout.autoRefresh();
+    }
+
+    @Override
     public void hidePullDownRefresh() {
         mRefreshLayout.finishRefresh();
     }
@@ -97,5 +125,6 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
         mRvMsgList.setVisibility(View.GONE);
         mllDataEmpty.setVisibility(View.VISIBLE);
     }
+
 
 }

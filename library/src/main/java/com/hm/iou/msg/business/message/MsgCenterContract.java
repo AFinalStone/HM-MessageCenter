@@ -34,9 +34,29 @@ public class MsgCenterContract {
         void hidePullDownRefresh();
 
         /**
+         * 显示下拉刷新view
+         */
+        void showPullDownRefresh();
+
+        /**
          * 显示加载失败
          */
         void showDataEmpty();
+
+        /**
+         * 显示初始化动画
+         */
+        void showInitLoading();
+
+        /**
+         * 初始化数据失败
+         */
+        void showInitLoadingFailed(String failedMsg);
+
+        /**
+         * 关闭初始化动画
+         */
+        void hideInitLoading();
     }
 
     public interface Presenter extends BaseContract.BasePresenter {

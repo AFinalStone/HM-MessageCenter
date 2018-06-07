@@ -6,7 +6,9 @@ import android.support.annotation.NonNull;
 import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
-import com.hm.iou.msg.DataUtil;
+import com.hm.iou.database.MsgCenterDbHelper;
+import com.hm.iou.database.table.MsgCenterDbData;
+import com.hm.iou.msg.CacheDataUtil;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.MsgDetailBean;
 import com.hm.iou.sharedata.model.BaseResponse;
@@ -16,7 +18,11 @@ import com.trello.rxlifecycle2.android.ActivityEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 获取消息
@@ -35,15 +41,50 @@ public class MsgCenterPresenter extends MvpActivityPresenter<MsgCenterContract.V
 
     @Override
     public void init() {
-        mMsgListData = DataUtil.readMsgListFromCache(mContext);
-        if (mMsgListData == null) {
-            mMsgListData = new ArrayList<>();
-        }
-        if (mMsgListData.isEmpty()) {
-            mView.showDataEmpty();
-        } else {
-            mView.showMsgList((ArrayList) mMsgListData);
-        }
+        mView.showInitLoading();
+        Flowable.just(0)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(getProvider().<Integer>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(new Function<Integer, List<MsgDetailBean>>() {
+                    @Override
+                    public List<MsgDetailBean> apply(Integer integer) throws Exception {
+                        List<MsgDetailBean> listCache = CacheDataUtil.readMsgListFromCacheData();
+                        return listCache;
+                    }
+                })
+                .subscribeWith(new CommSubscriber<List<MsgDetailBean>>(mView) {
+                    @Override
+                    public void handleResult(List<MsgDetailBean> list) {
+                        mView.hideInitLoading();
+                        mMsgListData = list;
+                        if (mMsgListData == null) {
+                            mMsgListData = new ArrayList<>();
+                        }
+                        if (mMsgListData.isEmpty()) {
+                            mView.showDataEmpty();
+                        } else {
+                            mView.showMsgList((ArrayList) mMsgListData);
+                        }
+                        //缓存加载成功，进行网络请求获取最新的数据
+                        mView.showPullDownRefresh();
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String code, String msg) {
+                        mView.showInitLoadingFailed(msg);
+                    }
+
+                    @Override
+                    public boolean isShowBusinessError() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isShowCommError() {
+                        return false;
+                    }
+                });
     }
 
     @Override
@@ -58,12 +99,12 @@ public class MsgCenterPresenter extends MvpActivityPresenter<MsgCenterContract.V
                     @Override
                     public void handleResult(List<MsgDetailBean> list) {
                         if (list != null) {
+                            CacheDataUtil.addMsgListToCache(list);
                             mMsgListData.addAll(list);
                         }
                         if (mMsgListData.isEmpty()) {
                             mView.showDataEmpty();
                         } else {
-                            DataUtil.setMsgListToCache(mContext, mMsgListData);
                             mView.showMsgList((ArrayList) mMsgListData);
                         }
                         mView.hidePullDownRefresh();
@@ -89,8 +130,9 @@ public class MsgCenterPresenter extends MvpActivityPresenter<MsgCenterContract.V
 
     @Override
     public void markHaveRead(int position) {
-        mMsgListData.get(position).setRead(true);
-        DataUtil.setMsgListToCache(mContext, mMsgListData);
+        MsgDetailBean data = mMsgListData.get(position);
+        data.setRead(true);
+        CacheDataUtil.updateMsgItemToCache(data);
         mView.refreshItem(position);
     }
 }

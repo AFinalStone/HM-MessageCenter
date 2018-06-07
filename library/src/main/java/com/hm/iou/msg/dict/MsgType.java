@@ -9,7 +9,7 @@ public enum MsgType {
     Sport(1, "活动"),
     Advertisement(2, "广告"),
     TopNews(3, "头条"),
-    CommuniqueIntro(4, "官方公告");
+    CommuniqueIntro(100, "官方公告");
 
     private int value;
     private String desc;

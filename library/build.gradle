@@ -35,5 +35,6 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 
     compile 'com.heima.iou:hmbasebizlocal:1.0.0'
+    compile 'com.heima.iou:hmdbcenterlocal:1.0.0'
 }
 apply from: './maven_local.gradle'
