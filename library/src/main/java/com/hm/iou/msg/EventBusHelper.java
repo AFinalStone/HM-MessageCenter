@@ -17,7 +17,7 @@ public class EventBusHelper {
      * @param noReadNum 未读消息数量
      */
     public static void postEventBusGetMsgNoReadNumSuccess(String noReadNum) {
-        EventBus.getDefault().post(new CommBizEvent(MsgCenterAppLike.EXTRA_KEY_GET_MSG_NO_READ_NUM_SUCCESS, noReadNum));
+        EventBus.getDefault().post(new CommBizEvent(MsgCenterAppLike.EXTRA_KEY_GET_NO_READ_NUM_SUCCESS, noReadNum));
     }
 
 }

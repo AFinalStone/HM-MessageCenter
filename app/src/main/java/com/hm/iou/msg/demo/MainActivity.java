@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvenBusMsgCenterNoRead(CommBizEvent commBizEvent) {
-        if (MsgCenterAppLike.EXTRA_KEY_GET_MSG_NO_READ_NUM_SUCCESS.equals(commBizEvent.key)) {
+        if (MsgCenterAppLike.EXTRA_KEY_GET_NO_READ_NUM_SUCCESS.equals(commBizEvent.key)) {
             ToastUtil.showMessage(this, "未读消息数量：" + commBizEvent.content);
         }
     }

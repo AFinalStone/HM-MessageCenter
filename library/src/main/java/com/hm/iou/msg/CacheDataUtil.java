@@ -148,7 +148,7 @@ public class CacheDataUtil {
         data.setImageUrl(msgDetailBean.getImageUrl());
         data.setTitle(msgDetailBean.getTitle());
         data.setInfoLinkUrl(msgDetailBean.getInfoLinkUrl());
-        data.setCommuniqueIntro(msgDetailBean.getCommuniqueIntro());
+        data.setNotice(msgDetailBean.getNotice());
         data.setRead(msgDetailBean.isRead());
         return data;
     }
@@ -167,7 +167,7 @@ public class CacheDataUtil {
         data.setImageUrl(dbData.getImageUrl());
         data.setTitle(dbData.getTitle());
         data.setInfoLinkUrl(dbData.getInfoLinkUrl());
-        data.setCommuniqueIntro(dbData.getCommuniqueIntro());
+        data.setNotice(dbData.getNotice());
         data.setRead(dbData.isRead());
         return data;
     }

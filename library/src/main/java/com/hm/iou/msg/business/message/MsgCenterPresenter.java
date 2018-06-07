@@ -8,6 +8,7 @@ import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.MsgCenterDbData;
+import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.CacheDataUtil;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.MsgDetailBean;
@@ -50,6 +51,9 @@ public class MsgCenterPresenter extends MvpActivityPresenter<MsgCenterContract.V
                     @Override
                     public List<MsgDetailBean> apply(Integer integer) throws Exception {
                         List<MsgDetailBean> listCache = CacheDataUtil.readMsgListFromCacheData();
+                        for (MsgDetailBean bean : listCache) {
+                            Logger.d("MsgCenterModule", bean.toString());
+                        }
                         return listCache;
                     }
                 })

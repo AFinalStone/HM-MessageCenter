@@ -58,13 +58,23 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
         mRvMsgList.addItemDecoration(new HMGrayDividerItemDecoration(mContext, LinearLayout.VERTICAL));
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-
+//        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+//                IMsgItem item = (IMsgItem) adapter.getItem(position);
+//                NavigationHelper.ToMsgDetail(mContext, item.getMsgDetailLinkUrl());
+//                mPresenter.markHaveRead(position);
+//            }
+//        });
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                IMsgItem item = (IMsgItem) adapter.getItem(position);
-                NavigationHelper.ToMsgDetail(mContext, item.getMsgDetailLinkUrl());
-                mPresenter.markHaveRead(position);
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (R.id.ll_adOrSport == view.getId()) {
+                    IMsgItem item = (IMsgItem) adapter.getItem(position);
+                    NavigationHelper.ToMsgDetail(mContext, item.getMsgDetailLinkUrl());
+                    mPresenter.markHaveRead(position);
+                }
             }
         });
         //设置下拉刷新监听

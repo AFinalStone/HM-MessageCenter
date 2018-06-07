@@ -27,7 +27,7 @@ public class MsgDetailBean implements IMsgItem, Serializable {
     private String imageUrl;
     private String title;
     private String infoLinkUrl;
-    private String communiqueIntro;//官方公告简介
+    private String notice;//官方公告简介
 
     private boolean isRead = false;//是否阅览过
 
@@ -87,8 +87,17 @@ public class MsgDetailBean implements IMsgItem, Serializable {
         isRead = read;
     }
 
-    public void setCommuniqueIntro(String communiqueIntro) {
-        this.communiqueIntro = communiqueIntro;
+
+    public void setNotice(String notice) {
+        this.notice = notice;
+    }
+
+    @Override
+    public String getNotice() {
+        if (TextUtils.isEmpty(notice)) {
+            return "";
+        }
+        return notice;
     }
 
     @Override
@@ -107,18 +116,16 @@ public class MsgDetailBean implements IMsgItem, Serializable {
         if (MsgType.TopNews.getValue() == type) {
             return R.mipmap.msg_icon_news_or_top;
         }
-        return R.mipmap.msg_icon_communique;
+        return R.mipmap.msg_icon_ad_or_sport;
     }
 
 
     @Override
     public String getMsgTitle() {
+        if (TextUtils.isEmpty(title)) {
+            return MsgType.getDescByValue(type) + "：";
+        }
         return MsgType.getDescByValue(type) + "：" + title;
-    }
-
-    @Override
-    public String getCommuniqueIntro() {
-        return communiqueIntro;
     }
 
     @Override
@@ -145,5 +152,19 @@ public class MsgDetailBean implements IMsgItem, Serializable {
             return TYPE_COMMUNIQUE;
         }
         return TYPE_AD_OR_SPORT;
+    }
+
+    @Override
+    public String toString() {
+        return "MsgDetailBean{" +
+                "type=" + type +
+                ", autoId='" + autoId + '\'' +
+                ", pushDate='" + pushDate + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", title='" + title + '\'' +
+                ", infoLinkUrl='" + infoLinkUrl + '\'' +
+                ", notice='" + notice + '\'' +
+                ", isRead=" + isRead +
+                '}';
     }
 }

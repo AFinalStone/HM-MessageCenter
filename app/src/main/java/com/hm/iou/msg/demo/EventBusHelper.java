@@ -19,9 +19,9 @@ public class EventBusHelper {
      */
     public static void postEventBusGetMsgNoReadNum(boolean ifRefresh) {
         if (ifRefresh) {
-            EventBus.getDefault().post(new CommBizEvent(MsgCenterAppLike.EXTRA_KEY_GET_MSG_NO_READ_NUM, "true"));
+            EventBus.getDefault().post(new CommBizEvent(MsgCenterAppLike.EXTRA_KEY_GET_NO_READ_NUM, "true"));
         } else {
-            EventBus.getDefault().post(new CommBizEvent(MsgCenterAppLike.EXTRA_KEY_GET_MSG_NO_READ_NUM, "false"));
+            EventBus.getDefault().post(new CommBizEvent(MsgCenterAppLike.EXTRA_KEY_GET_NO_READ_NUM, "false"));
         }
     }
 

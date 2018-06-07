@@ -1,14 +1,14 @@
 package com.hm.iou.msg.business.message.view;
 
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.hm.iou.msg.R;
 import com.hm.iou.tools.ImageLoader;
-
-import java.util.List;
 
 import static com.hm.iou.msg.business.message.view.IMsgItem.TYPE_AD_OR_SPORT;
 import static com.hm.iou.msg.business.message.view.IMsgItem.TYPE_COMMUNIQUE;
@@ -22,18 +22,20 @@ public class MsgListAdapter extends BaseMultiItemQuickAdapter<IMsgItem, BaseView
     public MsgListAdapter() {
         super(null);
         addItemType(TYPE_AD_OR_SPORT, R.layout.msg_item_msg_center_ad_or_sport);
-        addItemType(TYPE_COMMUNIQUE, R.layout.msg_item_msg_center_communique);
+        addItemType(TYPE_COMMUNIQUE, R.layout.msg_item_msg_center_notice);
     }
 
     @Override
     protected void convert(BaseViewHolder helper, IMsgItem item) {
 
-        helper.setImageResource(R.id.iv_icon, item.getMsgIcon());
-        helper.setText(R.id.tv_title, item.getMsgTitle());
         ImageLoader.getInstance(mContext).displayImage(item.getMsgImage(), (ImageView) helper.getView(R.id.imageView),
                 R.drawable.uikit_bg_pic_loading_place, R.drawable.uikit_bg_pic_loading_error);
+        helper.setText(R.id.tv_title, item.getMsgTitle());
+
 
         if (helper.getItemViewType() == TYPE_AD_OR_SPORT) {
+            helper.setImageResource(R.id.iv_icon, item.getMsgIcon());
+            helper.addOnClickListener(R.id.ll_adOrSport);
             if (TextUtils.isEmpty(item.getMsgTime())) {
                 helper.setGone(R.id.tv_time, false);
             } else {
@@ -48,7 +50,7 @@ public class MsgListAdapter extends BaseMultiItemQuickAdapter<IMsgItem, BaseView
             return;
         }
         if (helper.getItemViewType() == TYPE_COMMUNIQUE) {
-            helper.setText(R.id.tv_intro, item.getCommuniqueIntro());
+            helper.setText(R.id.tv_intro, item.getNotice());
         }
     }
 

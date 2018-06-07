@@ -47,7 +47,7 @@ public interface IMsgItem extends MultiItemEntity {
      *
      * @return
      */
-    String getCommuniqueIntro();
+    String getNotice();
 
     /**
      * 消息图片

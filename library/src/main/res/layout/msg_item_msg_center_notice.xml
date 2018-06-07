@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_notice"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/uikit_bg_item_ripple"
+    android:background="@color/white"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical">
@@ -22,7 +23,8 @@
             <ImageView
                 android:id="@+id/iv_icon"
                 android:layout_width="22dp"
-                android:layout_height="22dp" />
+                android:layout_height="22dp"
+                android:src="@mipmap/msg_icon_communique" />
 
             <TextView
                 android:id="@+id/tv_title"
