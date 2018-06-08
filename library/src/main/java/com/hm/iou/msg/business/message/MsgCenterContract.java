@@ -49,11 +49,6 @@ public class MsgCenterContract {
         void showInitLoading();
 
         /**
-         * 初始化数据失败
-         */
-        void showInitLoadingFailed(String failedMsg);
-
-        /**
          * 关闭初始化动画
          */
         void hideInitLoading();

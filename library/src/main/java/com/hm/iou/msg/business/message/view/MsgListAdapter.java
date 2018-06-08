@@ -28,12 +28,11 @@ public class MsgListAdapter extends BaseMultiItemQuickAdapter<IMsgItem, BaseView
     @Override
     protected void convert(BaseViewHolder helper, IMsgItem item) {
 
-        ImageLoader.getInstance(mContext).displayImage(item.getMsgImage(), (ImageView) helper.getView(R.id.imageView),
-                R.drawable.uikit_bg_pic_loading_place, R.drawable.uikit_bg_pic_loading_error);
         helper.setText(R.id.tv_title, item.getMsgTitle());
 
-
         if (helper.getItemViewType() == TYPE_AD_OR_SPORT) {
+            ImageLoader.getInstance(mContext).displayImage(item.getMsgImage(), (ImageView) helper.getView(R.id.imageView),
+                    R.drawable.uikit_bg_pic_loading_place, R.drawable.uikit_bg_pic_loading_error);
             helper.setImageResource(R.id.iv_icon, item.getMsgIcon());
             helper.addOnClickListener(R.id.ll_adOrSport);
             if (TextUtils.isEmpty(item.getMsgTime())) {

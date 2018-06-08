@@ -76,7 +76,8 @@ public class MsgCenterPresenter extends MvpActivityPresenter<MsgCenterContract.V
 
                     @Override
                     public void handleException(Throwable throwable, String code, String msg) {
-                        mView.showInitLoadingFailed(msg);
+                        mView.hideInitLoading();
+                        mView.showDataEmpty();
                     }
 
                     @Override
