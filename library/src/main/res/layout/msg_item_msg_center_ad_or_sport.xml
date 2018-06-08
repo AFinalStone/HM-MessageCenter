@@ -32,7 +32,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="22dp"
+            android:layout_height="25dp"
             android:orientation="horizontal">
 
             <RelativeLayout
@@ -44,8 +44,7 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/uikit_bg_pic_loading_place"
-                    android:scaleType="fitCenter" />
+                    android:src="@mipmap/msg_icon_news_or_top" />
 
                 <com.hm.iou.uikit.ShapedImageView
                     android:id="@+id/iv_noRead"
@@ -60,9 +59,10 @@
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="match_parent"
-                android:layout_height="22dp"
+                android:layout_height="25dp"
                 android:layout_marginLeft="10dp"
                 android:ellipsize="end"
+                android:gravity="center_vertical"
                 android:singleLine="true"
                 android:textColor="#ff222222"
                 android:textSize="@dimen/textFontSize_15" />
