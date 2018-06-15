@@ -40,16 +40,12 @@
         </LinearLayout>
 
 
-        <TextView
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_marginTop="15dp"
-            android:background="@mipmap/msgcenter_bg_notice"
-            android:gravity="center"
             android:scaleType="centerCrop"
-            android:text="默认系统广告图"
-            android:textColor="@color/white"
-            android:textSize="@dimen/textFontSize_24" />
+            android:src="@mipmap/msgcenter_bg_notice" />
 
         <TextView
             android:id="@+id/tv_intro"
