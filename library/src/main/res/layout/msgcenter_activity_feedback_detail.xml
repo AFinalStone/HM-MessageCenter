@@ -158,7 +158,7 @@
                 android:layout_width="32dip"
                 android:layout_height="32dp"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/msg_logo"
+                android:src="@mipmap/msgcenter_logo"
                 />
 
             <RelativeLayout

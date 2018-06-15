@@ -1,12 +1,9 @@
 package com.hm.iou.msg.business.feedback.view;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,19 +16,11 @@ import com.hm.iou.base.photo.SelectPicDialog;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
-import com.hm.iou.msg.bean.FeedbackDetailBean;
 import com.hm.iou.msg.business.feedback.FeedbackDetailContract;
-import com.hm.iou.msg.business.feedback.HistoryFeedbackContract;
 import com.hm.iou.msg.business.feedback.presenter.FeedbackDetailPresenter;
-import com.hm.iou.msg.business.feedback.presenter.HistoryFeedbackPresenter;
 import com.hm.iou.tools.ImageLoader;
-import com.hm.iou.uikit.HMGrayDividerItemDecoration;
-import com.hm.iou.uikit.HMLoadMoreView;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.HMTopBarView;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.List;
 
@@ -79,7 +68,7 @@ public class FeedbackDetailActivity extends BaseActivity<FeedbackDetailPresenter
 
     @Override
     protected int getLayoutId() {
-        return R.layout.msg_activity_feedback_detail;
+        return R.layout.msgcenter_activity_feedback_detail;
     }
 
     @Override
@@ -198,14 +187,14 @@ public class FeedbackDetailActivity extends BaseActivity<FeedbackDetailPresenter
     class QuestionImageAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
         public QuestionImageAdapter(@Nullable List<String> data) {
-            super(R.layout.msg_item_feedback_image, data);
+            super(R.layout.msgcenter_item_feedback_image, data);
         }
 
         @Override
         protected void convert(BaseViewHolder helper, String url) {
             ImageView imageView = helper.getView(R.id.iv_feedback_image);
             ImageLoader.getInstance(FeedbackDetailActivity.this)
-                    .displayImage(url, imageView, R.drawable.msg_bg_feedback_item_pic, R.drawable.msg_bg_feedback_item_pic);
+                    .displayImage(url, imageView, R.drawable.msgcenter_bg_feedback_item_pic, R.drawable.msgcenter_bg_feedback_item_pic);
         }
     }
 

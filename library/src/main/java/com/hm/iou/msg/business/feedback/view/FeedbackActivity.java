@@ -74,7 +74,7 @@ public class FeedbackActivity  extends BaseActivity<FeedbackPresenter> implement
 
     @Override
     protected int getLayoutId() {
-        return R.layout.msg_activity_feedback;
+        return R.layout.msgcenter_activity_feedback;
     }
 
     @Override
@@ -209,7 +209,7 @@ public class FeedbackActivity  extends BaseActivity<FeedbackPresenter> implement
         static final int MAX_PIC_COUNT = 3;
 
         public FeedbackImageAdapter() {
-            super(R.layout.msg_item_feedback_image);
+            super(R.layout.msgcenter_item_feedback_image);
             List<String> list = new ArrayList<>();
             list.add("");   //url为空时展示"+"图片
             setNewData(list);
@@ -244,11 +244,11 @@ public class FeedbackActivity  extends BaseActivity<FeedbackPresenter> implement
             helper.setTag(R.id.iv_delete, url);
             if (TextUtils.isEmpty(url)) {
                 helper.setVisible(R.id.iv_delete, false);
-                helper.setImageResource(R.id.iv_feedback_image, R.mipmap.msg_ic_add_photo);
+                helper.setImageResource(R.id.iv_feedback_image, R.mipmap.msgcenter_ic_add_photo);
                 helper.addOnClickListener(R.id.iv_feedback_image);
             } else {
                 helper.setVisible(R.id.iv_delete, true);
-                int resId = R.drawable.msg_bg_feedback_item_pic;
+                int resId = R.drawable.msgcenter_bg_feedback_item_pic;
                 ImageLoader.getInstance(FeedbackActivity.this)
                         .displayImage(url, (ImageView) helper.getView(R.id.iv_feedback_image), resId, resId);
                 helper.addOnClickListener(R.id.iv_delete);

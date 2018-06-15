@@ -13,7 +13,7 @@ import com.hm.iou.msg.R;
 public class FeedbackListAdapter extends BaseQuickAdapter<IFeedbackListItem, BaseViewHolder>{
 
     public FeedbackListAdapter(Context context) {
-        super(R.layout.msg_item_history_feedback);
+        super(R.layout.msgcenter_item_history_feedback);
     }
 
     @Override

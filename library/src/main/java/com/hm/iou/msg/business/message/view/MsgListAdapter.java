@@ -1,11 +1,9 @@
 package com.hm.iou.msg.business.message.view;
 
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.hm.iou.msg.R;
 import com.hm.iou.tools.ImageLoader;
@@ -21,8 +19,8 @@ public class MsgListAdapter extends BaseMultiItemQuickAdapter<IMsgItem, BaseView
 
     public MsgListAdapter() {
         super(null);
-        addItemType(TYPE_AD_OR_SPORT, R.layout.msg_item_msg_center_ad_or_sport);
-        addItemType(TYPE_COMMUNIQUE, R.layout.msg_item_msg_center_notice);
+        addItemType(TYPE_AD_OR_SPORT, R.layout.msgcenter_item_ad_or_sport);
+        addItemType(TYPE_COMMUNIQUE, R.layout.msgcenter_item_notice);
     }
 
     @Override

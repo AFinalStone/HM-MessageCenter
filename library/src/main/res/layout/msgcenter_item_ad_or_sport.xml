@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="18dp"
-        android:background="@drawable/msg_bg_msg_center_item_time"
+        android:background="@drawable/msgcenter_bg_msg_center_item_time"
         android:gravity="center"
         android:minHeight="20dp"
         android:minWidth="80dp"
@@ -44,7 +44,7 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_centerInParent="true"
-                    android:src="@mipmap/msg_icon_news_or_top" />
+                    android:src="@mipmap/msgcenter_icon_news_or_top" />
 
                 <com.hm.iou.uikit.ShapedImageView
                     android:id="@+id/iv_noRead"

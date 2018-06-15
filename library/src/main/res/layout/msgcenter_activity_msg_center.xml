@@ -54,7 +54,7 @@
                     android:layout_width="84dp"
                     android:layout_height="93dp"
                     android:scaleType="fitCenter"
-                    android:src="@mipmap/msg_icon_empty" />
+                    android:src="@mipmap/msgcenter_icon_empty" />
 
 
                 <TextView

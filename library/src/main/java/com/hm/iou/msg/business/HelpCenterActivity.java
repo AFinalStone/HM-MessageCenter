@@ -44,7 +44,7 @@ public class HelpCenterActivity extends BaseWebviewActivity implements View.OnCl
 
     @Override
     protected int getLayoutId() {
-        return R.layout.msg_activity_help_center;
+        return R.layout.msgcenter_activity_help_center;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.hm.iou.msg.business.feedback.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -47,7 +46,7 @@ public class HistoryFeedbackActivity extends BaseActivity<HistoryFeedbackPresent
 
     @Override
     protected int getLayoutId() {
-        return R.layout.msg_activity_feedback_history_list;
+        return R.layout.msgcenter_activity_feedback_history_list;
     }
 
     @Override

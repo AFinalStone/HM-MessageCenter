@@ -43,7 +43,7 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
 
     @Override
     protected int getLayoutId() {
-        return R.layout.msg_activity_msg_center;
+        return R.layout.msgcenter_activity_msg_center;
     }
 
     @Override
