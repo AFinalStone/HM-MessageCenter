@@ -109,29 +109,7 @@ public class CacheDataUtil {
      * 清除缓存消息中心的缓存列表
      */
     public static synchronized void clearMsgListCache() {
-        Flowable.just(0)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(new Function<Integer, Void>() {
-
-                    @Override
-                    public Void apply(Integer integer) throws Exception {
-                        MsgCenterDbHelper.deleteMsgCenterAllListData();
-                        return null;
-                    }
-                })
-                .subscribe(new Consumer<Void>() {
-
-                    @Override
-                    public void accept(Void o) throws Exception {
-
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-
-                    }
-                });
+        MsgCenterDbHelper.deleteMsgCenterAllListData();
     }
 
     /**

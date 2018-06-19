@@ -2,12 +2,11 @@ package com.hm.iou.msg;
 
 import android.content.Context;
 
-import com.google.gson.Gson;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.api.MsgApi;
-import com.hm.iou.msg.bean.CommuniqueMsgBean;
 import com.hm.iou.msg.bean.MsgDetailBean;
 import com.hm.iou.sharedata.event.CommBizEvent;
+import com.hm.iou.sharedata.event.LogoutEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -30,26 +29,8 @@ public class MsgCenterAppLike {
 
     private Disposable mListDisposable;
 
-    public static MsgCenterAppLike getInstance() {
-        if (mApp == null) {
-            throw new RuntimeException("MsgCenterAppLike should init first.");
-        }
-        return mApp;
-    }
-
-    private static MsgCenterAppLike mApp;
-
-    private Context mContext;
-
     public void onCreate(Context context) {
-        mContext = context;
-        mApp = this;
         EventBus.getDefault().register(this);
-    }
-
-    public void onDestroy() {
-        CacheDataUtil.clearMsgListCache();
-        EventBus.getDefault().unregister(this);
     }
 
     /**
@@ -93,6 +74,16 @@ public class MsgCenterAppLike {
                 EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
             }
         }
+    }
+
+    /**
+     * 用户退出
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onEventLogout(LogoutEvent event) {
+        CacheDataUtil.clearMsgListCache();
     }
 
 }
