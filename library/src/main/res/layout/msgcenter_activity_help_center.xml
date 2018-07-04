@@ -34,7 +34,8 @@
         android:id="@+id/lv_webview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"></com.hm.iou.uikit.HMLoadingView>
+        android:visibility="gone">
+    </com.hm.iou.uikit.HMLoadingView>
 
     <LinearLayout
         android:id="@+id/ll_feedback_bottom"
@@ -52,7 +53,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="意见反馈" />
+            android:text="意见反馈"
+            android:textSize="@dimen/textFontSize_14" />
 
         <TextView
             android:id="@+id/tv_feedbackHistory"
@@ -60,7 +62,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="历史反馈" />
+            android:text="历史反馈"
+            android:textSize="@dimen/textFontSize_14" />
 
     </LinearLayout>
 

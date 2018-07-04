@@ -16,10 +16,13 @@ import com.hm.iou.msg.business.feedback.HistoryFeedbackContract;
 import com.hm.iou.msg.business.feedback.view.IFeedbackListItem;
 import com.hm.iou.msg.dict.FeedbackKind;
 import com.hm.iou.sharedata.UserManager;
+import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.hm.iou.sharedata.model.SexEnum;
 import com.hm.iou.sharedata.model.UserInfo;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,6 +38,7 @@ import io.reactivex.disposables.Disposable;
 
 public class FeedbackDetailPresenter extends MvpActivityPresenter<FeedbackDetailContract.View> implements FeedbackDetailContract.Presenter {
 
+    public static final String EVENT_KEY_FEEDBACK_READ_DETAIL = "feedback_read_detail";
 
     public FeedbackDetailPresenter(@NonNull Context context, @NonNull FeedbackDetailContract.View view) {
         super(context, view);
@@ -58,6 +62,8 @@ public class FeedbackDetailPresenter extends MvpActivityPresenter<FeedbackDetail
                     @Override
                     public void handleResult(FeedbackDetailBean data) {
                         showFeedbackDetail(data);
+                        //通知该反馈已经阅读过
+                        EventBus.getDefault().post(new CommBizEvent(EVENT_KEY_FEEDBACK_READ_DETAIL, ""));
                     }
 
                     @Override
