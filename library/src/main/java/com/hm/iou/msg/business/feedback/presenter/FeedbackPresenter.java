@@ -124,8 +124,6 @@ public class FeedbackPresenter extends MvpActivityPresenter<FeedbackContract.Vie
     private void uploadImage(File file, final int pos) {
         mView.showLoadingView(String.format("图片上传中%d/%d", pos + 1, mTotalFileSize));
         UserInfo userInfo = UserManager.getInstance(mContext).getUserInfo();
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part partFile = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
         Map<String, Object> map = new HashMap<>();
         map.put("resourceType", "Complain");
         map.put("operId", userInfo.getUserId());
