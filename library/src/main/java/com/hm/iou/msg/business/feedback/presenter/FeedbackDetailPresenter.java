@@ -93,7 +93,7 @@ public class FeedbackDetailPresenter extends MvpActivityPresenter<FeedbackDetail
         int type = data.getKind();
         mView.showFeedbackType("#" + FeedbackKind.getDescByValue(type));
 
-        if (data.getStatus() == 3) {
+        if (data.getStatus() >= 3) {
             mView.showFeedbackStatus("已处理", 0xffa3a3a3);
         } else {
             mView.showFeedbackStatus("未处理", 0xff222222);
@@ -114,7 +114,7 @@ public class FeedbackDetailPresenter extends MvpActivityPresenter<FeedbackDetail
         mView.showFeedbackImageList(pics);
 
         //已处理
-        if (data.getStatus() == 3) {
+        if (data.getStatus() >= 3) {
             mView.showAnswerLayout(true);
             mView.showNoReplyLayout(false);
 

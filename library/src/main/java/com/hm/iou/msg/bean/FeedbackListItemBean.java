@@ -82,12 +82,20 @@ public class FeedbackListItemBean implements IFeedbackListItem {
         return formatTimeStr;
     }
 
+    /**
+     * Init(1,"未处理"),
+     * Processing(2,"处理中/已查看"),
+     * Done(3,"处理完成"),
+     * ReadAnswer(4,"已读客服回复的内容");
+     *
+     * @return
+     */
     @Override
     public String getStatusStr() {
-        if (status == 3) {
-            return "已处理";
+        if (status <= 2) {
+            return "未处理";
         }
-        return "未处理";
+        return "已处理";
     }
 
     @Override
