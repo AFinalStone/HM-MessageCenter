@@ -29,14 +29,14 @@ public class MsgCenterContract {
         void refreshItem(int position);
 
         /**
+         * 允许刷新
+         */
+        void enableRefresh();
+
+        /**
          * 隐藏下拉刷新View
          */
         void hidePullDownRefresh();
-
-        /**
-         * 显示下拉刷新view
-         */
-        void showPullDownRefresh();
 
         /**
          * 显示加载失败

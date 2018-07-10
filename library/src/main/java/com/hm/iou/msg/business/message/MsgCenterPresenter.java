@@ -18,6 +18,7 @@ import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -40,10 +41,53 @@ public class MsgCenterPresenter extends MvpActivityPresenter<MsgCenterContract.V
         super(context, view);
     }
 
+    private void getInitData() {
+        MsgApi.getMessages()
+                .compose(getProvider().<BaseResponse<List<MsgDetailBean>>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<List<MsgDetailBean>>handleResponse())
+                .subscribeWith(new CommSubscriber<List<MsgDetailBean>>(mView) {
+                    @Override
+                    public void handleResult(List<MsgDetailBean> list) {
+                        mView.hideInitLoading();
+                        mView.enableRefresh();
+                        if (mMsgListData == null) {
+                            mMsgListData = new ArrayList<>();
+                        }
+                        if (list != null) {
+                            CacheDataUtil.addMsgListToCache(list);
+                            mMsgListData.addAll(list);
+                        }
+                        if (mMsgListData.isEmpty()) {
+                            mView.showDataEmpty();
+                        } else {
+                            mView.showMsgList((ArrayList) mMsgListData);
+                        }
+
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String s, String s1) {
+                        mView.hideInitLoading();
+                        mView.enableRefresh();
+                    }
+
+                    @Override
+                    public boolean isShowCommError() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isShowBusinessError() {
+                        return false;
+                    }
+                });
+    }
+
     @Override
     public void init() {
         mView.showInitLoading();
         Flowable.just(0)
+                .delay(500, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(getProvider().<Integer>bindUntilEvent(ActivityEvent.DESTROY))
@@ -60,24 +104,13 @@ public class MsgCenterPresenter extends MvpActivityPresenter<MsgCenterContract.V
                 .subscribeWith(new CommSubscriber<List<MsgDetailBean>>(mView) {
                     @Override
                     public void handleResult(List<MsgDetailBean> list) {
-                        mView.hideInitLoading();
                         mMsgListData = list;
-                        if (mMsgListData == null) {
-                            mMsgListData = new ArrayList<>();
-                        }
-                        if (mMsgListData.isEmpty()) {
-                            mView.showDataEmpty();
-                        } else {
-                            mView.showMsgList((ArrayList) mMsgListData);
-                        }
-                        //缓存加载成功，进行网络请求获取最新的数据
-                        mView.showPullDownRefresh();
+                        getInitData();
                     }
 
                     @Override
                     public void handleException(Throwable throwable, String code, String msg) {
-                        mView.hideInitLoading();
-                        mView.showDataEmpty();
+                        getInitData();
                     }
 
                     @Override

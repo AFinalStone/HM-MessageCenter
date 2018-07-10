@@ -2,8 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/uikit_background"
-    android:orientation="vertical">
+    android:background="@color/uikit_background">
 
     <com.hm.iou.uikit.HMTopBarView
         android:id="@+id/topBar"
@@ -19,6 +18,7 @@
         app:srlAccentColor="@android:color/white"
         app:srlEnableLoadMore="false"
         app:srlEnablePreviewInEditMode="true"
+        app:srlEnableRefresh="false"
         app:srlPrimaryColor="#444444">
 
         <LinearLayout
@@ -32,43 +32,12 @@
                 android:layout_height="40dip" />
         </LinearLayout>
 
-        <RelativeLayout
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_msgList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_msgList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:overScrollMode="never"
-                android:visibility="gone" />
-
-            <LinearLayout
-                android:id="@+id/ll_data_empty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="84dp"
-                    android:layout_height="93dp"
-                    android:scaleType="fitCenter"
-                    android:src="@mipmap/msgcenter_icon_empty" />
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="21dp"
-                    android:text="@string/messagecenter_no_msg"
-                    android:textColor="#ffbbbbbb"
-                    android:textSize="@dimen/textFontSize_18" />
-
-            </LinearLayout>
-
-
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:overScrollMode="never" />
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
@@ -76,8 +45,7 @@
         android:id="@+id/loading_init"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/topBar"
-        android:background="@color/uikit_background" />
+        android:layout_below="@id/topBar" />
 
 </RelativeLayout>
 

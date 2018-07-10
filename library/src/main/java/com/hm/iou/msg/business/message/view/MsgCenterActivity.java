@@ -34,8 +34,6 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
     RecyclerView mRvMsgList;
     @BindView(R2.id.refreshLayout)
     SmartRefreshLayout mRefreshLayout;
-    @BindView(R2.id.ll_data_empty)
-    LinearLayout mllDataEmpty;
     @BindView(R2.id.loading_init)
     HMLoadingView mLoadingInit;
 
@@ -54,10 +52,8 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
     @Override
     protected void initEventAndData(Bundle bundle) {
         mAdapter = new MsgListAdapter();
-        mAdapter.bindToRecyclerView(mRvMsgList);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
-        mRvMsgList.addItemDecoration(new HMGrayDividerItemDecoration(mContext, LinearLayout.VERTICAL));
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -91,8 +87,6 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
 
     @Override
     public void showMsgList(List<IMsgItem> list) {
-        mllDataEmpty.setVisibility(View.GONE);
-        mRvMsgList.setVisibility(View.VISIBLE);
         mAdapter.setNewData(list);
     }
 
@@ -102,8 +96,8 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
     }
 
     @Override
-    public void showPullDownRefresh() {
-        mRefreshLayout.autoRefresh();
+    public void enableRefresh() {
+        mRefreshLayout.setEnableRefresh(true);
     }
 
     @Override
@@ -113,8 +107,8 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
 
     @Override
     public void showDataEmpty() {
-        mRvMsgList.setVisibility(View.GONE);
-        mllDataEmpty.setVisibility(View.VISIBLE);
+        mLoadingInit.setVisibility(View.VISIBLE);
+        mLoadingInit.showDataEmpty("");
     }
 
 
