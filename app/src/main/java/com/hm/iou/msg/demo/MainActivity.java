@@ -7,7 +7,6 @@ import android.view.View;
 
 import com.hm.iou.msg.MsgCenterAppLike;
 import com.hm.iou.msg.business.HelpCenterActivity;
-import com.hm.iou.msg.business.feedback.view.FeedbackActivity;
 import com.hm.iou.msg.business.feedback.view.HistoryFeedbackActivity;
 import com.hm.iou.msg.business.message.view.MsgCenterActivity;
 import com.hm.iou.network.HttpReqManager;
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         MobileLoginReqBean reqBean = new MobileLoginReqBean();
         reqBean.setMobile("15267163669");
         reqBean.setQueryPswd(pwd);
-        HttpReqManager.getInstance().getService(JietiaoService.class)
+        HttpReqManager.getInstance().getService(MsgCenterService.class)
                 .mobileLogin(reqBean)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

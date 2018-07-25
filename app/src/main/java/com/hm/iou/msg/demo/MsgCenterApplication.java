@@ -15,19 +15,19 @@ import com.orm.SugarContext;
  * Created by hjy on 18/5/11.<br>
  */
 
-public class JietiaoApplication extends Application {
+public class MsgCenterApplication extends Application {
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Router.init(this);
         Logger.init(this, true);
-        initNetwork();
-        SugarContext.init(this);
+        Router.init(this);
         BaseBizAppLike appLike = new BaseBizAppLike();
         appLike.onCreate(this);
-        appLike.initServer("http://192.168.1.254", "http://192.168.1.254",
-                "http://192.168.1.254");
+        appLike.initServer("http://192.168.1.217", "http://192.168.1.217",
+                "http://192.168.1.217");
+        initNetwork();
+        SugarContext.init(this);
         MsgCenterAppLike msgCenterAppLike = new MsgCenterAppLike();
         msgCenterAppLike.onCreate(this);
     }
@@ -39,7 +39,7 @@ public class JietiaoApplication extends Application {
                 .setAppChannel("guanfang")
                 .setAppVersion("1.0.2")
                 .setDeviceId("123abc123")
-                .setBaseUrl("http://192.168.1.254")
+                .setBaseUrl(BaseBizAppLike.getInstance().getApiServer())
                 .setUserId(UserManager.getInstance(this).getUserId())
                 .setToken(UserManager.getInstance(this).getToken())
                 .build();

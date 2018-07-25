@@ -17,7 +17,7 @@ import retrofit2.http.Query;
  * Created by hjy on 2018/5/29.
  */
 
-public interface JietiaoService {
+public interface MsgCenterService {
 
     @POST("/api/iou/user/v1/mobileLogin")
     Flowable<BaseResponse<UserInfo>> mobileLogin(@Body MobileLoginReqBean mobileLoginReqBean);
