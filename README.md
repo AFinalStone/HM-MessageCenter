@@ -43,11 +43,11 @@ allprojects {
 
 | 页面 | 路由url | 备注 |
 | ------ | ------ | ------ |
-| 帮助中心页面 | hmiou://m.54jietiao.com/message/helpcenter| |
-| 意见反馈页面 | hmiou://m.54jietiao.com/message/feedback|   |
-| 历史反馈页面 | hmiou://m.54jietiao.com/message/feedback_history?type=*| type的类型只能是FeedbackKind枚举类型中的一种|
-| 反馈详情页面 | hmiou://m.54jietiao.com/message/feedback_detail?feedback_id=*| |
-| 消息中心页面 | hmiou://m.54jietiao.com/message/index  |
+| 帮助中心页面 | ```hmiou://m.54jietiao.com/message/helpcenter```| |
+| 意见反馈页面 | ```hmiou://m.54jietiao.com/message/feedback```|   |
+| 历史反馈页面 | ````hmiou://m.54jietiao.com/message/feedback_history?type=*```| type的类型只能是FeedbackKind枚举类型中的一种|
+| 反馈详情页面 | ```hmiou://m.54jietiao.com/message/feedback_detail?feedback_id=*```| |
+| 消息中心页面 | ```hmiou://m.54jietiao.com/message/index```  |
 
 路由文件
 
