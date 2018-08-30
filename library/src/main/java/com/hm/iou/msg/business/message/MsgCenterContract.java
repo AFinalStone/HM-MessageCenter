@@ -39,7 +39,7 @@ public class MsgCenterContract {
         void hidePullDownRefresh();
 
         /**
-         * 显示加载失败
+         * 显示数据为空
          */
         void showDataEmpty();
 
