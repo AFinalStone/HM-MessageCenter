@@ -143,7 +143,7 @@
                 android:layout_width="32dip"
                 android:layout_height="32dp"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/msgcenter_logo" />
+                android:src="@mipmap/ic_launcher" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
