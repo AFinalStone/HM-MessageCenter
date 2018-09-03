@@ -40,6 +40,7 @@ public class HelpCenterActivity extends BaseWebviewActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         findViewById(R.id.tv_feedback).setOnClickListener(this);
         findViewById(R.id.tv_feedbackHistory).setOnClickListener(this);
+        mTopBar.getStatusBarPlaceHolder().setVisibility(View.VISIBLE);
     }
 
     @Override
