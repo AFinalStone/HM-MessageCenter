@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,37 +16,40 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.hm.iou.base.BaseActivity;
 import com.hm.iou.base.photo.CompressPictureUtil;
-import com.hm.iou.base.photo.PhotoUtil;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.feedback.FeedbackContract;
 import com.hm.iou.msg.business.feedback.presenter.FeedbackPresenter;
 import com.hm.iou.msg.dict.FeedbackKind;
+import com.hm.iou.router.Router;
 import com.hm.iou.tools.ImageLoader;
 import com.hm.iou.uikit.HMTopBarView;
 import com.hm.iou.uikit.dialog.IOSActionSheetItem;
 import com.hm.iou.uikit.dialog.IOSActionSheetTitleDialog;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by hjy on 2018/5/29.
  */
 
-public class FeedbackActivity  extends BaseActivity<FeedbackPresenter> implements FeedbackContract.View  {
+public class FeedbackActivity extends BaseActivity<FeedbackPresenter> implements FeedbackContract.View {
 
     public static final String EXTRA_KEY_TYPE = "type";
 
-    private static final int REQ_CODE_CAMERA = 101;
-    private static final int REQ_CODE_PHOTO = 102;
+    private static final int REQ_OPEN_SELECT_PIC = 100;
+
 
     @BindView(R2.id.topbar)
     HMTopBarView mTopBarView;
@@ -62,7 +66,7 @@ public class FeedbackActivity  extends BaseActivity<FeedbackPresenter> implement
 
     private FeedbackImageAdapter mAdapter;
 
-    private FeedbackKind[] mFeedbackKindArr = new FeedbackKind[] {
+    private FeedbackKind[] mFeedbackKindArr = new FeedbackKind[]{
             FeedbackKind.FlashWrong,
             FeedbackKind.DataWrong,
             FeedbackKind.NoCode,
@@ -118,7 +122,12 @@ public class FeedbackActivity  extends BaseActivity<FeedbackPresenter> implement
                 if (view.getId() == R.id.iv_feedback_image) {
                     String url = (String) view.getTag();
                     if (TextUtils.isEmpty(url)) {
-                        PhotoUtil.showSelectDialog(FeedbackActivity.this, REQ_CODE_CAMERA, REQ_CODE_PHOTO);
+                        List<String> list = mAdapter.getData();
+                        Router.getInstance()
+                                .buildWithUrl("hmiou://m.54jietiao.com/select_pic/index")
+                                .withString("enable_select_max_num", String.valueOf(3 + 1 - list.size()))
+                                .navigation(mContext, REQ_OPEN_SELECT_PIC);
+
                     } else {
 
                     }
@@ -149,28 +158,48 @@ public class FeedbackActivity  extends BaseActivity<FeedbackPresenter> implement
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_CODE_CAMERA) {
-            if (resultCode == RESULT_OK) {
-                String path = PhotoUtil.getCameraPhotoPath();
-                compressPic(path);
-            }
-        } else if (requestCode == REQ_CODE_PHOTO) {
-            if (resultCode == RESULT_OK) {
-                String path = PhotoUtil.getPath(this, data.getData());
-                compressPic(path);
-            }
+        if (REQ_OPEN_SELECT_PIC == requestCode && RESULT_OK == resultCode) {
+            List<String> listPaths = data.getStringArrayListExtra("extra_result_selection_path");
+            Log.d("Photo", " path: " + listPaths);
+            Flowable.just(listPaths)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .map(new Function<List<String>, List<String>>() {
+                        @Override
+                        public List<String> apply(List<String> list) throws Exception {
+                            List<String> listFiles = new ArrayList<>();
+                            for (String path : list) {
+                                listFiles.add("file://" + CompressPictureUtil.compressPic(mContext, path).getAbsolutePath());
+                            }
+                            return listFiles;
+                        }
+                    })
+                    .subscribe(new Consumer<List<String>>() {
+                        @Override
+                        public void accept(List<String> list) throws Exception {
+                            for (String path : list) {
+                                mAdapter.addImage(path);
+                            }
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+
+                        }
+                    });
+
         }
     }
 
-    private void compressPic(String fileUrl) {
-        CompressPictureUtil.compressPic(this, fileUrl, new CompressPictureUtil.OnCompressListener() {
-            @Override
-            public void onCompressPicSuccess(File file) {
-                Logger.d("图片压缩成功....");
-                mAdapter.addImage("file://" + file.getAbsolutePath());
-            }
-        });
-    }
+//    private void compressPic(String fileUrl) {
+//        CompressPictureUtil.compressPic(this, fileUrl, new CompressPictureUtil.OnCompressListener() {
+//            @Override
+//            public void onCompressPicSuccess(File file) {
+//                Logger.d("图片压缩成功....");
+//                mAdapter.addImage("file://" + file.getAbsolutePath());
+//            }
+//        });
+//    }
 
     @OnClick(value = {R2.id.linearLayout_type})
     void onClick(View v) {
@@ -185,7 +214,7 @@ public class FeedbackActivity  extends BaseActivity<FeedbackPresenter> implement
             builder.addSheetItem(IOSActionSheetItem.create(kind.getDesc()).setItemClickListener(new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Logger.d("click pos = " + which );
+                    Logger.d("click pos = " + which);
                     int type = mFeedbackKindArr[which].getValue();
                     mPresenter.setFeedbackType(type);
                 }
