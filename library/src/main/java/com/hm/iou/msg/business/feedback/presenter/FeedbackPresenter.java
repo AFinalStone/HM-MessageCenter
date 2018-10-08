@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.hm.iou.base.file.FileApi;
+import com.hm.iou.base.file.FileBizType;
 import com.hm.iou.base.file.FileUploadResult;
 import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
@@ -123,14 +124,7 @@ public class FeedbackPresenter extends MvpActivityPresenter<FeedbackContract.Vie
 
     private void uploadImage(File file, final int pos) {
         mView.showLoadingView(String.format("图片上传中%d/%d", pos + 1, mTotalFileSize));
-        UserInfo userInfo = UserManager.getInstance(mContext).getUserInfo();
-        Map<String, Object> map = new HashMap<>();
-        map.put("resourceType", "Complain");
-        map.put("operId", userInfo.getUserId());
-        map.put("operKind", "CUSTOMER");
-        map.put("businessModel", "ANDROID");
-        map.put("right", "777");
-        FileApi.uploadFile(file, map)
+        FileApi.uploadImage(file, FileBizType.Complain)
                 .compose(getProvider().<BaseResponse<FileUploadResult>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<FileUploadResult>handleResponse())
                 .subscribeWith(new CommSubscriber<FileUploadResult>(mView) {
