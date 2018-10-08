@@ -2,6 +2,7 @@ package com.hm.iou.msg;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.hm.iou.router.Router;
 
@@ -17,14 +18,9 @@ public class NavigationHelper {
      * @param context
      */
     public static void ToMsgDetail(Context context, String url) {
-//        try {
-//            Class WebViewH5Activity = Class.forName("com.hm.iou.base.webview.BaseWebviewActivity");
-//            Intent intent = new Intent(context, WebViewH5Activity);
-//            intent.putExtra("url", url);
-//            context.startActivity(intent);
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
+        if (TextUtils.isEmpty(url)) {
+            return;
+        }
         Router.getInstance()
                 .buildWithUrl("hmiou://m.54jietiao.com/webview/index")
                 .withString("url", url)
