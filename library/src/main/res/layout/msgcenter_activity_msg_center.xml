@@ -8,7 +8,9 @@
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/uikit_topbar_height"
-        app:titleText="@string/messagecenter_msg_center" />
+        app:titleText="@string/messagecenter_msg_center"
+        app:backIcon="@mipmap/uikit_icon_close_black"
+        />
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/refreshLayout"
