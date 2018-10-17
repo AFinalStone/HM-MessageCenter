@@ -29,8 +29,14 @@ public class MsgListAdapter extends BaseMultiItemQuickAdapter<IMsgItem, BaseView
         helper.setText(R.id.tv_title, item.getMsgTitle());
 
         if (helper.getItemViewType() == TYPE_AD_OR_SPORT) {
-            ImageLoader.getInstance(mContext).displayImage(item.getMsgImage(), (ImageView) helper.getView(R.id.imageView),
-                    R.drawable.uikit_bg_pic_loading_place, R.mipmap.msgcenter_icon_load_image_error_default);
+            String msgImage = item.getMsgImage();
+            if (TextUtils.isEmpty(msgImage)) {
+                ImageLoader.getInstance(mContext).displayImage(R.mipmap.msgcenter_icon_load_image_error_default, (ImageView) helper.getView(R.id.imageView));
+            } else {
+                ImageLoader.getInstance(mContext).displayImage(item.getMsgImage(), (ImageView) helper.getView(R.id.imageView),
+                        R.drawable.uikit_bg_pic_loading_place, R.mipmap.msgcenter_icon_load_image_error_default);
+            }
+
             helper.setImageResource(R.id.iv_icon, item.getMsgIcon());
             helper.addOnClickListener(R.id.ll_adOrSport);
             if (TextUtils.isEmpty(item.getMsgTime())) {
