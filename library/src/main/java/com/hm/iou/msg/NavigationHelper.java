@@ -21,6 +21,10 @@ public class NavigationHelper {
         if (TextUtils.isEmpty(url)) {
             return;
         }
+        if (url.startsWith("hmiou")) {
+            Router.getInstance().buildWithUrl(url).navigation(context);
+            return;
+        }
         Router.getInstance()
                 .buildWithUrl("hmiou://m.54jietiao.com/webview/index")
                 .withString("url", url)
