@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.hm.iou.base.mvp.MvpActivityPresenter;
+import com.hm.iou.base.mvp.MvpFragmentPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.database.MsgCenterDbHelper;
@@ -15,6 +16,7 @@ import com.hm.iou.msg.bean.MsgDetailBean;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.hm.iou.tools.ToastUtil;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,7 @@ import io.reactivex.schedulers.Schedulers;
  * @author syl
  * @time 2018/5/30 下午6:47
  */
-public class MsgCenterPresenter extends MvpActivityPresenter<MsgCenterContract.View> implements MsgCenterContract.Presenter {
+public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.View> implements MsgCenterContract.Presenter {
 
     private Disposable mListDisposable;
     private List<MsgDetailBean> mMsgListData;
@@ -43,7 +45,7 @@ public class MsgCenterPresenter extends MvpActivityPresenter<MsgCenterContract.V
 
     private void getInitData() {
         MsgApi.getMessages()
-                .compose(getProvider().<BaseResponse<List<MsgDetailBean>>>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(getProvider().<BaseResponse<List<MsgDetailBean>>>bindUntilEvent(FragmentEvent.DESTROY))
                 .map(RxUtil.<List<MsgDetailBean>>handleResponse())
                 .subscribeWith(new CommSubscriber<List<MsgDetailBean>>(mView) {
                     @Override
@@ -90,7 +92,7 @@ public class MsgCenterPresenter extends MvpActivityPresenter<MsgCenterContract.V
                 .delay(500, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(getProvider().<Integer>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(getProvider().<Integer>bindUntilEvent(FragmentEvent.DESTROY))
                 .map(new Function<Integer, List<MsgDetailBean>>() {
                     @Override
                     public List<MsgDetailBean> apply(Integer integer) throws Exception {
@@ -131,7 +133,7 @@ public class MsgCenterPresenter extends MvpActivityPresenter<MsgCenterContract.V
             mListDisposable.dispose();
         }
         mListDisposable = MsgApi.getMessages()
-                .compose(getProvider().<BaseResponse<List<MsgDetailBean>>>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(getProvider().<BaseResponse<List<MsgDetailBean>>>bindUntilEvent(FragmentEvent.DESTROY))
                 .map(RxUtil.<List<MsgDetailBean>>handleResponse())
                 .subscribeWith(new CommSubscriber<List<MsgDetailBean>>(mView) {
                     @Override

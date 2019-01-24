@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hm.iou.base.BaseActivity;
+import com.hm.iou.base.BaseFragment;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
@@ -25,7 +26,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implements MsgCenterContract.View {
+public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implements MsgCenterContract.View {
 
 
     @BindView(R2.id.iv_msg_refresh)
@@ -46,20 +47,20 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
 
     @Override
     protected MsgCenterPresenter initPresenter() {
-        return new MsgCenterPresenter(this, this);
+        return new MsgCenterPresenter(mActivity, this);
     }
 
     @Override
     protected void initEventAndData(Bundle bundle) {
         mAdapter = new MsgListAdapter();
-        mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
+        mRvMsgList.setLayoutManager(new LinearLayoutManager(mActivity));
         mRvMsgList.setAdapter(mAdapter);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 if (R.id.ll_adOrSport == view.getId()) {
                     IMsgItem item = (IMsgItem) adapter.getItem(position);
-                    NavigationHelper.ToMsgDetail(mContext, item.getMsgDetailLinkUrl());
+                    NavigationHelper.ToMsgDetail(mActivity, item.getMsgDetailLinkUrl());
                     mPresenter.markHaveRead(position);
                 }
             }
