@@ -13,10 +13,15 @@ import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.CacheDataUtil;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.MsgDetailBean;
+import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.hm.iou.tools.ToastUtil;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.android.FragmentEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -175,15 +180,12 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
         CacheDataUtil.updateMsgItemToCache(data);
         mView.refreshItem(position);
     }
-}
 
-//    MsgDetailBean msgBean = new MsgDetailBean(1, 12312
-//            , "http://p1.pstatp.com/large/pgc-image/1527661192654a57d03c488"
-//            , "因为拍了一张照片，这名女子被警察逮捕了，引起全国关", "https://www.toutiao.com/a6561254954655285774/"
-//            , false, "");
-//    mMsgListData.add(msgBean);
-//            msgBean=new MsgDetailBean(4,12312
-//            ,"http://p1.pstatp.com/large/pgc-image/1527661192654a57d03c488"
-//            ,"今晚系统升级","https://www.toutiao.com/a6561254954655285774/"
-//            ,true,"3月4日22点-3月5日06点，进行系统升级，可能会 出现“服务器繁忙”等异常提示，特此公告。（客服 微信号：jietiaoguanjia2018） ");
-//            mMsgListData.add(msgBean);
+    @Override
+    public void getHeadRedFlagCount() {
+        String redFlagCount = CacheDataUtil.getHeaderRedFlagCount(mContext);
+        mView.updateRedFlagCount(redFlagCount);
+    }
+
+
+}

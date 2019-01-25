@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_msgCenter).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MsgCenterFragment.class));
+//                startActivity(new Intent(MainActivity.this, MsgCenterFragment.class));
             }
         });
         findViewById(R.id.btn_getMsgCenterNoReadNum).setOnClickListener(new View.OnClickListener() {

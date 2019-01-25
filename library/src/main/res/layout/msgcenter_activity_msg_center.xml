@@ -1,53 +1,105 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/uikit_background">
+    android:background="@color/uikit_background"
+    android:orientation="vertical">
 
-    <com.hm.iou.uikit.HMTopBarView
-        android:id="@+id/topBar"
+    <View
+        android:id="@+id/view_statusbar_placeholder"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/uikit_topbar_height"
-        app:titleText="@string/messagecenter_msg_center"
-        app:backIcon="@mipmap/uikit_icon_close_black"
-        />
+        android:layout_height="@dimen/uikit_status_bar_height"
+        android:background="@color/uikit_colorPrimary" />
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/refreshLayout"
+    <LinearLayout
+        android:id="@+id/ll_top"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/topBar"
-        app:srlAccentColor="@android:color/white"
-        app:srlEnableLoadMore="false"
-        app:srlEnablePreviewInEditMode="true"
-        app:srlEnableRefresh="false"
-        app:srlPrimaryColor="#444444">
+        android:layout_height="48dip"
+        android:background="@color/uikit_colorPrimary"
+        android:orientation="horizontal">
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/rl_header"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:background="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/iv_header"
+                android:layout_width="24dip"
+                android:layout_height="24dip"
+                android:layout_centerInParent="true"
+                android:scaleType="fitXY"
+                android:src="@mipmap/jietiao_ic_home_top_header" />
+
+            <TextView
+                android:id="@+id/tv_num_no_read"
+                android:layout_width="11dp"
+                android:layout_height="11dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/jietiao_bg_home_top_header_red_num"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="6dp"
+                android:visibility="invisible" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="48dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/messagecenter_msg_center"
+            android:textColor="@color/uikit_text_main_content"
+            android:textSize="@dimen/uikit_main_title_text_size" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="50dip"
-            android:gravity="center">
+            android:layout_height="match_parent"
+            app:srlAccentColor="@android:color/white"
+            app:srlEnableLoadMore="false"
+            app:srlEnablePreviewInEditMode="true"
+            app:srlEnableRefresh="false"
+            app:srlPrimaryColor="#444444">
 
-            <com.hm.iou.uikit.PullDownRefreshImageView
-                android:id="@+id/iv_msg_refresh"
-                android:layout_width="40dip"
-                android:layout_height="40dip" />
-        </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:gravity="center">
+
+                <com.hm.iou.uikit.PullDownRefreshImageView
+                    android:id="@+id/iv_msg_refresh"
+                    android:layout_width="40dip"
+                    android:layout_height="40dip" />
+            </LinearLayout>
 
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_msgList"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_msgList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never" />
+
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+        <com.hm.iou.uikit.HMLoadingView
+            android:id="@+id/loading_init"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:overScrollMode="never" />
+            android:layout_height="match_parent" />
 
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </RelativeLayout>
 
-    <com.hm.iou.uikit.HMLoadingView
-        android:id="@+id/loading_init"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/topBar" />
 
-</RelativeLayout>
+</LinearLayout>
 

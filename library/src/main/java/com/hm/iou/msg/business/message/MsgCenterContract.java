@@ -52,6 +52,14 @@ public class MsgCenterContract {
          * 关闭初始化动画
          */
         void hideInitLoading();
+
+        /**
+         * 红色标记的数量
+         *
+         * @param redFlagCount
+         */
+        void updateRedFlagCount(String redFlagCount);
+
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
@@ -71,6 +79,11 @@ public class MsgCenterContract {
          * @param position 条目位置
          */
         void markHaveRead(int position);
+
+        /**
+         * 获取头部红点数量
+         */
+        void getHeadRedFlagCount();
 
     }
 }

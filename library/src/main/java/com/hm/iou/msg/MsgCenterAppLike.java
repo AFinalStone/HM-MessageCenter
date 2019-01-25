@@ -5,6 +5,7 @@ import android.content.Context;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.MsgDetailBean;
+import com.hm.iou.msg.event.UpdateHeadRedFlagEvent;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.event.LogoutEvent;
 
@@ -28,8 +29,10 @@ public class MsgCenterAppLike {
     public static final String EXTRA_KEY_GET_NO_READ_NUM_SUCCESS = "MsgCenter_getNoReadNumSuccess";
 
     private Disposable mListDisposable;
+    private Context mContext;
 
     public void onCreate(Context context) {
+        mContext = context;
         EventBus.getDefault().register(this);
     }
 
@@ -73,6 +76,18 @@ public class MsgCenterAppLike {
                 long numNoRead = CacheDataUtil.getNoReadMsgNum();
                 EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
             }
+        }
+    }
+
+    /**
+     * 成功获取个人中心红色标记数量
+     *
+     * @param commBizEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvenBusUserInfoHomeLeftMenuRedFlagCount(CommBizEvent commBizEvent) {
+        if ("userInfo_homeLeftMenu_redFlagCount".equals(commBizEvent.key)) {
+            CacheDataUtil.setHeaderRedFlagCount(mContext, commBizEvent.content);
         }
     }
 

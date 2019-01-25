@@ -1,5 +1,6 @@
 package com.hm.iou.msg;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.hm.iou.base.mvp.BaseContract;
@@ -8,6 +9,7 @@ import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.MsgCenterDbData;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.bean.MsgDetailBean;
+import com.hm.iou.tools.SPUtil;
 import com.hm.iou.tools.TimeUtil;
 
 import java.text.ParseException;
@@ -31,6 +33,10 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class CacheDataUtil {
 
+
+    private static final String SP_FILE_NAME = "msg_center_sp";
+    private static final String KEY_HEAD_RED_FLAG_COUNT = "head_red_flag_count";
+
     /**
      * 获取未读消息数量
      *
@@ -38,6 +44,24 @@ public class CacheDataUtil {
      */
     public static synchronized long getNoReadMsgNum() {
         return MsgCenterDbHelper.queryMsgCenterNoReadCount();
+    }
+
+    /**
+     * 获取顶部红点数量
+     *
+     * @return
+     */
+    public static String getHeaderRedFlagCount(Context context) {
+        return SPUtil.getString(context, SP_FILE_NAME, KEY_HEAD_RED_FLAG_COUNT, "0");
+    }
+
+    /**
+     * 存储顶部红点数量
+     *
+     * @return
+     */
+    public static void setHeaderRedFlagCount(Context context, String redFlagCount) {
+        SPUtil.put(context, SP_FILE_NAME, KEY_HEAD_RED_FLAG_COUNT, redFlagCount);
     }
 
     /**
