@@ -52,7 +52,7 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
 
     @Override
     protected int getLayoutId() {
-        return R.layout.msgcenter_activity_msg_center;
+        return R.layout.msgcenter_fragment_msg_center;
     }
 
     @Override
@@ -68,6 +68,10 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
             params.height = statusBarHeight;
             mViewStatusBar.setLayoutParams(params);
         }
+
+        //设置状态栏颜色为黑色
+        com.hm.iou.base.utils.StatusBarUtil.setStatusBarDarkFont(mActivity, true);
+
         mAdapter = new MsgListAdapter();
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mActivity));
         mRvMsgList.setAdapter(mAdapter);
