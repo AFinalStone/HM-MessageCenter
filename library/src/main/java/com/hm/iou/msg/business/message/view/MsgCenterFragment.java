@@ -88,13 +88,22 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
                 mPresenter.getMsgList();
             }
         });
+
         mPresenter.init();
+        mPresenter.getHeadRedFlagCount();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.getHeadRedFlagCount();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden && mPresenter != null) {
+            mPresenter.getHeadRedFlagCount();
+        }
     }
 
     @OnClick(R2.id.rl_header)
