@@ -108,6 +108,9 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
         if (!hidden && mPresenter != null) {
             mPresenter.getHeadRedFlagCount();
         }
+        if (!hidden) {
+            com.hm.iou.base.utils.StatusBarUtil.setStatusBarDarkFont(mActivity, true);
+        }
     }
 
     @OnClick(R2.id.rl_header)
