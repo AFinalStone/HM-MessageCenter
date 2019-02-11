@@ -28,12 +28,27 @@ public class MsgCenterAppLike {
     public static final String EXTRA_KEY_GET_NO_READ_NUM = "MsgCenter_getNoReadNum";
     public static final String EXTRA_KEY_GET_NO_READ_NUM_SUCCESS = "MsgCenter_getNoReadNumSuccess";
 
+    private static MsgCenterAppLike mApp;
+
+    public static MsgCenterAppLike getInstance() {
+        if (mApp == null) {
+            throw new RuntimeException("MsgCenterAppLike should init first.");
+        }
+        return mApp;
+    }
+
     private Disposable mListDisposable;
     private Context mContext;
+    private String mTopHeadRedFlagCount;    //导航栏上红点标记数字
 
     public void onCreate(Context context) {
         mContext = context;
+        mApp = this;
         EventBus.getDefault().register(this);
+    }
+
+    public String getTopHeadRedFlagCount() {
+        return mTopHeadRedFlagCount;
     }
 
     /**
@@ -87,7 +102,7 @@ public class MsgCenterAppLike {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvenBusUserInfoHomeLeftMenuRedFlagCount(CommBizEvent commBizEvent) {
         if ("userInfo_homeLeftMenu_redFlagCount".equals(commBizEvent.key)) {
-            CacheDataUtil.setHeaderRedFlagCount(mContext, commBizEvent.content);
+            mTopHeadRedFlagCount = commBizEvent.content;
         }
     }
 

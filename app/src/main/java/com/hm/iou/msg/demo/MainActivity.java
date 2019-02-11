@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.hm.iou.msg.MsgCenterAppLike;
-import com.hm.iou.msg.business.HelpCenterActivity;
-import com.hm.iou.msg.business.feedback.view.HistoryFeedbackActivity;
-import com.hm.iou.msg.business.message.view.MsgCenterFragment;
 import com.hm.iou.network.HttpReqManager;
 import com.hm.iou.sharedata.UserManager;
 import com.hm.iou.sharedata.event.CommBizEvent;
@@ -42,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_test).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, HistoryFeedbackActivity.class));
+
             }
         });
 
@@ -50,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //startActivity(new Intent(MainActivity.this, FeedbackActivity.class));
-                startActivity(new Intent(MainActivity.this, HelpCenterActivity.class));
             }
         });
 
