@@ -11,6 +11,7 @@ import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.MsgCenterDbData;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.CacheDataUtil;
+import com.hm.iou.msg.EventBusHelper;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.MsgDetailBean;
 import com.hm.iou.sharedata.event.CommBizEvent;
@@ -62,6 +63,9 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
                         }
                         if (list != null) {
                             CacheDataUtil.addMsgListToCache(list);
+                            long numNoRead = CacheDataUtil.getNoReadMsgNum();
+                            //及时更新底部红点
+                            EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
                             mMsgListData.addAll(list);
                         }
                         if (mMsgListData.isEmpty()) {
@@ -145,6 +149,9 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
                     public void handleResult(List<MsgDetailBean> list) {
                         if (list != null) {
                             CacheDataUtil.addMsgListToCache(list);
+                            //及时更新底部红点
+                            long numNoRead = CacheDataUtil.getNoReadMsgNum();
+                            EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
                             mMsgListData.addAll(list);
                         }
                         if (mMsgListData.isEmpty()) {
@@ -178,6 +185,9 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
         MsgDetailBean data = mMsgListData.get(position);
         data.setRead(true);
         CacheDataUtil.updateMsgItemToCache(data);
+        //及时更新底部红点
+        long numNoRead = CacheDataUtil.getNoReadMsgNum();
+        EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
         mView.refreshItem(position);
     }
 

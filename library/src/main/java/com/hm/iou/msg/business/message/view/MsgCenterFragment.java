@@ -52,7 +52,7 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
 
     @Override
     protected int getLayoutId() {
-        return R.layout.msgcenter_activity_msg_center;
+        return R.layout.msgcenter_fragment_msg_center;
     }
 
     @Override
