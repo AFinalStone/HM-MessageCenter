@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -68,6 +69,10 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
             params.height = statusBarHeight;
             mViewStatusBar.setLayoutParams(params);
         }
+
+        //设置状态栏颜色为黑色
+        com.hm.iou.base.utils.StatusBarUtil.setStatusBarDarkFont(mActivity, true);
+
         mAdapter = new MsgListAdapter();
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mActivity));
         mRvMsgList.setAdapter(mAdapter);
@@ -88,13 +93,25 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
                 mPresenter.getMsgList();
             }
         });
+
         mPresenter.init();
+        mPresenter.getHeadRedFlagCount();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.getHeadRedFlagCount();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden && mPresenter != null) {
+            mPresenter.getHeadRedFlagCount();
+        }
+        if (!hidden) {
+            com.hm.iou.base.utils.StatusBarUtil.setStatusBarDarkFont(mActivity, true);
+        }
     }
 
     @OnClick(R2.id.rl_header)
@@ -115,7 +132,7 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
 
     @Override
     public void updateRedFlagCount(String redFlagCount) {
-        if ("0".equals(redFlagCount)) {
+        if (TextUtils.isEmpty(redFlagCount) || "0".equals(redFlagCount)) {
             mTvNumNoRead.setVisibility(View.INVISIBLE);
         } else {
             mTvNumNoRead.setVisibility(View.VISIBLE);
