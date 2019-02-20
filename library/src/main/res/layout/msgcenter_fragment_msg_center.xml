@@ -8,14 +8,12 @@
     <View
         android:id="@+id/view_statusbar_placeholder"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/uikit_status_bar_height"
-        android:background="@color/white" />
+        android:layout_height="@dimen/uikit_status_bar_height"/>
 
     <LinearLayout
         android:id="@+id/ll_top"
         android:layout_width="match_parent"
         android:layout_height="48dip"
-        android:background="@color/white"
         android:orientation="horizontal">
 
         <RelativeLayout

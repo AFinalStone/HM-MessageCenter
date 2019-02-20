@@ -108,15 +108,15 @@ public class MsgDetailBean implements IMsgItem, Serializable {
     @Override
     public int getMsgIcon() {
         if (MsgType.Sport.getValue() == type) {
-            return R.mipmap.msgcenter_icon_ad_or_sport;
+            return R.mipmap.msgcenter_ic_activity;
         }
         if (MsgType.Advertisement.getValue() == type) {
-            return R.mipmap.msgcenter_icon_ad_or_sport;
+            return R.mipmap.msgcenter_ic_ad;
         }
         if (MsgType.TopNews.getValue() == type) {
-            return R.mipmap.msgcenter_icon_news_or_top;
+            return R.mipmap.msgcenter_ic_toutiao;
         }
-        return R.mipmap.msgcenter_icon_ad_or_sport;
+        return R.mipmap.msgcenter_ic_official_notice;
     }
 
 

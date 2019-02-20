@@ -1,60 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_notice"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/tv_time"
+        style="@style/UikitTextView.Auxiliary.Small"
+        android:layout_height="36dip"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="@color/uikit_text_hint" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_marginLeft="12dip"
+        android:layout_marginRight="12dip"
         android:background="@drawable/uikit_bg_item_ripple"
         android:clickable="true"
         android:focusable="true"
-        android:orientation="vertical"
-        android:padding="15dip">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:orientation="horizontal">
+            android:layout_height="38dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="6dip"
+            android:paddingRight="6dip">
 
             <ImageView
                 android:id="@+id/iv_icon"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:src="@mipmap/msgcenter_icon_communique" />
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerInParent="true"
+                android:padding="3.5dip"
+                android:src="@mipmap/msgcenter_ic_official_notice" />
 
             <TextView
                 android:id="@+id/tv_title"
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
+                style="@style/UikitTextView"
                 android:layout_marginLeft="10dp"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                android:textColor="#ff222222"
-                android:textSize="@dimen/textFontSize_15" />
-
+                android:text="官方公告："
+                android:textColor="@color/uikit_text_sub_content"
+                android:textSize="16dip" />
         </LinearLayout>
-
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:layout_marginTop="15dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/msgcenter_bg_notice" />
+            android:src="@mipmap/msgcenter_icon_load_image_error_default" />
 
         <TextView
             android:id="@+id/tv_intro"
+            style="@style/UikitTextView.Auxiliary.Small"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:paddingBottom="15dp"
-            android:textColor="#ff999999"
-            android:textSize="@dimen/textFontSize_15" />
+            android:layout_height="50dip"
+            android:gravity="center_vertical"
+            android:paddingLeft="9dip"
+            android:paddingRight="9dip" />
     </LinearLayout>
 </LinearLayout>
 

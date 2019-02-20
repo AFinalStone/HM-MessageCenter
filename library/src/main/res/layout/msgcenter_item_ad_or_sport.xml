@@ -3,37 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/UikitTextView.Auxiliary.Small"
+        android:layout_height="36dip"
+        android:textColor="@color/uikit_text_hint"
         android:layout_gravity="center"
-        android:layout_marginTop="18dp"
-        android:background="@drawable/msgcenter_bg_msg_center_item_time"
         android:gravity="center"
-        android:minHeight="20dp"
-        android:minWidth="80dp"
-        android:textColor="@color/white"
-        android:textSize="@dimen/textFontSize_11"
-        android:visibility="gone" />
+        />
 
     <LinearLayout
         android:id="@+id/ll_adOrSport"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_marginLeft="12dip"
+        android:layout_marginRight="12dip"
         android:background="@drawable/uikit_bg_item_ripple"
         android:orientation="vertical"
-        android:padding="15dip">
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:orientation="horizontal">
+            android:layout_height="38dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingLeft="6dip"
+            android:paddingRight="6dip"
+            >
 
             <RelativeLayout
                 android:layout_width="25dp"
@@ -41,15 +42,15 @@
 
                 <ImageView
                     android:id="@+id/iv_icon"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:layout_centerInParent="true"
-                    android:src="@mipmap/msgcenter_icon_news_or_top" />
+                    android:src="@mipmap/msgcenter_ic_ad" />
 
                 <com.hm.iou.uikit.ShapedImageView
                     android:id="@+id/iv_noRead"
-                    android:layout_width="6dp"
-                    android:layout_height="6dp"
+                    android:layout_width="4dp"
+                    android:layout_height="4dp"
                     android:layout_alignParentEnd="true"
                     android:background="@color/uikit_red"
                     app:shape_mode="circle" />
@@ -58,52 +59,39 @@
 
             <TextView
                 android:id="@+id/tv_title"
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
+                style="@style/UikitTextView"
+                android:textSize="16dip"
+                android:textColor="@color/uikit_text_sub_content"
                 android:layout_marginLeft="10dp"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                android:textColor="#ff222222"
-                android:textSize="@dimen/textFontSize_15" />
+                tools:text="这是标题"
+                />
 
         </LinearLayout>
-
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:layout_marginTop="15dp"
             android:clickable="false"
             android:focusable="false"
             android:scaleType="centerCrop" />
 
-        <View
-            style="@style/UikitDivider.Horizontal"
-            android:layout_marginTop="26dp" />
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="21dp"
-            android:layout_marginTop="11dp"
-            android:gravity="center_vertical"
+            android:layout_height="38dip"
+            android:gravity="center_vertical|right"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="21dp"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
+                style="@style/UikitTextView.Auxiliary.Small"
                 android:ellipsize="end"
-                android:text="查看详情"
-                android:textColor="#ff222222"
-                android:textSize="@dimen/textFontSize_15" />
-
-            <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:src="@mipmap/uikit_ic_arrow_right" />
+                android:text="查看详情 >"
+                android:textColor="@color/uikit_text_hint"
+                android:layout_marginRight="12dip"
+                />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
