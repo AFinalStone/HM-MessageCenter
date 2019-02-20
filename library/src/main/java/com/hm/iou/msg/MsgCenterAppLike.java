@@ -54,7 +54,7 @@ public class MsgCenterAppLike {
     /**
      * 获取消息中心未读消息数量
      */
-    private void getMsgCenterNoReadNum() {
+    public void getMsgCenterNoReadNum() {
         if (mListDisposable != null && !mListDisposable.isDisposed()) {
             mListDisposable.dispose();
         }
@@ -64,16 +64,22 @@ public class MsgCenterAppLike {
                     @Override
                     public void accept(List<MsgDetailBean> list) throws Exception {
                         CacheDataUtil.addMsgListToCache(list);
-                        long numNoRead = CacheDataUtil.getNoReadMsgNum();
-                        EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
+                        getMsgCenterNoReadNumFromCache();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        long numNoRead = CacheDataUtil.getNoReadMsgNum();
-                        EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
+                        getMsgCenterNoReadNumFromCache();
                     }
                 });
+    }
+
+    /**
+     * 从缓存中获取消息中心未读消息数量
+     */
+    public void getMsgCenterNoReadNumFromCache() {
+        long numNoRead = CacheDataUtil.getNoReadMsgNum();
+        EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
     }
 
     /**
@@ -88,8 +94,7 @@ public class MsgCenterAppLike {
             if ("true".equals(commBizEvent.content)) {
                 getMsgCenterNoReadNum();
             } else {
-                long numNoRead = CacheDataUtil.getNoReadMsgNum();
-                EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
+                getMsgCenterNoReadNumFromCache();
             }
         }
     }

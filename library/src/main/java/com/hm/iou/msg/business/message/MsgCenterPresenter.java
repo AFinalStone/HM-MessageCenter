@@ -3,21 +3,17 @@ package com.hm.iou.msg.business.message;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.base.mvp.MvpFragmentPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
-import com.hm.iou.database.MsgCenterDbHelper;
-import com.hm.iou.database.table.MsgCenterDbData;
-import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.CacheDataUtil;
+import com.hm.iou.msg.EventBusHelper;
 import com.hm.iou.msg.MsgCenterAppLike;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.MsgDetailBean;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.hm.iou.tools.ToastUtil;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -26,11 +22,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
@@ -120,7 +114,8 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
                         } else {
                             mView.showMsgList((ArrayList) mMsgListData);
                         }
-
+                        //获取未读消息数量
+                        MsgCenterAppLike.getInstance().getMsgCenterNoReadNumFromCache();
                     }
 
                     @Override
@@ -143,6 +138,8 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
 
     @Override
     public void getMsgList() {
+        //重新获取未读消息数量
+        MsgCenterAppLike.getInstance().getMsgCenterNoReadNum();
         MsgApi.getMessages()
                 .compose(getProvider().<BaseResponse<List<MsgDetailBean>>>bindUntilEvent(FragmentEvent.DESTROY))
                 .map(RxUtil.<List<MsgDetailBean>>handleResponse())
@@ -162,6 +159,8 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
                             mView.showMsgList((ArrayList) mMsgListData);
                         }
                         mView.hidePullDownRefresh();
+                        //获取未读消息数量
+                        MsgCenterAppLike.getInstance().getMsgCenterNoReadNumFromCache();
                     }
 
                     @Override
@@ -187,6 +186,8 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
         MsgDetailBean data = mMsgListData.get(position);
         data.setRead(true);
         CacheDataUtil.updateMsgItemToCache(data);
+        //获取未读消息数量
+        MsgCenterAppLike.getInstance().getMsgCenterNoReadNumFromCache();
         mView.refreshItem(position);
     }
 
