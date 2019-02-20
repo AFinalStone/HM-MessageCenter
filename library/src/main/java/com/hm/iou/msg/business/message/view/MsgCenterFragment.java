@@ -143,6 +143,9 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
     @Override
     public void showMsgList(List<IMsgItem> list) {
         mAdapter.setNewData(list);
+        if (list != null && !list.isEmpty()) {
+            mLoadingInit.setVisibility(View.GONE);
+        }
     }
 
     @Override
