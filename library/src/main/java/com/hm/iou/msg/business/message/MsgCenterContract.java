@@ -69,9 +69,14 @@ public class MsgCenterContract {
         void init();
 
         /**
-         * 获取消息列表
+         * 从服务端获取消息列表
          */
-        void getMsgList();
+        void getMsgListFromServer();
+
+        /**
+         * 从缓存中获取消息列表
+         */
+        void getMsgListFromCache();
 
         /**
          * 标记为已读
@@ -83,7 +88,7 @@ public class MsgCenterContract {
         /**
          * 获取头部红点数量
          */
-        void getHeadRedFlagCount();
+        void getRedFlagCount();
 
     }
 }

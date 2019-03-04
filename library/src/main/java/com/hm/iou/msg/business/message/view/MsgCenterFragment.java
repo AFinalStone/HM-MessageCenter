@@ -90,12 +90,12 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mPresenter.getMsgList();
+                mPresenter.getMsgListFromServer();
             }
         });
 
         mPresenter.init();
-        mPresenter.getHeadRedFlagCount();
+        mPresenter.getRedFlagCount();
     }
 
     @Override
@@ -107,7 +107,8 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden && mPresenter != null) {
-            mPresenter.getHeadRedFlagCount();
+            mPresenter.getRedFlagCount();
+            mPresenter.getMsgListFromCache();
         }
         if (!hidden) {
             com.hm.iou.base.utils.StatusBarUtil.setStatusBarDarkFont(mActivity, true);

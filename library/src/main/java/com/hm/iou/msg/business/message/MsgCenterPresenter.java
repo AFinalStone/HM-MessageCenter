@@ -7,7 +7,6 @@ import com.hm.iou.base.mvp.MvpFragmentPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.CacheDataUtil;
-import com.hm.iou.msg.EventBusHelper;
 import com.hm.iou.msg.MsgCenterAppLike;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.MsgDetailBean;
@@ -93,51 +92,8 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
                 });
     }
 
-    private void getInitData() {
-        MsgApi.getMessages()
-                .compose(getProvider().<BaseResponse<List<MsgDetailBean>>>bindUntilEvent(FragmentEvent.DESTROY))
-                .map(RxUtil.<List<MsgDetailBean>>handleResponse())
-                .subscribeWith(new CommSubscriber<List<MsgDetailBean>>(mView) {
-                    @Override
-                    public void handleResult(List<MsgDetailBean> list) {
-                        mView.hideInitLoading();
-                        mView.enableRefresh();
-                        if (mMsgListData == null) {
-                            mMsgListData = new ArrayList<>();
-                        }
-                        if (list != null) {
-                            CacheDataUtil.addMsgListToCache(list);
-                            mMsgListData.addAll(list);
-                        }
-                        if (mMsgListData.isEmpty()) {
-                            mView.showDataEmpty();
-                        } else {
-                            mView.showMsgList((ArrayList) mMsgListData);
-                        }
-                        //获取未读消息数量
-                        MsgCenterAppLike.getInstance().getMsgCenterNoReadNumFromCache();
-                    }
-
-                    @Override
-                    public void handleException(Throwable throwable, String s, String s1) {
-                        mView.hideInitLoading();
-                        mView.enableRefresh();
-                    }
-
-                    @Override
-                    public boolean isShowCommError() {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean isShowBusinessError() {
-                        return false;
-                    }
-                });
-    }
-
     @Override
-    public void getMsgList() {
+    public void getMsgListFromServer() {
         //重新获取未读消息数量
         MsgCenterAppLike.getInstance().getMsgCenterNoReadNum();
         MsgApi.getMessages()
@@ -182,6 +138,92 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     }
 
     @Override
+    public void getMsgListFromCache() {
+        Flowable.just(0)
+                .map(new Function<Integer, List<MsgDetailBean>>() {
+                    @Override
+                    public List<MsgDetailBean> apply(Integer integer) throws Exception {
+                        List<MsgDetailBean> listCache = CacheDataUtil.readMsgListFromCacheData();
+                        return listCache;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(getProvider().<List<MsgDetailBean>>bindUntilEvent(FragmentEvent.DESTROY))
+                .subscribeWith(new CommSubscriber<List<MsgDetailBean>>(mView) {
+                    @Override
+                    public void handleResult(List<MsgDetailBean> list) {
+                        mMsgListData = list;
+                        if (mMsgListData == null) {
+                            mMsgListData = new ArrayList<>();
+                        }
+                        if (mMsgListData.isEmpty()) {
+                            mView.showDataEmpty();
+                        } else {
+                            mView.showMsgList((ArrayList) mMsgListData);
+                        }
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String code, String msg) {
+                    }
+
+                    @Override
+                    public boolean isShowBusinessError() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isShowCommError() {
+                        return false;
+                    }
+                });
+    }
+
+    private void getInitData() {
+        MsgApi.getMessages()
+                .compose(getProvider().<BaseResponse<List<MsgDetailBean>>>bindUntilEvent(FragmentEvent.DESTROY))
+                .map(RxUtil.<List<MsgDetailBean>>handleResponse())
+                .subscribeWith(new CommSubscriber<List<MsgDetailBean>>(mView) {
+                    @Override
+                    public void handleResult(List<MsgDetailBean> list) {
+                        mView.hideInitLoading();
+                        mView.enableRefresh();
+                        if (mMsgListData == null) {
+                            mMsgListData = new ArrayList<>();
+                        }
+                        if (list != null) {
+                            CacheDataUtil.addMsgListToCache(list);
+                            mMsgListData.addAll(list);
+                        }
+                        if (mMsgListData.isEmpty()) {
+                            mView.showDataEmpty();
+                        } else {
+                            mView.showMsgList((ArrayList) mMsgListData);
+                        }
+                        //获取未读消息数量
+                        MsgCenterAppLike.getInstance().getMsgCenterNoReadNumFromCache();
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String s, String s1) {
+                        mView.hideInitLoading();
+                        mView.enableRefresh();
+                    }
+
+                    @Override
+                    public boolean isShowCommError() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isShowBusinessError() {
+                        return false;
+                    }
+                });
+    }
+
+    @Override
     public void markHaveRead(int position) {
         MsgDetailBean data = mMsgListData.get(position);
         data.setRead(true);
@@ -192,7 +234,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     }
 
     @Override
-    public void getHeadRedFlagCount() {
+    public void getRedFlagCount() {
         mRedFlagCount = MsgCenterAppLike.getInstance().getTopHeadRedFlagCount();
         mView.updateRedFlagCount(mRedFlagCount);
     }
