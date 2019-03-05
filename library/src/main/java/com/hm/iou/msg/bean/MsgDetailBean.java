@@ -5,8 +5,12 @@ import android.text.TextUtils;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.business.message.view.IMsgItem;
 import com.hm.iou.msg.dict.MsgType;
+import com.hm.iou.tools.TimeUtil;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by syl on 2018/5/30.
@@ -130,8 +134,13 @@ public class MsgDetailBean implements IMsgItem, Serializable {
 
     @Override
     public String getMsgTime() {
-        if (!TextUtils.isEmpty(pushDate)) {
-            return pushDate.replaceAll("-", ".");
+        try {
+            SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = timeFormat.parse(pushDate);
+            timeFormat = new SimpleDateFormat("MM-dd HH:mm:ss");
+            return timeFormat.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return "";
     }

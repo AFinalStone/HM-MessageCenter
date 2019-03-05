@@ -95,7 +95,6 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     @Override
     public void getMsgListFromServer() {
         //重新获取未读消息数量
-        MsgCenterAppLike.getInstance().getMsgCenterNoReadNum();
         MsgApi.getMessages()
                 .compose(getProvider().<BaseResponse<List<MsgDetailBean>>>bindUntilEvent(FragmentEvent.DESTROY))
                 .map(RxUtil.<List<MsgDetailBean>>handleResponse())
