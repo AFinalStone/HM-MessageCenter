@@ -64,7 +64,6 @@ public class MsgCenterAppLike {
                     @Override
                     public void accept(List<MsgDetailBean> list) throws Exception {
                         CacheDataUtil.addMsgListToCache(list);
-                        getMsgCenterNoReadNumFromCache();
                     }
                 }, new Consumer<Throwable>() {
                     @Override

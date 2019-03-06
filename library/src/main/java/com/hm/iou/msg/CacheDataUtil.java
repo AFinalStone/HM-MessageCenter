@@ -72,12 +72,13 @@ public class CacheDataUtil {
                 .subscribe(new Consumer<Void>() {
                     @Override
                     public void accept(Void aVoid) throws Exception {
-
+                        MsgCenterAppLike.getInstance().getMsgCenterNoReadNumFromCache();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Logger.e(throwable.getMessage());
+                        MsgCenterAppLike.getInstance().getMsgCenterNoReadNumFromCache();
                     }
                 });
     }
