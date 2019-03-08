@@ -81,7 +81,7 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 if (R.id.ll_adOrSport == view.getId()) {
                     IMsgItem item = (IMsgItem) adapter.getItem(position);
-                    NavigationHelper.ToMsgDetail(mActivity, item.getMsgDetailLinkUrl());
+                    NavigationHelper.ToMsgDetail(mActivity, item.getMsgDetailLinkUrl(), item.getMsgAutoId(), item.getMsgType());
                     mPresenter.markHaveRead(position);
                 }
             }

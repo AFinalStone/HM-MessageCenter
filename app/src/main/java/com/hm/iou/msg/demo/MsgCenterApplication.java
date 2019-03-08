@@ -24,8 +24,10 @@ public class MsgCenterApplication extends Application {
         Router.init(this);
         BaseBizAppLike appLike = new BaseBizAppLike();
         appLike.onCreate(this);
-        appLike.initServer("http://192.168.1.217", "http://192.168.1.217",
-                "http://192.168.1.217");
+//        appLike.initServer("http://192.168.1.217", "http://192.168.1.217",
+//                "http://192.168.1.217");
+        appLike.initServer("http://192.168.1.107:3000", "http://192.168.1.107:3000",
+                "http://192.168.1.107:3000");
         initNetwork();
         SugarContext.init(this);
         MsgCenterAppLike msgCenterAppLike = new MsgCenterAppLike();

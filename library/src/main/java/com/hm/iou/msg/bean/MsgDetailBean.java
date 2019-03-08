@@ -156,6 +156,16 @@ public class MsgDetailBean implements IMsgItem, Serializable {
     }
 
     @Override
+    public String getMsgAutoId() {
+        return autoId;
+    }
+
+    @Override
+    public int getMsgType() {
+        return type;
+    }
+
+    @Override
     public int getItemType() {
         if (MsgType.CommuniqueIntro.getValue() == type) {
             return TYPE_COMMUNIQUE;
