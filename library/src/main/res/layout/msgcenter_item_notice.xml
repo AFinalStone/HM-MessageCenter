@@ -55,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/msgcenter_icon_load_image_error_default" />
+            android:src="@mipmap/msgcenter_ic_sys_notice_flag" />
 
         <TextView
             android:id="@+id/tv_intro"
