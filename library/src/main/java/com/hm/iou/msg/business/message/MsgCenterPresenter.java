@@ -3,26 +3,27 @@ package com.hm.iou.msg.business.message;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.hm.iou.base.mvp.MvpActivityPresenter;
+import com.hm.iou.base.mvp.MvpFragmentPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
-import com.hm.iou.database.MsgCenterDbHelper;
-import com.hm.iou.database.table.MsgCenterDbData;
-import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.CacheDataUtil;
+import com.hm.iou.msg.MsgCenterAppLike;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.MsgDetailBean;
+import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.hm.iou.tools.ToastUtil;
-import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.android.FragmentEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
@@ -32,75 +33,41 @@ import io.reactivex.schedulers.Schedulers;
  * @author syl
  * @time 2018/5/30 下午6:47
  */
-public class MsgCenterPresenter extends MvpActivityPresenter<MsgCenterContract.View> implements MsgCenterContract.Presenter {
+public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.View> implements MsgCenterContract.Presenter {
 
-    private Disposable mListDisposable;
     private List<MsgDetailBean> mMsgListData;
+    private String mRedFlagCount;
 
     public MsgCenterPresenter(@NonNull Context context, @NonNull MsgCenterContract.View view) {
         super(context, view);
     }
 
-    private void getInitData() {
-        MsgApi.getMessages()
-                .compose(getProvider().<BaseResponse<List<MsgDetailBean>>>bindUntilEvent(ActivityEvent.DESTROY))
-                .map(RxUtil.<List<MsgDetailBean>>handleResponse())
-                .subscribeWith(new CommSubscriber<List<MsgDetailBean>>(mView) {
-                    @Override
-                    public void handleResult(List<MsgDetailBean> list) {
-                        mView.hideInitLoading();
-                        mView.enableRefresh();
-                        if (mMsgListData == null) {
-                            mMsgListData = new ArrayList<>();
-                        }
-                        if (list != null) {
-                            CacheDataUtil.addMsgListToCache(list);
-                            mMsgListData.addAll(list);
-                        }
-                        if (mMsgListData.isEmpty()) {
-                            mView.showDataEmpty();
-                        } else {
-                            mView.showMsgList((ArrayList) mMsgListData);
-                        }
+    @Override
+    public void onViewCreated() {
+        super.onViewCreated();
+        EventBus.getDefault().register(this);
+    }
 
-                    }
-
-                    @Override
-                    public void handleException(Throwable throwable, String s, String s1) {
-                        mView.hideInitLoading();
-                        mView.enableRefresh();
-                    }
-
-                    @Override
-                    public boolean isShowCommError() {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean isShowBusinessError() {
-                        return false;
-                    }
-                });
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
     public void init() {
         mView.showInitLoading();
         Flowable.just(0)
-                .delay(500, TimeUnit.MILLISECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(getProvider().<Integer>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(new Function<Integer, List<MsgDetailBean>>() {
                     @Override
                     public List<MsgDetailBean> apply(Integer integer) throws Exception {
                         List<MsgDetailBean> listCache = CacheDataUtil.readMsgListFromCacheData();
-                        for (MsgDetailBean bean : listCache) {
-                            Logger.d("MsgCenterModule", bean.toString());
-                        }
                         return listCache;
                     }
                 })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(getProvider().<List<MsgDetailBean>>bindUntilEvent(FragmentEvent.DESTROY))
                 .subscribeWith(new CommSubscriber<List<MsgDetailBean>>(mView) {
                     @Override
                     public void handleResult(List<MsgDetailBean> list) {
@@ -126,16 +93,17 @@ public class MsgCenterPresenter extends MvpActivityPresenter<MsgCenterContract.V
     }
 
     @Override
-    public void getMsgList() {
-        if (mListDisposable != null && !mListDisposable.isDisposed()) {
-            mListDisposable.dispose();
-        }
-        mListDisposable = MsgApi.getMessages()
-                .compose(getProvider().<BaseResponse<List<MsgDetailBean>>>bindUntilEvent(ActivityEvent.DESTROY))
+    public void getMsgListFromServer() {
+        //重新获取未读消息数量
+        MsgApi.getMessages()
+                .compose(getProvider().<BaseResponse<List<MsgDetailBean>>>bindUntilEvent(FragmentEvent.DESTROY))
                 .map(RxUtil.<List<MsgDetailBean>>handleResponse())
                 .subscribeWith(new CommSubscriber<List<MsgDetailBean>>(mView) {
                     @Override
                     public void handleResult(List<MsgDetailBean> list) {
+                        if (mMsgListData == null) {
+                            mMsgListData = new ArrayList<>();
+                        }
                         if (list != null) {
                             CacheDataUtil.addMsgListToCache(list);
                             mMsgListData.addAll(list);
@@ -146,6 +114,8 @@ public class MsgCenterPresenter extends MvpActivityPresenter<MsgCenterContract.V
                             mView.showMsgList((ArrayList) mMsgListData);
                         }
                         mView.hidePullDownRefresh();
+                        //获取未读消息数量
+                        MsgCenterAppLike.getInstance().getMsgCenterNoReadNumFromCache();
                     }
 
                     @Override
@@ -167,21 +137,113 @@ public class MsgCenterPresenter extends MvpActivityPresenter<MsgCenterContract.V
     }
 
     @Override
+    public void getMsgListFromCache() {
+        Flowable.just(0)
+                .map(new Function<Integer, List<MsgDetailBean>>() {
+                    @Override
+                    public List<MsgDetailBean> apply(Integer integer) throws Exception {
+                        List<MsgDetailBean> listCache = CacheDataUtil.readMsgListFromCacheData();
+                        return listCache;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(getProvider().<List<MsgDetailBean>>bindUntilEvent(FragmentEvent.DESTROY))
+                .subscribeWith(new CommSubscriber<List<MsgDetailBean>>(mView) {
+                    @Override
+                    public void handleResult(List<MsgDetailBean> list) {
+                        mMsgListData = list;
+                        if (mMsgListData == null) {
+                            mMsgListData = new ArrayList<>();
+                        }
+                        if (mMsgListData.isEmpty()) {
+                            mView.showDataEmpty();
+                        } else {
+                            mView.showMsgList((ArrayList) mMsgListData);
+                        }
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String code, String msg) {
+                    }
+
+                    @Override
+                    public boolean isShowBusinessError() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isShowCommError() {
+                        return false;
+                    }
+                });
+    }
+
+    private void getInitData() {
+        MsgApi.getMessages()
+                .compose(getProvider().<BaseResponse<List<MsgDetailBean>>>bindUntilEvent(FragmentEvent.DESTROY))
+                .map(RxUtil.<List<MsgDetailBean>>handleResponse())
+                .subscribeWith(new CommSubscriber<List<MsgDetailBean>>(mView) {
+                    @Override
+                    public void handleResult(List<MsgDetailBean> list) {
+                        mView.hideInitLoading();
+                        mView.enableRefresh();
+                        if (mMsgListData == null) {
+                            mMsgListData = new ArrayList<>();
+                        }
+                        if (list != null) {
+                            CacheDataUtil.addMsgListToCache(list);
+                            mMsgListData.addAll(list);
+                        }
+                        if (mMsgListData.isEmpty()) {
+                            mView.showDataEmpty();
+                        } else {
+                            mView.showMsgList((ArrayList) mMsgListData);
+                        }
+                        //获取未读消息数量
+                        MsgCenterAppLike.getInstance().getMsgCenterNoReadNumFromCache();
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String s, String s1) {
+                        mView.hideInitLoading();
+                        mView.enableRefresh();
+                    }
+
+                    @Override
+                    public boolean isShowCommError() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isShowBusinessError() {
+                        return false;
+                    }
+                });
+    }
+
+    @Override
     public void markHaveRead(int position) {
         MsgDetailBean data = mMsgListData.get(position);
         data.setRead(true);
         CacheDataUtil.updateMsgItemToCache(data);
+        //获取未读消息数量
+        MsgCenterAppLike.getInstance().getMsgCenterNoReadNumFromCache();
         mView.refreshItem(position);
     }
-}
 
-//    MsgDetailBean msgBean = new MsgDetailBean(1, 12312
-//            , "http://p1.pstatp.com/large/pgc-image/1527661192654a57d03c488"
-//            , "因为拍了一张照片，这名女子被警察逮捕了，引起全国关", "https://www.toutiao.com/a6561254954655285774/"
-//            , false, "");
-//    mMsgListData.add(msgBean);
-//            msgBean=new MsgDetailBean(4,12312
-//            ,"http://p1.pstatp.com/large/pgc-image/1527661192654a57d03c488"
-//            ,"今晚系统升级","https://www.toutiao.com/a6561254954655285774/"
-//            ,true,"3月4日22点-3月5日06点，进行系统升级，可能会 出现“服务器繁忙”等异常提示，特此公告。（客服 微信号：jietiaoguanjia2018） ");
-//            mMsgListData.add(msgBean);
+    @Override
+    public void getRedFlagCount() {
+        mRedFlagCount = MsgCenterAppLike.getInstance().getTopHeadRedFlagCount();
+        mView.updateRedFlagCount(mRedFlagCount);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvenRedFlagCount(CommBizEvent commBizEvent) {
+        if ("userInfo_homeLeftMenu_redFlagCount".equals(commBizEvent.key)) {
+            mRedFlagCount = commBizEvent.content;
+            mView.updateRedFlagCount(mRedFlagCount);
+        }
+    }
+
+}

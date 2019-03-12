@@ -4,30 +4,42 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.hm.iou.base.BaseActivity;
+import com.hm.iou.base.BaseFragment;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.message.MsgCenterContract;
 import com.hm.iou.msg.business.message.MsgCenterPresenter;
-import com.hm.iou.uikit.HMGrayDividerItemDecoration;
+import com.hm.iou.sharedata.event.CommBizEvent;
+import com.hm.iou.tools.StatusBarUtil;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
-public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implements MsgCenterContract.View {
+public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implements MsgCenterContract.View {
 
-
+    @BindView(R2.id.view_statusbar_placeholder)
+    View mViewStatusBar;
+    @BindView(R2.id.tv_num_no_read)
+    TextView mTvNumNoRead;
+    @BindView(R2.id.iv_header)
+    ImageView mIvHeader;
     @BindView(R2.id.iv_msg_refresh)
     PullDownRefreshImageView mIvMsgRefresh;
     @BindView(R2.id.rv_msgList)
@@ -41,25 +53,35 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
 
     @Override
     protected int getLayoutId() {
-        return R.layout.msgcenter_activity_msg_center;
+        return R.layout.msgcenter_fragment_msg_center;
     }
 
     @Override
     protected MsgCenterPresenter initPresenter() {
-        return new MsgCenterPresenter(this, this);
+        return new MsgCenterPresenter(mActivity, this);
     }
 
     @Override
     protected void initEventAndData(Bundle bundle) {
+        int statusBarHeight = StatusBarUtil.getStatusBarHeight(mActivity);
+        if (statusBarHeight > 0) {
+            ViewGroup.LayoutParams params = mViewStatusBar.getLayoutParams();
+            params.height = statusBarHeight;
+            mViewStatusBar.setLayoutParams(params);
+        }
+
+        //设置状态栏颜色为黑色
+        com.hm.iou.base.utils.StatusBarUtil.setStatusBarDarkFont(mActivity, true);
+
         mAdapter = new MsgListAdapter();
-        mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
+        mRvMsgList.setLayoutManager(new LinearLayoutManager(mActivity));
         mRvMsgList.setAdapter(mAdapter);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 if (R.id.ll_adOrSport == view.getId()) {
                     IMsgItem item = (IMsgItem) adapter.getItem(position);
-                    NavigationHelper.ToMsgDetail(mContext, item.getMsgDetailLinkUrl());
+                    NavigationHelper.ToMsgDetail(mActivity, item.getMsgDetailLinkUrl(), item.getMsgAutoId(), item.getMsgType());
                     mPresenter.markHaveRead(position);
                 }
             }
@@ -68,10 +90,34 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mPresenter.getMsgList();
+                mPresenter.getMsgListFromServer();
             }
         });
+
         mPresenter.init();
+        mPresenter.getRedFlagCount();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden && mPresenter != null) {
+            mPresenter.getRedFlagCount();
+            mPresenter.getMsgListFromCache();
+        }
+        if (!hidden) {
+            com.hm.iou.base.utils.StatusBarUtil.setStatusBarDarkFont(mActivity, true);
+        }
+    }
+
+    @OnClick(R2.id.rl_header)
+    public void onClick() {
+        EventBus.getDefault().post(new CommBizEvent("iou_show_home_left_menu", "显示首页左侧菜单"));
     }
 
     @Override
@@ -86,8 +132,21 @@ public class MsgCenterActivity extends BaseActivity<MsgCenterPresenter> implemen
     }
 
     @Override
+    public void updateRedFlagCount(String redFlagCount) {
+        if (TextUtils.isEmpty(redFlagCount) || "0".equals(redFlagCount)) {
+            mTvNumNoRead.setVisibility(View.INVISIBLE);
+        } else {
+            mTvNumNoRead.setVisibility(View.VISIBLE);
+            mTvNumNoRead.setText(redFlagCount);
+        }
+    }
+
+    @Override
     public void showMsgList(List<IMsgItem> list) {
         mAdapter.setNewData(list);
+        if (list != null && !list.isEmpty()) {
+            mLoadingInit.setVisibility(View.GONE);
+        }
     }
 
     @Override

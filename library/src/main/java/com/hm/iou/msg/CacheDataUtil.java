@@ -1,5 +1,6 @@
 package com.hm.iou.msg;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.hm.iou.base.mvp.BaseContract;
@@ -8,6 +9,7 @@ import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.MsgCenterDbData;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.bean.MsgDetailBean;
+import com.hm.iou.tools.SPUtil;
 import com.hm.iou.tools.TimeUtil;
 
 import java.text.ParseException;
@@ -70,12 +72,13 @@ public class CacheDataUtil {
                 .subscribe(new Consumer<Void>() {
                     @Override
                     public void accept(Void aVoid) throws Exception {
-
+                        MsgCenterAppLike.getInstance().getMsgCenterNoReadNumFromCache();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Logger.e(throwable.getMessage());
+                        MsgCenterAppLike.getInstance().getMsgCenterNoReadNumFromCache();
                     }
                 });
     }

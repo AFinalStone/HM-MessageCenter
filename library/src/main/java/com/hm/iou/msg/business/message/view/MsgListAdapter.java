@@ -25,7 +25,6 @@ public class MsgListAdapter extends BaseMultiItemQuickAdapter<IMsgItem, BaseView
 
     @Override
     protected void convert(BaseViewHolder helper, IMsgItem item) {
-
         helper.setText(R.id.tv_title, item.getMsgTitle());
 
         if (helper.getItemViewType() == TYPE_AD_OR_SPORT) {
@@ -39,12 +38,9 @@ public class MsgListAdapter extends BaseMultiItemQuickAdapter<IMsgItem, BaseView
 
             helper.setImageResource(R.id.iv_icon, item.getMsgIcon());
             helper.addOnClickListener(R.id.ll_adOrSport);
-            if (TextUtils.isEmpty(item.getMsgTime())) {
-                helper.setGone(R.id.tv_time, false);
-            } else {
-                helper.setText(R.id.tv_time, item.getMsgTime());
-                helper.setGone(R.id.tv_time, true);
-            }
+
+            String time = item.getMsgTime();
+            helper.setText(R.id.tv_time, time);
             if (item.getMsgReadState()) {
                 helper.setVisible(R.id.iv_noRead, false);
             } else {
@@ -53,6 +49,8 @@ public class MsgListAdapter extends BaseMultiItemQuickAdapter<IMsgItem, BaseView
             return;
         }
         if (helper.getItemViewType() == TYPE_COMMUNIQUE) {
+            String time = item.getMsgTime();
+            helper.setText(R.id.tv_time, time);
             helper.setText(R.id.tv_intro, item.getNotice());
         }
     }

@@ -62,4 +62,18 @@ public interface IMsgItem extends MultiItemEntity {
      * @return
      */
     String getMsgDetailLinkUrl();
+
+    /**
+     * 获取消息的唯一id
+     *
+     * @return
+     */
+    String getMsgAutoId();
+
+    /**
+     * 获取消息类型
+     *
+     * @return
+     */
+    int getMsgType();
 }

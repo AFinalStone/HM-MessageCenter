@@ -5,6 +5,7 @@ import android.content.Context;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.MsgDetailBean;
+import com.hm.iou.msg.event.UpdateHeadRedFlagEvent;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.event.LogoutEvent;
 
@@ -27,16 +28,33 @@ public class MsgCenterAppLike {
     public static final String EXTRA_KEY_GET_NO_READ_NUM = "MsgCenter_getNoReadNum";
     public static final String EXTRA_KEY_GET_NO_READ_NUM_SUCCESS = "MsgCenter_getNoReadNumSuccess";
 
+    private static MsgCenterAppLike mApp;
+
+    public static MsgCenterAppLike getInstance() {
+        if (mApp == null) {
+            throw new RuntimeException("MsgCenterAppLike should init first.");
+        }
+        return mApp;
+    }
+
     private Disposable mListDisposable;
+    private Context mContext;
+    private String mTopHeadRedFlagCount;    //导航栏上红点标记数字
 
     public void onCreate(Context context) {
+        mContext = context;
+        mApp = this;
         EventBus.getDefault().register(this);
+    }
+
+    public String getTopHeadRedFlagCount() {
+        return mTopHeadRedFlagCount;
     }
 
     /**
      * 获取消息中心未读消息数量
      */
-    private void getMsgCenterNoReadNum() {
+    public void getMsgCenterNoReadNum() {
         if (mListDisposable != null && !mListDisposable.isDisposed()) {
             mListDisposable.dispose();
         }
@@ -46,16 +64,21 @@ public class MsgCenterAppLike {
                     @Override
                     public void accept(List<MsgDetailBean> list) throws Exception {
                         CacheDataUtil.addMsgListToCache(list);
-                        long numNoRead = CacheDataUtil.getNoReadMsgNum();
-                        EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        long numNoRead = CacheDataUtil.getNoReadMsgNum();
-                        EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
+                        getMsgCenterNoReadNumFromCache();
                     }
                 });
+    }
+
+    /**
+     * 从缓存中获取消息中心未读消息数量
+     */
+    public void getMsgCenterNoReadNumFromCache() {
+        long numNoRead = CacheDataUtil.getNoReadMsgNum();
+        EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
     }
 
     /**
@@ -70,9 +93,20 @@ public class MsgCenterAppLike {
             if ("true".equals(commBizEvent.content)) {
                 getMsgCenterNoReadNum();
             } else {
-                long numNoRead = CacheDataUtil.getNoReadMsgNum();
-                EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
+                getMsgCenterNoReadNumFromCache();
             }
+        }
+    }
+
+    /**
+     * 成功获取个人中心红色标记数量
+     *
+     * @param commBizEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvenBusUserInfoHomeLeftMenuRedFlagCount(CommBizEvent commBizEvent) {
+        if ("userInfo_homeLeftMenu_redFlagCount".equals(commBizEvent.key)) {
+            mTopHeadRedFlagCount = commBizEvent.content;
         }
     }
 
