@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "/Users/hjy/Desktop/heima/code/gitlab/HM-MessageCenter/IMLib/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-bg/values-bg.xml",
+            "map": [
+                {
+                    "source": "/Users/hjy/.gradle/caches/transforms-1/files-1.1/support-compat-26.0.0.aar/2070a0a45f7c87812b9dfc9d3c8f19ae/res/values-bg/values-bg.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    }
+                }
+            ]
+        }
+    ]
+}

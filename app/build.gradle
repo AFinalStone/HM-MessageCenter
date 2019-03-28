@@ -9,6 +9,10 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        manifestPlaceholders = [
+                RONGCLOUD_APPKEY : "123abc123"
+        ]
     }
     buildTypes {
         release {
@@ -29,4 +33,5 @@ dependencies {
     //图片选择
     compile 'com.heima.iou:hmselectpiclocal:1.0.0'
     compile project(':library')
+
 }
