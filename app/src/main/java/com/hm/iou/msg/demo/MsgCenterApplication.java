@@ -1,6 +1,8 @@
 package com.hm.iou.msg.demo;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.hm.iou.base.BaseBizAppLike;
 import com.hm.iou.logger.Logger;
@@ -32,7 +34,21 @@ public class MsgCenterApplication extends Application {
         SugarContext.init(this);
         MsgCenterAppLike msgCenterAppLike = new MsgCenterAppLike();
         msgCenterAppLike.onCreate(this);
+
+        //初始化融云
+        initRongRunIM();
     }
+
+
+    /**
+     * 分包
+     */
+    @Override
+    protected void attachBaseContext(Context context) {
+        super.attachBaseContext(context);
+        MultiDex.install(this);
+    }
+
 
     private void initNetwork() {
         System.out.println("init-----------");
@@ -46,6 +62,9 @@ public class MsgCenterApplication extends Application {
                 .setToken(UserManager.getInstance(this).getToken())
                 .build();
         HttpReqManager.init(config);
+    }
+
+    private void initRongRunIM() {
     }
 
 }

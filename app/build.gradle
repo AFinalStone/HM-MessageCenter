@@ -10,6 +10,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+
+        multiDexEnabled true
+
         manifestPlaceholders = [
                 RONGCLOUD_APPKEY : "123abc123"
         ]
@@ -33,5 +36,6 @@ dependencies {
     //图片选择
     compile 'com.heima.iou:hmselectpiclocal:1.0.0'
     compile project(':library')
+    compile 'com.android.support:multidex:1.0.0'
 
 }
