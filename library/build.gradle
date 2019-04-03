@@ -26,10 +26,13 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
+    //noinspection GradleCompatible
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'com.heima.iou:hmbasebizlocal:1.0.0'
     compile 'com.heima.iou:hmdbcenterlocal:1.0.0'
+    // 网易云IM基础功能 (必需)
+//    compile 'com.netease.nimlib:basesdk:3.3.0'
 }
 apply from: './maven_local.gradle'
