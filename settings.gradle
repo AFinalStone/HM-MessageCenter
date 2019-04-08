@@ -1,1 +1,1 @@
-include ':app', ':library', ':NIM_UIKi'
+include ':app', ':library'

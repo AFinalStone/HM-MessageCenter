@@ -5,9 +5,14 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_login_nim"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="登陆" />
+        android:text="登陆网易云IM" />
+
+    <Button
+        android:id="@+id/btn_chat_with_another"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="和另外一个人聊天" />
 </LinearLayout>

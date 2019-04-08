@@ -18,7 +18,7 @@
         android:id="@+id/btn_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="test" />
+        android:text="网易云IM" />
 
     <Button
         android:id="@+id/btn_feedback"
