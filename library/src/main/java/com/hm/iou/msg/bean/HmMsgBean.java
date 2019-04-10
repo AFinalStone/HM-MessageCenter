@@ -3,19 +3,17 @@ package com.hm.iou.msg.bean;
 import android.text.TextUtils;
 
 import com.hm.iou.msg.R;
-import com.hm.iou.msg.business.message.view.IMsgItem;
+import com.hm.iou.msg.business.hmmsg.view.IHmMsgItem;
 import com.hm.iou.msg.dict.MsgType;
-import com.hm.iou.tools.TimeUtil;
 
 import java.io.Serializable;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Created by syl on 2018/5/30.
  */
-public class MsgDetailBean implements IMsgItem, Serializable {
+public class HmMsgBean implements IHmMsgItem, Serializable {
 
     /**
      * type : 3
@@ -175,7 +173,7 @@ public class MsgDetailBean implements IMsgItem, Serializable {
 
     @Override
     public String toString() {
-        return "MsgDetailBean{" +
+        return "HmMsgBean{" +
                 "type=" + type +
                 ", autoId='" + autoId + '\'' +
                 ", pushDate='" + pushDate + '\'' +

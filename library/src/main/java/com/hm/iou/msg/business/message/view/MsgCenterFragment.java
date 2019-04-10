@@ -7,16 +7,18 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hm.iou.base.BaseFragment;
+import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.message.MsgCenterContract;
 import com.hm.iou.msg.business.message.MsgCenterPresenter;
+import com.hm.iou.msg.business.message.view.header.HeaderViewHelper;
+import com.hm.iou.msg.business.message.view.header.MsgListHeaderModel;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.tools.StatusBarUtil;
 import com.hm.iou.uikit.HMLoadingView;
@@ -38,8 +40,6 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
     View mViewStatusBar;
     @BindView(R2.id.tv_num_no_read)
     TextView mTvNumNoRead;
-    @BindView(R2.id.iv_header)
-    ImageView mIvHeader;
     @BindView(R2.id.iv_msg_refresh)
     PullDownRefreshImageView mIvMsgRefresh;
     @BindView(R2.id.rv_msgList)
@@ -49,7 +49,8 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
     @BindView(R2.id.loading_init)
     HMLoadingView mLoadingInit;
 
-    MsgListAdapter mAdapter;
+    HeaderViewHelper mHeaderViewHelper;
+    ChatMsgListAdapter mAdapter;
 
     @Override
     protected int getLayoutId() {
@@ -73,34 +74,39 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
         //设置状态栏颜色为黑色
         com.hm.iou.base.utils.StatusBarUtil.setStatusBarDarkFont(mActivity, true);
 
-        mAdapter = new MsgListAdapter();
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mActivity));
-        mRvMsgList.setAdapter(mAdapter);
-        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        mAdapter = new ChatMsgListAdapter(mActivity);
+        mHeaderViewHelper = new HeaderViewHelper(mRvMsgList, mPresenter);
+        mAdapter.addHeaderView(mHeaderViewHelper.getRootView());
+        mAdapter.bindToRecyclerView(mRvMsgList);
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                if (R.id.ll_adOrSport == view.getId()) {
-                    IMsgItem item = (IMsgItem) adapter.getItem(position);
-                    NavigationHelper.ToMsgDetail(mActivity, item.getMsgDetailLinkUrl(), item.getMsgAutoId(), item.getMsgType());
-                    mPresenter.markHaveRead(position);
-                }
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                ChatMsgModel item = (ChatMsgModel) adapter.getItem(position);
+                Logger.d("会话id==" + item.getContactId());
+                NavigationHelper.toSessionDetail(mActivity, item.getContactId());
             }
         });
+
         //设置下拉刷新监听
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mPresenter.getMsgListFromServer();
+                mPresenter.getChatList();
             }
         });
 
-        mPresenter.init();
+        mPresenter.getHeaderModules();
         mPresenter.getRedFlagCount();
+        mPresenter.getChatList();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if (mPresenter != null) {
+            mPresenter.onResume();
+        }
     }
 
     @Override
@@ -108,16 +114,20 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
         super.onHiddenChanged(hidden);
         if (!hidden && mPresenter != null) {
             mPresenter.getRedFlagCount();
-            mPresenter.getMsgListFromCache();
         }
         if (!hidden) {
             com.hm.iou.base.utils.StatusBarUtil.setStatusBarDarkFont(mActivity, true);
         }
     }
 
-    @OnClick(R2.id.rl_header)
-    public void onClick() {
-        EventBus.getDefault().post(new CommBizEvent("iou_show_home_left_menu", "显示首页左侧菜单"));
+    @OnClick({R2.id.rl_header, R2.id.tv_right_title})
+    public void onClick(View view) {
+        int id = view.getId();
+        if (R.id.rl_header == id) {
+            EventBus.getDefault().post(new CommBizEvent("iou_show_home_left_menu", "显示首页左侧菜单"));
+        } else if (R.id.tv_right_title == id) {
+            NavigationHelper.toFriendList(mActivity);
+        }
     }
 
     @Override
@@ -142,10 +152,18 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
     }
 
     @Override
-    public void showMsgList(List<IMsgItem> list) {
+    public void showMsgList(List<ChatMsgModel> list) {
         mAdapter.setNewData(list);
         if (list != null && !list.isEmpty()) {
             mLoadingInit.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showHeaderModule(List<MsgListHeaderModel> list) {
+        if (mHeaderViewHelper != null) {
+            mHeaderViewHelper.clearHeaderModlues();
+            mHeaderViewHelper.addModule(list);
         }
     }
 
@@ -162,12 +180,6 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
     @Override
     public void hidePullDownRefresh() {
         mRefreshLayout.finishRefresh();
-    }
-
-    @Override
-    public void showDataEmpty() {
-        mLoadingInit.setVisibility(View.VISIBLE);
-        mLoadingInit.showDataEmpty("");
     }
 
 

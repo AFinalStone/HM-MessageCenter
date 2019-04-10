@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <LinearLayout style="@style/MsgCenterMsgListHeaderItem">
+
+        <ImageView
+            android:id="@+id/iv_module"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/msgcenter_ic_activity" />
+
+        <TextView
+            android:id="@+id/tv_module"
+            style="@style/MsgCenterMsgListHeaderItemTitle"
+            android:text="合同消息" />
+
+        <LinearLayout
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <com.hm.iou.uikit.HMDotTextView
+                android:id="@+id/dot_module_red_msg_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:dotBackgroundColor="@color/uikit_function_exception"
+                app:dotText="1"
+                app:dotTextColor="@color/white"
+                app:dotTextSize="@dimen/textFontSize_12" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        style="@style/UikitDivider.Horizontal"
+        android:layout_marginStart="64dp" />
+
+
+</LinearLayout>

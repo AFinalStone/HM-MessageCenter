@@ -1,6 +1,6 @@
 package com.hm.iou.msg.api;
 
-import com.hm.iou.msg.bean.MsgDetailBean;
+import com.hm.iou.msg.bean.HmMsgBean;
 import com.hm.iou.network.HttpReqManager;
 import com.hm.iou.sharedata.model.BaseResponse;
 
@@ -25,7 +25,7 @@ public class MsgApi {
      *
      * @return
      */
-    public static Flowable<BaseResponse<List<MsgDetailBean>>> getMessages() {
+    public static Flowable<BaseResponse<List<HmMsgBean>>> getMessages() {
         return getService().getMessages()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

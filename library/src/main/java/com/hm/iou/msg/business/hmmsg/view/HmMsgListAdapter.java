@@ -1,4 +1,4 @@
-package com.hm.iou.msg.business.message.view;
+package com.hm.iou.msg.business.hmmsg.view;
 
 import android.text.TextUtils;
 import android.widget.ImageView;
@@ -8,26 +8,24 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.hm.iou.msg.R;
 import com.hm.iou.tools.ImageLoader;
 
-import static com.hm.iou.msg.business.message.view.IMsgItem.TYPE_AD_OR_SPORT;
-import static com.hm.iou.msg.business.message.view.IMsgItem.TYPE_COMMUNIQUE;
 
 /**
  * Created by syl on 18/4/28.<br>
  */
 
-public class MsgListAdapter extends BaseMultiItemQuickAdapter<IMsgItem, BaseViewHolder> {
+public class HmMsgListAdapter extends BaseMultiItemQuickAdapter<IHmMsgItem, BaseViewHolder> {
 
-    public MsgListAdapter() {
+    public HmMsgListAdapter() {
         super(null);
-        addItemType(TYPE_AD_OR_SPORT, R.layout.msgcenter_item_ad_or_sport);
-        addItemType(TYPE_COMMUNIQUE, R.layout.msgcenter_item_notice);
+        addItemType(IHmMsgItem.TYPE_AD_OR_SPORT, R.layout.msgcenter_item_hm_msg_list_ad_or_sport);
+        addItemType(IHmMsgItem.TYPE_COMMUNIQUE, R.layout.msgcenter_item_hm_msg_list_notice);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, IMsgItem item) {
+    protected void convert(BaseViewHolder helper, IHmMsgItem item) {
         helper.setText(R.id.tv_title, item.getMsgTitle());
 
-        if (helper.getItemViewType() == TYPE_AD_OR_SPORT) {
+        if (helper.getItemViewType() == IHmMsgItem.TYPE_AD_OR_SPORT) {
             String msgImage = item.getMsgImage();
             if (TextUtils.isEmpty(msgImage)) {
                 ImageLoader.getInstance(mContext).displayImage(R.mipmap.msgcenter_icon_load_image_error_default, (ImageView) helper.getView(R.id.imageView));
@@ -48,7 +46,7 @@ public class MsgListAdapter extends BaseMultiItemQuickAdapter<IMsgItem, BaseView
             }
             return;
         }
-        if (helper.getItemViewType() == TYPE_COMMUNIQUE) {
+        if (helper.getItemViewType() == IHmMsgItem.TYPE_COMMUNIQUE) {
             String time = item.getMsgTime();
             helper.setText(R.id.tv_time, time);
             helper.setText(R.id.tv_intro, item.getNotice());

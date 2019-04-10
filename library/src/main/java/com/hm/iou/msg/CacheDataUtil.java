@@ -1,28 +1,14 @@
 package com.hm.iou.msg;
 
-import android.content.Context;
-import android.text.TextUtils;
-
-import com.hm.iou.base.mvp.BaseContract;
-import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.MsgCenterDbData;
-import com.hm.iou.logger.Logger;
-import com.hm.iou.msg.bean.MsgDetailBean;
-import com.hm.iou.tools.SPUtil;
-import com.hm.iou.tools.TimeUtil;
+import com.hm.iou.msg.bean.HmMsgBean;
 
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -47,38 +33,30 @@ public class CacheDataUtil {
      *
      * @return
      */
-    public static synchronized void addMsgListToCache(List<MsgDetailBean> list) {
+    public static synchronized void addMsgListToCache(List<HmMsgBean> list) {
         Flowable.just(list)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Function<List<MsgDetailBean>, List<MsgCenterDbData>>() {
+                .map(new Function<List<HmMsgBean>, List<MsgCenterDbData>>() {
                     @Override
-                    public List<MsgCenterDbData> apply(List<MsgDetailBean> list) throws Exception {
+                    public List<MsgCenterDbData> apply(List<HmMsgBean> list) throws Exception {
                         List<MsgCenterDbData> listMsgCenter = new ArrayList<>();
-                        for (MsgDetailBean msgDetailBean : list) {
-                            MsgCenterDbData dbData = makeMsgDetailBeanToMsgCenterDbData(msgDetailBean);
+                        for (HmMsgBean hmMsgBean : list) {
+                            MsgCenterDbData dbData = makeMsgDetailBeanToMsgCenterDbData(hmMsgBean);
                             listMsgCenter.add(dbData);
                         }
                         return listMsgCenter;
                     }
                 })
-                .map(new Function<List<MsgCenterDbData>, Void>() {
+                .subscribe(new Consumer<List<MsgCenterDbData>>() {
                     @Override
-                    public Void apply(List<MsgCenterDbData> list) throws Exception {
-                        MsgCenterDbHelper.addOrUpdateDataToMsgCenter(list);
-                        return null;
-                    }
-                })
-                .subscribe(new Consumer<Void>() {
-                    @Override
-                    public void accept(Void aVoid) throws Exception {
-                        MsgCenterAppLike.getInstance().getMsgCenterNoReadNumFromCache();
+                    public void accept(List<MsgCenterDbData> msgCenterDbData) throws Exception {
+                        MsgCenterDbHelper.addOrUpdateDataToMsgCenter(msgCenterDbData);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Logger.e(throwable.getMessage());
-                        MsgCenterAppLike.getInstance().getMsgCenterNoReadNumFromCache();
+
                     }
                 });
     }
@@ -86,10 +64,10 @@ public class CacheDataUtil {
     /**
      * 新增或者更新消息都消息中心
      *
-     * @param msgDetailBean 需要新增或者更新的item
+     * @param hmMsgBean 需要新增或者更新的item
      */
-    public static synchronized void updateMsgItemToCache(MsgDetailBean msgDetailBean) {
-        MsgCenterDbData dbData = makeMsgDetailBeanToMsgCenterDbData(msgDetailBean);
+    public static synchronized void updateMsgItemToCache(HmMsgBean hmMsgBean) {
+        MsgCenterDbData dbData = makeMsgDetailBeanToMsgCenterDbData(hmMsgBean);
         MsgCenterDbHelper.addOrUpdateDataToMsgCenter(dbData);
     }
 
@@ -98,11 +76,11 @@ public class CacheDataUtil {
      *
      * @return
      */
-    public static synchronized List<MsgDetailBean> readMsgListFromCacheData() {
+    public static synchronized List<HmMsgBean> readMsgListFromCacheData() {
         List<MsgCenterDbData> listCache = MsgCenterDbHelper.queryMsgCenterListData();
-        List<MsgDetailBean> list = new ArrayList<>();
+        List<HmMsgBean> list = new ArrayList<>();
         for (MsgCenterDbData dbData : listCache) {
-            MsgDetailBean data = makeMsgCenterDbDataToMsgDetailBean(dbData);
+            HmMsgBean data = makeMsgCenterDbDataToMsgDetailBean(dbData);
             list.add(data);
         }
         return list;
@@ -118,19 +96,19 @@ public class CacheDataUtil {
     /**
      * 把MsgDetailBean转换为MsgCenterDbData
      *
-     * @param msgDetailBean
+     * @param hmMsgBean
      * @return
      */
-    private static MsgCenterDbData makeMsgDetailBeanToMsgCenterDbData(MsgDetailBean msgDetailBean) {
+    private static MsgCenterDbData makeMsgDetailBeanToMsgCenterDbData(HmMsgBean hmMsgBean) {
         MsgCenterDbData data = new MsgCenterDbData();
-        data.setAutoId(msgDetailBean.getAutoId());
-        data.setType(msgDetailBean.getType());
-        data.setPushDate(msgDetailBean.getPushDate());
-        data.setImageUrl(msgDetailBean.getImageUrl());
-        data.setTitle(msgDetailBean.getTitle());
-        data.setInfoLinkUrl(msgDetailBean.getInfoLinkUrl());
-        data.setNotice(msgDetailBean.getNotice());
-        data.setRead(msgDetailBean.isRead());
+        data.setAutoId(hmMsgBean.getAutoId());
+        data.setType(hmMsgBean.getType());
+        data.setPushDate(hmMsgBean.getPushDate());
+        data.setImageUrl(hmMsgBean.getImageUrl());
+        data.setTitle(hmMsgBean.getTitle());
+        data.setInfoLinkUrl(hmMsgBean.getInfoLinkUrl());
+        data.setNotice(hmMsgBean.getNotice());
+        data.setRead(hmMsgBean.isRead());
         return data;
     }
 
@@ -140,8 +118,8 @@ public class CacheDataUtil {
      * @param dbData
      * @return
      */
-    private static MsgDetailBean makeMsgCenterDbDataToMsgDetailBean(MsgCenterDbData dbData) {
-        MsgDetailBean data = new MsgDetailBean();
+    private static HmMsgBean makeMsgCenterDbDataToMsgDetailBean(MsgCenterDbData dbData) {
+        HmMsgBean data = new HmMsgBean();
         data.setAutoId(dbData.getAutoId());
         data.setType(dbData.getType());
         data.setPushDate(dbData.getPushDate());

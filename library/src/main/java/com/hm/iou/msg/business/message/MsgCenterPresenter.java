@@ -1,30 +1,38 @@
 package com.hm.iou.msg.business.message;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.support.annotation.NonNull;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hm.iou.base.mvp.MvpFragmentPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
-import com.hm.iou.base.utils.RxUtil;
-import com.hm.iou.msg.CacheDataUtil;
 import com.hm.iou.msg.MsgCenterAppLike;
-import com.hm.iou.msg.api.MsgApi;
-import com.hm.iou.msg.bean.MsgDetailBean;
+import com.hm.iou.msg.business.message.view.ChatMsgModel;
+import com.hm.iou.msg.business.message.view.header.MsgListHeaderModel;
+import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.event.CommBizEvent;
-import com.hm.iou.sharedata.model.BaseResponse;
-import com.hm.iou.tools.ToastUtil;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -35,179 +43,83 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.View> implements MsgCenterContract.Presenter {
 
-    private List<MsgDetailBean> mMsgListData;
+    private List<ChatMsgModel> mChatList;
     private String mRedFlagCount;
+    //  创建观察者对象
+    Observer<List<RecentContact>> mChatListObserver;
 
     public MsgCenterPresenter(@NonNull Context context, @NonNull MsgCenterContract.View view) {
         super(context, view);
+        mChatList = new ArrayList<>();
+        if (mChatListObserver == null) {
+            mChatListObserver = new Observer<List<RecentContact>>() {
+                @Override
+                public void onEvent(List<RecentContact> messages) {
+                    if (mView != null) {
+                        List<ChatMsgModel> newList = DataChangeUtil.changeRecentContactToIChatMsgItem(messages);
+                        for (ChatMsgModel model : newList) {
+                            int index = mChatList.indexOf(model);
+                            if (index == -1) {
+                                mChatList.add(0, model);
+                            } else {
+                                mChatList.set(index, model);
+                            }
+                        }
+                        mView.showMsgList(mChatList);
+                    }
+                }
+            };
+        }
     }
 
     @Override
     public void onViewCreated() {
         super.onViewCreated();
         EventBus.getDefault().register(this);
+        //  注册/注销观察者
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeRecentContact(mChatListObserver, true);
+
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
+        //  注册/注销观察者
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeRecentContact(mChatListObserver, false);
+
     }
 
     @Override
-    public void init() {
+    public void onResume() {
+
+    }
+
+    @Override
+    public void getHeaderModules() {
         mView.showInitLoading();
-        Flowable.just(0)
-                .map(new Function<Integer, List<MsgDetailBean>>() {
-                    @Override
-                    public List<MsgDetailBean> apply(Integer integer) throws Exception {
-                        List<MsgDetailBean> listCache = CacheDataUtil.readMsgListFromCacheData();
-                        return listCache;
-                    }
-                })
+        Flowable.create(new FlowableOnSubscribe<List<MsgListHeaderModel>>() {
+            @Override
+            public void subscribe(FlowableEmitter<List<MsgListHeaderModel>> e) throws Exception {
+                List<MsgListHeaderModel> headerModels = readDataFromAssert();
+                e.onNext(headerModels);
+            }
+        }, BackpressureStrategy.ERROR)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(getProvider().<List<MsgDetailBean>>bindUntilEvent(FragmentEvent.DESTROY))
-                .subscribeWith(new CommSubscriber<List<MsgDetailBean>>(mView) {
+                .compose(getProvider().<List<MsgListHeaderModel>>bindUntilEvent(FragmentEvent.DESTROY))
+                .subscribeWith(new CommSubscriber<List<MsgListHeaderModel>>(mView) {
                     @Override
-                    public void handleResult(List<MsgDetailBean> list) {
-                        mMsgListData = list;
-                        getInitData();
-                    }
-
-                    @Override
-                    public void handleException(Throwable throwable, String code, String msg) {
-                        getInitData();
-                    }
-
-                    @Override
-                    public boolean isShowBusinessError() {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean isShowCommError() {
-                        return false;
-                    }
-                });
-    }
-
-    @Override
-    public void getMsgListFromServer() {
-        //重新获取未读消息数量
-        MsgApi.getMessages()
-                .compose(getProvider().<BaseResponse<List<MsgDetailBean>>>bindUntilEvent(FragmentEvent.DESTROY))
-                .map(RxUtil.<List<MsgDetailBean>>handleResponse())
-                .subscribeWith(new CommSubscriber<List<MsgDetailBean>>(mView) {
-                    @Override
-                    public void handleResult(List<MsgDetailBean> list) {
-                        if (mMsgListData == null) {
-                            mMsgListData = new ArrayList<>();
-                        }
-                        if (list != null) {
-                            CacheDataUtil.addMsgListToCache(list);
-                            mMsgListData.addAll(list);
-                        }
-                        if (mMsgListData.isEmpty()) {
-                            mView.showDataEmpty();
-                        } else {
-                            mView.showMsgList((ArrayList) mMsgListData);
-                        }
-                        mView.hidePullDownRefresh();
-                        //获取未读消息数量
-                        MsgCenterAppLike.getInstance().getMsgCenterNoReadNumFromCache();
-                    }
-
-                    @Override
-                    public void handleException(Throwable throwable, String s, String s1) {
-                        mView.hidePullDownRefresh();
-                        ToastUtil.showMessage(mContext, "网络不给力");
-                    }
-
-                    @Override
-                    public boolean isShowCommError() {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean isShowBusinessError() {
-                        return false;
-                    }
-                });
-    }
-
-    @Override
-    public void getMsgListFromCache() {
-        Flowable.just(0)
-                .map(new Function<Integer, List<MsgDetailBean>>() {
-                    @Override
-                    public List<MsgDetailBean> apply(Integer integer) throws Exception {
-                        List<MsgDetailBean> listCache = CacheDataUtil.readMsgListFromCacheData();
-                        return listCache;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(getProvider().<List<MsgDetailBean>>bindUntilEvent(FragmentEvent.DESTROY))
-                .subscribeWith(new CommSubscriber<List<MsgDetailBean>>(mView) {
-                    @Override
-                    public void handleResult(List<MsgDetailBean> list) {
-                        mMsgListData = list;
-                        if (mMsgListData == null) {
-                            mMsgListData = new ArrayList<>();
-                        }
-                        if (mMsgListData.isEmpty()) {
-                            mView.showDataEmpty();
-                        } else {
-                            mView.showMsgList((ArrayList) mMsgListData);
-                        }
-                    }
-
-                    @Override
-                    public void handleException(Throwable throwable, String code, String msg) {
-                    }
-
-                    @Override
-                    public boolean isShowBusinessError() {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean isShowCommError() {
-                        return false;
-                    }
-                });
-    }
-
-    private void getInitData() {
-        MsgApi.getMessages()
-                .compose(getProvider().<BaseResponse<List<MsgDetailBean>>>bindUntilEvent(FragmentEvent.DESTROY))
-                .map(RxUtil.<List<MsgDetailBean>>handleResponse())
-                .subscribeWith(new CommSubscriber<List<MsgDetailBean>>(mView) {
-                    @Override
-                    public void handleResult(List<MsgDetailBean> list) {
+                    public void handleResult(List<MsgListHeaderModel> msgListHeaderModels) {
                         mView.hideInitLoading();
-                        mView.enableRefresh();
-                        if (mMsgListData == null) {
-                            mMsgListData = new ArrayList<>();
-                        }
-                        if (list != null) {
-                            CacheDataUtil.addMsgListToCache(list);
-                            mMsgListData.addAll(list);
-                        }
-                        if (mMsgListData.isEmpty()) {
-                            mView.showDataEmpty();
-                        } else {
-                            mView.showMsgList((ArrayList) mMsgListData);
-                        }
-                        //获取未读消息数量
-                        MsgCenterAppLike.getInstance().getMsgCenterNoReadNumFromCache();
+                        mView.showHeaderModule(msgListHeaderModels);
                     }
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
                         mView.hideInitLoading();
-                        mView.enableRefresh();
                     }
 
                     @Override
@@ -217,6 +129,77 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
 
                     @Override
                     public boolean isShowBusinessError() {
+                        return false;
+                    }
+                });
+    }
+
+    /**
+     * 从assert文件中读取数据
+     *
+     * @return
+     */
+    private List<MsgListHeaderModel> readDataFromAssert() {
+        AssetManager manager = mContext.getAssets();
+        try {
+            InputStream inputStream = manager.open("msgcenter_msg_list_header_module_data.json");
+            int length = inputStream.available();
+            byte[] buffer = new byte[length];
+            inputStream.read(buffer);
+            inputStream.close();
+            String json = new String(buffer);
+            Gson gson = new Gson();
+            List<MsgListHeaderModel> list = gson.fromJson(json, new TypeToken<List<MsgListHeaderModel>>() {
+            }.getType());
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void getChatList() {
+        Flowable.create(new FlowableOnSubscribe<List<RecentContact>>() {
+            @Override
+            public void subscribe(FlowableEmitter<List<RecentContact>> e) throws Exception {
+                List<RecentContact> recentChatList = NIMClient.getService(MsgService.class).queryRecentContactsBlock();
+                e.onNext(recentChatList);
+            }
+        }, BackpressureStrategy.ERROR)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(getProvider().<List<RecentContact>>bindUntilEvent(FragmentEvent.DESTROY))
+                .subscribeWith(new CommSubscriber<List<RecentContact>>(mView) {
+                    @Override
+                    public void handleResult(List<RecentContact> recentContacts) {
+                        List<ChatMsgModel> newList = DataChangeUtil.changeRecentContactToIChatMsgItem(recentContacts);
+                        for (ChatMsgModel model : newList) {
+                            int index = mChatList.indexOf(model);
+                            if (index == -1) {
+                                mChatList.add(model);
+                            } else {
+                                mChatList.set(index, model);
+                            }
+                        }
+                        mView.showMsgList(mChatList);
+                        mView.hidePullDownRefresh();
+                        mView.enableRefresh();
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String s, String s1) {
+                        mView.hidePullDownRefresh();
+                        mView.enableRefresh();
+                    }
+
+                    @Override
+                    public boolean isShowBusinessError() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isShowCommError() {
                         return false;
                     }
                 });
@@ -224,12 +207,6 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
 
     @Override
     public void markHaveRead(int position) {
-        MsgDetailBean data = mMsgListData.get(position);
-        data.setRead(true);
-        CacheDataUtil.updateMsgItemToCache(data);
-        //获取未读消息数量
-        MsgCenterAppLike.getInstance().getMsgCenterNoReadNumFromCache();
-        mView.refreshItem(position);
     }
 
     @Override

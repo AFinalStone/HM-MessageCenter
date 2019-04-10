@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.hm.iou.msg.MsgCenterAppLike;
+import com.hm.iou.msg.business.hmmsg.view.HmMsgListActivity;
 import com.hm.iou.network.HttpReqManager;
 import com.hm.iou.sharedata.UserManager;
 import com.hm.iou.sharedata.event.CommBizEvent;

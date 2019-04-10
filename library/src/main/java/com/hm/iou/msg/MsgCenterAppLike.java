@@ -9,7 +9,7 @@ import android.text.TextUtils;
 import com.hm.iou.base.file.FileUtil;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.api.MsgApi;
-import com.hm.iou.msg.bean.MsgDetailBean;
+import com.hm.iou.msg.bean.HmMsgBean;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.event.LogoutEvent;
 import com.hm.iou.tools.Md5Util;
@@ -186,10 +186,10 @@ public class MsgCenterAppLike {
             mListDisposable.dispose();
         }
         mListDisposable = MsgApi.getMessages()
-                .map(RxUtil.<List<MsgDetailBean>>handleResponse())
-                .subscribe(new Consumer<List<MsgDetailBean>>() {
+                .map(RxUtil.<List<HmMsgBean>>handleResponse())
+                .subscribe(new Consumer<List<HmMsgBean>>() {
                     @Override
-                    public void accept(List<MsgDetailBean> list) throws Exception {
+                    public void accept(List<HmMsgBean> list) throws Exception {
                         CacheDataUtil.addMsgListToCache(list);
                     }
                 }, new Consumer<Throwable>() {

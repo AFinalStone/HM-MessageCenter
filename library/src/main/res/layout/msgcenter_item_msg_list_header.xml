@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+
+    <View
+        style="@style/UikitDivider.Horizontal"
+        android:layout_height="7dp"
+        android:background="@color/uikit_background" />
+
+    <LinearLayout
+        android:id="@+id/ll_module_new_friend"
+        style="@style/MsgCenterMsgListHeaderItem">
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/msgcenter_ic_msg_list_new_friend" />
+
+        <TextView
+            style="@style/MsgCenterMsgListHeaderItemTitle"
+            android:text="新的朋友" />
+
+        <LinearLayout
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <com.hm.iou.uikit.HMDotTextView
+                android:id="@+id/dot_module_new_friend_no_read_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:dotBackgroundColor="@color/uikit_function_exception"
+                app:dotText="1"
+                app:dotTextColor="@color/white"
+                app:dotTextSize="@dimen/textFontSize_12" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        style="@style/UikitDivider.Horizontal"
+        android:layout_marginStart="64dp" />
+</LinearLayout>

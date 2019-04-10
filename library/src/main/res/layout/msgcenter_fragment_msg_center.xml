@@ -2,13 +2,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/uikit_background"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <View
         android:id="@+id/view_statusbar_placeholder"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/uikit_status_bar_height"/>
+        android:layout_height="@dimen/uikit_status_bar_height" />
 
     <LinearLayout
         android:id="@+id/ll_top"
@@ -49,12 +49,21 @@
             android:id="@+id/tv_title"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginEnd="48dp"
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/messagecenter_msg_center"
             android:textColor="@color/uikit_text_main_content"
             android:textSize="@dimen/textFontSize_20" />
+
+        <TextView
+            android:id="@+id/tv_right_title"
+            style="@style/UikitTextView"
+            android:layout_height="match_parent"
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingEnd="20dp"
+            android:text="通讯录"
+            android:textColor="@color/uikit_text_sub_content"
+            android:textSize="@dimen/textFontSize_14" />
     </LinearLayout>
 
     <RelativeLayout
@@ -65,7 +74,6 @@
             android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:srlAccentColor="@android:color/white"
             app:srlEnableLoadMore="false"
             app:srlEnablePreviewInEditMode="true"
             app:srlEnableRefresh="false"
@@ -94,7 +102,8 @@
         <com.hm.iou.uikit.HMLoadingView
             android:id="@+id/loading_init"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/white" />
 
     </RelativeLayout>
 
