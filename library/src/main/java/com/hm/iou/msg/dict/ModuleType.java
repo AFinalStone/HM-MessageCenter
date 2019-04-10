@@ -1,4 +1,4 @@
-package com.hm.iou.msg.business.message.view.header;
+package com.hm.iou.msg.dict;
 
 /**
  * @author syl

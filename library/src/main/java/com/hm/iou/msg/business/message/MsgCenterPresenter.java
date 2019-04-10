@@ -10,7 +10,7 @@ import com.hm.iou.base.mvp.MvpFragmentPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.msg.MsgCenterAppLike;
 import com.hm.iou.msg.business.message.view.ChatMsgModel;
-import com.hm.iou.msg.business.message.view.header.MsgListHeaderModel;
+import com.hm.iou.msg.bean.MsgListHeaderBean;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.netease.nimlib.sdk.NIMClient;
@@ -100,21 +100,21 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     @Override
     public void getHeaderModules() {
         mView.showInitLoading();
-        Flowable.create(new FlowableOnSubscribe<List<MsgListHeaderModel>>() {
+        Flowable.create(new FlowableOnSubscribe<List<MsgListHeaderBean>>() {
             @Override
-            public void subscribe(FlowableEmitter<List<MsgListHeaderModel>> e) throws Exception {
-                List<MsgListHeaderModel> headerModels = readDataFromAssert();
+            public void subscribe(FlowableEmitter<List<MsgListHeaderBean>> e) throws Exception {
+                List<MsgListHeaderBean> headerModels = readDataFromAssert();
                 e.onNext(headerModels);
             }
         }, BackpressureStrategy.ERROR)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(getProvider().<List<MsgListHeaderModel>>bindUntilEvent(FragmentEvent.DESTROY))
-                .subscribeWith(new CommSubscriber<List<MsgListHeaderModel>>(mView) {
+                .compose(getProvider().<List<MsgListHeaderBean>>bindUntilEvent(FragmentEvent.DESTROY))
+                .subscribeWith(new CommSubscriber<List<MsgListHeaderBean>>(mView) {
                     @Override
-                    public void handleResult(List<MsgListHeaderModel> msgListHeaderModels) {
+                    public void handleResult(List<MsgListHeaderBean> msgListHeaderBeans) {
                         mView.hideInitLoading();
-                        mView.showHeaderModule(msgListHeaderModels);
+                        mView.showHeaderModule(msgListHeaderBeans);
                     }
 
                     @Override
@@ -139,7 +139,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
      *
      * @return
      */
-    private List<MsgListHeaderModel> readDataFromAssert() {
+    private List<MsgListHeaderBean> readDataFromAssert() {
         AssetManager manager = mContext.getAssets();
         try {
             InputStream inputStream = manager.open("msgcenter_msg_list_header_module_data.json");
@@ -149,7 +149,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
             inputStream.close();
             String json = new String(buffer);
             Gson gson = new Gson();
-            List<MsgListHeaderModel> list = gson.fromJson(json, new TypeToken<List<MsgListHeaderModel>>() {
+            List<MsgListHeaderBean> list = gson.fromJson(json, new TypeToken<List<MsgListHeaderBean>>() {
             }.getType());
             return list;
         } catch (Exception e) {

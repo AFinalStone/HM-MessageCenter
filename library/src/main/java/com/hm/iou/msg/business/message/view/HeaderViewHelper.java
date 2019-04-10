@@ -1,4 +1,4 @@
-package com.hm.iou.msg.business.message.view.header;
+package com.hm.iou.msg.business.message.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.hm.iou.base.utils.ImageLoadUtil;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
+import com.hm.iou.msg.bean.MsgListHeaderBean;
 import com.hm.iou.msg.business.message.MsgCenterContract;
 import com.hm.iou.tools.ImageLoader;
 import com.hm.iou.uikit.HMDotTextView;
@@ -47,7 +48,7 @@ public class HeaderViewHelper {
         return mRootView;
     }
 
-    private void addModule(MsgListHeaderModel moduleBean) {
+    private void addModule(MsgListHeaderBean moduleBean) {
         if (moduleBean == null) {
             return;
         }
@@ -73,7 +74,7 @@ public class HeaderViewHelper {
         mLlHeader.addView(viewModule);
     }
 
-    public void addModule(List<MsgListHeaderModel> list) {
+    public void addModule(List<MsgListHeaderBean> list) {
         if (list == null || list.size() == 0) {
             return;
         }
@@ -82,7 +83,7 @@ public class HeaderViewHelper {
         }
     }
 
-    public void updateModuleItem(MsgListHeaderModel moduleBean) {
+    public void updateModuleItem(MsgListHeaderBean moduleBean) {
         if (moduleBean == null) {
             return;
         }

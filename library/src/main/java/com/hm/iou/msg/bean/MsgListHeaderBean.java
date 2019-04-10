@@ -1,4 +1,4 @@
-package com.hm.iou.msg.business.message.view.header;
+package com.hm.iou.msg.bean;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import lombok.Data;
  * Created by syl on 2019/4/9.
  */
 @Data
-public class MsgListHeaderModel {
+public class MsgListHeaderBean {
 
     private String image;
     private String name;

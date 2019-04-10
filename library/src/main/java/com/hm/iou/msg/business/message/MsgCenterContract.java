@@ -2,7 +2,7 @@ package com.hm.iou.msg.business.message;
 
 import com.hm.iou.base.mvp.BaseContract;
 import com.hm.iou.msg.business.message.view.ChatMsgModel;
-import com.hm.iou.msg.business.message.view.header.MsgListHeaderModel;
+import com.hm.iou.msg.bean.MsgListHeaderBean;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class MsgCenterContract {
          *
          * @param list
          */
-        void showHeaderModule(List<MsgListHeaderModel> list);
+        void showHeaderModule(List<MsgListHeaderBean> list);
 
         /**
          * 更新条目样式

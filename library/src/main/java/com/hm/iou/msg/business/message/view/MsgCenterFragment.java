@@ -17,8 +17,7 @@ import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.message.MsgCenterContract;
 import com.hm.iou.msg.business.message.MsgCenterPresenter;
-import com.hm.iou.msg.business.message.view.header.HeaderViewHelper;
-import com.hm.iou.msg.business.message.view.header.MsgListHeaderModel;
+import com.hm.iou.msg.bean.MsgListHeaderBean;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.tools.StatusBarUtil;
 import com.hm.iou.uikit.HMLoadingView;
@@ -160,7 +159,7 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
     }
 
     @Override
-    public void showHeaderModule(List<MsgListHeaderModel> list) {
+    public void showHeaderModule(List<MsgListHeaderBean> list) {
         if (mHeaderViewHelper != null) {
             mHeaderViewHelper.clearHeaderModlues();
             mHeaderViewHelper.addModule(list);
