@@ -1,5 +1,6 @@
 package com.hm.iou.msg.business.hmmsg.view;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
@@ -15,8 +16,9 @@ import com.hm.iou.tools.ImageLoader;
 
 public class HmMsgListAdapter extends BaseMultiItemQuickAdapter<IHmMsgItem, BaseViewHolder> {
 
-    public HmMsgListAdapter() {
+    public HmMsgListAdapter(Context context) {
         super(null);
+        mContext = context;
         addItemType(IHmMsgItem.TYPE_AD_OR_SPORT, R.layout.msgcenter_item_hm_msg_list_ad_or_sport);
         addItemType(IHmMsgItem.TYPE_COMMUNIQUE, R.layout.msgcenter_item_hm_msg_list_notice);
     }

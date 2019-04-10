@@ -49,7 +49,7 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
     @Override
     protected void initEventAndData(Bundle bundle) {
 
-        mAdapter = new HmMsgListAdapter();
+        mAdapter = new HmMsgListAdapter(mContext);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -93,9 +93,6 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
     @Override
     public void showMsgList(List<IHmMsgItem> list) {
         mAdapter.setNewData(list);
-        if (list != null && !list.isEmpty()) {
-            mLoadingInit.setVisibility(View.GONE);
-        }
     }
 
     @Override

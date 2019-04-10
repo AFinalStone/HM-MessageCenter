@@ -130,7 +130,24 @@ public class MsgCenterAppLike {
 
             @Override
             public UserInfo getUserInfo(String account) {
-                return null;
+                UserInfo userInfo = new UserInfo() {
+                    @Override
+                    public String getAccount() {
+                        return "123";
+                    }
+
+                    @Override
+                    public String getName() {
+                        return "石头";
+                    }
+
+                    @Override
+                    public String getAvatar() {
+
+                        return "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1554904754963&di=0190a2aa4e57906eb5135d0667e9656e&imgtype=0&src=http%3A%2F%2Fwww.lovehhy.net%2Flib%2Fimg%2F9555118%2F1336676_0002011295.jpg";
+                    }
+                };
+                return userInfo;
             }
 
             @Override

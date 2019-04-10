@@ -1,56 +1,31 @@
 package com.hm.iou.msg.business.contract.view;
 
-import android.text.TextUtils;
-import android.widget.ImageView;
+import android.content.Context;
 
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.hm.iou.msg.R;
-import com.hm.iou.tools.ImageLoader;
 
 
 /**
  * Created by syl on 18/4/28.<br>
  */
 
-public class ContractMsgListAdapter extends BaseMultiItemQuickAdapter<IContractMsgItem, BaseViewHolder> {
+public class ContractMsgListAdapter extends BaseQuickAdapter<IContractMsgItem, BaseViewHolder> {
 
-    public ContractMsgListAdapter() {
-        super(null);
-        addItemType(IContractMsgItem.TYPE_AD_OR_SPORT, R.layout.msgcenter_item_hm_msg_list_ad_or_sport);
-        addItemType(IContractMsgItem.TYPE_COMMUNIQUE, R.layout.msgcenter_item_hm_msg_list_notice);
+    public ContractMsgListAdapter(Context context) {
+        super(R.layout.msgcenter_item_contract_msg_list_item);
+        mContext = context;
     }
+
 
     @Override
     protected void convert(BaseViewHolder helper, IContractMsgItem item) {
-        helper.setText(R.id.tv_title, item.getMsgTitle());
-
-        if (helper.getItemViewType() == IContractMsgItem.TYPE_AD_OR_SPORT) {
-            String msgImage = item.getMsgImage();
-            if (TextUtils.isEmpty(msgImage)) {
-                ImageLoader.getInstance(mContext).displayImage(R.mipmap.msgcenter_icon_load_image_error_default, (ImageView) helper.getView(R.id.imageView));
-            } else {
-                ImageLoader.getInstance(mContext).displayImage(item.getMsgImage(), (ImageView) helper.getView(R.id.imageView),
-                        R.drawable.uikit_bg_pic_loading_place, R.mipmap.msgcenter_icon_load_image_error_default);
-            }
-
-            helper.setImageResource(R.id.iv_icon, item.getMsgIcon());
-            helper.addOnClickListener(R.id.ll_adOrSport);
-
-            String time = item.getMsgTime();
-            helper.setText(R.id.tv_time, time);
-            if (item.getMsgReadState()) {
-                helper.setVisible(R.id.iv_noRead, false);
-            } else {
-                helper.setVisible(R.id.iv_noRead, true);
-            }
-            return;
-        }
-        if (helper.getItemViewType() == IContractMsgItem.TYPE_COMMUNIQUE) {
-            String time = item.getMsgTime();
-            helper.setText(R.id.tv_time, time);
-            helper.setText(R.id.tv_intro, item.getNotice());
-        }
+        //时间
+        helper.setText(R.id.tv_time, item.getTime());
+        //标题
+        helper.setText(R.id.tv_title, item.getTitle());
+        //内容
+        helper.setText(R.id.tv_content, item.getContent());
     }
-
 }

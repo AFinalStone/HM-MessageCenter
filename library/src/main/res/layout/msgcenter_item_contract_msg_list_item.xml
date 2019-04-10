@@ -11,6 +11,7 @@
     android:paddingStart="12dp">
 
     <TextView
+        android:id="@+id/tv_time"
         style="@style/UikitTextView.Auxiliary.Small"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
@@ -19,11 +20,12 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="85dp"
-        android:background="@drawable/jietiao_bg_message_list_item">
+        android:layout_height="wrap_content"
+        android:background="@drawable/jietiao_bg_message_list_item"
+        android:minHeight="85dp"
+        android:paddingEnd="10dp">
 
         <ImageView
-            android:id="@+id/iv_contract_flag"
             android:layout_width="26dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
@@ -33,12 +35,14 @@
             android:src="@mipmap/msgcenter_ic_contract_flag" />
 
         <TextView
+            android:id="@+id/tv_title"
             style="@style/UikitTextView"
             android:layout_marginStart="62dp"
             android:layout_marginTop="19dp"
             tools:text="合同创建成功 " />
 
         <TextView
+            android:id="@+id/tv_content"
             style="@style/UikitTextView.Small"
             android:layout_marginStart="62dp"
             android:layout_marginTop="46dp"

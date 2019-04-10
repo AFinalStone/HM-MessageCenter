@@ -2,7 +2,10 @@ package com.hm.iou.msg.util;
 
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.business.message.view.ChatMsgModel;
+import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
+import com.netease.nimlib.sdk.uinfo.UserService;
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +27,12 @@ public class DataChangeUtil {
                 String content = contact.getContent();
                 String strTime = TimeUtil.formatChatListTime(contact.getTime());
                 int redMsgNum = contact.getUnreadCount();
+                NimUserInfo users = NIMClient.getService(UserService.class).getUserInfo(fromAccount);
+                ChatMsgModel chatMsgModel = new ChatMsgModel();
                 Logger.d("fromName=" + fromNick + "contactId="
                         + contactId + "content=" + content + "strTime" + strTime + "redMsgNum" + redMsgNum);
-                ChatMsgModel chatMsgModel = new ChatMsgModel();
                 chatMsgModel.setFromNick(fromNick);
+                chatMsgModel.setFromHeaderImage(users.getAvatar());
                 chatMsgModel.setFromAccount(fromAccount);
                 chatMsgModel.setContactId(contactId);
                 chatMsgModel.setChatContent(content);

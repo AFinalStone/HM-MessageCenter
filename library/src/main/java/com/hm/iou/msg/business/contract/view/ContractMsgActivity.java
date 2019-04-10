@@ -14,7 +14,6 @@ import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.contract.ContractMsgContract;
 import com.hm.iou.msg.business.contract.ContractMsgPresenter;
 import com.hm.iou.msg.business.hmmsg.view.HmMsgListAdapter;
-import com.hm.iou.msg.business.message.view.ChatMsgModel;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -37,7 +36,7 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
     @BindView(R2.id.loading_init)
     HMLoadingView mLoadingInit;
 
-    HmMsgListAdapter mAdapter;
+    ContractMsgListAdapter mAdapter;
 
     @Override
     protected int getLayoutId() {
@@ -52,15 +51,13 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
     @Override
     protected void initEventAndData(Bundle bundle) {
 
-        mAdapter = new HmMsgListAdapter();
+        mAdapter = new ContractMsgListAdapter(mContext);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                if (R.id.ll_adOrSport == view.getId()) {
-                    NavigationHelper.toContractMsgDetailPage(mContext);
-                }
+                NavigationHelper.toContractMsgDetailPage(mContext);
             }
         });
         //设置下拉刷新监听
@@ -75,27 +72,34 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
     }
 
     @Override
-    public void showMsgList(List<ChatMsgModel> list) {
-
+    public void showMsgList(List<IContractMsgItem> list) {
+        mAdapter.setNewData(list);
     }
 
     @Override
     public void enableRefresh() {
-
+        mRefreshLayout.setEnableRefresh(true);
     }
 
     @Override
     public void hidePullDownRefresh() {
-
+        mRefreshLayout.finishRefresh();
     }
 
     @Override
     public void showInitLoading() {
-
+        mLoadingInit.setVisibility(View.VISIBLE);
+        mLoadingInit.showDataLoading();
     }
 
     @Override
     public void hideInitLoading() {
+        mLoadingInit.setVisibility(View.GONE);
+    }
 
+    @Override
+    public void showDataEmpty() {
+        mLoadingInit.setVisibility(View.VISIBLE);
+        mLoadingInit.showDataEmpty("");
     }
 }
