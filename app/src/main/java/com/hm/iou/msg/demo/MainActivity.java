@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.hm.iou.msg.MsgCenterAppLike;
+import com.hm.iou.msg.business.contract.view.ContractMsgActivity;
 import com.hm.iou.msg.business.hmmsg.view.HmMsgListActivity;
 import com.hm.iou.network.HttpReqManager;
 import com.hm.iou.sharedata.UserManager;
@@ -61,6 +62,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 EventBusHelper.postEventBusGetMsgNoReadNum(true);
+            }
+        });
+        findViewById(R.id.btn_get_contract_msg).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ContractMsgActivity.class));
+            }
+        });
+        findViewById(R.id.btn_get_remind_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        findViewById(R.id.btn_get_similarity_contract).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        findViewById(R.id.btn_get_hm_msg).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, HmMsgListActivity.class));
             }
         });
     }

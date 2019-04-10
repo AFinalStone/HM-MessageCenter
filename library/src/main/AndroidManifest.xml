@@ -34,6 +34,10 @@
             android:name=".business.hmmsg.view.HmMsgListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+        <activity
+            android:name=".business.contract.view.ContractMsgActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
         <!-- APP key, 可以在这里设置，也可以在 SDKOptions 中提供。
                如果 SDKOptions 中提供了，取 SDKOptions 中的值。 -->

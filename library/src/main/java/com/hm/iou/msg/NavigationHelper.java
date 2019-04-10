@@ -50,6 +50,24 @@ public class NavigationHelper {
     }
 
     /**
+     * 跳转到合同详情
+     *
+     * @param context
+     */
+    public static void toContractMsgDetailPage(Context context) {
+
+    }
+
+    /**
+     * 跳转到待还提醒
+     *
+     * @param context
+     */
+    public static void toRemaindItemDetailPage(Context context) {
+
+    }
+
+    /**
      * 会话详情
      *
      * @param context

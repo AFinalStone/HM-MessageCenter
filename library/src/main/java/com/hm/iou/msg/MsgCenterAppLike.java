@@ -16,6 +16,7 @@ import com.hm.iou.tools.Md5Util;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.UIKitOptions;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.auth.LoginInfo;
@@ -63,12 +64,29 @@ public class MsgCenterAppLike {
     }
 
     private void initIM() {
-        NIMClient.init(mContext, getLoginInfo(), options());
+        LoginInfo loginInfo = getLoginInfo();
+        NIMClient.init(mContext, loginInfo, options());
         String packageName = mContext.getPackageName();
         String processName = getProcessName();
         if (packageName.equals(processName)) {
             // 初始化UIKit模块
             NimUIKit.init(mContext, buildUIKitOptions());
+            NimUIKit.login(loginInfo, new RequestCallback<LoginInfo>() {
+                @Override
+                public void onSuccess(LoginInfo param) {
+
+                }
+
+                @Override
+                public void onFailed(int code) {
+
+                }
+
+                @Override
+                public void onException(Throwable exception) {
+
+                }
+            });
         }
     }
 

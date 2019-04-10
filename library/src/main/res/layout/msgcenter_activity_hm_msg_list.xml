@@ -5,6 +5,10 @@
     android:background="@color/uikit_background"
     android:orientation="vertical">
 
+    <View
+        android:id="@+id/view_statusbar_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/uikit_status_bar_height" />
 
     <RelativeLayout
         android:layout_width="match_parent"

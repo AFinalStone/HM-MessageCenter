@@ -1,15 +1,15 @@
 [
   {
     "name": "合同消息",
-    "moduleId": "msg_center_msg_list_header_contract",
+    "moduleId": "msg_center_msg_list_header_contract_msg",
     "image": "hmiou://mipmap/msgcenter_ic_msg_list_contract_msg",
     "url": "hmiou://m.54jietiao.com/facecheck/authentication",
     "redMsgNum": 0
   },
   {
     "name": "待还提醒",
-    "moduleId": "msg_center_msg_list_header_need_to_back",
-    "image": "hmiou://mipmap/msgcenter_ic_msg_list_need_back",
+    "moduleId": "msg_center_msg_list_header_remind_to_back",
+    "image": "hmiou://mipmap/msgcenter_ic_msg_list_remind_to_back",
     "url": "hmiou://m.54jietiao.com/pay/user_bind_bank?source=usercenter",
     "redMsgNum": 99
   },

@@ -6,8 +6,8 @@ package com.hm.iou.msg.dict;
  */
 public enum ModuleType {
 
-    CONTRACT("msg_center_msg_list_header_contract", "合同消息"),
-    BANK_CARD("msg_center_msg_list_header_need_to_back", "待还提醒"),
+    CONTRACT("msg_center_msg_list_header_contract_msg", "合同消息"),
+    BANK_CARD("msg_center_msg_list_header_remind_to_back", "待还提醒"),
     EMAIL("msg_center_msg_list_header_similarity_contract", "疑似合同"),
     SIGHATURE_LIST("msg_center_msg_list_header_hm_msg", "管家消息"),;
 

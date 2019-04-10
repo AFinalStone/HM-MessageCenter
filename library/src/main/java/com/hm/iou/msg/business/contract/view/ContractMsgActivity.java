@@ -1,4 +1,4 @@
-package com.hm.iou.msg.business.hmmsg.view;
+package com.hm.iou.msg.business.contract.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,8 +11,10 @@ import com.hm.iou.base.BaseActivity;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
-import com.hm.iou.msg.business.hmmsg.HmMsgListContract;
-import com.hm.iou.msg.business.hmmsg.HmMsgListPresenter;
+import com.hm.iou.msg.business.contract.ContractMsgContract;
+import com.hm.iou.msg.business.contract.ContractMsgPresenter;
+import com.hm.iou.msg.business.hmmsg.view.HmMsgListAdapter;
+import com.hm.iou.msg.business.message.view.ChatMsgModel;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -23,7 +25,8 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implements HmMsgListContract.View {
+public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> implements ContractMsgContract.View {
+
 
     @BindView(R2.id.iv_msg_refresh)
     PullDownRefreshImageView mIvMsgRefresh;
@@ -38,12 +41,12 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
 
     @Override
     protected int getLayoutId() {
-        return R.layout.msgcenter_activity_hm_msg_list;
+        return R.layout.msgcenter_activity_contract_msg;
     }
 
     @Override
-    protected HmMsgListPresenter initPresenter() {
-        return new HmMsgListPresenter(this, this);
+    protected ContractMsgPresenter initPresenter() {
+        return new ContractMsgPresenter(this, this);
     }
 
     @Override
@@ -56,9 +59,7 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 if (R.id.ll_adOrSport == view.getId()) {
-                    IHmMsgItem item = (IHmMsgItem) adapter.getItem(position);
-                    NavigationHelper.toMsgDetail(mContext, item.getMsgDetailLinkUrl(), item.getMsgAutoId(), item.getMsgType());
-                    mPresenter.markHaveRead(position);
+                    NavigationHelper.toContractMsgDetailPage(mContext);
                 }
             }
         });
@@ -66,58 +67,35 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mPresenter.getMsgListFromServer();
+                mPresenter.getContractList();
             }
         });
 
-        mPresenter.init();
+        mPresenter.getContractList();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
+    public void showMsgList(List<ChatMsgModel> list) {
 
-
-    @Override
-    public void showInitLoading() {
-        mLoadingInit.setVisibility(View.VISIBLE);
-        mLoadingInit.showDataLoading();
-    }
-
-    @Override
-    public void hideInitLoading() {
-        mLoadingInit.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showMsgList(List<IHmMsgItem> list) {
-        mAdapter.setNewData(list);
-        if (list != null && !list.isEmpty()) {
-            mLoadingInit.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void refreshItem(int position) {
-        mAdapter.notifyItemChanged(position);
     }
 
     @Override
     public void enableRefresh() {
-        mRefreshLayout.setEnableRefresh(true);
+
     }
 
     @Override
     public void hidePullDownRefresh() {
-        mRefreshLayout.finishRefresh();
+
     }
 
     @Override
-    public void showDataEmpty() {
-        mLoadingInit.setVisibility(View.VISIBLE);
-        mLoadingInit.showDataEmpty("");
+    public void showInitLoading() {
+
     }
 
+    @Override
+    public void hideInitLoading() {
 
+    }
 }
