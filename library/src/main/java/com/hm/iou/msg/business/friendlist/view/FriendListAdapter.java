@@ -16,7 +16,7 @@ import com.hm.iou.tools.ImageLoader;
 public class FriendListAdapter extends BaseQuickAdapter<IFriend, BaseViewHolder> {
 
     public FriendListAdapter(Context context) {
-        super(R.layout.msgcenter_item_contract_list_item);
+        super(R.layout.msgcenter_item_friend_list_item);
         mContext = context;
     }
 

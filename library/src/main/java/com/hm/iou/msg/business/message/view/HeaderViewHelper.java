@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hm.iou.base.utils.ImageLoadUtil;
+import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.bean.MsgListHeaderBean;
@@ -114,12 +115,12 @@ public class HeaderViewHelper {
         }
     }
 
-    public void clearHeaderModlues() {
+    public void clearHeaderModules() {
         mLlHeader.removeAllViews();
     }
 
     @OnClick(R2.id.ll_module_new_friend)
     public void onClick() {
-
+        NavigationHelper.toApplyNewFriendList(mContent);
     }
 }

@@ -162,7 +162,7 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
     @Override
     public void showHeaderModule(List<MsgListHeaderBean> list) {
         if (mHeaderViewHelper != null) {
-            mHeaderViewHelper.clearHeaderModlues();
+            mHeaderViewHelper.clearHeaderModules();
             mHeaderViewHelper.addModule(list);
         }
     }

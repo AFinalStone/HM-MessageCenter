@@ -1,12 +1,14 @@
 package com.hm.iou.msg.api;
 
-import com.hm.iou.msg.bean.FriendBean;
+import com.hm.iou.msg.bean.ApplyApplyNewFriendBean;
 import com.hm.iou.msg.bean.ContractMsgBean;
+import com.hm.iou.msg.bean.FriendBean;
 import com.hm.iou.msg.bean.HmMsgBean;
 import com.hm.iou.msg.bean.RemindBackMsgBean;
 import com.hm.iou.msg.bean.SimilarityContractMsgBean;
-import com.hm.iou.msg.bean.req.GetFriendListReq;
+import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
 import com.hm.iou.msg.bean.req.GetContractMsgListReq;
+import com.hm.iou.msg.bean.req.GetFriendListReq;
 import com.hm.iou.msg.bean.req.GetRemindBackListReq;
 import com.hm.iou.msg.bean.req.GetSimilarityContractListReq;
 import com.hm.iou.network.HttpReqManager;
@@ -79,6 +81,17 @@ public class MsgApi {
      */
     public static Flowable<BaseResponse<List<FriendBean>>> getFriendList(GetFriendListReq req) {
         return getService().getFriendList(req)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 通讯录
+     *
+     * @return
+     */
+    public static Flowable<BaseResponse<List<ApplyApplyNewFriendBean>>> getApplyNewFriendList(GetApplyNewFriendListReq req) {
+        return getService().getApplyNewFriendList(req)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

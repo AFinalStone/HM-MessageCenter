@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="63dp"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:paddingEnd="20dp"
+    android:paddingStart="20dp">
+
+    <com.hm.iou.uikit.ShapedImageView
+        android:id="@+id/iv_from_header"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_centerVertical="true"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/uikit_icon_header_unknow"
+        app:shape_mode="circle" />
+
+    <Button
+        android:id="@+id/btn_see"
+        style="@style/UikitHMButton.Small.Main"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:minHeight="30dp"
+        android:minWidth="52dp"
+        android:text="查看" />
+
+    <TextView
+        android:id="@+id/tv_status"
+        style="@style/UikitTextView.Auxiliary"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:minHeight="30dp"
+        android:minWidth="52dp"
+        android:text="已同意"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="46dp"
+        android:layout_toStartOf="@id/btn_see"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_from_nick"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:textColor="@color/uikit_text_main_content"
+            android:textSize="@dimen/uikit_main_content_text_size"
+            tools:text="红烧茄子" />
+
+        <TextView
+            android:id="@+id/tv_chat_content"
+            style="@style/UikitTextView.Auxiliary.Small"
+            android:layout_width="match_parent"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLength="30"
+            tools:text="我有一个律师函订单请您接单" />
+
+    </LinearLayout>
+
+
+    <View
+        style="@style/UikitDivider.Horizontal"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="62dp" />
+
+
+</RelativeLayout>

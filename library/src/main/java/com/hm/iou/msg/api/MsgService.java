@@ -1,10 +1,12 @@
 package com.hm.iou.msg.api;
 
+import com.hm.iou.msg.bean.ApplyApplyNewFriendBean;
 import com.hm.iou.msg.bean.FriendBean;
 import com.hm.iou.msg.bean.ContractMsgBean;
 import com.hm.iou.msg.bean.HmMsgBean;
 import com.hm.iou.msg.bean.RemindBackMsgBean;
 import com.hm.iou.msg.bean.SimilarityContractMsgBean;
+import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
 import com.hm.iou.msg.bean.req.GetContractMsgListReq;
 import com.hm.iou.msg.bean.req.GetRemindBackListReq;
@@ -38,5 +40,8 @@ public interface MsgService {
 
     @POST("/api/message/messageCenter/v1/getFriendList")
     Flowable<BaseResponse<List<FriendBean>>> getFriendList(@Body GetFriendListReq req);
+
+    @POST("/api/message/messageCenter/v1/getApplyNewFriendList")
+    Flowable<BaseResponse<List<ApplyApplyNewFriendBean>>> getApplyNewFriendList(@Body GetApplyNewFriendListReq req);
 
 }
