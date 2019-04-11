@@ -1,4 +1,4 @@
-package com.hm.iou.msg.business.contract;
+package com.hm.iou.msg.business.similarity;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,7 +8,11 @@ import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.ContractMsgBean;
+import com.hm.iou.msg.bean.RemindBackMsgBean;
+import com.hm.iou.msg.bean.SimilarityContractMsgBean;
 import com.hm.iou.msg.bean.req.GetContractListReq;
+import com.hm.iou.msg.bean.req.GetRemindBackListReq;
+import com.hm.iou.msg.bean.req.GetSimilarityContractListReq;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -21,23 +25,23 @@ import java.util.List;
  * @author syl
  * @time 2018/5/30 下午6:47
  */
-public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContract.View> implements ContractMsgContract.Presenter {
+public class SimilarityContractMsgPresenter extends MvpActivityPresenter<SimilarityContractMsgContract.View> implements SimilarityContractMsgContract.Presenter {
 
 
-    public ContractMsgPresenter(@NonNull Context context, @NonNull ContractMsgContract.View view) {
+    public SimilarityContractMsgPresenter(@NonNull Context context, @NonNull SimilarityContractMsgContract.View view) {
         super(context, view);
     }
 
     @Override
     public void init() {
         mView.showInitLoading();
-        GetContractListReq req = new GetContractListReq();
-        MsgApi.getContractList(req)
-                .compose(getProvider().<BaseResponse<List<ContractMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
-                .map(RxUtil.<List<ContractMsgBean>>handleResponse())
-                .subscribeWith(new CommSubscriber<List<ContractMsgBean>>(mView) {
+        GetSimilarityContractListReq req = new GetSimilarityContractListReq();
+        MsgApi.getSimilarityContractList(req)
+                .compose(getProvider().<BaseResponse<List<SimilarityContractMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<List<SimilarityContractMsgBean>>handleResponse())
+                .subscribeWith(new CommSubscriber<List<SimilarityContractMsgBean>>(mView) {
                     @Override
-                    public void handleResult(List<ContractMsgBean> list) {
+                    public void handleResult(List<SimilarityContractMsgBean> list) {
                         mView.hideInitLoading();
                         mView.enableRefresh();
                         if (list == null || list.size() == 0) {
@@ -66,13 +70,13 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
 
     @Override
     public void getMsgList() {
-        GetContractListReq req = new GetContractListReq();
-        MsgApi.getContractList(req)
-                .compose(getProvider().<BaseResponse<List<ContractMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
-                .map(RxUtil.<List<ContractMsgBean>>handleResponse())
-                .subscribeWith(new CommSubscriber<List<ContractMsgBean>>(mView) {
+        GetSimilarityContractListReq req = new GetSimilarityContractListReq();
+        MsgApi.getSimilarityContractList(req)
+                .compose(getProvider().<BaseResponse<List<SimilarityContractMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<List<SimilarityContractMsgBean>>handleResponse())
+                .subscribeWith(new CommSubscriber<List<SimilarityContractMsgBean>>(mView) {
                     @Override
-                    public void handleResult(List<ContractMsgBean> list) {
+                    public void handleResult(List<SimilarityContractMsgBean> list) {
                         mView.hidePullDownRefresh();
                         if (list == null || list.size() == 0) {
                             mView.showDataEmpty();
@@ -87,5 +91,6 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                     }
                 });
     }
+
 
 }

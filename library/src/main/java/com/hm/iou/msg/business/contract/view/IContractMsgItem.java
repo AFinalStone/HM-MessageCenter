@@ -11,34 +11,34 @@ public interface IContractMsgItem {
      *
      * @return
      */
-    String getTitle();
+    String getITitle();
 
     /**
      * 获取时间
      *
      * @return
      */
-    String getTime();
+    String getITime();
 
     /**
      * 消息图片
      *
      * @return
      */
-    String getContent();
+    String getIContent();
 
     /**
      * 获取合同id
      *
      * @return
      */
-    String getContractId();
+    String getIContractId();
 
     /**
      * 获取合同类型
      *
      * @return
      */
-    String getContractType();
+    String getIContractType();
 }
 

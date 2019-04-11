@@ -1,18 +1,24 @@
-package com.hm.iou.msg.business.hmmsg.view;
+package com.hm.iou.msg.business.remind.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hm.iou.base.BaseActivity;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
-import com.hm.iou.msg.business.hmmsg.HmMsgListContract;
-import com.hm.iou.msg.business.hmmsg.HmMsgListPresenter;
+import com.hm.iou.msg.business.contract.ContractMsgContract;
+import com.hm.iou.msg.business.contract.ContractMsgPresenter;
+import com.hm.iou.msg.business.contract.view.ContractMsgListAdapter;
+import com.hm.iou.msg.business.contract.view.IContractMsgItem;
+import com.hm.iou.msg.business.remind.RemindBackMsgContract;
+import com.hm.iou.msg.business.remind.RemindBackMsgPresenter;
+import com.hm.iou.tools.StatusBarUtil;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -23,7 +29,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implements HmMsgListContract.View {
+public class RemindBackMsgActivity extends BaseActivity<RemindBackMsgPresenter> implements RemindBackMsgContract.View {
 
     @BindView(R2.id.view_statusbar_placeholder)
     View mViewStatusBar;
@@ -36,39 +42,40 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
     @BindView(R2.id.loading_init)
     HMLoadingView mLoadingInit;
 
-    HmMsgListAdapter mAdapter;
+    RemindBackListAdapter mAdapter;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.msgcenter_activity_hm_msg_list;
+        return R.layout.msgcenter_activity_remind_back;
     }
 
     @Override
-    protected HmMsgListPresenter initPresenter() {
-        return new HmMsgListPresenter(this, this);
+    protected RemindBackMsgPresenter initPresenter() {
+        return new RemindBackMsgPresenter(this, this);
     }
 
     @Override
     protected void initEventAndData(Bundle bundle) {
-
-        mAdapter = new HmMsgListAdapter(mContext);
+        int statusBarHeight = StatusBarUtil.getStatusBarHeight(mContext);
+        if (statusBarHeight > 0) {
+            ViewGroup.LayoutParams params = mViewStatusBar.getLayoutParams();
+            params.height = statusBarHeight;
+            mViewStatusBar.setLayoutParams(params);
+        }
+        mAdapter = new RemindBackListAdapter(mContext);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                if (R.id.ll_adOrSport == view.getId()) {
-                    IHmMsgItem item = (IHmMsgItem) adapter.getItem(position);
-                    NavigationHelper.toMsgDetail(mContext, item.getMsgDetailLinkUrl(), item.getMsgAutoId(), item.getMsgType());
-                    mPresenter.markHaveRead(position);
-                }
+                NavigationHelper.toContractMsgDetailPage(mContext);
             }
         });
         //设置下拉刷新监听
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mPresenter.getMsgListFromServer();
+                mPresenter.getMsgList();
             }
         });
 
@@ -76,30 +83,8 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-
-    @Override
-    public void showInitLoading() {
-        mLoadingInit.setVisibility(View.VISIBLE);
-        mLoadingInit.showDataLoading();
-    }
-
-    @Override
-    public void hideInitLoading() {
-        mLoadingInit.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showMsgList(List<IHmMsgItem> list) {
+    public void showMsgList(List<IRemindBackMsgItem> list) {
         mAdapter.setNewData(list);
-    }
-
-    @Override
-    public void refreshItem(int position) {
-        mAdapter.notifyItemChanged(position);
     }
 
     @Override
@@ -113,10 +98,30 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
     }
 
     @Override
+    public void showInitLoading() {
+        mLoadingInit.setVisibility(View.VISIBLE);
+        mLoadingInit.showDataLoading();
+    }
+
+    @Override
+    public void showInitFailed() {
+        mLoadingInit.setVisibility(View.VISIBLE);
+        mLoadingInit.showDataFail(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.getMsgList();
+            }
+        });
+    }
+
+    @Override
+    public void hideInitLoading() {
+        mLoadingInit.setVisibility(View.GONE);
+    }
+
+    @Override
     public void showDataEmpty() {
         mLoadingInit.setVisibility(View.VISIBLE);
         mLoadingInit.showDataEmpty("");
     }
-
-
 }

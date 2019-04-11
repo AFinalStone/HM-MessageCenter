@@ -1,4 +1,4 @@
-package com.hm.iou.msg.business.contract;
+package com.hm.iou.msg.business.remind;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,7 +8,9 @@ import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.ContractMsgBean;
+import com.hm.iou.msg.bean.RemindBackMsgBean;
 import com.hm.iou.msg.bean.req.GetContractListReq;
+import com.hm.iou.msg.bean.req.GetRemindBackListReq;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -16,28 +18,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 获取消息
+ * 待还提醒
  *
  * @author syl
  * @time 2018/5/30 下午6:47
  */
-public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContract.View> implements ContractMsgContract.Presenter {
+public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgContract.View> implements RemindBackMsgContract.Presenter {
 
 
-    public ContractMsgPresenter(@NonNull Context context, @NonNull ContractMsgContract.View view) {
+    public RemindBackMsgPresenter(@NonNull Context context, @NonNull RemindBackMsgContract.View view) {
         super(context, view);
     }
 
     @Override
     public void init() {
         mView.showInitLoading();
-        GetContractListReq req = new GetContractListReq();
-        MsgApi.getContractList(req)
-                .compose(getProvider().<BaseResponse<List<ContractMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
-                .map(RxUtil.<List<ContractMsgBean>>handleResponse())
-                .subscribeWith(new CommSubscriber<List<ContractMsgBean>>(mView) {
+        GetRemindBackListReq req = new GetRemindBackListReq();
+        MsgApi.getRemindBackList(req)
+                .compose(getProvider().<BaseResponse<List<RemindBackMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<List<RemindBackMsgBean>>handleResponse())
+                .subscribeWith(new CommSubscriber<List<RemindBackMsgBean>>(mView) {
                     @Override
-                    public void handleResult(List<ContractMsgBean> list) {
+                    public void handleResult(List<RemindBackMsgBean> list) {
                         mView.hideInitLoading();
                         mView.enableRefresh();
                         if (list == null || list.size() == 0) {
@@ -66,15 +68,15 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
 
     @Override
     public void getMsgList() {
-        GetContractListReq req = new GetContractListReq();
-        MsgApi.getContractList(req)
-                .compose(getProvider().<BaseResponse<List<ContractMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
-                .map(RxUtil.<List<ContractMsgBean>>handleResponse())
-                .subscribeWith(new CommSubscriber<List<ContractMsgBean>>(mView) {
+        GetRemindBackListReq req = new GetRemindBackListReq();
+        MsgApi.getRemindBackList(req)
+                .compose(getProvider().<BaseResponse<List<RemindBackMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<List<RemindBackMsgBean>>handleResponse())
+                .subscribeWith(new CommSubscriber<List<RemindBackMsgBean>>(mView) {
                     @Override
-                    public void handleResult(List<ContractMsgBean> list) {
+                    public void handleResult(List<RemindBackMsgBean> list) {
                         mView.hidePullDownRefresh();
-                        if (list == null || list.size() == 0) {
+                        if (list == null && list.size() == 0) {
                             mView.showDataEmpty();
                         } else {
                             mView.showMsgList((ArrayList) list);
@@ -87,5 +89,6 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                     }
                 });
     }
+
 
 }

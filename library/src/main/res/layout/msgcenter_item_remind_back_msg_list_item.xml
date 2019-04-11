@@ -1,81 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="63dp"
-    android:background="?attr/selectableItemBackground"
+    android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    android:paddingEnd="20dp"
-    android:paddingStart="20dp">
-
-    <ImageView
-        android:id="@+id/iv_from_header"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_centerVertical="true"
-        android:scaleType="fitXY"
-        android:src="@mipmap/uikit_icon_header_unknow" />
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingEnd="12dp"
+    android:paddingStart="12dp">
 
     <TextView
         android:id="@+id/tv_time"
-        style="@style/UikitTextView"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="12dp"
-        android:minHeight="14dp"
-        android:minWidth="20dp"
-        android:textColor="@color/uikit_text_hint"
-        android:textSize="@dimen/textFontSize_10"
-        tools:text="昨天" />
-
-
-    <LinearLayout
-        android:id="@+id/ll_dot_chat_red_msg_num"
-        android:layout_width="30dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@id/tv_time"
-        android:layout_marginTop="5dp"
-        android:gravity="center">
-
-        <com.hm.iou.uikit.HMDotTextView
-            android:id="@+id/dot_chat_red_msg_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:dotBackgroundColor="@color/uikit_function_exception"
-            app:dotText="12"
-            app:dotTextColor="@color/white"
-            app:dotTextSize="@dimen/textFontSize_12" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_from_nick"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_marginStart="46dp"
-        android:layout_marginTop="12dp"
-        android:layout_toStartOf="@id/tv_time"
-        android:textColor="@color/uikit_text_main_content"
-        android:textSize="@dimen/uikit_main_content_text_size"
-        tools:text="红烧茄子" />
-
-    <TextView
-        android:id="@+id/tv_chat_content"
         style="@style/UikitTextView.Auxiliary.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:textColor="@color/uikit_text_hint"
+        tools:text="星期六 上午 10:00" />
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_alignTop="@id/ll_dot_chat_red_msg_num"
-        android:layout_marginStart="46dp"
-        android:layout_toStartOf="@id/ll_dot_chat_red_msg_num"
-        android:minHeight="17dp"
-        tools:text="我有一个律师函订单请您接单" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/jietiao_bg_message_list_item"
+        android:minHeight="85dp"
+        android:paddingBottom="20dp"
+        android:paddingEnd="10dp">
 
-    <View
-        style="@style/UikitDivider.Horizontal"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="62dp" />
+        <ImageView
+            android:layout_width="26dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="24dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/msgcenter_ic_remind_back_flag" />
 
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/UikitTextView"
+            android:layout_marginStart="62dp"
+            android:layout_marginTop="19dp"
+            tools:text="小条君您好！您有一份“合同类型”即将到还款日  " />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tv_back_money_time"
+            style="@style/UikitTextView.Auxiliary.Small"
+            android:layout_below="@id/tv_title"
+            android:layout_marginStart="62dp"
+            android:layout_marginTop="6dp"
+            tools:text="还款日期：2019年02月16日" />
+
+        <TextView
+            android:id="@+id/tv_back_money"
+            style="@style/UikitTextView.Auxiliary.Small"
+            android:layout_below="@id/tv_back_money_time"
+            android:layout_marginStart="62dp"
+            android:layout_marginTop="4dp"
+            tools:text="还款金额：2000元 " />
+    </RelativeLayout>
+
+</LinearLayout>

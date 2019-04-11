@@ -8,6 +8,8 @@ import android.view.View;
 import com.hm.iou.msg.MsgCenterAppLike;
 import com.hm.iou.msg.business.contract.view.ContractMsgActivity;
 import com.hm.iou.msg.business.hmmsg.view.HmMsgListActivity;
+import com.hm.iou.msg.business.remind.view.RemindBackMsgActivity;
+import com.hm.iou.msg.business.similarity.view.SimilarityContractMsgActivity;
 import com.hm.iou.network.HttpReqManager;
 import com.hm.iou.sharedata.UserManager;
 import com.hm.iou.sharedata.event.CommBizEvent;
@@ -73,11 +75,13 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_get_remind_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, RemindBackMsgActivity.class));
             }
         });
         findViewById(R.id.btn_get_similarity_contract).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SimilarityContractMsgActivity.class));
             }
         });
         findViewById(R.id.btn_get_hm_msg).setOnClickListener(new View.OnClickListener() {

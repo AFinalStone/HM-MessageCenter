@@ -9,7 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import com.hm.iou.base.mvp.MvpFragmentPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.msg.MsgCenterAppLike;
-import com.hm.iou.msg.business.message.view.ChatMsgModel;
+import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.bean.MsgListHeaderBean;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.event.CommBizEvent;
@@ -43,7 +43,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.View> implements MsgCenterContract.Presenter {
 
-    private List<ChatMsgModel> mChatList;
+    private List<ChatMsgBean> mChatList;
     private String mRedFlagCount;
     //  创建观察者对象
     Observer<List<RecentContact>> mChatListObserver;
@@ -56,8 +56,8 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
                 @Override
                 public void onEvent(List<RecentContact> messages) {
                     if (mView != null) {
-                        List<ChatMsgModel> newList = DataChangeUtil.changeRecentContactToIChatMsgItem(messages);
-                        for (ChatMsgModel model : newList) {
+                        List<ChatMsgBean> newList = DataChangeUtil.changeRecentContactToIChatMsgItem(messages);
+                        for (ChatMsgBean model : newList) {
                             int index = mChatList.indexOf(model);
                             if (index == -1) {
                                 mChatList.add(0, model);
@@ -173,8 +173,8 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
                 .subscribeWith(new CommSubscriber<List<RecentContact>>(mView) {
                     @Override
                     public void handleResult(List<RecentContact> recentContacts) {
-                        List<ChatMsgModel> newList = DataChangeUtil.changeRecentContactToIChatMsgItem(recentContacts);
-                        for (ChatMsgModel model : newList) {
+                        List<ChatMsgBean> newList = DataChangeUtil.changeRecentContactToIChatMsgItem(recentContacts);
+                        for (ChatMsgBean model : newList) {
                             int index = mChatList.indexOf(model);
                             if (index == -1) {
                                 mChatList.add(model);

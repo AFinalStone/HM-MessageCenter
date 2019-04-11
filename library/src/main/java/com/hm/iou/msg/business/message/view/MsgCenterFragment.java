@@ -15,6 +15,7 @@ import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
+import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.business.message.MsgCenterContract;
 import com.hm.iou.msg.business.message.MsgCenterPresenter;
 import com.hm.iou.msg.bean.MsgListHeaderBean;
@@ -81,7 +82,7 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ChatMsgModel item = (ChatMsgModel) adapter.getItem(position);
+                ChatMsgBean item = (ChatMsgBean) adapter.getItem(position);
                 Logger.d("会话id==" + item.getContactId());
                 NavigationHelper.toSessionDetail(mActivity, item.getContactId());
             }
@@ -151,7 +152,7 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
     }
 
     @Override
-    public void showMsgList(List<ChatMsgModel> list) {
+    public void showMsgList(List<ChatMsgBean> list) {
         mAdapter.setNewData(list);
         if (list != null && !list.isEmpty()) {
             mLoadingInit.setVisibility(View.GONE);

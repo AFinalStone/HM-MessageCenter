@@ -1,7 +1,7 @@
 package com.hm.iou.msg.util;
 
 import com.hm.iou.logger.Logger;
-import com.hm.iou.msg.business.message.view.ChatMsgModel;
+import com.hm.iou.msg.bean.ChatMsgBean;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.uinfo.UserService;
@@ -16,8 +16,8 @@ import java.util.List;
 
 public class DataChangeUtil {
 
-    public static List<ChatMsgModel> changeRecentContactToIChatMsgItem(List<RecentContact> list) {
-        List<ChatMsgModel> resultList = new ArrayList<>();
+    public static List<ChatMsgBean> changeRecentContactToIChatMsgItem(List<RecentContact> list) {
+        List<ChatMsgBean> resultList = new ArrayList<>();
 
         if (list != null) {
             for (RecentContact contact : list) {
@@ -28,17 +28,17 @@ public class DataChangeUtil {
                 String strTime = TimeUtil.formatChatListTime(contact.getTime());
                 int redMsgNum = contact.getUnreadCount();
                 NimUserInfo users = NIMClient.getService(UserService.class).getUserInfo(fromAccount);
-                ChatMsgModel chatMsgModel = new ChatMsgModel();
+                ChatMsgBean chatMsgBean = new ChatMsgBean();
                 Logger.d("fromName=" + fromNick + "contactId="
                         + contactId + "content=" + content + "strTime" + strTime + "redMsgNum" + redMsgNum);
-                chatMsgModel.setFromNick(fromNick);
-                chatMsgModel.setFromHeaderImage(users.getAvatar());
-                chatMsgModel.setFromAccount(fromAccount);
-                chatMsgModel.setContactId(contactId);
-                chatMsgModel.setChatContent(content);
-                chatMsgModel.setRedMsgNum(redMsgNum);
-                chatMsgModel.setTime(strTime);
-                resultList.add(chatMsgModel);
+                chatMsgBean.setFromNick(fromNick);
+                chatMsgBean.setFromHeaderImage(users.getAvatar());
+                chatMsgBean.setFromAccount(fromAccount);
+                chatMsgBean.setContactId(contactId);
+                chatMsgBean.setChatContent(content);
+                chatMsgBean.setRedMsgNum(redMsgNum);
+                chatMsgBean.setTime(strTime);
+                resultList.add(chatMsgBean);
             }
         }
 

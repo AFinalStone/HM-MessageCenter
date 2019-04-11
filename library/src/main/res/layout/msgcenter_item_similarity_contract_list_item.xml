@@ -1,81 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="63dp"
-    android:background="?attr/selectableItemBackground"
+    android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    android:paddingEnd="20dp"
-    android:paddingStart="20dp">
-
-    <ImageView
-        android:id="@+id/iv_from_header"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_centerVertical="true"
-        android:scaleType="fitXY"
-        android:src="@mipmap/uikit_icon_header_unknow" />
-
-    <TextView
-        android:id="@+id/tv_time"
-        style="@style/UikitTextView"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="12dp"
-        android:minHeight="14dp"
-        android:minWidth="20dp"
-        android:textColor="@color/uikit_text_hint"
-        android:textSize="@dimen/textFontSize_10"
-        tools:text="昨天" />
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="6dp"
+    android:paddingEnd="12dp"
+    android:paddingStart="12dp"
+    android:paddingTop="6dp">
 
 
-    <LinearLayout
-        android:id="@+id/ll_dot_chat_red_msg_num"
-        android:layout_width="30dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@id/tv_time"
-        android:layout_marginTop="5dp"
-        android:gravity="center">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/jietiao_bg_message_list_item"
+        android:minHeight="114dp"
+        android:padding="15dp">
 
-        <com.hm.iou.uikit.HMDotTextView
-            android:id="@+id/dot_chat_red_msg_num"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/iv_iou"
+            android:layout_width="68dp"
+            android:layout_height="90dp"
+            android:background="#ffd7dde4"
+            android:padding="0.5dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/jietiao_elec_borrow_placeholder" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/UikitTextView.Large"
+            android:layout_marginStart="92dp"
+            android:text="借条：¥1,000,000"
+            android:textStyle="bold" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:dotBackgroundColor="@color/uikit_function_exception"
-            app:dotText="12"
-            app:dotTextColor="@color/white"
-            app:dotTextSize="@dimen/textFontSize_12" />
+            android:layout_marginStart="95dp"
+            android:layout_marginTop="27dip"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <TextView
+                style="@style/UikitTextView.Auxiliary.Small"
+                android:singleLine="true"
+                android:text="出借方:" />
 
-    <TextView
-        android:id="@+id/tv_from_nick"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_marginStart="46dp"
-        android:layout_marginTop="12dp"
-        android:layout_toStartOf="@id/tv_time"
-        android:textColor="@color/uikit_text_main_content"
-        android:textSize="@dimen/uikit_main_content_text_size"
-        tools:text="红烧茄子" />
+            <TextView
+                android:id="@+id/tv_lender_name"
+                style="@style/UikitTextView.Auxiliary.Small"
+                android:layout_marginLeft="9dip"
+                android:maxWidth="100dip"
+                android:singleLine="true"
+                tools:text="马云" />
 
-    <TextView
-        android:id="@+id/tv_chat_content"
-        style="@style/UikitTextView.Auxiliary.Small"
-        android:layout_width="match_parent"
-        android:layout_alignTop="@id/ll_dot_chat_red_msg_num"
-        android:layout_marginStart="46dp"
-        android:layout_toStartOf="@id/ll_dot_chat_red_msg_num"
-        android:minHeight="17dp"
-        tools:text="我有一个律师函订单请您接单" />
+            <View
+                android:layout_width="1dip"
+                android:layout_height="11dip"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dip"
+                android:layout_marginRight="8dip"
+                android:background="#dcdcdc" />
 
-    <View
-        style="@style/UikitDivider.Horizontal"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="62dp" />
+            <TextView
+                style="@style/UikitTextView.Auxiliary.Small"
+                android:singleLine="true"
+                android:text="借到方:" />
+
+            <TextView
+                android:id="@+id/tv_borrower_name"
+                style="@style/UikitTextView.Auxiliary.Small"
+                android:layout_marginStart="9dip"
+                android:ellipsize="end"
+                android:singleLine="true"
+                tools:text="本人" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_back_time"
+            style="@style/UikitTextView.Auxiliary.Small"
+            android:layout_marginStart="94dp"
+            android:layout_marginTop="56dp"
+            android:text="归还时间：2018.05.23"
+            android:textSize="@dimen/textFontSize_10" />
+
+        <TextView
+            android:id="@+id/tv_back_type"
+            style="@style/UikitTextView.Auxiliary.Small"
+            android:layout_marginStart="94dp"
+            android:layout_marginTop="74dp"
+            android:text="归还方式：一次性归还"
+            android:textSize="@dimen/textFontSize_10" />
 
 
-</RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

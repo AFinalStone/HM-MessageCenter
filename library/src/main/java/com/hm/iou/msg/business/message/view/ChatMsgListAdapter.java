@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.hm.iou.msg.R;
+import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.tools.ImageLoader;
 import com.hm.iou.uikit.HMDotTextView;
 
@@ -14,7 +15,7 @@ import com.hm.iou.uikit.HMDotTextView;
  * Created by syl on 18/4/28.<br>
  */
 
-public class ChatMsgListAdapter extends BaseQuickAdapter<ChatMsgModel, BaseViewHolder> {
+public class ChatMsgListAdapter extends BaseQuickAdapter<ChatMsgBean, BaseViewHolder> {
 
     public ChatMsgListAdapter(Context context) {
         super(R.layout.msgcenter_item_msg_list_item);
@@ -23,7 +24,7 @@ public class ChatMsgListAdapter extends BaseQuickAdapter<ChatMsgModel, BaseViewH
 
 
     @Override
-    protected void convert(BaseViewHolder helper, ChatMsgModel item) {
+    protected void convert(BaseViewHolder helper, ChatMsgBean item) {
         //头像
         ImageView ivHeader = helper.getView(R.id.iv_from_header);
         ImageLoader.getInstance(mContext).displayImage(item.getFromHeaderImage(), ivHeader);

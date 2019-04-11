@@ -1,4 +1,4 @@
-package com.hm.iou.msg.business.message.view;
+package com.hm.iou.msg.bean;
 
 import android.text.TextUtils;
 
@@ -9,7 +9,7 @@ import lombok.Data;
  * @time 2018/5/30 上午11:51
  */
 @Data
-public class ChatMsgModel {
+public class ChatMsgBean {
 
     String fromAccount;
     String fromHeaderImage;
@@ -19,11 +19,10 @@ public class ChatMsgModel {
     String time;
     int redMsgNum;
 
-
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof ChatMsgModel) {
-            return !TextUtils.isEmpty(fromAccount) && fromAccount.equals(((ChatMsgModel) obj).getFromAccount());
+        if (obj instanceof ChatMsgBean) {
+            return !TextUtils.isEmpty(fromAccount) && fromAccount.equals(((ChatMsgBean) obj).getFromAccount());
         }
         return false;
     }

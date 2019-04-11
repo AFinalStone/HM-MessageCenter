@@ -43,9 +43,10 @@
 
         <TextView
             android:id="@+id/tv_content"
-            style="@style/UikitTextView.Small"
+            style="@style/UikitTextView.Auxiliary.Small"
+            android:layout_below="@id/tv_title"
             android:layout_marginStart="62dp"
-            android:layout_marginTop="46dp"
+            android:layout_marginTop="6dp"
             tools:text="小希女士，您的合同已创建成功  " />
     </RelativeLayout>
 
