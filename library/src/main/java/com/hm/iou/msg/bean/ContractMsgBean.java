@@ -1,6 +1,6 @@
 package com.hm.iou.msg.bean;
 
-import com.hm.iou.msg.business.contract.view.IContractMsgItem;
+import com.hm.iou.msg.business.contractmsg.view.IContractMsgItem;
 
 import lombok.Data;
 

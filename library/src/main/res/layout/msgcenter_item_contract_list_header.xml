@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <LinearLayout style="@style/MsgCenterMsgListHeaderItem">
+
+        <ImageView
+            android:id="@+id/iv_header"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/msgcenter_ic_add_new_friend" />
+
+        <TextView
+            style="@style/UikitTextView"
+            tools:text="昵称" />
+
+
+    </LinearLayout>
+
+    <View
+        style="@style/UikitDivider.Horizontal"
+        android:layout_marginStart="64dp" />
+
+
+</LinearLayout>

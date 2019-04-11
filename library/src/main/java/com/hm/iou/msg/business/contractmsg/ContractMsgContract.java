@@ -1,7 +1,7 @@
-package com.hm.iou.msg.business.contract;
+package com.hm.iou.msg.business.contractmsg;
 
 import com.hm.iou.base.mvp.BaseContract;
-import com.hm.iou.msg.business.contract.view.IContractMsgItem;
+import com.hm.iou.msg.business.contractmsg.view.IContractMsgItem;
 
 import java.util.List;
 

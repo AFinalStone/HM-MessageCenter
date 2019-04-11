@@ -1,6 +1,6 @@
 package com.hm.iou.msg.bean;
 
-import com.hm.iou.msg.business.remind.view.IRemindBackMsgItem;
+import com.hm.iou.msg.business.remindback.view.IRemindBackMsgItem;
 
 import lombok.Data;
 

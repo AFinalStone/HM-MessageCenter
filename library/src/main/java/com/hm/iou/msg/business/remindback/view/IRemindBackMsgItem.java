@@ -1,4 +1,4 @@
-package com.hm.iou.msg.business.remind.view;
+package com.hm.iou.msg.business.remindback.view;
 
 /**
  * Created by syl on 2019/4/11.

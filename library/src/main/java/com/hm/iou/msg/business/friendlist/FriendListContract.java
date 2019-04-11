@@ -1,8 +1,7 @@
-package com.hm.iou.msg.business.remind;
+package com.hm.iou.msg.business.friendlist;
 
 import com.hm.iou.base.mvp.BaseContract;
-import com.hm.iou.msg.business.contract.view.IContractMsgItem;
-import com.hm.iou.msg.business.remind.view.IRemindBackMsgItem;
+import com.hm.iou.msg.business.friendlist.view.IFriend;
 
 import java.util.List;
 
@@ -10,8 +9,9 @@ import java.util.List;
  * @author : syl
  * @Date : 2018/5/30 11:01
  * @E-Mail : shiyaolei@dafy.com
+ * 通讯录
  */
-public class RemindBackMsgContract {
+public class FriendListContract {
 
     public interface View extends BaseContract.BaseView {
 
@@ -20,7 +20,7 @@ public class RemindBackMsgContract {
          *
          * @param list
          */
-        void showMsgList(List<IRemindBackMsgItem> list);
+        void showMsgList(List<IFriend> list);
 
 
         /**

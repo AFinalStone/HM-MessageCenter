@@ -6,7 +6,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:orientation">horizontal</item>
-        <item name="android:background">@drawable/uikit_bg_item_ripple</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:paddingStart">20dp</item>
         <item name="android:paddingEnd">20dp</item>
     </style>

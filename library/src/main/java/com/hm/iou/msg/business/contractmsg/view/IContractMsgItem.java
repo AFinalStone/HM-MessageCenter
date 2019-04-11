@@ -1,4 +1,4 @@
-package com.hm.iou.msg.business.contract.view;
+package com.hm.iou.msg.business.contractmsg.view;
 
 /**
  * @author syl

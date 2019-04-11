@@ -1,8 +1,10 @@
 package com.hm.iou.msg;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 
+import com.hm.iou.msg.business.friendlist.view.FriendListActivity;
 import com.hm.iou.msg.dict.MsgType;
 import com.hm.iou.router.Router;
 import com.netease.nim.uikit.business.session.activity.P2PMessageActivity;
@@ -46,7 +48,7 @@ public class NavigationHelper {
      * @param context
      */
     public static void toFriendList(Context context) {
-
+        context.startActivity(new Intent(context, FriendListActivity.class));
     }
 
     /**

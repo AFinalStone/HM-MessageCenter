@@ -1,4 +1,4 @@
-package com.hm.iou.msg.business.similarity.view;
+package com.hm.iou.msg.business.contractmsg.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,8 +12,8 @@ import com.hm.iou.base.BaseActivity;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
-import com.hm.iou.msg.business.similarity.SimilarityContractMsgContract;
-import com.hm.iou.msg.business.similarity.SimilarityContractMsgPresenter;
+import com.hm.iou.msg.business.contractmsg.ContractMsgContract;
+import com.hm.iou.msg.business.contractmsg.ContractMsgPresenter;
 import com.hm.iou.tools.StatusBarUtil;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
@@ -25,7 +25,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContractMsgPresenter> implements SimilarityContractMsgContract.View {
+public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> implements ContractMsgContract.View {
 
     @BindView(R2.id.view_statusbar_placeholder)
     View mViewStatusBar;
@@ -38,16 +38,16 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
     @BindView(R2.id.loading_init)
     HMLoadingView mLoadingInit;
 
-    SimilarityContractListAdapter mAdapter;
+    ContractMsgListAdapter mAdapter;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.msgcenter_activity_similarity_contract;
+        return R.layout.msgcenter_activity_contract_msg;
     }
 
     @Override
-    protected SimilarityContractMsgPresenter initPresenter() {
-        return new SimilarityContractMsgPresenter(this, this);
+    protected ContractMsgPresenter initPresenter() {
+        return new ContractMsgPresenter(this, this);
     }
 
     @Override
@@ -58,7 +58,8 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
             params.height = statusBarHeight;
             mViewStatusBar.setLayoutParams(params);
         }
-        mAdapter = new SimilarityContractListAdapter(mContext);
+
+        mAdapter = new ContractMsgListAdapter(mContext);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -79,7 +80,7 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
     }
 
     @Override
-    public void showMsgList(List<ISimilarityContractMsgItem> list) {
+    public void showMsgList(List<IContractMsgItem> list) {
         mAdapter.setNewData(list);
     }
 

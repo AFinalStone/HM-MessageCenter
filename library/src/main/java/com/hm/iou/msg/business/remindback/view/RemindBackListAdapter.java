@@ -1,4 +1,4 @@
-package com.hm.iou.msg.business.remind.view;
+package com.hm.iou.msg.business.remindback.view;
 
 import android.content.Context;
 

@@ -1,4 +1,4 @@
-package com.hm.iou.msg.business.remind;
+package com.hm.iou.msg.business.friendlist;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,10 +7,8 @@ import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.api.MsgApi;
-import com.hm.iou.msg.bean.ContractMsgBean;
-import com.hm.iou.msg.bean.RemindBackMsgBean;
-import com.hm.iou.msg.bean.req.GetContractListReq;
-import com.hm.iou.msg.bean.req.GetRemindBackListReq;
+import com.hm.iou.msg.bean.FriendBean;
+import com.hm.iou.msg.bean.req.GetFriendListReq;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -18,28 +16,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 待还提醒
- *
  * @author syl
  * @time 2018/5/30 下午6:47
  */
-public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgContract.View> implements RemindBackMsgContract.Presenter {
+public class FriendListPresenter extends MvpActivityPresenter<FriendListContract.View> implements FriendListContract.Presenter {
 
 
-    public RemindBackMsgPresenter(@NonNull Context context, @NonNull RemindBackMsgContract.View view) {
+    public FriendListPresenter(@NonNull Context context, @NonNull FriendListContract.View view) {
         super(context, view);
     }
 
     @Override
     public void init() {
         mView.showInitLoading();
-        GetRemindBackListReq req = new GetRemindBackListReq();
-        MsgApi.getRemindBackList(req)
-                .compose(getProvider().<BaseResponse<List<RemindBackMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
-                .map(RxUtil.<List<RemindBackMsgBean>>handleResponse())
-                .subscribeWith(new CommSubscriber<List<RemindBackMsgBean>>(mView) {
+        GetFriendListReq req = new GetFriendListReq();
+        MsgApi.getFriendList(req)
+                .compose(getProvider().<BaseResponse<List<FriendBean>>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<List<FriendBean>>handleResponse())
+                .subscribeWith(new CommSubscriber<List<FriendBean>>(mView) {
                     @Override
-                    public void handleResult(List<RemindBackMsgBean> list) {
+                    public void handleResult(List<FriendBean> list) {
                         mView.hideInitLoading();
                         mView.enableRefresh();
                         if (list == null || list.size() == 0) {
@@ -68,15 +64,16 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
 
     @Override
     public void getMsgList() {
-        GetRemindBackListReq req = new GetRemindBackListReq();
-        MsgApi.getRemindBackList(req)
-                .compose(getProvider().<BaseResponse<List<RemindBackMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
-                .map(RxUtil.<List<RemindBackMsgBean>>handleResponse())
-                .subscribeWith(new CommSubscriber<List<RemindBackMsgBean>>(mView) {
+        GetFriendListReq req = new GetFriendListReq();
+        MsgApi.getFriendList(req)
+                .compose(getProvider().<BaseResponse<List<FriendBean>>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<List<FriendBean>>handleResponse())
+                .subscribeWith(new CommSubscriber<List<FriendBean>>(mView) {
                     @Override
-                    public void handleResult(List<RemindBackMsgBean> list) {
+                    public void handleResult(List<FriendBean> list) {
                         mView.hidePullDownRefresh();
-                        if (list == null && list.size() == 0) {
+                        mView.enableRefresh();
+                        if (list == null || list.size() == 0) {
                             mView.showDataEmpty();
                         } else {
                             mView.showMsgList((ArrayList) list);
@@ -89,6 +86,5 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                     }
                 });
     }
-
 
 }

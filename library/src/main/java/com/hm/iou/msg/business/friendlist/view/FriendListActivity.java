@@ -1,4 +1,4 @@
-package com.hm.iou.msg.business.remind.view;
+package com.hm.iou.msg.business.friendlist.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,12 +12,8 @@ import com.hm.iou.base.BaseActivity;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
-import com.hm.iou.msg.business.contract.ContractMsgContract;
-import com.hm.iou.msg.business.contract.ContractMsgPresenter;
-import com.hm.iou.msg.business.contract.view.ContractMsgListAdapter;
-import com.hm.iou.msg.business.contract.view.IContractMsgItem;
-import com.hm.iou.msg.business.remind.RemindBackMsgContract;
-import com.hm.iou.msg.business.remind.RemindBackMsgPresenter;
+import com.hm.iou.msg.business.friendlist.FriendListContract;
+import com.hm.iou.msg.business.friendlist.FriendListPresenter;
 import com.hm.iou.tools.StatusBarUtil;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
@@ -29,7 +25,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class RemindBackMsgActivity extends BaseActivity<RemindBackMsgPresenter> implements RemindBackMsgContract.View {
+public class FriendListActivity extends BaseActivity<FriendListPresenter> implements FriendListContract.View {
 
     @BindView(R2.id.view_statusbar_placeholder)
     View mViewStatusBar;
@@ -42,16 +38,16 @@ public class RemindBackMsgActivity extends BaseActivity<RemindBackMsgPresenter> 
     @BindView(R2.id.loading_init)
     HMLoadingView mLoadingInit;
 
-    RemindBackListAdapter mAdapter;
+    FriendListAdapter mAdapter;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.msgcenter_activity_remind_back;
+        return R.layout.msgcenter_activity_friend_list;
     }
 
     @Override
-    protected RemindBackMsgPresenter initPresenter() {
-        return new RemindBackMsgPresenter(this, this);
+    protected FriendListPresenter initPresenter() {
+        return new FriendListPresenter(this, this);
     }
 
     @Override
@@ -62,7 +58,8 @@ public class RemindBackMsgActivity extends BaseActivity<RemindBackMsgPresenter> 
             params.height = statusBarHeight;
             mViewStatusBar.setLayoutParams(params);
         }
-        mAdapter = new RemindBackListAdapter(mContext);
+
+        mAdapter = new FriendListAdapter(mContext);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -83,7 +80,7 @@ public class RemindBackMsgActivity extends BaseActivity<RemindBackMsgPresenter> 
     }
 
     @Override
-    public void showMsgList(List<IRemindBackMsgItem> list) {
+    public void showMsgList(List<IFriend> list) {
         mAdapter.setNewData(list);
     }
 
