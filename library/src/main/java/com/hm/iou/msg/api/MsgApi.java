@@ -6,9 +6,11 @@ import com.hm.iou.msg.bean.FriendBean;
 import com.hm.iou.msg.bean.HmMsgBean;
 import com.hm.iou.msg.bean.RemindBackMsgBean;
 import com.hm.iou.msg.bean.SimilarityContractMsgBean;
+import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
 import com.hm.iou.msg.bean.req.GetContractMsgListReq;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
+import com.hm.iou.msg.bean.req.GetHmMsgListReq;
 import com.hm.iou.msg.bean.req.GetRemindBackListReq;
 import com.hm.iou.msg.bean.req.GetSimilarityContractListReq;
 import com.hm.iou.network.HttpReqManager;
@@ -21,7 +23,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by hjy on 18/5/3.<br>
+ * @author syl
+ * @time 2019/4/12 2:18 PM
  */
 
 public class MsgApi {
@@ -31,12 +34,23 @@ public class MsgApi {
     }
 
     /**
-     * 获取消息中心的消息，每次只获取最新的消息，获取过的不会再给
+     * 获取消息中心未读消息数量
      *
      * @return
      */
-    public static Flowable<BaseResponse<List<HmMsgBean>>> getMessages() {
-        return getService().getMessages()
+    public static Flowable<BaseResponse<UnReadMsgNumBean>> getUnReadMsgNum() {
+        return getService().getUnReadMsgNum()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 获取管家消息
+     *
+     * @return
+     */
+    public static Flowable<BaseResponse<List<HmMsgBean>>> getHmMsgList(GetHmMsgListReq req) {
+        return getService().getHmMsgList(req)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

@@ -6,9 +6,11 @@ import com.hm.iou.msg.bean.ContractMsgBean;
 import com.hm.iou.msg.bean.HmMsgBean;
 import com.hm.iou.msg.bean.RemindBackMsgBean;
 import com.hm.iou.msg.bean.SimilarityContractMsgBean;
+import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
 import com.hm.iou.msg.bean.req.GetContractMsgListReq;
+import com.hm.iou.msg.bean.req.GetHmMsgListReq;
 import com.hm.iou.msg.bean.req.GetRemindBackListReq;
 import com.hm.iou.msg.bean.req.GetSimilarityContractListReq;
 import com.hm.iou.sharedata.model.BaseResponse;
@@ -26,8 +28,11 @@ import retrofit2.http.POST;
 
 public interface MsgService {
 
-    @GET("/api/message/messageCenter/v1/getMessages")
-    Flowable<BaseResponse<List<HmMsgBean>>> getMessages();
+    @GET("/api/message/messageCenter/v1/getUnReadMsgNum")
+    Flowable<BaseResponse<UnReadMsgNumBean>> getUnReadMsgNum();
+
+    @POST("/api/message/messageCenter/v1/getHmMsgList")
+    Flowable<BaseResponse<List<HmMsgBean>>> getHmMsgList(@Body GetHmMsgListReq req);
 
     @POST("/api/message/messageCenter/v1/getContractMsgList")
     Flowable<BaseResponse<List<ContractMsgBean>>> getContractMsgList(@Body GetContractMsgListReq req);

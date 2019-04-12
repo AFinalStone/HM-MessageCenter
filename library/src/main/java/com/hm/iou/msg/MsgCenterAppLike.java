@@ -9,7 +9,8 @@ import android.text.TextUtils;
 import com.hm.iou.base.file.FileUtil;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.api.MsgApi;
-import com.hm.iou.msg.bean.HmMsgBean;
+import com.hm.iou.msg.bean.UnReadMsgNumBean;
+import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.sharedata.UserManager;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.event.LoginSuccEvent;
@@ -29,8 +30,6 @@ import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -228,12 +227,12 @@ public class MsgCenterAppLike {
         if (mListDisposable != null && !mListDisposable.isDisposed()) {
             mListDisposable.dispose();
         }
-        mListDisposable = MsgApi.getMessages()
-                .map(RxUtil.<List<HmMsgBean>>handleResponse())
-                .subscribe(new Consumer<List<HmMsgBean>>() {
+        mListDisposable = MsgApi.getUnReadMsgNum()
+                .map(RxUtil.<UnReadMsgNumBean>handleResponse())
+                .subscribe(new Consumer<UnReadMsgNumBean>() {
                     @Override
-                    public void accept(List<HmMsgBean> list) throws Exception {
-                        CacheDataUtil.addMsgListToCache(list);
+                    public void accept(UnReadMsgNumBean unReadMsgNumBean) throws Exception {
+                        CacheDataUtil.setNoReadMsgNum(mContext, unReadMsgNumBean);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -247,7 +246,13 @@ public class MsgCenterAppLike {
      * 从缓存中获取消息中心未读消息数量
      */
     public void getMsgCenterNoReadNumFromCache() {
-        long numNoRead = CacheDataUtil.getNoReadMsgNum();
+        UnReadMsgNumBean unReadMsgNumBean = CacheDataUtil.getNoReadMsgNum(mContext);
+        long numNoRead = 0;
+        numNoRead = numNoRead + unReadMsgNumBean.getMsgContractUnread();
+        numNoRead = numNoRead + unReadMsgNumBean.getMsgButlerUnread();
+        numNoRead = numNoRead + unReadMsgNumBean.getMsgNoRepayUnread();
+        numNoRead = numNoRead + unReadMsgNumBean.getMsgSimilarContractUnread();
+        numNoRead = numNoRead + unReadMsgNumBean.getNewFriendUnread();
         EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
     }
 
@@ -291,7 +296,7 @@ public class MsgCenterAppLike {
     }
 
     /**
-     * 用户登陆成功
+     * 需要初始化IM
      *
      * @param commBizEvent
      */
@@ -309,7 +314,7 @@ public class MsgCenterAppLike {
      */
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onEventLogout(LogoutEvent event) {
-        CacheDataUtil.clearMsgListCache();
+        CacheDataUtil.clearAllCache(mContext);
     }
 
 

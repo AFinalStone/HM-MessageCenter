@@ -1,9 +1,9 @@
 package com.hm.iou.msg.bean.req;
 
 /**
- * Created by syl on 2019/4/11.
- * 通讯录
+ * 管家消息
+ * @author syl
+ * @time 2019/4/12 2:18 PM
  */
-
-public class GetFriendListReq {
+public class GetHmMsgListReq {
 }

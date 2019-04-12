@@ -1,8 +1,13 @@
-package com.hm.iou.msg;
+package com.hm.iou.msg.util;
+
+import android.content.Context;
 
 import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.MsgCenterDbData;
+import com.hm.iou.msg.MsgCenterConstants;
 import com.hm.iou.msg.bean.HmMsgBean;
+import com.hm.iou.msg.bean.UnReadMsgNumBean;
+import com.hm.iou.tools.ACache;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +25,24 @@ import io.reactivex.schedulers.Schedulers;
 public class CacheDataUtil {
 
     /**
+     * 设置未读消息数量
+     *
+     * @return
+     */
+    public static void setNoReadMsgNum(Context context, UnReadMsgNumBean unReadMsgNumBean) {
+        ACache.get(context.getApplicationContext()).put(MsgCenterConstants.KEY_UN_READ_MSG_NUM, unReadMsgNumBean);
+    }
+
+    /**
      * 获取未读消息数量
      *
      * @return
      */
-    public static synchronized long getNoReadMsgNum() {
-        return MsgCenterDbHelper.queryMsgCenterNoReadCount();
+    public static UnReadMsgNumBean getNoReadMsgNum(Context context) {
+        ACache cache = ACache.get(context.getApplicationContext());
+        return (UnReadMsgNumBean) cache.getAsObject(MsgCenterConstants.KEY_UN_READ_MSG_NUM);
     }
+
 
     /**
      * 添加list到cache中
@@ -86,12 +102,6 @@ public class CacheDataUtil {
         return list;
     }
 
-    /**
-     * 清除缓存消息中心的缓存列表
-     */
-    public static synchronized void clearMsgListCache() {
-        MsgCenterDbHelper.deleteMsgCenterAllListData();
-    }
 
     /**
      * 把MsgDetailBean转换为MsgCenterDbData
@@ -131,4 +141,16 @@ public class CacheDataUtil {
         return data;
     }
 
+    /**
+     * 清空消息中心所有缓存
+     */
+    public static synchronized void clearAllCache(Context context) {
+        //条管家消息缓存
+        MsgCenterDbHelper.deleteMsgCenterAllListData();
+        //未读消息数量缓存
+        ACache cache = ACache.get(context.getApplicationContext());
+        cache.remove(MsgCenterConstants.KEY_UN_READ_MSG_NUM);
+        //合同消息缓存
+
+    }
 }
