@@ -25,7 +25,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class ApplyNewFriendActivity extends BaseActivity<ApplyNewFriendListPresenter> implements ApplyNewFriendListContract.View {
+public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListPresenter> implements ApplyNewFriendListContract.View {
 
     @BindView(R2.id.view_statusbar_placeholder)
     View mViewStatusBar;

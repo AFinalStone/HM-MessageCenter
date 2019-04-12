@@ -2,6 +2,7 @@ package com.hm.iou.msg.business.message.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.bean.MsgListHeaderBean;
 import com.hm.iou.msg.business.message.MsgCenterContract;
+import com.hm.iou.router.Router;
 import com.hm.iou.tools.ImageLoader;
 import com.hm.iou.uikit.HMDotTextView;
 
@@ -71,7 +73,17 @@ public class HeaderViewHelper {
         } else {
             dotTextView.setVisibility(View.INVISIBLE);
         }
-        viewModule.setTag(moduleBean.getModuleId());
+        viewModule.setTag(moduleBean);
+        viewModule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MsgListHeaderBean childModule = (MsgListHeaderBean) v.getTag();
+                if (childModule != null && !TextUtils.isEmpty(childModule.getUrl())) {
+                    Router.getInstance().buildWithUrl(childModule.getUrl())
+                            .navigation(mContent);
+                }
+            }
+        });
         mLlHeader.addView(viewModule);
     }
 
@@ -91,8 +103,8 @@ public class HeaderViewHelper {
         int count = mLlHeader.getChildCount();
         for (int i = 0; i < count; i++) {
             View childView = mLlHeader.getChildAt(i);
-            String moduleId = (String) childView.getTag();
-            if (moduleId != null && moduleId.equals(moduleBean.getModuleId())) {
+            MsgListHeaderBean childModule = (MsgListHeaderBean) childView.getTag();
+            if (childModule != null && childModule.getModuleId().equals(moduleBean.getModuleId())) {
                 ImageView ivModule = childView.findViewById(R.id.iv_module);
                 TextView tvModule = childView.findViewById(R.id.tv_module);
                 HMDotTextView dotTextView = childView.findViewById(R.id.dot_module_red_msg_num);

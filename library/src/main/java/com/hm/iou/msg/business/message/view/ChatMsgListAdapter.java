@@ -46,5 +46,8 @@ public class ChatMsgListAdapter extends BaseQuickAdapter<ChatMsgBean, BaseViewHo
         } else {
             dotTextView.setVisibility(View.INVISIBLE);
         }
+        //添加点击事件
+        helper.addOnClickListener(R.id.btn_hide);
+        helper.addOnClickListener(R.id.rl_content);
     }
 }

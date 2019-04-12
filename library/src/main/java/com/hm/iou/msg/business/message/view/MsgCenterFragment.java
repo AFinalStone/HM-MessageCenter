@@ -79,15 +79,18 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
         mHeaderViewHelper = new HeaderViewHelper(mRvMsgList, mPresenter);
         mAdapter.addHeaderView(mHeaderViewHelper.getRootView());
         mAdapter.bindToRecyclerView(mRvMsgList);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 ChatMsgBean item = (ChatMsgBean) adapter.getItem(position);
                 Logger.d("会话id==" + item.getContactId());
-                NavigationHelper.toSessionDetail(mActivity, item.getContactId());
+                if (R.id.rl_content == view.getId()) {
+                    NavigationHelper.toSessionDetail(mActivity, item.getContactId());
+                } else if (R.id.btn_hide == view.getId()) {
+                    toastMessage("隐藏");
+                }
             }
         });
-
         //设置下拉刷新监听
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override

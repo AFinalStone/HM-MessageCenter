@@ -10,7 +10,9 @@ import com.hm.iou.base.file.FileUtil;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.HmMsgBean;
+import com.hm.iou.sharedata.UserManager;
 import com.hm.iou.sharedata.event.CommBizEvent;
+import com.hm.iou.sharedata.event.LoginSuccEvent;
 import com.hm.iou.sharedata.event.LogoutEvent;
 import com.hm.iou.tools.Md5Util;
 import com.netease.nim.uikit.api.NimUIKit;
@@ -42,6 +44,7 @@ public class MsgCenterAppLike {
 
     public static final String EXTRA_KEY_GET_NO_READ_NUM = "MsgCenter_getNoReadNum";
     public static final String EXTRA_KEY_GET_NO_READ_NUM_SUCCESS = "MsgCenter_getNoReadNumSuccess";
+    public static final String EXTRA_KEY_INIT_IM = "MsgCenter_initIM";
 
     private static MsgCenterAppLike mApp;
 
@@ -60,10 +63,15 @@ public class MsgCenterAppLike {
         mContext = context;
         mApp = this;
         EventBus.getDefault().register(this);
+        //初始化IM
         initIM();
     }
 
     private void initIM() {
+        com.hm.iou.sharedata.model.UserInfo userInfo = UserManager.getInstance(mContext).getUserInfo();
+        if (userInfo == null) {
+            return;
+        }
         LoginInfo loginInfo = getLoginInfo();
         NIMClient.init(mContext, loginInfo, options());
         String packageName = mContext.getPackageName();
@@ -163,7 +171,7 @@ public class MsgCenterAppLike {
         return options;
     }
 
-    public LoginInfo getLoginInfo() {
+    private LoginInfo getLoginInfo() {
 //        UserInfo userInfo = UserManager.getInstance(this).getUserInfo();
 //        if (userInfo != null) {
 //            String userId = userInfo.getUserId();
@@ -180,7 +188,7 @@ public class MsgCenterAppLike {
      *
      * @return
      */
-    public String getProcessName() {
+    private String getProcessName() {
         String processName = null;
 
         // ActivityManager
@@ -273,6 +281,28 @@ public class MsgCenterAppLike {
     }
 
     /**
+     * 用户登陆成功
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventLogout(LoginSuccEvent event) {
+        initIM();
+    }
+
+    /**
+     * 用户登陆成功
+     *
+     * @param commBizEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventInitIM(CommBizEvent commBizEvent) {
+        if (EXTRA_KEY_INIT_IM.equals(commBizEvent.key)) {
+            initIM();
+        }
+    }
+
+    /**
      * 用户退出
      *
      * @param event
@@ -281,5 +311,6 @@ public class MsgCenterAppLike {
     public void onEventLogout(LogoutEvent event) {
         CacheDataUtil.clearMsgListCache();
     }
+
 
 }

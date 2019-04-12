@@ -51,7 +51,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity
-            android:name=".business.apply.view.ApplyNewFriendActivity"
+            android:name=".business.apply.view.ApplyNewFriendListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 

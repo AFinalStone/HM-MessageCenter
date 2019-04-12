@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.hm.iou.msg.business.apply.view.ApplyNewFriendActivity;
+import com.hm.iou.msg.business.apply.view.ApplyNewFriendListActivity;
 import com.hm.iou.msg.business.friendlist.view.FriendListActivity;
 import com.hm.iou.msg.dict.MsgType;
 import com.hm.iou.router.Router;
@@ -58,7 +58,7 @@ public class NavigationHelper {
      * @param context
      */
     public static void toApplyNewFriendList(Context context) {
-        context.startActivity(new Intent(context, ApplyNewFriendActivity.class));
+        context.startActivity(new Intent(context, ApplyNewFriendListActivity.class));
     }
 
     /**
