@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(MainActivity.this, FriendDetailActivity.class);
                 intent.putExtra(FriendDetailActivity.EXTRA_KEY_USER_ID, "1362");
-                intent.putExtra(FriendDetailActivity.EXTRA_KEY_APPLY_STATUS, FriendDetailActivity.APPLY_WAIT_CONRIM);
+                intent.putExtra(FriendDetailActivity.EXTRA_KEY_APPLY_STATUS, FriendDetailActivity.APPLY_WAIT_CONFIRM);
                 startActivity(intent);
 
 

@@ -21,6 +21,19 @@ public class ApplyNewFriendListAdapter extends BaseQuickAdapter<IApplyNewFriend,
         mContext = context;
     }
 
+    public void removeData(String applyId) {
+        if (mData != null) {
+            int index = -1;
+            for (int i = 0; i < mData.size(); i++) {
+                if (applyId.equals(mData.get(i).getApplyId())) {
+                    index = i;
+                }
+            }
+            if (index != -1) {
+                remove(index);
+            }
+        }
+    }
 
     @Override
     protected void convert(BaseViewHolder helper, IApplyNewFriend item) {
@@ -35,8 +48,7 @@ public class ApplyNewFriendListAdapter extends BaseQuickAdapter<IApplyNewFriend,
         //状态
         int status = item.getIStatus();
         if (ApplyNewFriendStatus.HAVE_AGREE.getValue() == status
-                || ApplyNewFriendStatus.HAVE_OVER.getValue() == status
-                || ApplyNewFriendStatus.NO_AGREE.getValue() == status) {
+                || ApplyNewFriendStatus.HAVE_OVER.getValue() == status) {
             helper.setVisible(R.id.btn_see, false);
             helper.setVisible(R.id.tv_status, true);
             helper.setText(R.id.tv_status, ApplyNewFriendStatus.getDescByValue(status));
@@ -44,5 +56,7 @@ public class ApplyNewFriendListAdapter extends BaseQuickAdapter<IApplyNewFriend,
             helper.setVisible(R.id.btn_see, true);
             helper.setVisible(R.id.tv_status, false);
         }
+        helper.addOnClickListener(R.id.btn_delete);
+        helper.addOnClickListener(R.id.rl_content);
     }
 }

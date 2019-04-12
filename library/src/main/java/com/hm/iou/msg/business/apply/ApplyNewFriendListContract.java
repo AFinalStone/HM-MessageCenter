@@ -53,6 +53,8 @@ public class ApplyNewFriendListContract {
          */
         void showDataEmpty();
 
+
+        void removeData(String applyId);
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
@@ -67,5 +69,11 @@ public class ApplyNewFriendListContract {
          */
         void init();
 
+        /**
+         * 删除好友申请请求
+         *
+         * @param applyId
+         */
+        void deleteApplyRecord(String applyId);
     }
 }

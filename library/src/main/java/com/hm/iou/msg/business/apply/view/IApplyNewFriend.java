@@ -34,10 +34,8 @@ public interface IApplyNewFriend {
      */
     int getIStatus();
 
-    /**
-     * 申请账号
-     */
-    String getIApplyId();
+    String getFriendId();
 
+    String getApplyId();
 }
 

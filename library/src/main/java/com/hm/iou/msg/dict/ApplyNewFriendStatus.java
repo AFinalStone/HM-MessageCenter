@@ -6,10 +6,9 @@ package com.hm.iou.msg.dict;
 
 public enum ApplyNewFriendStatus {
 
+    NEED_TO_AGREE(0, "待同意"),
     HAVE_AGREE(1, "已同意"),
-    HAVE_OVER(2, "已过期"),
-    NO_AGREE(3, "不同意"),
-    NEED_TO_AGREE(4, "待同意");
+    HAVE_OVER(3, "已过期");
 
     private int value;
     private String desc;

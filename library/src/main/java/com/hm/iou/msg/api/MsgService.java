@@ -51,10 +51,10 @@ public interface MsgService {
     @POST("/api/message/messageCenter/v1/getSimilarityContractList")
     Flowable<BaseResponse<List<SimilarityContractMsgBean>>> getSimilarityContractList(@Body GetSimilarityContractListReq req);
 
-    @POST("/api/message/messageCenter/v1/getFriendList")
+    @POST("/api/news/friend/v1/getMailList")
     Flowable<BaseResponse<List<FriendBean>>> getFriendList(@Body GetFriendListReq req);
 
-    @POST("/api/message/messageCenter/v1/getApplyNewFriendList")
+    @POST("/api/news/friend/v1/getApplyRecordList")
     Flowable<BaseResponse<List<ApplyApplyNewFriendBean>>> getApplyNewFriendList(@Body GetApplyNewFriendListReq req);
 
     @GET("/api/iou/user/v1/getCustomerFeedback")
@@ -89,5 +89,8 @@ public interface MsgService {
 
     @GET("/api/news/friend/v1/agreeApply")
     Flowable<BaseResponse<Object>> agreeApply(@Query("friendId") String friendId);
+
+    @GET("/api/news/friend/v1/delApplyRecord")
+    Flowable<BaseResponse<Object>> deleteApplyRecord(@Query("applyId") String applyId);
 
 }

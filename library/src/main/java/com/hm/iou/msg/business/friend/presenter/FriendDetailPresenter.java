@@ -62,7 +62,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                         } else {
                             if (FriendDetailActivity.APPLY_OVERDUE.equals(mApplyStatus)) {
                                 mView.showButtonText("同意");
-                            } else if (FriendDetailActivity.APPLY_WAIT_CONRIM.equals(mApplyStatus)) {
+                            } else if (FriendDetailActivity.APPLY_WAIT_CONFIRM.equals(mApplyStatus)) {
                                 mView.showButtonText("同意");
                             } else {
                                 mView.showButtonText("添加朋友");
@@ -153,7 +153,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
         } else {
             if (FriendDetailActivity.APPLY_OVERDUE.equals(mApplyStatus)) {
                 mView.showFriendApplyOverdueDialog();
-            } else if (FriendDetailActivity.APPLY_WAIT_CONRIM.equals(mApplyStatus)) {
+            } else if (FriendDetailActivity.APPLY_WAIT_CONFIRM.equals(mApplyStatus)) {
                 agreeApplyNewFriend();
             } else {
                 //如果不是好友，则跳转到 发送好友请求 页面

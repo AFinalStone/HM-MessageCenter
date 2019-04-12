@@ -3,21 +3,20 @@ package com.hm.iou.msg.api;
 import com.hm.iou.msg.bean.ApplyApplyNewFriendBean;
 import com.hm.iou.msg.bean.ContractMsgBean;
 import com.hm.iou.msg.bean.FriendBean;
+import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.bean.HmMsgBean;
+import com.hm.iou.msg.bean.PowerSearchResult;
 import com.hm.iou.msg.bean.RemindBackMsgBean;
+import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.SimilarityContractMsgBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
+import com.hm.iou.msg.bean.req.AddFriendReqBean;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
 import com.hm.iou.msg.bean.req.GetContractMsgListReq;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
 import com.hm.iou.msg.bean.req.GetHmMsgListReq;
 import com.hm.iou.msg.bean.req.GetRemindBackListReq;
 import com.hm.iou.msg.bean.req.GetSimilarityContractListReq;
-import com.hm.iou.msg.bean.FriendInfo;
-import com.hm.iou.msg.bean.HmMsgBean;
-import com.hm.iou.msg.bean.PowerSearchResult;
-import com.hm.iou.msg.bean.ReportItemBean;
-import com.hm.iou.msg.bean.req.AddFriendReqBean;
 import com.hm.iou.msg.bean.req.PowerSearchReqBean;
 import com.hm.iou.msg.bean.req.ReportUserReqBean;
 import com.hm.iou.msg.bean.req.UpdateRemarkNameReqBean;
@@ -201,6 +200,12 @@ public class MsgApi {
 
     public static Flowable<BaseResponse<Object>> agreeApply(String friendId) {
         return getService().agreeApply(friendId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Flowable<BaseResponse<Object>> deleteApplyRecord(String applyId) {
+        return getService().deleteApplyRecord(applyId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
