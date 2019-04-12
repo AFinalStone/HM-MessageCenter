@@ -232,6 +232,13 @@ public class MsgCenterAppLike {
                 .subscribe(new Consumer<UnReadMsgNumBean>() {
                     @Override
                     public void accept(UnReadMsgNumBean unReadMsgNumBean) throws Exception {
+                        long numNoRead = 0;
+                        numNoRead = numNoRead + unReadMsgNumBean.getMsgContractUnread();
+                        numNoRead = numNoRead + unReadMsgNumBean.getMsgButlerUnread();
+                        numNoRead = numNoRead + unReadMsgNumBean.getMsgNoRepayUnread();
+                        numNoRead = numNoRead + unReadMsgNumBean.getMsgSimilarContractUnread();
+                        numNoRead = numNoRead + unReadMsgNumBean.getNewFriendUnread();
+                        EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
                         CacheDataUtil.setNoReadMsgNum(mContext, unReadMsgNumBean);
                     }
                 }, new Consumer<Throwable>() {
@@ -247,12 +254,15 @@ public class MsgCenterAppLike {
      */
     public void getMsgCenterNoReadNumFromCache() {
         UnReadMsgNumBean unReadMsgNumBean = CacheDataUtil.getNoReadMsgNum(mContext);
-        long numNoRead = 0;
-        numNoRead = numNoRead + unReadMsgNumBean.getMsgContractUnread();
-        numNoRead = numNoRead + unReadMsgNumBean.getMsgButlerUnread();
-        numNoRead = numNoRead + unReadMsgNumBean.getMsgNoRepayUnread();
-        numNoRead = numNoRead + unReadMsgNumBean.getMsgSimilarContractUnread();
-        numNoRead = numNoRead + unReadMsgNumBean.getNewFriendUnread();
+        int numNoRead = 0;
+        if (unReadMsgNumBean != null) {
+            numNoRead = numNoRead + unReadMsgNumBean.getMsgContractUnread();
+            numNoRead = numNoRead + unReadMsgNumBean.getMsgButlerUnread();
+            numNoRead = numNoRead + unReadMsgNumBean.getMsgNoRepayUnread();
+            numNoRead = numNoRead + unReadMsgNumBean.getMsgSimilarContractUnread();
+            numNoRead = numNoRead + unReadMsgNumBean.getNewFriendUnread();
+        }
+
         EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
     }
 
