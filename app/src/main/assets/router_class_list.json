@@ -306,6 +306,11 @@
       "url": "hmiou://m.54jietiao.com/message/apply_new_friend_list",
       "iclass": "",
       "aclass": "com.hm.iou.msg.business.apply.view.ApplyNewFriendListActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/message/firend_detail?userId=*",
+      "iclass": "",
+      "aclass": "com.hm.iou.msg.business.friend.view.FriendDetailActivity"
     }
   ],
   "webview": [

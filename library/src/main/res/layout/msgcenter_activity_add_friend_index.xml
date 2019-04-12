@@ -1,0 +1,252 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <com.hm.iou.uikit.HMTopBarView
+            android:id="@+id/topBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/uikit_topbar_height"
+            app:bottomDividerIsShow="false"
+            app:rightIcon="@mipmap/uikit_ic_about"
+            app:titleBackground="@color/transparent"
+            app:titleText="添加朋友" />
+
+        <RelativeLayout
+            android:id="@+id/rl_addfriend_search"
+            android:layout_width="match_parent"
+            android:layout_height="48dip"
+            android:gravity="center"
+            android:paddingLeft="20dip"
+            android:paddingRight="20dip">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/uikit_bg_edit_gray"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_marginLeft="5dp"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/uikit_ic_search_gray" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:hint="请输入用户ID"
+                    android:singleLine="true"
+                    android:textColorHint="@color/uikit_text_hint"
+                    android:textSize="@dimen/uikti_sub_content_text_size" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_addfriend_scan"
+            android:layout_width="match_parent"
+            android:layout_height="60dip"
+            android:layout_marginTop="5dip"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dip">
+
+            <ImageView
+                android:layout_width="35dip"
+                android:layout_height="35dip"
+                android:layout_marginRight="12dip"
+                android:src="@mipmap/msgcenter_ic_add_friend_scan" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/UikitTextView"
+                    android:text="扫一扫"
+                    android:textSize="16dip" />
+
+                <TextView
+                    style="@style/UikitTextView.Auxiliary.Small"
+                    android:layout_marginTop="5dip"
+                    android:text="扫描好友二维码名片" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            style="@style/UikitDivider.Horizontal"
+            android:layout_marginBottom="10dip"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            android:layout_marginTop="10dip" />
+
+        <LinearLayout
+            android:id="@+id/ll_addfriend_mycard"
+            android:layout_width="match_parent"
+            android:layout_height="60dip"
+            android:background="?android:attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dip">
+
+            <ImageView
+                android:layout_width="35dip"
+                android:layout_height="35dip"
+                android:layout_marginRight="12dip"
+                android:src="@mipmap/msgcenter_ic_add_friend_card" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/UikitTextView"
+                    android:text="个人名片"
+                    android:textSize="16dip" />
+
+                <TextView
+                    style="@style/UikitTextView.Auxiliary.Small"
+                    android:layout_marginTop="5dip"
+                    android:text="我的个人名片" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            style="@style/UikitDivider.Horizontal"
+            android:layout_marginBottom="10dip"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            android:layout_marginTop="10dip" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_addfriend_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:visibility="gone"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dip"
+            android:paddingLeft="20dip"
+            android:paddingRight="10dip">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/uikit_bg_edit_gray"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_toLeftOf="@+id/tv_addfriend_cancel"
+                android:layout_centerVertical="true"
+                >
+
+                <ImageView
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_marginLeft="5dp"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/uikit_ic_search_gray" />
+
+                <EditText
+                    android:id="@+id/et_addfriend_content"
+                    style="@style/UikitEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:hint="请输入用户ID"
+                    android:background="@null"
+                    android:singleLine="true"
+                    android:textColorHint="@color/uikit_text_hint"
+                    android:textSize="@dimen/uikti_sub_content_text_size"
+                    android:imeOptions="actionSearch"
+                    android:inputType="numberSigned"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_addfriend_cancel"
+                style="@style/UikitTextView"
+                android:textSize="14dip"
+                android:textColor="@color/uikit_text_sub_content"
+                android:layout_alignParentRight="true"
+                android:text="取消"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dip"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                />
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_addfriend_searchcontent"
+            android:layout_width="match_parent"
+            android:layout_height="60dip"
+            android:layout_marginTop="15dip"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dip"
+            android:visibility="gone"
+            >
+
+            <ImageView
+                android:layout_width="35dip"
+                android:layout_height="35dip"
+                android:layout_marginRight="12dip"
+                android:src="@mipmap/msgcenter_ic_add_friend_scan" />
+
+
+            <TextView
+                android:id="@+id/tv_addfriend_searchcontent"
+                style="@style/UikitTextView"
+                android:text="搜索："
+                android:textSize="16dip"
+                />
+
+        </LinearLayout>
+
+        <View
+            style="@style/UikitDivider.Horizontal"
+            android:layout_marginBottom="10dip"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            android:layout_marginTop="10dip" />
+
+    </LinearLayout>
+
+</RelativeLayout>

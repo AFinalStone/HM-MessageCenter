@@ -61,4 +61,17 @@
         android:layout_height="wrap_content"
         android:text="管家消息" />
 
+
+    <Button
+        android:id="@+id/btn_add_friend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="好友详情" />
+
+    <Button
+        android:id="@+id/btn_add_friend2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="添加朋友" />
+
 </LinearLayout>

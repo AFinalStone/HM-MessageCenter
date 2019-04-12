@@ -6,6 +6,9 @@ import android.text.TextUtils;
 
 import com.hm.iou.msg.business.apply.view.ApplyNewFriendListActivity;
 import com.hm.iou.msg.business.friendlist.view.FriendListActivity;
+import com.hm.iou.base.utils.RouterUtil;
+import com.hm.iou.msg.business.friend.view.ReportUserActivity;
+import com.hm.iou.msg.business.friend.view.SendVerifyRequestActivity;
 import com.hm.iou.msg.dict.MsgType;
 import com.hm.iou.router.Router;
 import com.netease.nim.uikit.business.session.activity.P2PMessageActivity;
@@ -88,5 +91,35 @@ public class NavigationHelper {
         P2PMessageActivity.start(context, sessionId, null, null);
     }
 
+    public static void toMyCardPage(Context context) {
+        RouterUtil.clickMenuLink(context, "hmiou://m.54jietiao.com/qrcode/index?show_type=show_my_card");
+    }
 
+    public static void toScanQrCodePage(Context context) {
+        RouterUtil.clickMenuLink(context, "hmiou://m.54jietiao.com/qrcode/index?show_type=show_scan_code");
+    }
+
+    /**
+     * 好友举报页面
+     *
+     * @param context
+     * @param userId 好友的userId
+     */
+    public static void toFriendReportPage(Context context, String userId) {
+        Intent intent = new Intent(context, ReportUserActivity.class);
+        intent.putExtra(ReportUserActivity.EXTRA_KEY_FRIEND_ID, userId);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 跳转到好友申请页面
+     *
+     * @param context
+     * @param friendId
+     */
+    public static void toSendVerifyRequestPage(Context context, String friendId) {
+        Intent intent = new Intent(context, SendVerifyRequestActivity.class);
+        intent.putExtra(SendVerifyRequestActivity.EXTRA_KEY_USER_ID, friendId);
+        context.startActivity(intent);
+    }
 }

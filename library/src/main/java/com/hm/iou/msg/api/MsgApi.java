@@ -13,6 +13,14 @@ import com.hm.iou.msg.bean.req.GetFriendListReq;
 import com.hm.iou.msg.bean.req.GetHmMsgListReq;
 import com.hm.iou.msg.bean.req.GetRemindBackListReq;
 import com.hm.iou.msg.bean.req.GetSimilarityContractListReq;
+import com.hm.iou.msg.bean.FriendInfo;
+import com.hm.iou.msg.bean.HmMsgBean;
+import com.hm.iou.msg.bean.PowerSearchResult;
+import com.hm.iou.msg.bean.ReportItemBean;
+import com.hm.iou.msg.bean.req.AddFriendReqBean;
+import com.hm.iou.msg.bean.req.PowerSearchReqBean;
+import com.hm.iou.msg.bean.req.ReportUserReqBean;
+import com.hm.iou.msg.bean.req.UpdateRemarkNameReqBean;
 import com.hm.iou.network.HttpReqManager;
 import com.hm.iou.sharedata.model.BaseResponse;
 
@@ -110,5 +118,91 @@ public class MsgApi {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 获取不同意的原因列表
+     *
+     * @param scene 1:反馈告知原因 2：举报好友
+     * @return
+     */
+    public static Flowable<BaseResponse<List<ReportItemBean>>> getReportList(int scene) {
+        return getService().getReportList(scene).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Flowable<BaseResponse<Object>> reportUser(ReportUserReqBean data) {
+        return getService().reportUser(data).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Flowable<BaseResponse<FriendInfo>> getUserInfoById(String userId) {
+        return getService().getUserInfoById(userId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Flowable<BaseResponse<Object>> addFriendRequest(String userId, String applyMsg) {
+        AddFriendReqBean data = new AddFriendReqBean();
+        data.setFriendId(userId);
+        data.setApplyMsg(applyMsg);
+        return getService().addFriendRequest(data).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 搜索
+     *
+     * @param content 搜索内容
+     * @param purpose 搜索用途，未知=0，借条合同=1，附属合同=2，好友=3
+     * @return
+     */
+    public static Flowable<BaseResponse<PowerSearchResult>> powerSearch(String content, int purpose) {
+        PowerSearchReqBean data = new PowerSearchReqBean();
+        data.setContent(content);
+        data.setPurpose(purpose);
+        return getService().powerSearch(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 更新用户的备注名
+     *
+     * @param userId     用户id
+     * @param remarkName 用户备注名
+     * @return
+     */
+    public static Flowable<BaseResponse<Object>> updateRemarkName(String userId, String remarkName) {
+        UpdateRemarkNameReqBean data = new UpdateRemarkNameReqBean();
+        data.setFriendId(userId);
+        data.setStageName(remarkName);
+        return getService().updateRemarkName(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Flowable<BaseResponse<Object>> addBlackName(String friendId) {
+        return getService().addBlackName(friendId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Flowable<BaseResponse<Object>> removeBlackName(String friendId) {
+        return getService().removeBlackName(friendId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Flowable<BaseResponse<Object>> removeFriendById(String friendId) {
+        return getService().removeFriendById(friendId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Flowable<BaseResponse<Integer>> countSameIOU(String friendId) {
+        return getService().countSameIOU(friendId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Flowable<BaseResponse<Object>> agreeApply(String friendId) {
+        return getService().agreeApply(friendId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 
 }

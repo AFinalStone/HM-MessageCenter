@@ -7,6 +7,8 @@ import android.view.View;
 
 import com.hm.iou.msg.MsgCenterAppLike;
 import com.hm.iou.msg.business.contractmsg.view.ContractMsgActivity;
+import com.hm.iou.msg.business.friend.view.AddFriendIndexActivity;
+import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
 import com.hm.iou.msg.business.hmmsg.view.HmMsgListActivity;
 import com.hm.iou.msg.business.remindback.view.RemindBackMsgActivity;
 import com.hm.iou.msg.business.similarity.view.SimilarityContractMsgActivity;
@@ -88,6 +90,29 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, HmMsgListActivity.class));
+            }
+        });
+
+
+        findViewById(R.id.btn_add_friend).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+        //        startActivity(new Intent(MainActivity.this, AddFriendIndexActivity.class));
+
+                Intent intent = new Intent(MainActivity.this, FriendDetailActivity.class);
+                intent.putExtra(FriendDetailActivity.EXTRA_KEY_USER_ID, "1362");
+                intent.putExtra(FriendDetailActivity.EXTRA_KEY_APPLY_STATUS, FriendDetailActivity.APPLY_WAIT_CONRIM);
+                startActivity(intent);
+
+
+//                NavigationHelper.toSendVerifyRequestPage(MainActivity.this, "1383");
+            }
+        });
+
+        findViewById(R.id.btn_add_friend2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, AddFriendIndexActivity.class));
             }
         });
     }

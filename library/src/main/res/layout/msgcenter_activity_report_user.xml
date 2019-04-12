@@ -1,0 +1,139 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.hm.iou.uikit.HMTopBarView
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="72dip"
+        app:titleText="举报"
+        app:bottomDividerIsShow="false"
+        />
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/sv_report_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="请选择举报原因"
+                android:textColor="#ff222222"
+                android:textSize="14sp"
+                android:paddingLeft="20dip"
+                android:paddingRight="20dip"
+                android:paddingTop="10dip"
+                android:paddingBottom="10dip"
+                />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_reason_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="7dip"
+                android:background="#fff8f8f9" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dip"
+                android:paddingRight="20dip"
+                android:paddingTop="10dip"
+                android:text="补充说明"
+                android:textColor="#ff222222"
+                android:textSize="14dip" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/et_mContent"
+                    style="@style/UikitEditText.Normal.TextArea"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dip"
+                    android:layout_marginRight="20dip"
+                    android:layout_marginBottom="20dip"
+                    android:layout_marginTop="10dip"
+                    android:gravity="left|top"
+                    android:hint="请输入文字或上传截图证明"
+                    android:maxLength="50"
+                    android:minHeight="80dp"
+                    android:padding="10dip"
+                    android:text=""
+                    />
+
+                <TextView
+                    android:id="@+id/tv_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/et_mContent"
+                    android:layout_alignRight="@id/et_mContent"
+                    android:layout_margin="7dip"
+                    android:gravity="right"
+                    android:text="0/50"
+                    android:textColor="@color/uikit_text_hint"
+                    android:textSize="@dimen/textFontSize_14" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="20dip"
+                android:text="上传照片 "
+                android:textColor="#ff111111"
+                android:textSize="14sp" />
+
+            <com.hm.iou.uikit.ShapedImageView
+                android:id="@+id/iv_report_img"
+                android:layout_width="98dip"
+                android:layout_height="98dip"
+                android:src="@mipmap/uikit_ic_circle_add"
+                app:shape_mode="round_rect"
+                app:round_radius="2dip"
+                android:layout_marginRight="10dip"
+                android:scaleType="centerInside"
+                android:background="#fff8f8f9"
+                android:layout_marginLeft="20dip"
+                android:layout_marginTop="10dip"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*请上传真实性内容，以便尽快审核处理"
+                android:textColor="#ff9b9b9b"
+                android:textSize="12sp"
+                android:layout_marginLeft="20dip"
+                android:layout_marginTop="15dip"
+                android:layout_marginBottom="20dip"
+                />
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <com.hm.iou.uikit.HMLoadingView
+        android:id="@+id/hmLoadingView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topBar"
+        android:background="@color/white" />
+
+</LinearLayout>
