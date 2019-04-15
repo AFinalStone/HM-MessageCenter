@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hm.iou.base.BaseActivity;
+import com.hm.iou.base.comm.CommApi;
+import com.hm.iou.base.comm.PowerSearchResult;
 import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RouterUtil;
@@ -20,8 +22,6 @@ import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
-import com.hm.iou.msg.api.MsgApi;
-import com.hm.iou.msg.bean.PowerSearchResult;
 import com.hm.iou.uikit.HMTopBarView;
 import com.hm.iou.uikit.dialog.HMAlertDialog;
 
@@ -157,7 +157,7 @@ public class AddFriendIndexActivity extends BaseActivity {
         String content = mEtContent.getText().toString();
         Logger.d("search content : " + content);
         showLoadingView();
-        mDisposable = MsgApi.powerSearch(content, 3)
+        mDisposable = CommApi.powerSearch(content, 3)
                 .map(RxUtil.<PowerSearchResult>handleResponse())
                 .subscribeWith(new CommSubscriber<PowerSearchResult>(this) {
                     @Override

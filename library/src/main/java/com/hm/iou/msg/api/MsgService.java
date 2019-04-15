@@ -5,7 +5,6 @@ import com.hm.iou.msg.bean.ContractMsgBean;
 import com.hm.iou.msg.bean.FriendBean;
 import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.bean.HmMsgBean;
-import com.hm.iou.msg.bean.PowerSearchResult;
 import com.hm.iou.msg.bean.RemindBackMsgBean;
 import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.SimilarityContractMsgBean;
@@ -17,7 +16,6 @@ import com.hm.iou.msg.bean.req.GetFriendListReq;
 import com.hm.iou.msg.bean.req.GetHmMsgListReq;
 import com.hm.iou.msg.bean.req.GetRemindBackListReq;
 import com.hm.iou.msg.bean.req.GetSimilarityContractListReq;
-import com.hm.iou.msg.bean.req.PowerSearchReqBean;
 import com.hm.iou.msg.bean.req.ReportUserReqBean;
 import com.hm.iou.msg.bean.req.UpdateRemarkNameReqBean;
 import com.hm.iou.sharedata.model.BaseResponse;
@@ -68,9 +66,6 @@ public interface MsgService {
 
     @POST("/api/news/friend/v1/addFriends")
     Flowable<BaseResponse<Object>> addFriendRequest(@Body AddFriendReqBean data);
-
-    @POST("/api/base/shearPlate/v1/powerSearch")
-    Flowable<BaseResponse<PowerSearchResult>> powerSearch(@Body PowerSearchReqBean data);
 
     @POST("/api/news/friend/v1/updateStageName")
     Flowable<BaseResponse<Object>> updateRemarkName(@Body UpdateRemarkNameReqBean data);
