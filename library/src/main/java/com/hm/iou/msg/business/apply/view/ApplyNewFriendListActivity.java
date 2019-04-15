@@ -104,8 +104,8 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
     }
 
     @Override
-    public void enableRefresh() {
-        mRefreshLayout.setEnableRefresh(true);
+    public void enableRefresh(boolean enabled) {
+        mRefreshLayout.setEnableRefresh(enabled);
     }
 
     @Override
@@ -125,7 +125,7 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
         mLoadingInit.showDataFail(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.getMsgList();
+                mPresenter.init();
             }
         });
     }

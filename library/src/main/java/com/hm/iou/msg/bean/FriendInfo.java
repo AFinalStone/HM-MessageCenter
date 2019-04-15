@@ -18,4 +18,6 @@ public class FriendInfo {
     private String showId;
     private int customerType;
     private String stageName;
+    private boolean sysBlackStatus;
+
 }

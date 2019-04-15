@@ -65,7 +65,11 @@ public class FriendListActivity extends BaseActivity<FriendListPresenter> implem
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                NavigationHelper.toContractMsgDetailPage(mContext);
+                IFriend data = (IFriend) adapter.getItem(position);
+                if (view.getId() == R.id.ll_friend_item) {
+                    //跳转到好友详情页面
+                    NavigationHelper.toFriendDetailPage(FriendListActivity.this, data.getIAccount(), null, null);
+                }
             }
         });
         //设置下拉刷新监听
@@ -85,8 +89,8 @@ public class FriendListActivity extends BaseActivity<FriendListPresenter> implem
     }
 
     @Override
-    public void enableRefresh() {
-        mRefreshLayout.setEnableRefresh(true);
+    public void enableRefresh(boolean enabled) {
+        mRefreshLayout.setEnableRefresh(enabled);
     }
 
     @Override
@@ -106,7 +110,7 @@ public class FriendListActivity extends BaseActivity<FriendListPresenter> implem
         mLoadingInit.showDataFail(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.getMsgList();
+                mPresenter.init();
             }
         });
     }
@@ -121,4 +125,5 @@ public class FriendListActivity extends BaseActivity<FriendListPresenter> implem
         mLoadingInit.setVisibility(View.VISIBLE);
         mLoadingInit.showDataEmpty("");
     }
+
 }
