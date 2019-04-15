@@ -6,10 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.hm.iou.logger.Logger;
-import com.hm.iou.tools.Md5Util;
 import com.hm.iou.tools.ToastUtil;
 import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nim.uikit.business.session.activity.P2PMessageActivity;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
@@ -43,8 +41,9 @@ public class IMTestActivity extends AppCompatActivity {
         findViewById(R.id.btn_chat_with_another).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String contactId = "p_58824674063828429";
-                P2PMessageActivity.start(IMTestActivity.this, contactId, null, null);
+//                String account = ((EditText) findViewById(R.id.et_another_account)).getText().toString();
+                NimUIKit.startP2PSession(IMTestActivity.this, "1000294");//方超
+//                NimUIKit.startP2PSession(IMTestActivity.this, "1000393");//石磊
             }
         });
         findViewById(R.id.btn_get_chat_list).setOnClickListener(new View.OnClickListener() {
@@ -60,11 +59,16 @@ public class IMTestActivity extends AppCompatActivity {
 
             }
         });
+//        MsgCenterAppLike.getInstance().initIM();
     }
 
     public void doLogin() {
-        String account = "15267163669";
-        String token = Md5Util.getMd5ByString("123456");
+//        String account = ((EditText) findViewById(R.id.et_account)).getText().toString();
+//        String token = ((EditText) findViewById(R.id.et_token)).getText().toString();
+        String account = "1000393";//石磊
+        String token = "3ee5b627b483df7dad89ca1eeb5371bc";
+//        String account = "1000294";//方超
+//        String token = "5a5c5dd3f195bb0bf05e0de00b2237f6";
         LoginInfo loginInfo = new LoginInfo(account, token);
         RequestCallback requestCallback = new RequestCallback() {
             @Override
@@ -108,4 +112,6 @@ public class IMTestActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

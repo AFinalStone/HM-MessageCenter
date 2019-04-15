@@ -4,11 +4,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <EditText
+        android:id="@+id/et_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="网易云账号" />
+
+    <EditText
+        android:id="@+id/et_token"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="网易云Token" />
+
     <Button
         android:id="@+id/btn_login_nim"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="登陆网易云IM" />
+
+    <EditText
+        android:id="@+id/et_another_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="另外一个人的网易云账号"
+        android:text="1000294" />
 
     <Button
         android:id="@+id/btn_chat_with_another"
