@@ -8,22 +8,24 @@ import android.text.TextUtils;
 
 import com.hm.iou.base.file.FileUtil;
 import com.hm.iou.base.utils.RxUtil;
+import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
+import com.hm.iou.msg.im.MsgViewHolderTip;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.sharedata.UserManager;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.event.LoginSuccEvent;
 import com.hm.iou.sharedata.event.LogoutEvent;
-import com.hm.iou.tools.Md5Util;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.UIKitOptions;
+import com.netease.nim.uikit.api.model.session.SessionEventListener;
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 
@@ -46,6 +48,8 @@ public class MsgCenterAppLike {
     public static final String EXTRA_KEY_INIT_IM = "MsgCenter_initIM";
 
     private static MsgCenterAppLike mApp;
+    private boolean mHaveInitIM = false;//是否已经初始化IM
+
 
     public static MsgCenterAppLike getInstance() {
         if (mApp == null) {
@@ -66,34 +70,70 @@ public class MsgCenterAppLike {
         initIM();
     }
 
-    private void initIM() {
-        com.hm.iou.sharedata.model.UserInfo userInfo = UserManager.getInstance(mContext).getUserInfo();
-        if (userInfo == null) {
-            return;
-        }
+    public void initIM() {
+        //TODO
         LoginInfo loginInfo = getLoginInfo();
-        NIMClient.init(mContext, loginInfo, options());
-        String packageName = mContext.getPackageName();
-        String processName = getProcessName();
-        if (packageName.equals(processName)) {
-            // 初始化UIKit模块
-            NimUIKit.init(mContext, buildUIKitOptions());
-            NimUIKit.login(loginInfo, new RequestCallback<LoginInfo>() {
-                @Override
-                public void onSuccess(LoginInfo param) {
+//        if (loginInfo == null) {
+//            return;
+//        }
+        if (!mHaveInitIM) {
+            NIMClient.init(mContext, loginInfo, options());
+            String packageName = mContext.getPackageName();
+            String processName = getProcessName();
+            if (packageName.equals(processName)) {
+                // 初始化UIKit模块
+                NimUIKit.init(mContext, buildUIKitOptions());
+                //黑名单
+                NimUIKit.registerTipMsgViewHolder(MsgViewHolderTip.class);
+                //头像点击事件
+                SessionEventListener listener = new SessionEventListener() {
+                    @Override
+                    public void onAvatarClicked(Context context, IMMessage message) {
+                        // 一般用于打开用户资料页面
+//                if (message.getMsgType() == MsgTypeEnum.robot && message.getDirect() == MsgDirectionEnum.In) {
+//                    RobotAttachment attachment = (RobotAttachment) message.getAttachment();
+//                    if (attachment.isRobotSend()) {
+//                        RobotProfileActivity.start(context, attachment.getFromRobotAccount());
+//                        return;
+//                    }
+//                }
+//                UserProfileActivity.start(context, message.getFromAccount());
+                        Logger.d("onAvatarClicked");
+                    }
 
-                }
+                    @Override
+                    public void onAvatarLongClicked(Context context, IMMessage message) {
+                        // 一般用于群组@功能，或者弹出菜单，做拉黑，加好友等功能
+                        Logger.d("onAvatarLongClicked");
+                    }
 
-                @Override
-                public void onFailed(int code) {
-
-                }
-
-                @Override
-                public void onException(Throwable exception) {
-
-                }
-            });
+                    @Override
+                    public void onAckMsgClicked(Context context, IMMessage message) {
+                        // 已读回执事件处理，用于群组的已读回执事件的响应，弹出消息已读详情
+//                AckMsgInfoActivity.start(context, message);
+                        Logger.d("onAckMsgClicked");
+                    }
+                };
+                NimUIKit.setSessionListener(listener);
+                //登陆
+//                NimUIKit.login(loginInfo, new RequestCallback<LoginInfo>() {
+//                    @Override
+//                    public void onSuccess(LoginInfo param) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onFailed(int code) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onException(Throwable exception) {
+//
+//                    }
+//                });
+            }
+            mHaveInitIM = true;
         }
     }
 
@@ -171,15 +211,13 @@ public class MsgCenterAppLike {
     }
 
     private LoginInfo getLoginInfo() {
-//        UserInfo userInfo = UserManager.getInstance(this).getUserInfo();
-//        if (userInfo != null) {
-//            String userId = userInfo.getUserId();
-//            String token = userInfo.getToken();
-//            LoginInfo loginInfo = new LoginInfo(userId, token);
-//            return loginInfo;
-//        }
-        LoginInfo loginInfo = new LoginInfo("15267163669", Md5Util.getMd5ByString("123456"));
-        return loginInfo;
+        com.hm.iou.sharedata.model.UserInfo userInfo = UserManager.getInstance(mContext).getUserInfo();
+        if (userInfo == null || TextUtils.isEmpty(userInfo.getImToken())) {
+            return null;
+        }
+        String userId = userInfo.getUserId();
+        String imToken = userInfo.getImToken();
+        return new LoginInfo(userId, imToken);
     }
 
     /**
@@ -303,18 +341,6 @@ public class MsgCenterAppLike {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventLogin(LoginSuccEvent event) {
         initIM();
-    }
-
-    /**
-     * 需要初始化IM
-     *
-     * @param commBizEvent
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventInitIM(CommBizEvent commBizEvent) {
-        if (EXTRA_KEY_INIT_IM.equals(commBizEvent.key)) {
-            initIM();
-        }
     }
 
     /**

@@ -12,6 +12,7 @@ import com.hm.iou.msg.business.friend.view.ReportUserActivity;
 import com.hm.iou.msg.business.friend.view.SendVerifyRequestActivity;
 import com.hm.iou.msg.dict.MsgType;
 import com.hm.iou.router.Router;
+import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.business.session.activity.P2PMessageActivity;
 
 /**
@@ -88,8 +89,9 @@ public class NavigationHelper {
      *
      * @param context
      */
-    public static void toSessionDetail(Context context, String sessionId) {
-        P2PMessageActivity.start(context, sessionId, null, null);
+    public static void toSessionDetail(Context context, String fromAccount) {
+//        P2PMessageActivity.start(context, sessionId, null, null);
+        NimUIKit.startP2PSession(context, fromAccount);
     }
 
     public static void toMyCardPage(Context context) {

@@ -23,6 +23,7 @@ import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.tools.StatusBarUtil;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
+import com.netease.nim.uikit.api.NimUIKit;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -85,7 +86,7 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
                 ChatMsgBean item = (ChatMsgBean) adapter.getItem(position);
                 Logger.d("会话id==" + item.getContactId());
                 if (R.id.rl_content == view.getId()) {
-                    NavigationHelper.toSessionDetail(mActivity, item.getContactId());
+                    NavigationHelper.toSessionDetail(mActivity, item.getFromAccount());
                 } else if (R.id.btn_hide == view.getId()) {
                     toastMessage("隐藏");
                 }
