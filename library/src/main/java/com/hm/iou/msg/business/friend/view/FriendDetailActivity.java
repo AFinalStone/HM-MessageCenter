@@ -37,7 +37,7 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
     public static final String EXTRA_KEY_COMMENT_INFO = "comment";
 
     public static final String APPLY_OVERDUE = "1";
-    public static final String APPLY_WAIT_CONRIM = "2";
+    public static final String APPLY_WAIT_CONFIRM = "2";
 
     @BindView(R2.id.iv_friend_avatar)
     ImageView mIvAvatar;

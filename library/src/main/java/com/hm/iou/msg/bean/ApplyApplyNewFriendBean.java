@@ -14,8 +14,9 @@ public class ApplyApplyNewFriendBean implements IApplyNewFriend {
     private String applyId;
     private String avatarUrl;
     private String nickName;
-    private String applyMemo;
-    private int status;
+    private String applyMsg;
+    private String friendId;
+    private int status;                 //状态 0 待同意 1已同意 3已过期
 
     @Override
     public String getIHeaderImg() {
@@ -29,7 +30,7 @@ public class ApplyApplyNewFriendBean implements IApplyNewFriend {
 
     @Override
     public String getIContent() {
-        return applyMemo;
+        return applyMsg;
     }
 
     @Override
@@ -38,7 +39,13 @@ public class ApplyApplyNewFriendBean implements IApplyNewFriend {
     }
 
     @Override
-    public String getIApplyId() {
+    public String getFriendId() {
+        return friendId;
+    }
+
+    @Override
+    public String getApplyId() {
         return applyId;
     }
+
 }

@@ -11,9 +11,10 @@ import lombok.Data;
 @Data
 public class FriendBean implements IFriend {
 
-    private String avatarUrl;
-    private String nickName;
-    private String userId;
+    private String avatarUrl;   //头像
+    private String nickName;    //昵称
+    private String friendId;    //好友id
+    private String stageName;   //备注名
 
     @Override
     public String getIHeaderImg() {
@@ -27,6 +28,6 @@ public class FriendBean implements IFriend {
 
     @Override
     public String getIAccount() {
-        return userId;
+        return friendId;
     }
 }

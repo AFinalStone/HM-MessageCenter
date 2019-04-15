@@ -87,4 +87,24 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
                 });
     }
 
+    @Override
+    public void deleteApplyRecord(final String applyId) {
+        mView.showLoadingView();
+        MsgApi.deleteApplyRecord(applyId)
+                .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<Object>handleResponse())
+                .subscribeWith(new CommSubscriber<Object>(mView) {
+                    @Override
+                    public void handleResult(Object o) {
+                        mView.dismissLoadingView();
+                        mView.removeData(applyId);
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String s, String s1) {
+                        mView.dismissLoadingView();
+                    }
+                });
+    }
+
 }

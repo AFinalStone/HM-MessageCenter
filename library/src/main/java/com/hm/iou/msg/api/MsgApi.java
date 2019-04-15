@@ -3,22 +3,19 @@ package com.hm.iou.msg.api;
 import com.hm.iou.msg.bean.ApplyApplyNewFriendBean;
 import com.hm.iou.msg.bean.ContractMsgBean;
 import com.hm.iou.msg.bean.FriendBean;
+import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.bean.HmMsgBean;
 import com.hm.iou.msg.bean.RemindBackMsgBean;
+import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.SimilarityContractMsgBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
+import com.hm.iou.msg.bean.req.AddFriendReqBean;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
 import com.hm.iou.msg.bean.req.GetContractMsgListReq;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
 import com.hm.iou.msg.bean.req.GetHmMsgListReq;
 import com.hm.iou.msg.bean.req.GetRemindBackListReq;
 import com.hm.iou.msg.bean.req.GetSimilarityContractListReq;
-import com.hm.iou.msg.bean.FriendInfo;
-import com.hm.iou.msg.bean.HmMsgBean;
-import com.hm.iou.msg.bean.PowerSearchResult;
-import com.hm.iou.msg.bean.ReportItemBean;
-import com.hm.iou.msg.bean.req.AddFriendReqBean;
-import com.hm.iou.msg.bean.req.PowerSearchReqBean;
 import com.hm.iou.msg.bean.req.ReportUserReqBean;
 import com.hm.iou.msg.bean.req.UpdateRemarkNameReqBean;
 import com.hm.iou.network.HttpReqManager;
@@ -144,22 +141,6 @@ public class MsgApi {
     }
 
     /**
-     * 搜索
-     *
-     * @param content 搜索内容
-     * @param purpose 搜索用途，未知=0，借条合同=1，附属合同=2，好友=3
-     * @return
-     */
-    public static Flowable<BaseResponse<PowerSearchResult>> powerSearch(String content, int purpose) {
-        PowerSearchReqBean data = new PowerSearchReqBean();
-        data.setContent(content);
-        data.setPurpose(purpose);
-        return getService().powerSearch(data)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    /**
      * 更新用户的备注名
      *
      * @param userId     用户id
@@ -201,6 +182,12 @@ public class MsgApi {
 
     public static Flowable<BaseResponse<Object>> agreeApply(String friendId) {
         return getService().agreeApply(friendId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Flowable<BaseResponse<Object>> deleteApplyRecord(String applyId) {
+        return getService().deleteApplyRecord(applyId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

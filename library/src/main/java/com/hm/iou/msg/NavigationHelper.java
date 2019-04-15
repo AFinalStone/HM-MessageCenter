@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.hm.iou.msg.business.apply.view.ApplyNewFriendListActivity;
+import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
 import com.hm.iou.msg.business.friendlist.view.FriendListActivity;
 import com.hm.iou.base.utils.RouterUtil;
 import com.hm.iou.msg.business.friend.view.ReportUserActivity;
@@ -124,4 +125,21 @@ public class NavigationHelper {
         intent.putExtra(SendVerifyRequestActivity.EXTRA_KEY_USER_ID, friendId);
         context.startActivity(intent);
     }
+
+    /**
+     * 跳转到好友详情页面
+     *
+     * @param context
+     * @param friendId    好友的用户id
+     * @param applyStatus 从好友申请列表进入时，需要传入此参数。1-已过期，2-等待确认。{@link FriendDetailActivity.APPLY_OVERDUE}
+     * @param applyMsg
+     */
+    public static void toFriendDetailPage(Context context, String friendId, String applyStatus, String applyMsg) {
+        Intent intent = new Intent(context, FriendDetailActivity.class);
+        intent.putExtra(FriendDetailActivity.EXTRA_KEY_USER_ID, friendId);
+        intent.putExtra(FriendDetailActivity.EXTRA_KEY_APPLY_STATUS, applyStatus);
+        intent.putExtra(FriendDetailActivity.EXTRA_KEY_COMMENT_INFO, applyMsg);
+        context.startActivity(intent);
+    }
+
 }
