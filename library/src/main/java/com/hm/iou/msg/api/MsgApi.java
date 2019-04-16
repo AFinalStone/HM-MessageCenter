@@ -11,11 +11,7 @@ import com.hm.iou.msg.bean.SimilarityContractMsgBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.AddFriendReqBean;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
-import com.hm.iou.msg.bean.req.GetContractMsgListReq;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
-import com.hm.iou.msg.bean.req.GetHmMsgListReq;
-import com.hm.iou.msg.bean.req.GetRemindBackListReq;
-import com.hm.iou.msg.bean.req.GetSimilarityContractListReq;
 import com.hm.iou.msg.bean.req.ReportUserReqBean;
 import com.hm.iou.msg.bean.req.UpdateRemarkNameReqBean;
 import com.hm.iou.network.HttpReqManager;
@@ -54,8 +50,8 @@ public class MsgApi {
      *
      * @return
      */
-    public static Flowable<BaseResponse<List<HmMsgBean>>> getHmMsgList(GetHmMsgListReq req) {
-        return getService().getHmMsgList(req)
+    public static Flowable<BaseResponse<List<HmMsgBean>>> getHmMsgList() {
+        return getService().getHmMsgList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -65,8 +61,8 @@ public class MsgApi {
      *
      * @return
      */
-    public static Flowable<BaseResponse<List<ContractMsgBean>>> getContractMsgList(GetContractMsgListReq req) {
-        return getService().getContractMsgList(req)
+    public static Flowable<BaseResponse<List<ContractMsgBean>>> getContractMsgList() {
+        return getService().getContractMsgList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -76,8 +72,8 @@ public class MsgApi {
      *
      * @return
      */
-    public static Flowable<BaseResponse<List<RemindBackMsgBean>>> getRemindBackList(GetRemindBackListReq req) {
-        return getService().getRemindBackList(req)
+    public static Flowable<BaseResponse<List<RemindBackMsgBean>>> getRemindBackList() {
+        return getService().getRemindBackList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -87,8 +83,8 @@ public class MsgApi {
      *
      * @return
      */
-    public static Flowable<BaseResponse<List<SimilarityContractMsgBean>>> getSimilarityContractList(GetSimilarityContractListReq req) {
-        return getService().getSimilarityContractList(req)
+    public static Flowable<BaseResponse<List<SimilarityContractMsgBean>>> getSimilarityContractList() {
+        return getService().getSimilarityContractList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

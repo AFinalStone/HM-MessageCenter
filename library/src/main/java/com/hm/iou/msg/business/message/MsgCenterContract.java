@@ -30,11 +30,11 @@ public class MsgCenterContract {
         void showHeaderModule(List<MsgListHeaderBean> list);
 
         /**
-         * 更新条目样式
+         * 更新头部条目样式
          *
-         * @param position
+         * @param msgListHeaderBean
          */
-        void refreshItem(int position);
+        void refreshHeaderModule(MsgListHeaderBean msgListHeaderBean);
 
         /**
          * 允许刷新
@@ -76,6 +76,11 @@ public class MsgCenterContract {
          * 获取会话列表
          */
         void getChatList();
+
+        /**
+         * 获取未读消息数量
+         */
+        void getUnReadMsgNum();
 
         /**
          * 标记为已读

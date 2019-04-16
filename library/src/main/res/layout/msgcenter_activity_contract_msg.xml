@@ -54,6 +54,7 @@
     </RelativeLayout>
 
     <com.hm.iou.uikit.HMBottomBarView
+        android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="62dip"
         app:bottomBackText="合同消息" />

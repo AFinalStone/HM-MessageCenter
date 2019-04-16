@@ -8,11 +8,10 @@ import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.ContractMsgBean;
-import com.hm.iou.msg.bean.req.GetContractMsgListReq;
+import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,8 +30,7 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
     @Override
     public void init() {
         mView.showInitLoading();
-        GetContractMsgListReq req = new GetContractMsgListReq();
-        MsgApi.getContractMsgList(req)
+        MsgApi.getContractMsgList()
                 .compose(getProvider().<BaseResponse<List<ContractMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<List<ContractMsgBean>>handleResponse())
                 .subscribeWith(new CommSubscriber<List<ContractMsgBean>>(mView) {
@@ -43,7 +41,7 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                         if (list == null || list.size() == 0) {
                             mView.showDataEmpty();
                         } else {
-                            mView.showMsgList((ArrayList) list);
+                            mView.showMsgList(DataChangeUtil.changeContractMsgBeanToIContractMsgItem(list));
                         }
                     }
 
@@ -66,8 +64,7 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
 
     @Override
     public void getMsgList() {
-        GetContractMsgListReq req = new GetContractMsgListReq();
-        MsgApi.getContractMsgList(req)
+        MsgApi.getContractMsgList()
                 .compose(getProvider().<BaseResponse<List<ContractMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<List<ContractMsgBean>>handleResponse())
                 .subscribeWith(new CommSubscriber<List<ContractMsgBean>>(mView) {
@@ -77,7 +74,7 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                         if (list == null || list.size() == 0) {
                             mView.showDataEmpty();
                         } else {
-                            mView.showMsgList((ArrayList) list);
+                            mView.showMsgList(DataChangeUtil.changeContractMsgBeanToIContractMsgItem(list));
                         }
                     }
 
@@ -87,5 +84,6 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                     }
                 });
     }
+
 
 }

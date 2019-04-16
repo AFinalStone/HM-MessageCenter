@@ -8,7 +8,6 @@ import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.RemindBackMsgBean;
-import com.hm.iou.msg.bean.req.GetRemindBackListReq;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -31,8 +30,7 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
     @Override
     public void init() {
         mView.showInitLoading();
-        GetRemindBackListReq req = new GetRemindBackListReq();
-        MsgApi.getRemindBackList(req)
+        MsgApi.getRemindBackList()
                 .compose(getProvider().<BaseResponse<List<RemindBackMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<List<RemindBackMsgBean>>handleResponse())
                 .subscribeWith(new CommSubscriber<List<RemindBackMsgBean>>(mView) {
@@ -66,8 +64,7 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
 
     @Override
     public void getMsgList() {
-        GetRemindBackListReq req = new GetRemindBackListReq();
-        MsgApi.getRemindBackList(req)
+        MsgApi.getRemindBackList()
                 .compose(getProvider().<BaseResponse<List<RemindBackMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<List<RemindBackMsgBean>>handleResponse())
                 .subscribeWith(new CommSubscriber<List<RemindBackMsgBean>>(mView) {

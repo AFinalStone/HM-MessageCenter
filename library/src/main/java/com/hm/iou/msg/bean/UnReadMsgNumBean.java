@@ -11,9 +11,9 @@ import lombok.Data;
 @Data
 public class UnReadMsgNumBean implements Serializable {
 
-    int msgContractUnread;
-    int msgNoRepayUnread;
-    int msgSimilarContractUnread;
-    int msgButlerUnread;
-    int newFriendUnread;
+    private int butlerMessageNumber;
+    private int contractNumber;
+    private int similarContractNumber;
+    private int waitRepayNumber;
+
 }

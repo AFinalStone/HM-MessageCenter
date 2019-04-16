@@ -9,14 +9,28 @@ import com.hm.iou.tools.StringUtil;
 
 public class SimilarityContractMsgBean implements ISimilarityContractMsgItem {
 
-    private String title;               //标题
-    private String amount;               //金额
-    private String type;           //合同类型
-    private String loanerName;          //出借人
-    private String borrowerName;        //借款人
-    private String repayDateTime;        //还款日期
-    private String returnWay;        //归还方式
-    private String jumpUrl;      //归还时间
+
+    /**
+     * amount : string
+     * borrowerName : string
+     * createTime : 2019-04-15T12:17:23.976Z
+     * iouKind : 0
+     * iouStatus : 0
+     * jumpUrl : string
+     * loanerName : string
+     * returnWayDesc : string
+     * title : string
+     */
+
+    private String amount;
+    private String borrowerName;
+    private String createTime;
+    private int iouKind;
+    private int iouStatus;
+    private String jumpUrl;
+    private String loanerName;
+    private String returnWayDesc;
+    private String title;
 
     @Override
     public String getITitle() {
@@ -35,12 +49,12 @@ public class SimilarityContractMsgBean implements ISimilarityContractMsgItem {
 
     @Override
     public String getIBackTime() {
-        return "归还时间：" + repayDateTime;
+        return "归还时间：" + createTime;
     }
 
     @Override
     public String getIBackType() {
-        return returnWay;
+        return returnWayDesc;
     }
 
     @Override
@@ -50,7 +64,7 @@ public class SimilarityContractMsgBean implements ISimilarityContractMsgItem {
 
     @Override
     public String getIContractType() {
-        return type;
+        //TODO
+        return String.valueOf(iouKind);
     }
-
 }

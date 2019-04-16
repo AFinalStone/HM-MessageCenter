@@ -6,34 +6,32 @@ package com.hm.iou.msg.dict;
  */
 public enum ModuleType {
 
-    CONTRACT("msg_center_msg_list_header_contract_msg", "合同消息"),
-    BANK_CARD("msg_center_msg_list_header_remind_to_back", "待还提醒"),
-    EMAIL("msg_center_msg_list_header_similarity_contract", "疑似合同"),
-    SIGHATURE_LIST("msg_center_msg_list_header_hm_msg", "管家消息"),;
+    CONTRACT_MSG("msg_center_msg_list_header_contract_msg", "合同消息"),
+    REMIND_BACK_MSG("msg_center_msg_list_header_remind_to_back", "待还提醒"),
+    SIMILARITY_CONTRACT_MSG("msg_center_msg_list_header_similarity_contract", "疑似合同"),
+    HM_MSG("msg_center_msg_list_header_hm_msg", "管家消息"),;
 
-    private String value;
-    private String desc;
+    private String typeId;
+    private String title;
 
-    ModuleType(String value, String desc) {
-        this.value = value;
-        this.desc = desc;
+    ModuleType(String typeId, String title) {
+        this.typeId = typeId;
+        this.title = title;
     }
 
-    public String getValue() {
-        return value;
+    public String getTypeId() {
+        return typeId;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setTypeId(String typeId) {
+        this.typeId = typeId;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getTitle() {
+        return title;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setTitle(String title) {
+        this.title = title;
     }
-
-
 }

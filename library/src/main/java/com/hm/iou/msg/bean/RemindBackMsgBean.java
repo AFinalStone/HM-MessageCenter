@@ -1,6 +1,7 @@
 package com.hm.iou.msg.bean;
 
 import com.hm.iou.msg.business.remindback.view.IRemindBackMsgItem;
+import com.hm.iou.sharedata.model.IOUKindEnum;
 
 import lombok.Data;
 
@@ -10,13 +11,24 @@ import lombok.Data;
 @Data
 public class RemindBackMsgBean implements IRemindBackMsgItem {
 
-    private String title;
+
+    /**
+     * content : string
+     * createTime : 2019-04-15T12:17:23.987Z
+     * iouKind : 0
+     * jumpUrl : string
+     * repayAmount : 0
+     * repayDateTime : 2019-04-15T12:17:23.988Z
+     * title : string
+     */
+
     private String content;
-    private String type;
-    private String repayDateTime;
-    private String repayAmount;
     private String createTime;
+    private int iouKind;
     private String jumpUrl;
+    private int repayAmount;
+    private String repayDateTime;
+    private String title;
 
     @Override
     public String getITitle() {
@@ -45,6 +57,8 @@ public class RemindBackMsgBean implements IRemindBackMsgItem {
 
     @Override
     public String getIContractType() {
-        return type;
+        //TODO
+        return String.valueOf(iouKind);
     }
+
 }

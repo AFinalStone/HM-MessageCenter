@@ -7,18 +7,32 @@ package com.hm.iou.msg.business.contractmsg.view;
 public interface IContractMsgItem {
 
     /**
-     * 消息标题
-     *
-     * @return
-     */
-    String getITitle();
-
-    /**
      * 获取时间
      *
      * @return
      */
     String getITime();
+
+    /**
+     * 是否显示时间
+     *
+     * @return
+     */
+    boolean ifIShowTime();
+
+    /**
+     * 设置是否显示时间
+     *
+     * @return
+     */
+    boolean setIfIShowTime(boolean isShowTime);
+
+    /**
+     * 消息标题
+     *
+     * @return
+     */
+    String getITitle();
 
     /**
      * 消息图片
@@ -28,11 +42,11 @@ public interface IContractMsgItem {
     String getIContent();
 
     /**
-     * 获取合同id
+     * 获取跳转的url
      *
      * @return
      */
-    String getIContractId();
+    String getIJustUrl();
 
     /**
      * 获取合同类型
