@@ -2,6 +2,7 @@ package com.hm.iou.msg.util;
 
 import android.content.Context;
 
+import com.hm.iou.database.FriendDbUtil;
 import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.MsgCenterDbData;
 import com.hm.iou.msg.MsgCenterConstants;
@@ -17,6 +18,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.hm.iou.msg.MsgCenterConstants.KEY_LAST_FRIEND_APPLY_RECORD_TIME;
+import static com.hm.iou.msg.MsgCenterConstants.KEY_LAST_FRIEND_UPDATE_TIME;
 
 /**
  * @author syl
@@ -43,6 +47,25 @@ public class CacheDataUtil {
         return (UnReadMsgNumBean) cache.getAsObject(MsgCenterConstants.KEY_UN_READ_MSG_NUM);
     }
 
+    public static String getLastFriendPullDate(Context context) {
+        ACache cache = ACache.get(context.getApplicationContext());
+        return cache.getAsString(KEY_LAST_FRIEND_UPDATE_TIME);
+    }
+
+    public static String getLastApplyRecordPullDate(Context context) {
+        ACache cache = ACache.get(context.getApplicationContext());
+        return cache.getAsString(KEY_LAST_FRIEND_APPLY_RECORD_TIME);
+    }
+
+    public static void saveLastFriendPullDate(Context context, String lastPullDate) {
+        ACache cache = ACache.get(context.getApplicationContext());
+        cache.put(KEY_LAST_FRIEND_UPDATE_TIME, lastPullDate);
+    }
+
+    public static void saveLastApplyRecordPullDate(Context context, String lastPullDate) {
+        ACache cache = ACache.get(context.getApplicationContext());
+        cache.put(KEY_LAST_FRIEND_APPLY_RECORD_TIME, lastPullDate);
+    }
 
     /**
      * 添加list到cache中
@@ -152,5 +175,8 @@ public class CacheDataUtil {
         cache.remove(MsgCenterConstants.KEY_UN_READ_MSG_NUM);
         //合同消息缓存
 
+        //删除相关好友数据
+        FriendDbUtil.deleteAllFriendData();
     }
+
 }

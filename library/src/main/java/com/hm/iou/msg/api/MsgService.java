@@ -1,9 +1,9 @@
 package com.hm.iou.msg.api;
 
-import com.hm.iou.msg.bean.ApplyApplyNewFriendBean;
 import com.hm.iou.msg.bean.ContractMsgBean;
-import com.hm.iou.msg.bean.FriendBean;
+import com.hm.iou.msg.bean.FriendApplyRecordListBean;
 import com.hm.iou.msg.bean.FriendInfo;
+import com.hm.iou.msg.bean.FriendListBean;
 import com.hm.iou.msg.bean.HmMsgBean;
 import com.hm.iou.msg.bean.RemindBackMsgBean;
 import com.hm.iou.msg.bean.ReportItemBean;
@@ -46,10 +46,10 @@ public interface MsgService {
     Flowable<BaseResponse<List<SimilarityContractMsgBean>>> getSimilarityContractList();
 
     @POST("/api/news/friend/v1/getMailList")
-    Flowable<BaseResponse<List<FriendBean>>> getFriendList(@Body GetFriendListReq req);
+    Flowable<BaseResponse<FriendListBean>> getFriendList(@Body GetFriendListReq req);
 
     @POST("/api/news/friend/v1/getApplyRecordList")
-    Flowable<BaseResponse<List<ApplyApplyNewFriendBean>>> getApplyNewFriendList(@Body GetApplyNewFriendListReq req);
+    Flowable<BaseResponse<FriendApplyRecordListBean>> getApplyNewFriendList(@Body GetApplyNewFriendListReq req);
 
     @GET("/api/iou/user/v1/getCustomerFeedback")
     Flowable<BaseResponse<List<ReportItemBean>>> getReportList(@Query("scene") int scene);

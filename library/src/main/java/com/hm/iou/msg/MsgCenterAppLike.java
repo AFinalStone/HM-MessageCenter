@@ -336,7 +336,7 @@ public class MsgCenterAppLike {
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventLogout(LoginSuccEvent event) {
+    public void onEventLogin(LoginSuccEvent event) {
         initIM();
     }
 

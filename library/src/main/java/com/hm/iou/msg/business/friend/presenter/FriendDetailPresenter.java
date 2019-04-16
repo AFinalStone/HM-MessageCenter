@@ -156,7 +156,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
             } else if (FriendDetailActivity.APPLY_WAIT_CONFIRM.equals(mApplyStatus)) {
                 agreeApplyNewFriend();
             } else {
-                if (mFriendInfo.isBlackStatus()) {
+                if (mFriendInfo.isSysBlackStatus()) {
                     mView.showAlertDialog("该用户已禁止添加好友");
                     return;
                 }

@@ -26,7 +26,7 @@ public class ApplyNewFriendListContract {
         /**
          * 允许刷新
          */
-        void enableRefresh();
+        void enableRefresh(boolean enabled);
 
         /**
          * 隐藏下拉刷新View

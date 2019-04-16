@@ -20,7 +20,6 @@ public class FriendListAdapter extends BaseQuickAdapter<IFriend, BaseViewHolder>
         mContext = context;
     }
 
-
     @Override
     protected void convert(BaseViewHolder helper, IFriend item) {
         //头像
@@ -29,5 +28,7 @@ public class FriendListAdapter extends BaseQuickAdapter<IFriend, BaseViewHolder>
         ImageLoader.getInstance(mContext).displayImage(headerUrl, ivHeader);
         //昵称
         helper.setText(R.id.tv_nick, item.getINick());
+
+        helper.addOnClickListener(R.id.ll_friend_item);
     }
 }

@@ -13,4 +13,17 @@ public class MsgCenterConstants {
     public static final String KEY_UN_READ_MSG_NUM = "msgcenter_key_un_read_msg_num";
 
 
+    //消息中心模块用的 SharedPreferences 文件名
+    public static final String SP_MSG_CENTER = "msgcenter";
+
+    /**
+     * 最近一次获取好友的时间
+     */
+    public static final String KEY_LAST_FRIEND_UPDATE_TIME = "msgcenter_friend_update_time";
+
+    /**
+     * 最近一次获取好友申请记录的时间
+     */
+    public static final String KEY_LAST_FRIEND_APPLY_RECORD_TIME = "msgcenter_apply_record";
+
 }
