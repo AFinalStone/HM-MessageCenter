@@ -55,6 +55,7 @@ public class ApplyNewFriendListAdapter extends BaseQuickAdapter<IApplyNewFriend,
         } else {
             helper.setVisible(R.id.btn_see, true);
             helper.setVisible(R.id.tv_status, false);
+            helper.addOnClickListener(R.id.btn_see);
         }
         helper.addOnClickListener(R.id.btn_delete);
         helper.addOnClickListener(R.id.rl_content);

@@ -13,8 +13,13 @@ import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.business.friend.FriendDetailContract;
 import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
+import com.hm.iou.msg.event.AddFriendEvent;
+import com.hm.iou.msg.event.DeleteFriendEvent;
+import com.hm.iou.msg.event.UpdateFriendEvent;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +53,8 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                 .subscribeWith(new CommSubscriber<FriendInfo>(mView) {
                     @Override
                     public void handleResult(FriendInfo friendInfo) {
-                        mFriendInfo = friendInfo;
                         mView.dismissLoadingView();
+                        mFriendInfo = friendInfo;
                         mView.showAvatar(friendInfo.getAvatarUrl());
                         mView.showNickname(friendInfo.getNickName(), friendInfo.getStageName());
                         mView.showUserId(friendInfo.getShowId());
@@ -71,8 +76,19 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                     }
 
                     @Override
-                    public void handleException(Throwable throwable, String s, String s1) {
+                    public void handleException(Throwable throwable, String code, String msg) {
                         mView.dismissLoadingView();
+                        mView.showDetailError(msg);
+                    }
+
+                    @Override
+                    public boolean isShowCommError() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isShowBusinessError() {
+                        return false;
                     }
                 });
     }
@@ -148,8 +164,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
         }
         //如果是好友，则跳转到聊天页面
         if (mFriendInfo.isFriended()) {
-            //TODO 跳转到聊天页面
-
+            NavigationHelper.toSessionDetail(mContext, mFriendInfo.getFriendImAccId());
         } else {
             if (FriendDetailActivity.APPLY_OVERDUE.equals(mApplyStatus)) {
                 mView.showFriendApplyOverdueDialog();
@@ -231,6 +246,8 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                         //备注名修改成功
                         mFriendInfo.setStageName(remark);
                         mView.showNickname(mFriendInfo.getNickName(), remark);
+
+                        EventBus.getDefault().post(new UpdateFriendEvent());
                     }
 
                     @Override
@@ -255,6 +272,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                         mView.toastMessage("已解除好友关系");
                         mFriendInfo.setFriended(false);
                         mView.showButtonText("添加朋友");
+                        EventBus.getDefault().post(new DeleteFriendEvent(mFriendInfo.getFriendId()));
                     }
 
                     @Override
@@ -282,6 +300,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                         mFriendInfo.setFriended(true);
                         mApplyStatus = null;
                         mView.showButtonText("发消息");
+                        EventBus.getDefault().post(new AddFriendEvent());
                     }
 
                     @Override

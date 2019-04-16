@@ -19,5 +19,5 @@ public class FriendInfo {
     private int customerType;
     private String stageName;
     private boolean sysBlackStatus;
-
+    private String friendImAccId;
 }

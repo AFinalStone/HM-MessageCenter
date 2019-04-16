@@ -106,6 +106,7 @@ public class SendVerifyRequestActivity extends BaseActivity {
                     public void handleResult(Object o) {
                         dismissLoadingView();
                         ToastUtil.showStatusView(SendVerifyRequestActivity.this, "申请已发送");
+                        closeCurrPage();
                     }
 
                     @Override

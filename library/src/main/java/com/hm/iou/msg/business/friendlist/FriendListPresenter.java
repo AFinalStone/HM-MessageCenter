@@ -13,9 +13,15 @@ import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.FriendListBean;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
 import com.hm.iou.msg.business.friendlist.view.IFriend;
+import com.hm.iou.msg.event.AddFriendEvent;
+import com.hm.iou.msg.event.DeleteFriendEvent;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +42,13 @@ public class FriendListPresenter extends MvpActivityPresenter<FriendListContract
 
     public FriendListPresenter(@NonNull Context context, @NonNull FriendListContract.View view) {
         super(context, view);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -200,6 +213,17 @@ public class FriendListPresenter extends MvpActivityPresenter<FriendListContract
             });
         }
         return dataList;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventAddFriend(AddFriendEvent event) {
+        //刷新一下状态
+        loadDataFromServer();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventDeleteFriend(DeleteFriendEvent event) {
+        loadDataFromServer();
     }
 
 }
