@@ -11,11 +11,7 @@ import com.hm.iou.msg.bean.SimilarityContractMsgBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.AddFriendReqBean;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
-import com.hm.iou.msg.bean.req.GetContractMsgListReq;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
-import com.hm.iou.msg.bean.req.GetHmMsgListReq;
-import com.hm.iou.msg.bean.req.GetRemindBackListReq;
-import com.hm.iou.msg.bean.req.GetSimilarityContractListReq;
 import com.hm.iou.msg.bean.req.ReportUserReqBean;
 import com.hm.iou.msg.bean.req.UpdateRemarkNameReqBean;
 import com.hm.iou.sharedata.model.BaseResponse;
@@ -34,20 +30,20 @@ import retrofit2.http.Query;
 
 public interface MsgService {
 
-    @GET("/api/message/messageCenter/v1/getUnReadMsgNum")
+    @GET("/api/message/messageCenter/v2/unReadMessages")
     Flowable<BaseResponse<UnReadMsgNumBean>> getUnReadMsgNum();
 
-    @POST("/api/message/messageCenter/v1/getHmMsgList")
-    Flowable<BaseResponse<List<HmMsgBean>>> getHmMsgList(@Body GetHmMsgListReq req);
+    @GET("/api/message/messageCenter/v2/getButlerMessage")
+    Flowable<BaseResponse<List<HmMsgBean>>> getHmMsgList();
 
-    @POST("/api/message/messageCenter/v1/getContractMsgList")
-    Flowable<BaseResponse<List<ContractMsgBean>>> getContractMsgList(@Body GetContractMsgListReq req);
+    @GET("/api/message/messageCenter/v2/getContractMessage")
+    Flowable<BaseResponse<List<ContractMsgBean>>> getContractMsgList();
 
-    @POST("/api/message/messageCenter/v1/getRemindBackList")
-    Flowable<BaseResponse<List<RemindBackMsgBean>>> getRemindBackList(@Body GetRemindBackListReq req);
+    @GET("/api/message/messageCenter/v2/getWaitRepayMessage")
+    Flowable<BaseResponse<List<RemindBackMsgBean>>> getRemindBackList();
 
-    @POST("/api/message/messageCenter/v1/getSimilarityContractList")
-    Flowable<BaseResponse<List<SimilarityContractMsgBean>>> getSimilarityContractList(@Body GetSimilarityContractListReq req);
+    @GET("/api/message/messageCenter/v2/getSimilarContractMessage")
+    Flowable<BaseResponse<List<SimilarityContractMsgBean>>> getSimilarityContractList();
 
     @POST("/api/news/friend/v1/getMailList")
     Flowable<BaseResponse<List<FriendBean>>> getFriendList(@Body GetFriendListReq req);

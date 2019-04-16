@@ -16,14 +16,13 @@ import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.bean.ChatMsgBean;
+import com.hm.iou.msg.bean.MsgListHeaderBean;
 import com.hm.iou.msg.business.message.MsgCenterContract;
 import com.hm.iou.msg.business.message.MsgCenterPresenter;
-import com.hm.iou.msg.bean.MsgListHeaderBean;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.tools.StatusBarUtil;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
-import com.netease.nim.uikit.api.NimUIKit;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -172,9 +171,12 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
     }
 
     @Override
-    public void refreshItem(int position) {
-        mAdapter.notifyItemChanged(position);
+    public void refreshHeaderModule(MsgListHeaderBean msgListHeaderBean) {
+        if (mHeaderViewHelper != null) {
+            mHeaderViewHelper.updateModuleItem(msgListHeaderBean);
+        }
     }
+
 
     @Override
     public void enableRefresh() {

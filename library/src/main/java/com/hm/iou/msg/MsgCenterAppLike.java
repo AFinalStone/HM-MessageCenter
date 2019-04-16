@@ -21,6 +21,7 @@ import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.UIKitOptions;
 import com.netease.nim.uikit.api.model.session.SessionEventListener;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.auth.LoginInfo;
@@ -48,7 +49,7 @@ public class MsgCenterAppLike {
     public static final String EXTRA_KEY_INIT_IM = "MsgCenter_initIM";
 
     private static MsgCenterAppLike mApp;
-    private boolean mHaveInitIM = false;//是否已经初始化IM
+    public boolean mHaveInitIM = false;//是否已经初始化IM
 
 
     public static MsgCenterAppLike getInstance() {
@@ -116,22 +117,22 @@ public class MsgCenterAppLike {
                 };
                 NimUIKit.setSessionListener(listener);
                 //登陆
-//                NimUIKit.login(loginInfo, new RequestCallback<LoginInfo>() {
-//                    @Override
-//                    public void onSuccess(LoginInfo param) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onFailed(int code) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onException(Throwable exception) {
-//
-//                    }
-//                });
+                NimUIKit.login(loginInfo, new RequestCallback<LoginInfo>() {
+                    @Override
+                    public void onSuccess(LoginInfo param) {
+
+                    }
+
+                    @Override
+                    public void onFailed(int code) {
+
+                    }
+
+                    @Override
+                    public void onException(Throwable exception) {
+
+                    }
+                });
             }
             mHaveInitIM = true;
         }
@@ -157,7 +158,7 @@ public class MsgCenterAppLike {
         config.ledOnMs = 1000;
         config.ledOffMs = 1500;
         // 通知铃声的uri字符串
-        config.notificationSound = "android.resource://com.netease.nim.demo/raw/msg";
+        config.notificationSound = "android.resource://" + mContext.getPackageName() + "/raw/msg";
         options.statusBarNotificationConfig = config;
 
         // 配置保存图片，文件，log 等数据的目录
@@ -212,12 +213,12 @@ public class MsgCenterAppLike {
 
     private LoginInfo getLoginInfo() {
         com.hm.iou.sharedata.model.UserInfo userInfo = UserManager.getInstance(mContext).getUserInfo();
-        if (userInfo == null || TextUtils.isEmpty(userInfo.getImToken())) {
+        if (userInfo == null || TextUtils.isEmpty(userInfo.getImAccId()) || TextUtils.isEmpty(userInfo.getImToken())) {
             return null;
         }
-        String userId = userInfo.getUserId();
+        String imId = userInfo.getImAccId();
         String imToken = userInfo.getImToken();
-        return new LoginInfo(userId, imToken);
+        return new LoginInfo(imId, imToken);
     }
 
     /**
@@ -270,12 +271,10 @@ public class MsgCenterAppLike {
                 .subscribe(new Consumer<UnReadMsgNumBean>() {
                     @Override
                     public void accept(UnReadMsgNumBean unReadMsgNumBean) throws Exception {
-                        long numNoRead = 0;
-                        numNoRead = numNoRead + unReadMsgNumBean.getMsgContractUnread();
-                        numNoRead = numNoRead + unReadMsgNumBean.getMsgButlerUnread();
-                        numNoRead = numNoRead + unReadMsgNumBean.getMsgNoRepayUnread();
-                        numNoRead = numNoRead + unReadMsgNumBean.getMsgSimilarContractUnread();
-                        numNoRead = numNoRead + unReadMsgNumBean.getNewFriendUnread();
+                        int numNoRead = unReadMsgNumBean.getButlerMessageNumber()
+                                + unReadMsgNumBean.getContractNumber()
+                                + unReadMsgNumBean.getSimilarContractNumber()
+                                + unReadMsgNumBean.getWaitRepayNumber();
                         EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
                         CacheDataUtil.setNoReadMsgNum(mContext, unReadMsgNumBean);
                     }
@@ -294,13 +293,11 @@ public class MsgCenterAppLike {
         UnReadMsgNumBean unReadMsgNumBean = CacheDataUtil.getNoReadMsgNum(mContext);
         int numNoRead = 0;
         if (unReadMsgNumBean != null) {
-            numNoRead = numNoRead + unReadMsgNumBean.getMsgContractUnread();
-            numNoRead = numNoRead + unReadMsgNumBean.getMsgButlerUnread();
-            numNoRead = numNoRead + unReadMsgNumBean.getMsgNoRepayUnread();
-            numNoRead = numNoRead + unReadMsgNumBean.getMsgSimilarContractUnread();
-            numNoRead = numNoRead + unReadMsgNumBean.getNewFriendUnread();
+            numNoRead = unReadMsgNumBean.getButlerMessageNumber()
+                    + unReadMsgNumBean.getContractNumber()
+                    + unReadMsgNumBean.getSimilarContractNumber()
+                    + unReadMsgNumBean.getWaitRepayNumber();
         }
-
         EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
     }
 

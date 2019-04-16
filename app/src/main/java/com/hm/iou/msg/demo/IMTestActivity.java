@@ -41,7 +41,6 @@ public class IMTestActivity extends AppCompatActivity {
         findViewById(R.id.btn_chat_with_another).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                String account = ((EditText) findViewById(R.id.et_another_account)).getText().toString();
                 NimUIKit.startP2PSession(IMTestActivity.this, "1000294");//方超
 //                NimUIKit.startP2PSession(IMTestActivity.this, "1000393");//石磊
             }
@@ -53,7 +52,7 @@ public class IMTestActivity extends AppCompatActivity {
             }
         });
         RxPermissions rxPermissions = new RxPermissions(this);
-        rxPermissions.request(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA, android.Manifest.permission.RECORD_AUDIO).subscribe(new Consumer<Boolean>() {
+        rxPermissions.request(android.Manifest.permission.CAMERA, android.Manifest.permission.RECORD_AUDIO).subscribe(new Consumer<Boolean>() {
             @Override
             public void accept(Boolean aBoolean) throws Exception {
 
@@ -63,10 +62,8 @@ public class IMTestActivity extends AppCompatActivity {
     }
 
     public void doLogin() {
-//        String account = ((EditText) findViewById(R.id.et_account)).getText().toString();
-//        String token = ((EditText) findViewById(R.id.et_token)).getText().toString();
-        String account = "1000393";//石磊
-        String token = "3ee5b627b483df7dad89ca1eeb5371bc";
+        String account = "d1000401";//石磊
+        String token = "0d1bc63b31d087162112252c87176edd";
 //        String account = "1000294";//方超
 //        String token = "5a5c5dd3f195bb0bf05e0de00b2237f6";
         LoginInfo loginInfo = new LoginInfo(account, token);

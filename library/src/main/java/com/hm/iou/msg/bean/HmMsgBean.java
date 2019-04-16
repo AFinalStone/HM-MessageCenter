@@ -168,7 +168,7 @@ public class HmMsgBean implements IHmMsgItem, Serializable {
         if (MsgType.CommuniqueIntro.getValue() == type) {
             return TYPE_COMMUNIQUE;
         }
-        return TYPE_AD_OR_SPORT;
+        return TYPE_ADVERTISEMENT;
     }
 
     @Override

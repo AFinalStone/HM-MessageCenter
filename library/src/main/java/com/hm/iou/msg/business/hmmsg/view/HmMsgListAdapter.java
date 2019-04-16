@@ -19,7 +19,7 @@ public class HmMsgListAdapter extends BaseMultiItemQuickAdapter<IHmMsgItem, Base
     public HmMsgListAdapter(Context context) {
         super(null);
         mContext = context;
-        addItemType(IHmMsgItem.TYPE_AD_OR_SPORT, R.layout.msgcenter_item_hm_msg_list_ad_or_sport);
+        addItemType(IHmMsgItem.TYPE_ADVERTISEMENT, R.layout.msgcenter_item_hm_msg_list_ad_or_sport);
         addItemType(IHmMsgItem.TYPE_COMMUNIQUE, R.layout.msgcenter_item_hm_msg_list_notice);
     }
 
@@ -27,7 +27,7 @@ public class HmMsgListAdapter extends BaseMultiItemQuickAdapter<IHmMsgItem, Base
     protected void convert(BaseViewHolder helper, IHmMsgItem item) {
         helper.setText(R.id.tv_title, item.getMsgTitle());
 
-        if (helper.getItemViewType() == IHmMsgItem.TYPE_AD_OR_SPORT) {
+        if (helper.getItemViewType() == IHmMsgItem.TYPE_ADVERTISEMENT) {
             String msgImage = item.getMsgImage();
             if (TextUtils.isEmpty(msgImage)) {
                 ImageLoader.getInstance(mContext).displayImage(R.mipmap.msgcenter_icon_load_image_error_default, (ImageView) helper.getView(R.id.imageView));

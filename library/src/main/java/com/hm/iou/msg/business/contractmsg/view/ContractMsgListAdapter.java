@@ -23,6 +23,7 @@ public class ContractMsgListAdapter extends BaseQuickAdapter<IContractMsgItem, B
     protected void convert(BaseViewHolder helper, IContractMsgItem item) {
         //时间
         helper.setText(R.id.tv_time, item.getITime());
+        helper.setGone(R.id.tv_time, item.ifIShowTime());
         //标题
         helper.setText(R.id.tv_title, item.getITitle());
         //内容

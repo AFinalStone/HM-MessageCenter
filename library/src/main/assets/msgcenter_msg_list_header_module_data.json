@@ -11,20 +11,20 @@
     "moduleId": "msg_center_msg_list_header_remind_to_back",
     "image": "hmiou://mipmap/msgcenter_ic_msg_list_remind_to_back",
     "url": "hmiou://m.54jietiao.com/message/remind_back_msg",
-    "redMsgNum": 99
+    "redMsgNum": 0
   },
   {
     "name": "疑似合同",
     "moduleId": "msg_center_msg_list_header_similarity_contract",
     "image": "hmiou://mipmap/msgcenter_ic_msg_list_similarity_contract",
     "url": "hmiou://m.54jietiao.com/message/similarity_contract",
-    "redMsgNum": 9
+    "redMsgNum": 0
   },
   {
     "name": "管家消息",
     "moduleId": "msg_center_msg_list_header_hm_msg",
     "image": "hmiou://mipmap/msgcenter_ic_msg_list_hm_msg",
     "url": "hmiou://m.54jietiao.com/message/hm_msg",
-    "redMsgNum": 102
+    "redMsgNum": 0
   }
 ]

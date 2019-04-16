@@ -9,7 +9,6 @@ import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.HmMsgBean;
-import com.hm.iou.msg.bean.req.GetHmMsgListReq;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.hm.iou.tools.ToastUtil;
 import com.trello.rxlifecycle2.android.ActivityEvent;
@@ -77,8 +76,7 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
     @Override
     public void getMsgListFromServer() {
         //重新获取未读消息数量
-        GetHmMsgListReq req = new GetHmMsgListReq();
-        MsgApi.getHmMsgList(req).compose(getProvider().<BaseResponse<List<HmMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
+        MsgApi.getHmMsgList().compose(getProvider().<BaseResponse<List<HmMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<List<HmMsgBean>>handleResponse())
                 .subscribeWith(new CommSubscriber<List<HmMsgBean>>(mView) {
                     @Override
@@ -117,8 +115,7 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
     }
 
     private void getInitData() {
-        GetHmMsgListReq req = new GetHmMsgListReq();
-        MsgApi.getHmMsgList(req)
+        MsgApi.getHmMsgList()
                 .compose(getProvider().<BaseResponse<List<HmMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<List<HmMsgBean>>handleResponse())
                 .subscribeWith(new CommSubscriber<List<HmMsgBean>>(mView) {

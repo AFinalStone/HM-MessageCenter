@@ -8,7 +8,6 @@ import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.SimilarityContractMsgBean;
-import com.hm.iou.msg.bean.req.GetSimilarityContractListReq;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -31,8 +30,7 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
     @Override
     public void init() {
         mView.showInitLoading();
-        GetSimilarityContractListReq req = new GetSimilarityContractListReq();
-        MsgApi.getSimilarityContractList(req)
+        MsgApi.getSimilarityContractList()
                 .compose(getProvider().<BaseResponse<List<SimilarityContractMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<List<SimilarityContractMsgBean>>handleResponse())
                 .subscribeWith(new CommSubscriber<List<SimilarityContractMsgBean>>(mView) {
@@ -66,8 +64,7 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
 
     @Override
     public void getMsgList() {
-        GetSimilarityContractListReq req = new GetSimilarityContractListReq();
-        MsgApi.getSimilarityContractList(req)
+        MsgApi.getSimilarityContractList()
                 .compose(getProvider().<BaseResponse<List<SimilarityContractMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<List<SimilarityContractMsgBean>>handleResponse())
                 .subscribeWith(new CommSubscriber<List<SimilarityContractMsgBean>>(mView) {
