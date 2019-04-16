@@ -1,13 +1,13 @@
 package com.hm.iou.msg.api;
 
-import com.hm.iou.msg.bean.ContractMsgBean;
+import com.hm.iou.database.table.msg.ContractMsgDbData;
+import com.hm.iou.database.table.msg.RemindBackMsgDbData;
+import com.hm.iou.database.table.msg.SimilarityContractMsgDbData;
 import com.hm.iou.msg.bean.FriendApplyRecordListBean;
 import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.bean.FriendListBean;
 import com.hm.iou.msg.bean.HmMsgBean;
-import com.hm.iou.msg.bean.RemindBackMsgBean;
 import com.hm.iou.msg.bean.ReportItemBean;
-import com.hm.iou.msg.bean.SimilarityContractMsgBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.AddFriendReqBean;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
@@ -61,10 +61,10 @@ public class MsgApi {
      *
      * @return
      */
-    public static Flowable<BaseResponse<List<ContractMsgBean>>> getContractMsgList() {
+    public static Flowable<BaseResponse<List<ContractMsgDbData>>> getContractMsgList() {
         return getService().getContractMsgList()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .observeOn(Schedulers.io());
     }
 
     /**
@@ -72,7 +72,7 @@ public class MsgApi {
      *
      * @return
      */
-    public static Flowable<BaseResponse<List<RemindBackMsgBean>>> getRemindBackList() {
+    public static Flowable<BaseResponse<List<RemindBackMsgDbData>>> getRemindBackList() {
         return getService().getRemindBackList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -83,7 +83,7 @@ public class MsgApi {
      *
      * @return
      */
-    public static Flowable<BaseResponse<List<SimilarityContractMsgBean>>> getSimilarityContractList() {
+    public static Flowable<BaseResponse<List<SimilarityContractMsgDbData>>> getSimilarityContractList() {
         return getService().getSimilarityContractList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

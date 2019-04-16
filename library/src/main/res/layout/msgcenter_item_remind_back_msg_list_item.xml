@@ -39,6 +39,7 @@
             style="@style/UikitTextView"
             android:layout_marginStart="62dp"
             android:layout_marginTop="19dp"
+            android:textSize="@dimen/textFontSize_16"
             tools:text="小条君您好！您有一份“合同类型”即将到还款日  " />
 
         <TextView
