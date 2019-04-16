@@ -6,13 +6,20 @@ import android.support.annotation.NonNull;
 import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
+import com.hm.iou.database.MsgDbHelper;
+import com.hm.iou.database.table.msg.SimilarityContractMsgDbData;
+import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
-import com.hm.iou.msg.bean.SimilarityContractMsgBean;
+import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 获取消息
@@ -31,17 +38,31 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
     public void init() {
         mView.showInitLoading();
         MsgApi.getSimilarityContractList()
-                .compose(getProvider().<BaseResponse<List<SimilarityContractMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
-                .map(RxUtil.<List<SimilarityContractMsgBean>>handleResponse())
-                .subscribeWith(new CommSubscriber<List<SimilarityContractMsgBean>>(mView) {
+                .compose(getProvider().<BaseResponse<List<SimilarityContractMsgDbData>>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<List<SimilarityContractMsgDbData>>handleResponse())
+                .map(new Function<List<SimilarityContractMsgDbData>, List<SimilarityContractMsgDbData>>() {
                     @Override
-                    public void handleResult(List<SimilarityContractMsgBean> list) {
+                    public List<SimilarityContractMsgDbData> apply(List<SimilarityContractMsgDbData> list) throws Exception {
+                        MsgDbHelper.saveOrUpdateSimilarityContractMsgList(list);
+                        List<SimilarityContractMsgDbData> resultList = MsgDbHelper.getSimilarityContractMsgList();
+                        if (resultList == null) {
+                            resultList = new ArrayList<>();
+                        }
+                        Logger.d("thread_name====" + Thread.currentThread().getName());
+                        return resultList;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new CommSubscriber<List<SimilarityContractMsgDbData>>(mView) {
+                    @Override
+                    public void handleResult(List<SimilarityContractMsgDbData> list) {
                         mView.hideInitLoading();
                         mView.enableRefresh();
                         if (list == null || list.size() == 0) {
                             mView.showDataEmpty();
                         } else {
-                            mView.showMsgList((ArrayList) list);
+                            mView.showMsgList(DataChangeUtil.changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(list));
                         }
                     }
 
@@ -51,12 +72,12 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                     }
 
                     @Override
-                    public boolean isShowCommError() {
+                    public boolean isShowBusinessError() {
                         return false;
                     }
 
                     @Override
-                    public boolean isShowBusinessError() {
+                    public boolean isShowCommError() {
                         return false;
                     }
                 });
@@ -65,22 +86,47 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
     @Override
     public void getMsgList() {
         MsgApi.getSimilarityContractList()
-                .compose(getProvider().<BaseResponse<List<SimilarityContractMsgBean>>>bindUntilEvent(ActivityEvent.DESTROY))
-                .map(RxUtil.<List<SimilarityContractMsgBean>>handleResponse())
-                .subscribeWith(new CommSubscriber<List<SimilarityContractMsgBean>>(mView) {
+                .compose(getProvider().<BaseResponse<List<SimilarityContractMsgDbData>>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<List<SimilarityContractMsgDbData>>handleResponse())
+                .map(new Function<List<SimilarityContractMsgDbData>, List<SimilarityContractMsgDbData>>() {
                     @Override
-                    public void handleResult(List<SimilarityContractMsgBean> list) {
+                    public List<SimilarityContractMsgDbData> apply(List<SimilarityContractMsgDbData> list) throws Exception {
+                        MsgDbHelper.saveOrUpdateSimilarityContractMsgList(list);
+                        List<SimilarityContractMsgDbData> resultList = MsgDbHelper.getSimilarityContractMsgList();
+                        if (resultList == null) {
+                            resultList = new ArrayList<>();
+                        }
+                        Logger.d("thread_name====" + Thread.currentThread().getName());
+                        return resultList;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new CommSubscriber<List<SimilarityContractMsgDbData>>(mView) {
+                    @Override
+                    public void handleResult(List<SimilarityContractMsgDbData> list) {
                         mView.hidePullDownRefresh();
+                        mView.enableRefresh();
                         if (list == null || list.size() == 0) {
                             mView.showDataEmpty();
                         } else {
-                            mView.showMsgList((ArrayList) list);
+                            mView.showMsgList(DataChangeUtil.changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(list));
                         }
                     }
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
                         mView.hidePullDownRefresh();
+                    }
+
+                    @Override
+                    public boolean isShowBusinessError() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isShowCommError() {
+                        return false;
                     }
                 });
     }

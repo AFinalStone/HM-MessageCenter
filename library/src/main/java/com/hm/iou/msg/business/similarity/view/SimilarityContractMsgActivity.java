@@ -105,7 +105,7 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
         mLoadingInit.showDataFail(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.getMsgList();
+                mPresenter.init();
             }
         });
     }

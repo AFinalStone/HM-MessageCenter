@@ -53,6 +53,6 @@ public interface IContractMsgItem {
      *
      * @return
      */
-    String getIContractType();
+    int getIContractType();
 }
 

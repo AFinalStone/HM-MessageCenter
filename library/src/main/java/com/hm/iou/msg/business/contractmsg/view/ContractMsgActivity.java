@@ -106,7 +106,7 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
         mLoadingInit.showDataFail(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.getMsgList();
+                mPresenter.init();
             }
         });
     }

@@ -42,16 +42,16 @@ public interface ISimilarityContractMsgItem {
     public String getIBackType();
 
     /**
-     * 合同id
+     * 跳转的链接
      *
      * @return
      */
-    public String getIContractId();
+    public String getIJustUrl();
 
     /**
      * 合同类型
      *
      * @return
      */
-    public String getIContractType();
+    public int getIContractType();
 }
