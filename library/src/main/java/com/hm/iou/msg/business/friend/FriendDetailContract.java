@@ -8,6 +8,13 @@ public class FriendDetailContract {
 
     public interface View extends BaseContract.BaseView {
 
+        /**
+         * 显示加载详情失败后的错误信息
+         *
+         * @param errMsg
+         */
+        void showDetailError(String errMsg);
+
         void showAvatar(String avatar);
 
         void showNickname(String nickname, String remarkName);

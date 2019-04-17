@@ -112,6 +112,28 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
     }
 
     @Override
+    public void showDetailError(String errMsg) {
+        new HMAlertDialog.Builder(this)
+                .setMessage(errMsg)
+                .setPositiveButton("重试")
+                .setNegativeButton("退出")
+                .setOnClickListener(new HMAlertDialog.OnClickListener() {
+                    @Override
+                    public void onPosClick() {
+                        mPresenter.getUserInfo(mUserId, mApplyStatus);
+                    }
+
+                    @Override
+                    public void onNegClick() {
+
+                    }
+                })
+                .setCancelable(false)
+                .setCanceledOnTouchOutside(false)
+                .create().show();
+    }
+
+    @Override
     public void showAvatar(String avatar) {
         if (TextUtils.isEmpty(avatar)) {
             mIvAvatar.setImageResource(R.mipmap.uikit_icon_header_unknow);
