@@ -6,10 +6,10 @@ package com.hm.iou.msg.dict;
  */
 public enum MsgType {
 
-    Sport(40, "活动"),
-    Advertisement(10, "广告"),
+    Sport(10, "活动"),
     News(20, "头条"),
     FeedBack(30, "您有新的意见反馈结果"),
+    Advertisement(40, "广告"),
     CommuniqueIntro(100, "官方公告");
 
     private int value;

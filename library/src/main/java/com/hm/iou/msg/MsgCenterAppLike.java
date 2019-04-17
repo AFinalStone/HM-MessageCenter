@@ -2,7 +2,7 @@ package com.hm.iou.msg;
 
 import android.content.Context;
 
-import com.hm.iou.msg.im.IMInitHelper;
+import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.MsgCenterMsgUtil;
 import com.hm.iou.sharedata.event.CommBizEvent;
@@ -39,7 +39,7 @@ public class MsgCenterAppLike {
         mApp = this;
         EventBus.getDefault().register(this);
         //初始化IM
-        IMInitHelper.getInstance(mContext).initIM();
+        IMHelper.getInstance(mContext).initIM();
     }
 
     /**
@@ -80,7 +80,7 @@ public class MsgCenterAppLike {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventLogin(LoginSuccEvent event) {
         //初始化IM
-        IMInitHelper.getInstance(mContext).initIM();
+        IMHelper.getInstance(mContext).initIM();
     }
 
     /**

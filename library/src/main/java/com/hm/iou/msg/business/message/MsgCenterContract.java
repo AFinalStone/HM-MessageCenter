@@ -79,6 +79,11 @@ public class MsgCenterContract {
          */
         void onResume();
 
-
+        /**
+         * 删除
+         *
+         * @param position
+         */
+        void deleteItemByPosition(int position);
     }
 }

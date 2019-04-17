@@ -13,7 +13,8 @@ import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.bean.MsgListHeaderBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.dict.ModuleType;
-import com.hm.iou.msg.im.IMInitHelper;
+import com.hm.iou.msg.event.UpdateMsgCenterUnReadMsgNumEvent;
+import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.msg.util.MsgCenterMsgUtil;
@@ -53,6 +54,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     private String mRedFlagCount;
     //  创建观察者对象
     Observer<List<RecentContact>> mChatListObserver;
+    private boolean mIsNeedRefresh = true;//是否需要刷新
 
     public MsgCenterPresenter(@NonNull Context context, @NonNull MsgCenterContract.View view) {
         super(context, view);
@@ -82,7 +84,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     public void onViewCreated() {
         super.onViewCreated();
         EventBus.getDefault().register(this);
-        if (IMInitHelper.mHaveInitIM) {
+        if (IMHelper.mHaveInitIM) {
             //  注册/注销观察者
             NIMClient.getService(MsgServiceObserve.class)
                     .observeRecentContact(mChatListObserver, true);
@@ -93,7 +95,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
-        if (IMInitHelper.mHaveInitIM) {
+        if (IMHelper.mHaveInitIM) {
             //  注册/注销观察者
             NIMClient.getService(MsgServiceObserve.class)
                     .observeRecentContact(mChatListObserver, false);
@@ -110,7 +112,20 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
 
     @Override
     public void onResume() {
+        if (mIsNeedRefresh) {
+            MsgCenterMsgUtil.getMsgCenterNoReadNumFromServer(mContext);
+            mIsNeedRefresh = false;
+        }
+    }
 
+    @Override
+    public void deleteItemByPosition(int position) {
+        if (position >= 0 && position < mChatList.size()) {
+            ChatMsgBean msgBean = mChatList.get(position);
+            IMHelper.getInstance(mContext).deleteRecentContract(msgBean.getContactId());
+            mChatList.remove(msgBean);
+            mView.showMsgList(mChatList);
+        }
     }
 
     @Override
@@ -244,6 +259,16 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     public void getRedFlagCount() {
         mRedFlagCount = MsgCenterMsgUtil.getTopHeadRedFlagCount();
         mView.updateRedFlagCount(mRedFlagCount);
+    }
+
+    /**
+     * 用户进入了消息列表页面，需要重新刷新页面未读消息数量
+     *
+     * @param commBizEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvenUpdateUnReadMsgNum(UpdateMsgCenterUnReadMsgNumEvent commBizEvent) {
+        mIsNeedRefresh = true;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

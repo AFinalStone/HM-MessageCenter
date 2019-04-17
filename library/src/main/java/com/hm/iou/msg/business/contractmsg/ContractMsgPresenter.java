@@ -10,9 +10,12 @@ import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.msg.ContractMsgDbData;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
+import com.hm.iou.msg.event.UpdateMsgCenterUnReadMsgNumEvent;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +67,7 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                         } else {
                             mView.showMsgList(DataChangeUtil.changeContractMsgDbDataToIContractMsgItem(list));
                         }
+                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                     }
 
                     @Override
@@ -111,6 +115,7 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                         } else {
                             mView.showMsgList(DataChangeUtil.changeContractMsgDbDataToIContractMsgItem(list));
                         }
+                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                     }
 
                     @Override

@@ -42,6 +42,7 @@ public class MsgCenterMsgUtil {
                         int numNoRead = unReadMsgNumBean.getButlerMessageNumber()
                                 + unReadMsgNumBean.getContractNumber()
                                 + unReadMsgNumBean.getSimilarContractNumber()
+                                + unReadMsgNumBean.getFriendMessageNumber()
                                 + unReadMsgNumBean.getWaitRepayNumber();
                         EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
                         CacheDataUtil.setNoReadMsgNum(context, unReadMsgNumBean);
@@ -64,6 +65,7 @@ public class MsgCenterMsgUtil {
             numNoRead = unReadMsgNumBean.getButlerMessageNumber()
                     + unReadMsgNumBean.getContractNumber()
                     + unReadMsgNumBean.getSimilarContractNumber()
+                    + unReadMsgNumBean.getFriendMessageNumber()
                     + unReadMsgNumBean.getWaitRepayNumber();
         }
         EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));

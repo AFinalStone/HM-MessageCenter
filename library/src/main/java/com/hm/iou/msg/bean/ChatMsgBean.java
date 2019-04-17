@@ -22,7 +22,7 @@ public class ChatMsgBean {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof ChatMsgBean) {
-            return !TextUtils.isEmpty(fromAccount) && fromAccount.equals(((ChatMsgBean) obj).getFromAccount());
+            return !TextUtils.isEmpty(contactId) && contactId.equals(((ChatMsgBean) obj).getContactId());
         }
         return false;
     }
@@ -30,7 +30,7 @@ public class ChatMsgBean {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (fromAccount != null ? fromAccount.hashCode() : 0);
+        result = 31 * result + (contactId != null ? contactId.hashCode() : 0);
         return result;
     }
 }

@@ -56,7 +56,7 @@
 
     <com.hm.iou.uikit.HMBottomBarView
         android:layout_width="match_parent"
-        android:layout_height="62dip"
+        android:layout_height="50dip"
         app:bottomBackText="待还提醒" />
 </LinearLayout>
 

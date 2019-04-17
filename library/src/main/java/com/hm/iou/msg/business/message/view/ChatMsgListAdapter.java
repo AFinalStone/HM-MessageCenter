@@ -40,7 +40,7 @@ public class ChatMsgListAdapter extends BaseQuickAdapter<ChatMsgBean, BaseViewHo
         if (redMsgNum > 99) {
             dotTextView.setVisibility(View.VISIBLE);
             dotTextView.showMoreText();
-        } else if (redMsgNum > 1) {
+        } else if (redMsgNum >= 1) {
             dotTextView.setVisibility(View.VISIBLE);
             dotTextView.setText(String.valueOf(redMsgNum));
         } else {

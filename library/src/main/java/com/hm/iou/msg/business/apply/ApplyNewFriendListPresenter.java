@@ -13,9 +13,12 @@ import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.FriendApplyRecordListBean;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
 import com.hm.iou.msg.business.apply.view.IApplyNewFriend;
+import com.hm.iou.msg.event.UpdateMsgCenterUnReadMsgNumEvent;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +106,6 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
                     @Override
                     public List<FriendApplyRecord> apply(FriendApplyRecordListBean result) throws Exception {
                         List<FriendApplyRecord> list = result.getApplyRecordRespList();
-
                         //保存到数据库
                         FriendDbUtil.saveOrUpdateFriendApplyRecordList(list);
                         String lastPullDate = result.getLastReqDate();
@@ -128,6 +130,7 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
                             //刷新新的数据
                             loadDataFromCache(false);
                         }
+                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                     }
 
                     @Override

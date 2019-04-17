@@ -15,6 +15,7 @@ import com.hm.iou.msg.business.similarity.view.SimilarityContractMsgActivity;
 import com.hm.iou.network.HttpReqManager;
 import com.hm.iou.sharedata.UserManager;
 import com.hm.iou.sharedata.event.CommBizEvent;
+import com.hm.iou.sharedata.event.LoginSuccEvent;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.hm.iou.sharedata.model.UserInfo;
 import com.hm.iou.tools.ToastUtil;
@@ -141,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
                         UserManager.getInstance(MainActivity.this).updateOrSaveUserInfo(userInfo);
                         HttpReqManager.getInstance().setUserId(userInfo.getUserId());
                         HttpReqManager.getInstance().setToken(userInfo.getToken());
+                        EventBus.getDefault().post(new LoginSuccEvent());
                     }
                 }, new Consumer<Throwable>() {
                     @Override

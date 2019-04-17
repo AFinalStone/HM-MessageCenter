@@ -9,9 +9,12 @@ import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.msg.HmMsgDbData;
 import com.hm.iou.msg.api.MsgApi;
+import com.hm.iou.msg.event.UpdateMsgCenterUnReadMsgNumEvent;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +66,7 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                         } else {
                             mView.showMsgList(DataChangeUtil.changeHmMsgDbDataToIHmMsgItem(list));
                         }
+                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                     }
 
                     @Override
@@ -81,29 +85,6 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                     }
                 });
 
-//        mView.showInitLoading();
-//        Flowable.create(new FlowableOnSubscribe<List<HmMsgDbData>>() {
-//            @Override
-//            public void subscribe(FlowableEmitter<List<HmMsgDbData>> e) throws Exception {
-//                List<HmMsgDbData> listCache = MsgCenterDbHelper.getHmMsgList();
-//                e.onNext(listCache);
-//            }
-//        }, BackpressureStrategy.ERROR)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .compose(getProvider().<List<HmMsgDbData>>bindUntilEvent(ActivityEvent.DESTROY))
-//                .subscribe(new Consumer<List<HmMsgDbData>>() {
-//                    @Override
-//                    public void accept(List<HmMsgDbData> listCache) throws Exception {
-//                        mMsgListData = listCache;
-//                        getInitData();
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        getInitData();
-//                    }
-//                };
     }
 
     @Override
@@ -134,6 +115,7 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                         } else {
                             mView.showMsgList(DataChangeUtil.changeHmMsgDbDataToIHmMsgItem(list));
                         }
+                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                     }
 
                     @Override

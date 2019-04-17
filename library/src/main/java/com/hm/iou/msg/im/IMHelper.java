@@ -4,11 +4,11 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Process;
 import android.text.TextUtils;
 
 import com.hm.iou.base.file.FileUtil;
 import com.hm.iou.logger.Logger;
-import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.sharedata.UserManager;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.UIKitOptions;
@@ -18,10 +18,13 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.uinfo.model.UserInfo;
+
+import java.util.List;
 
 /**
  * @author syl
@@ -29,20 +32,20 @@ import com.netease.nimlib.sdk.uinfo.model.UserInfo;
  * IM初始化工具类
  */
 
-public class IMInitHelper {
+public class IMHelper {
 
     public static boolean mHaveInitIM = false;//是否已经初始化IM
-    private static IMInitHelper mImInitHelper;
+    private static IMHelper mImHelper;
     private Context mContext;
 
-    public static IMInitHelper getInstance(Context context) {
-        if (mImInitHelper == null) {
-            mImInitHelper = new IMInitHelper(context);
+    public static IMHelper getInstance(Context context) {
+        if (mImHelper == null) {
+            mImHelper = new IMHelper(context);
         }
-        return mImInitHelper;
+        return mImHelper;
     }
 
-    private IMInitHelper(Context context) {
+    private IMHelper(Context context) {
         this.mContext = context;
     }
 
@@ -55,6 +58,7 @@ public class IMInitHelper {
             NIMClient.init(mContext, loginInfo, options());
             String packageName = mContext.getPackageName();
             String processName = getProcessName();
+
             if (packageName.equals(processName)) {
                 // 初始化UIKit模块
                 NimUIKit.init(mContext, buildUIKitOptions());
@@ -65,7 +69,7 @@ public class IMInitHelper {
                     @Override
                     public void onAvatarClicked(Context context, IMMessage message) {
                         // 一般用于打开用户资料页面
-                        NavigationHelper.toFriendDetailPage(mContext, message.getFromAccount(), null, null);
+//                        NavigationHelper.toFriendDetailPage(mContext, message.getFromAccount(), null, null);
                         Logger.d("onAvatarClicked");
                     }
 
@@ -148,18 +152,17 @@ public class IMInitHelper {
                 UserInfo userInfo = new UserInfo() {
                     @Override
                     public String getAccount() {
-                        return "123";
+                        return "";
                     }
 
                     @Override
                     public String getName() {
-                        return "石头";
+                        return "";
                     }
 
                     @Override
                     public String getAvatar() {
-
-                        return "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1554904754963&di=0190a2aa4e57906eb5135d0667e9656e&imgtype=0&src=http%3A%2F%2Fwww.lovehhy.net%2Flib%2Fimg%2F9555118%2F1336676_0002011295.jpg";
+                        return "";
                     }
                 };
                 return userInfo;
@@ -194,31 +197,27 @@ public class IMInitHelper {
      * @return
      */
     private String getProcessName() {
-        String processName = null;
-
-        // ActivityManager
-        ActivityManager am = ((ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE));
-
-        while (true) {
-            for (ActivityManager.RunningAppProcessInfo info : am.getRunningAppProcesses()) {
-                if (info.pid == android.os.Process.myPid()) {
-                    processName = info.processName;
-                    break;
-                }
-            }
-
-            // go home
-            if (!TextUtils.isEmpty(processName)) {
-                return processName;
-            }
-
-            // take a rest and again
-            try {
-                Thread.sleep(100L);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
+        android.app.ActivityManager am = (android.app.ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> list = am.getRunningAppProcesses();
+        if (list == null) {
+            return null;
+        }
+        for (android.app.ActivityManager.RunningAppProcessInfo processInfo : list) {
+            if (processInfo.pid == Process.myPid()) {
+                return processInfo.processName;
             }
         }
+        return null;
+    }
+
+    /**
+     * 删除最近会话
+     *
+     * @param account
+     */
+    public void deleteRecentContract(String account) {
+        NIMClient.getService(MsgService.class)
+                .deleteRecentContact2(account, SessionTypeEnum.P2P);
     }
 
 }
