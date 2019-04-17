@@ -7,8 +7,10 @@ package com.hm.iou.msg.event;
 public class DeleteFriendEvent {
 
     public String friendId;
+    public String imAccId;
 
-    public DeleteFriendEvent(String friendId) {
+    public DeleteFriendEvent(String friendId, String imAccId) {
         this.friendId = friendId;
+        this.imAccId = imAccId;
     }
 }

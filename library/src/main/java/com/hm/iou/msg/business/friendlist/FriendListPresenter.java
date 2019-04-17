@@ -9,6 +9,7 @@ import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.database.FriendDbUtil;
 import com.hm.iou.database.table.FriendData;
+import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.FriendListBean;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
@@ -107,9 +108,9 @@ public class FriendListPresenter extends MvpActivityPresenter<FriendListContract
         MsgApi.getFriendList(req)
                 .compose(getProvider().<BaseResponse<FriendListBean>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<FriendListBean>handleResponse())
-                .map(new Function<FriendListBean, List<FriendData>>() {
+                .map(new Function<FriendListBean, Boolean>() {
                     @Override
-                    public List<FriendData> apply(FriendListBean result) throws Exception {
+                    public Boolean apply(FriendListBean result) throws Exception {
                         List<FriendData> list = result.getMailListRespList();
 
                         //保存到数据库
@@ -119,20 +120,22 @@ public class FriendListPresenter extends MvpActivityPresenter<FriendListContract
                         List<String> delList = result.getDelList();
                         if (delList != null && !delList.isEmpty()) {
                             for (String uid : delList) {
-                                FriendDbUtil.deleteFriendByUserId(uid);
+                                int r = FriendDbUtil.deleteFriendByUserId(uid);
+                                Logger.d("好友已被删除：" + r);
                             }
                         }
 
                         String lastPullDate = result.getLastReqDate();
                         //更新最近更新时间
                         CacheDataUtil.saveLastFriendPullDate(mContext, lastPullDate);
-                        return list != null ? list : new ArrayList<FriendData>();
+
+                        return (list == null || list.isEmpty()) && (delList == null || delList.isEmpty()) ? true : false;
                     }
                 })
-                .subscribeWith(new CommSubscriber<List<FriendData>>(mView) {
+                .subscribeWith(new CommSubscriber<Boolean>(mView) {
                     @Override
-                    public void handleResult(List<FriendData> list) {
-                        if (list == null || list.isEmpty()) {
+                    public void handleResult(Boolean isEmpty) {
+                        if (isEmpty) {
                             //说明没有新增数据
                             mView.hidePullDownRefresh();
                             mView.enableRefresh(true);
