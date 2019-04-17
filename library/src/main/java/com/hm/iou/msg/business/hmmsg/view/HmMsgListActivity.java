@@ -60,7 +60,6 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
                 if (R.id.ll_adOrSport == view.getId()) {
                     IHmMsgItem item = (IHmMsgItem) adapter.getItem(position);
                     NavigationHelper.toMsgDetail(mContext, item.getMsgDetailLinkUrl(), item.getMsgAutoId(), item.getMsgType());
-                    mPresenter.markHaveRead(position);
                 }
             }
         });

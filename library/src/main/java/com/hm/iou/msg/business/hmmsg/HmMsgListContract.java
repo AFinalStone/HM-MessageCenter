@@ -65,12 +65,5 @@ public class HmMsgListContract {
          */
         void getMsgListFromServer();
 
-        /**
-         * 标记为已读
-         *
-         * @param position 条目位置
-         */
-        void markHaveRead(int position);
-
     }
 }

@@ -67,37 +67,18 @@ public class MsgCenterContract {
 
     public interface Presenter extends BaseContract.BasePresenter {
 
-        /**
-         * 获取顶部模块
-         */
-        void getHeaderModules();
-
-        /**
-         * 获取会话列表
-         */
-        void getChatList();
+        void init();
 
         /**
          * 获取未读消息数量
          */
-        void getUnReadMsgNum();
-
-        /**
-         * 标记为已读
-         *
-         * @param position 条目位置
-         */
-        void markHaveRead(int position);
+        void refreshData();
 
         /**
          * 需要刷新未读消息数量
          */
         void onResume();
 
-        /**
-         * 获取头部红点数量
-         */
-        void getRedFlagCount();
 
     }
 }

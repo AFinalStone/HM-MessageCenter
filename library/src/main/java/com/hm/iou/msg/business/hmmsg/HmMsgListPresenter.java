@@ -6,9 +6,9 @@ import android.support.annotation.NonNull;
 import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
-import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.HmMsgBean;
+import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.hm.iou.tools.ToastUtil;
 import com.trello.rxlifecycle2.android.ActivityEvent;
@@ -153,14 +153,6 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                         return false;
                     }
                 });
-    }
-
-    @Override
-    public void markHaveRead(int position) {
-        HmMsgBean data = mMsgListData.get(position);
-        data.setRead(true);
-        CacheDataUtil.updateMsgItemToCache(data);
-        mView.refreshItem(position);
     }
 
 }
