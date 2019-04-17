@@ -8,23 +8,32 @@ import android.os.Process;
 import android.text.TextUtils;
 
 import com.hm.iou.base.file.FileUtil;
-import com.hm.iou.logger.Logger;
+import com.hm.iou.base.utils.RxUtil;
+import com.hm.iou.msg.api.MsgApi;
+import com.hm.iou.msg.bean.ChatMsgBean;
+import com.hm.iou.msg.bean.GetOrRefreshIMTokenBean;
+import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.UserManager;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.UIKitOptions;
-import com.netease.nim.uikit.api.model.session.SessionEventListener;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
-import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * @author syl
@@ -37,6 +46,10 @@ public class IMHelper {
     public static boolean mHaveInitIM = false;//是否已经初始化IM
     private static IMHelper mImHelper;
     private Context mContext;
+    //  创建观察者对象
+    private Observer<List<RecentContact>> mChatListObserver;
+    private List<OnChatListChangeListener> mOnChatListChangeListenerList;
+    private Disposable mDisLogin;
 
     public static IMHelper getInstance(Context context) {
         if (mImHelper == null) {
@@ -51,11 +64,7 @@ public class IMHelper {
 
     public void initIM() {
         if (!mHaveInitIM) {
-            LoginInfo loginInfo = getLoginInfo();
-            if (loginInfo == null) {
-                return;
-            }
-            NIMClient.init(mContext, loginInfo, options());
+            NIMClient.init(mContext, getLoginInfo(), options());
             String packageName = mContext.getPackageName();
             String processName = getProcessName();
 
@@ -64,46 +73,6 @@ public class IMHelper {
                 NimUIKit.init(mContext, buildUIKitOptions());
                 //黑名单
                 NimUIKit.registerTipMsgViewHolder(MsgViewHolderTip.class);
-                //头像点击事件
-                SessionEventListener listener = new SessionEventListener() {
-                    @Override
-                    public void onAvatarClicked(Context context, IMMessage message) {
-                        // 一般用于打开用户资料页面
-//                        NavigationHelper.toFriendDetailPage(mContext, message.getFromAccount(), null, null);
-                        Logger.d("onAvatarClicked");
-                    }
-
-                    @Override
-                    public void onAvatarLongClicked(Context context, IMMessage message) {
-                        // 一般用于群组@功能，或者弹出菜单，做拉黑，加好友等功能
-                        Logger.d("onAvatarLongClicked");
-                    }
-
-                    @Override
-                    public void onAckMsgClicked(Context context, IMMessage message) {
-                        // 已读回执事件处理，用于群组的已读回执事件的响应，弹出消息已读详情
-//                AckMsgInfoActivity.start(context, message);
-                        Logger.d("onAckMsgClicked");
-                    }
-                };
-                NimUIKit.setSessionListener(listener);
-                //登陆
-                NimUIKit.login(loginInfo, new RequestCallback<LoginInfo>() {
-                    @Override
-                    public void onSuccess(LoginInfo param) {
-
-                    }
-
-                    @Override
-                    public void onFailed(int code) {
-
-                    }
-
-                    @Override
-                    public void onException(Throwable exception) {
-
-                    }
-                });
             }
             mHaveInitIM = true;
         }
@@ -218,6 +187,113 @@ public class IMHelper {
     public void deleteRecentContract(String account) {
         NIMClient.getService(MsgService.class)
                 .deleteRecentContact2(account, SessionTypeEnum.P2P);
+    }
+
+    /**
+     * 登陆
+     */
+    public void login() {
+        if (mHaveInitIM) {
+            if (UserManager.getInstance(mContext).isLoginIM()) {
+                return;
+            }
+            if (mDisLogin != null && !mDisLogin.isDisposed()) {
+                mDisLogin.dispose();
+            }
+            mDisLogin = MsgApi.getOrRefreshIMToken()
+                    .map(RxUtil.<GetOrRefreshIMTokenBean>handleResponse())
+                    .subscribe(new Consumer<GetOrRefreshIMTokenBean>() {
+                        @Override
+                        public void accept(GetOrRefreshIMTokenBean getOrRefreshIMTokenBean) throws Exception {
+                            UserManager.getInstance(mContext).updateIMId(getOrRefreshIMTokenBean.getImAccId());
+                            UserManager.getInstance(mContext).updateIMToken(getOrRefreshIMTokenBean.getImToken());
+                            //登陆
+                            NimUIKit.login(getLoginInfo(), new RequestCallback<LoginInfo>() {
+                                @Override
+                                public void onSuccess(LoginInfo param) {
+                                    if (mChatListObserver == null) {
+                                        mChatListObserver = new Observer<List<RecentContact>>() {
+                                            @Override
+                                            public void onEvent(List<RecentContact> messages) {
+                                                if (mOnChatListChangeListenerList == null) {
+                                                    return;
+                                                }
+                                                for (OnChatListChangeListener listener : mOnChatListChangeListenerList) {
+                                                    List<ChatMsgBean> chatList = DataChangeUtil.changeRecentContactToIChatMsgItem(messages);
+                                                    listener.onDataChange(chatList);
+                                                }
+                                            }
+                                        };
+                                        //  注销观察者
+                                        NIMClient.getService(MsgServiceObserve.class)
+                                                .observeRecentContact(mChatListObserver, true);
+                                    }
+                                }
+
+                                @Override
+                                public void onFailed(int code) {
+
+                                }
+
+                                @Override
+                                public void onException(Throwable exception) {
+
+                                }
+                            });
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+
+                        }
+                    });
+        }
+    }
+
+    /**
+     * 登出，释放相关资源
+     */
+    public void logout() {
+        if (mHaveInitIM) {
+            //注销会话列表观察者
+            mChatListObserver = null;
+            mOnChatListChangeListenerList = null;
+            NIMClient.getService(MsgServiceObserve.class)
+                    .observeRecentContact(mChatListObserver, false);
+            //调用登出接口
+            NimUIKit.logout();
+        }
+    }
+
+    /**
+     * 添加监听
+     */
+    public void addOnChatListChangeListener(OnChatListChangeListener onChatListChangeListener) {
+        if (mOnChatListChangeListenerList == null) {
+            mOnChatListChangeListenerList = new ArrayList<>();
+        }
+        mOnChatListChangeListenerList.add(onChatListChangeListener);
+    }
+
+    /**
+     * 移除监听
+     */
+    public void removeOnChatListChangeListener(OnChatListChangeListener onChatListChangeListener) {
+        if (mOnChatListChangeListenerList != null) {
+            mOnChatListChangeListenerList.remove(onChatListChangeListener);
+        }
+    }
+
+    /**
+     * 会话列表变化监听对象
+     */
+    public interface OnChatListChangeListener {
+        /**
+         * 数据发生了变化
+         *
+         * @param chatMsgBeanList
+         */
+        void onDataChange(List<ChatMsgBean> chatMsgBeanList);
     }
 
 }

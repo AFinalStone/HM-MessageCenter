@@ -81,6 +81,7 @@ public class MsgCenterAppLike {
     public void onEventLogin(LoginSuccEvent event) {
         //初始化IM
         IMHelper.getInstance(mContext).initIM();
+        IMHelper.getInstance(mContext).login();
     }
 
     /**
@@ -91,6 +92,7 @@ public class MsgCenterAppLike {
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onEventLogout(LogoutEvent event) {
         CacheDataUtil.clearAllCache(mContext);
+        IMHelper.getInstance(mContext).logout();
     }
 
 

@@ -7,7 +7,7 @@ import com.hm.iou.database.table.msg.SimilarityContractMsgDbData;
 import com.hm.iou.msg.bean.FriendApplyRecordListBean;
 import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.bean.FriendListBean;
-import com.hm.iou.msg.bean.HmMsgBean;
+import com.hm.iou.msg.bean.GetOrRefreshIMTokenBean;
 import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.AddFriendReqBean;
@@ -84,5 +84,8 @@ public interface MsgService {
 
     @GET("/api/news/friend/v1/delApplyRecord")
     Flowable<BaseResponse<Object>> deleteApplyRecord(@Query("applyId") String applyId);
+
+    @GET("/api/news/friend/v1/getOrRefreshToken")
+    Flowable<BaseResponse<GetOrRefreshIMTokenBean>> getOrRefreshIMToken();
 
 }

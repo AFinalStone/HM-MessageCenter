@@ -7,6 +7,7 @@ import com.hm.iou.database.table.msg.SimilarityContractMsgDbData;
 import com.hm.iou.msg.bean.FriendApplyRecordListBean;
 import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.bean.FriendListBean;
+import com.hm.iou.msg.bean.GetOrRefreshIMTokenBean;
 import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.AddFriendReqBean;
@@ -184,6 +185,18 @@ public class MsgApi {
 
     public static Flowable<BaseResponse<Object>> deleteApplyRecord(String applyId) {
         return getService().deleteApplyRecord(applyId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 获取或者更新Im_Token
+     *
+     * @param applyId
+     * @return
+     */
+    public static Flowable<BaseResponse<GetOrRefreshIMTokenBean>> getOrRefreshIMToken() {
+        return getService().getOrRefreshIMToken()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

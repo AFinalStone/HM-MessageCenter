@@ -16,6 +16,7 @@ import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
 import com.hm.iou.msg.event.AddFriendEvent;
 import com.hm.iou.msg.event.DeleteFriendEvent;
 import com.hm.iou.msg.event.UpdateFriendEvent;
+import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -296,11 +297,13 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                     @Override
                     public void handleResult(Object o) {
                         mView.dismissLoadingView();
-                        //TODO 添加为好友了，后续通知
                         mFriendInfo.setFriended(true);
                         mApplyStatus = null;
                         mView.showButtonText("发消息");
                         EventBus.getDefault().post(new AddFriendEvent());
+                        //初始化
+                        IMHelper.getInstance(mContext).initIM();
+                        IMHelper.getInstance(mContext).login();
                     }
 
                     @Override

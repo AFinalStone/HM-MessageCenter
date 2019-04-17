@@ -20,9 +20,7 @@ import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.msg.util.MsgCenterMsgUtil;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgService;
-import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
@@ -54,28 +52,28 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     private List<ChatMsgBean> mChatList;
     private String mRedFlagCount;
     //  创建观察者对象
-    Observer<List<RecentContact>> mChatListObserver;
+    IMHelper.OnChatListChangeListener mChatListChangeListener;
     private boolean mIsNeedRefresh = false;//是否需要刷新
 
     public MsgCenterPresenter(@NonNull Context context, @NonNull MsgCenterContract.View view) {
         super(context, view);
         mChatList = new ArrayList<>();
-        if (mChatListObserver == null) {
-            mChatListObserver = new Observer<List<RecentContact>>() {
+        if (mChatListChangeListener == null) {
+            mChatListChangeListener = new IMHelper.OnChatListChangeListener() {
                 @Override
-                public void onEvent(List<RecentContact> messages) {
-                    if (mView != null) {
-                        List<ChatMsgBean> newList = DataChangeUtil.changeRecentContactToIChatMsgItem(messages);
-                        for (ChatMsgBean model : newList) {
-                            int index = mChatList.indexOf(model);
-                            if (index == -1) {
-                                mChatList.add(0, model);
-                            } else {
-                                mChatList.set(index, model);
-                            }
-                        }
-                        mView.showMsgList(mChatList);
+                public void onDataChange(List<ChatMsgBean> chatMsgBeanList) {
+                    if (chatMsgBeanList == null) {
+                        return;
                     }
+                    for (ChatMsgBean model : chatMsgBeanList) {
+                        int index = mChatList.indexOf(model);
+                        if (index == -1) {
+                            mChatList.add(0, model);
+                        } else {
+                            mChatList.set(index, model);
+                        }
+                    }
+                    mView.showMsgList(mChatList);
                 }
             };
         }
@@ -85,22 +83,14 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     public void onViewCreated() {
         super.onViewCreated();
         EventBus.getDefault().register(this);
-        if (IMHelper.mHaveInitIM) {
-            //  注册/注销观察者
-            NIMClient.getService(MsgServiceObserve.class)
-                    .observeRecentContact(mChatListObserver, true);
-        }
+        IMHelper.getInstance(mContext).addOnChatListChangeListener(mChatListChangeListener);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
-        if (IMHelper.mHaveInitIM) {
-            //  注册/注销观察者
-            NIMClient.getService(MsgServiceObserve.class)
-                    .observeRecentContact(mChatListObserver, false);
-        }
+        IMHelper.getInstance(mContext).removeOnChatListChangeListener(mChatListChangeListener);
     }
 
     @Override

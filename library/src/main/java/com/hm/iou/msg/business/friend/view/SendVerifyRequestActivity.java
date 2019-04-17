@@ -14,6 +14,7 @@ import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.api.MsgApi;
+import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.sharedata.UserManager;
 import com.hm.iou.sharedata.model.UserInfo;
 import com.hm.iou.tools.StringUtil;
@@ -106,6 +107,10 @@ public class SendVerifyRequestActivity extends BaseActivity {
                     public void handleResult(Object o) {
                         dismissLoadingView();
                         ToastUtil.showStatusView(SendVerifyRequestActivity.this, "申请已发送");
+
+                        //初始化
+                        IMHelper.getInstance(mContext).initIM();
+                        IMHelper.getInstance(mContext).login();
                         closeCurrPage();
                     }
 
