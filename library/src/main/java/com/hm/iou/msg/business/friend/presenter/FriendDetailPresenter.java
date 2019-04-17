@@ -272,7 +272,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                         mView.toastMessage("已解除好友关系");
                         mFriendInfo.setFriended(false);
                         mView.showButtonText("添加朋友");
-                        EventBus.getDefault().post(new DeleteFriendEvent(mFriendInfo.getFriendId()));
+                        EventBus.getDefault().post(new DeleteFriendEvent(mFriendInfo.getFriendId(), mFriendInfo.getFriendImAccId()));
                     }
 
                     @Override
