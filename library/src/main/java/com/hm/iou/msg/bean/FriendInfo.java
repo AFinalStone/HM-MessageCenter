@@ -11,7 +11,6 @@ public class FriendInfo {
     private String avatarUrl;
     private boolean blackStatus;
     private String friendId;
-    private String friendImAccId;
     private boolean friended;
     private String location;
     private String nickName;
