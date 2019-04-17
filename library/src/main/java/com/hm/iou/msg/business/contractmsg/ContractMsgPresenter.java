@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
-import com.hm.iou.database.MsgDbHelper;
+import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.msg.ContractMsgDbData;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
@@ -43,8 +43,8 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                 .map(new Function<List<ContractMsgDbData>, List<ContractMsgDbData>>() {
                     @Override
                     public List<ContractMsgDbData> apply(List<ContractMsgDbData> list) throws Exception {
-                        MsgDbHelper.saveOrUpdateContractMsgList(list);
-                        List<ContractMsgDbData> resultList = MsgDbHelper.getContractMsgList();
+                        MsgCenterDbHelper.saveOrUpdateContractMsgList(list);
+                        List<ContractMsgDbData> resultList = MsgCenterDbHelper.getContractMsgList();
                         if (resultList == null) {
                             resultList = new ArrayList<>();
                         }
@@ -91,8 +91,8 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                 .map(new Function<List<ContractMsgDbData>, List<ContractMsgDbData>>() {
                     @Override
                     public List<ContractMsgDbData> apply(List<ContractMsgDbData> list) throws Exception {
-                        MsgDbHelper.saveOrUpdateContractMsgList(list);
-                        List<ContractMsgDbData> resultList = MsgDbHelper.getContractMsgList();
+                        MsgCenterDbHelper.saveOrUpdateContractMsgList(list);
+                        List<ContractMsgDbData> resultList = MsgCenterDbHelper.getContractMsgList();
                         if (resultList == null) {
                             resultList = new ArrayList<>();
                         }

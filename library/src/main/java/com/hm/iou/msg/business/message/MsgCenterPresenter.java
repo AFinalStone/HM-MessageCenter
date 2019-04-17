@@ -8,16 +8,16 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hm.iou.base.mvp.MvpFragmentPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
-import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.MsgCenterAppLike;
-import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.bean.MsgListHeaderBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.dict.ModuleType;
+import com.hm.iou.msg.im.IMInitHelper;
+import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.DataChangeUtil;
+import com.hm.iou.msg.util.MsgCenterMsgUtil;
 import com.hm.iou.sharedata.event.CommBizEvent;
-import com.hm.iou.sharedata.model.BaseResponse;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgService;
@@ -28,7 +28,6 @@ import com.trello.rxlifecycle2.android.FragmentEvent;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.reactivestreams.Publisher;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -39,7 +38,6 @@ import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -50,6 +48,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.View> implements MsgCenterContract.Presenter {
 
+    private List<MsgListHeaderBean> mHeaderList;
     private List<ChatMsgBean> mChatList;
     private String mRedFlagCount;
     //  创建观察者对象
@@ -83,7 +82,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     public void onViewCreated() {
         super.onViewCreated();
         EventBus.getDefault().register(this);
-        if (MsgCenterAppLike.getInstance().mHaveInitIM) {
+        if (IMInitHelper.mHaveInitIM) {
             //  注册/注销观察者
             NIMClient.getService(MsgServiceObserve.class)
                     .observeRecentContact(mChatListObserver, true);
@@ -94,11 +93,19 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
-        if (MsgCenterAppLike.getInstance().mHaveInitIM) {
+        if (IMInitHelper.mHaveInitIM) {
             //  注册/注销观察者
             NIMClient.getService(MsgServiceObserve.class)
                     .observeRecentContact(mChatListObserver, false);
         }
+    }
+
+    @Override
+    public void init() {
+        getHeaderModules();
+        getChatList();
+        getRedFlagCount();
+        MsgCenterMsgUtil.getMsgCenterNoReadNumFromServer(mContext);
     }
 
     @Override
@@ -107,49 +114,46 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     }
 
     @Override
-    public void getHeaderModules() {
+    public void refreshData() {
+        getChatList();
+        MsgCenterMsgUtil.getMsgCenterNoReadNumFromServer(mContext);
+    }
+
+
+    private void getHeaderModules() {
         mView.showInitLoading();
-        MsgApi.getUnReadMsgNum()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(getProvider().<BaseResponse<UnReadMsgNumBean>>bindUntilEvent(FragmentEvent.DESTROY))
-                .map(RxUtil.<UnReadMsgNumBean>handleResponse())
-                .flatMap(new Function<UnReadMsgNumBean, Publisher<List<MsgListHeaderBean>>>() {
-                    @Override
-                    public Flowable<List<MsgListHeaderBean>> apply(UnReadMsgNumBean unReadMsgNumBean) throws Exception {
-                        final int contractMsgNum = unReadMsgNumBean.getContractNumber();
-                        final int similarMsgNum = unReadMsgNumBean.getSimilarContractNumber();
-                        final int hmMsgNum = unReadMsgNumBean.getButlerMessageNumber();
-                        final int remindBackNum = unReadMsgNumBean.getWaitRepayNumber();
-                        return Flowable.create(new FlowableOnSubscribe<List<MsgListHeaderBean>>() {
-                            @Override
-                            public void subscribe(FlowableEmitter<List<MsgListHeaderBean>> e) throws Exception {
-                                List<MsgListHeaderBean> headerModels = readDataFromAssert();
-                                if (headerModels != null) {
-                                     for (MsgListHeaderBean bean : headerModels) {
-                                        if (ModuleType.CONTRACT_MSG.getTypeId().equals(bean.getModuleId())) {
-                                            bean.setRedMsgNum(contractMsgNum);
-                                            continue;
-                                        }
-                                        if (ModuleType.SIMILARITY_CONTRACT_MSG.getTypeId().equals(bean.getModuleId())) {
-                                            bean.setRedMsgNum(similarMsgNum);
-                                            continue;
-                                        }
-                                        if (ModuleType.HM_MSG.getTypeId().equals(bean.getModuleId())) {
-                                            bean.setRedMsgNum(hmMsgNum);
-                                            continue;
-                                        }
-                                        if (ModuleType.REMIND_BACK_MSG.getTypeId().equals(bean.getModuleId())) {
-                                            bean.setRedMsgNum(remindBackNum);
-                                            continue;
-                                        }
-                                    }
-                                }
-                                e.onNext(headerModels);
-                            }
-                        }, BackpressureStrategy.ERROR);
+        Flowable.create(new FlowableOnSubscribe<List<MsgListHeaderBean>>() {
+            @Override
+            public void subscribe(FlowableEmitter<List<MsgListHeaderBean>> e) throws Exception {
+                mHeaderList = readDataFromAssert();
+                UnReadMsgNumBean unReadMsgNumBean = CacheDataUtil.getNoReadMsgNum(mContext);
+                if (unReadMsgNumBean != null && mHeaderList != null) {
+                    for (MsgListHeaderBean bean : mHeaderList) {
+                        if (ModuleType.CONTRACT_MSG.getTypeId().equals(bean.getModuleId())) {
+                            bean.setRedMsgNum(unReadMsgNumBean.getContractNumber());
+                            continue;
+                        }
+                        if (ModuleType.SIMILARITY_CONTRACT_MSG.getTypeId().equals(bean.getModuleId())) {
+                            bean.setRedMsgNum(unReadMsgNumBean.getSimilarContractNumber());
+                            continue;
+                        }
+                        if (ModuleType.HM_MSG.getTypeId().equals(bean.getModuleId())) {
+                            bean.setRedMsgNum(unReadMsgNumBean.getButlerMessageNumber());
+                            continue;
+                        }
+                        if (ModuleType.REMIND_BACK_MSG.getTypeId().equals(bean.getModuleId())) {
+                            bean.setRedMsgNum(unReadMsgNumBean.getWaitRepayNumber());
+                            continue;
+                        }
+                        if (ModuleType.NEW_APPLY_FRIEND.getTypeId().equals(bean.getModuleId())) {
+                            bean.setRedMsgNum(unReadMsgNumBean.getFriendMessageNumber());
+                            continue;
+                        }
                     }
-                })
+                }
+                e.onNext(mHeaderList);
+            }
+        }, BackpressureStrategy.ERROR)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(getProvider().<List<MsgListHeaderBean>>bindUntilEvent(FragmentEvent.DESTROY))
@@ -191,7 +195,9 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
         return null;
     }
 
-    @Override
+    /**
+     * 获取会话列表
+     */
     public void getChatList() {
         Flowable.create(new FlowableOnSubscribe<List<RecentContact>>() {
             @Override
@@ -207,14 +213,6 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
                     @Override
                     public void handleResult(List<RecentContact> recentContacts) {
                         List<ChatMsgBean> newList = DataChangeUtil.changeRecentContactToIChatMsgItem(recentContacts);
-//                        for (ChatMsgBean model : newList) {
-//                            int index = mChatList.indexOf(model);
-//                            if (index == -1) {
-//                                mChatList.add(model);
-//                            } else {
-//                                mChatList.set(index, model);
-//                            }
-//                        }
                         mChatList.clear();
                         mChatList.addAll(newList);
                         mView.showMsgList(mChatList);
@@ -240,18 +238,11 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
                 });
     }
 
-    @Override
-    public void getUnReadMsgNum() {
-
-    }
-
-    @Override
-    public void markHaveRead(int position) {
-    }
-
-    @Override
+    /**
+     * 获取左侧头部红点数量
+     */
     public void getRedFlagCount() {
-        mRedFlagCount = MsgCenterAppLike.getInstance().getTopHeadRedFlagCount();
+        mRedFlagCount = MsgCenterMsgUtil.getTopHeadRedFlagCount();
         mView.updateRedFlagCount(mRedFlagCount);
     }
 
@@ -260,6 +251,52 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
         if ("userInfo_homeLeftMenu_redFlagCount".equals(commBizEvent.key)) {
             mRedFlagCount = commBizEvent.content;
             mView.updateRedFlagCount(mRedFlagCount);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvenGetNoReadNumSuccess(CommBizEvent commBizEvent) {
+        if (MsgCenterAppLike.EXTRA_KEY_GET_NO_READ_NUM_SUCCESS.equals(commBizEvent.key)) {
+            UnReadMsgNumBean unReadMsgNumBean = CacheDataUtil.getNoReadMsgNum(mContext);
+            if (unReadMsgNumBean != null && mHeaderList != null) {
+                for (MsgListHeaderBean bean : mHeaderList) {
+                    if (ModuleType.CONTRACT_MSG.getTypeId().equals(bean.getModuleId())) {
+                        bean.setRedMsgNum(unReadMsgNumBean.getContractNumber());
+                        if (mView != null) {
+                            mView.refreshHeaderModule(bean);
+                        }
+                        continue;
+                    }
+                    if (ModuleType.SIMILARITY_CONTRACT_MSG.getTypeId().equals(bean.getModuleId())) {
+                        bean.setRedMsgNum(unReadMsgNumBean.getSimilarContractNumber());
+                        if (mView != null) {
+                            mView.refreshHeaderModule(bean);
+                        }
+                        continue;
+                    }
+                    if (ModuleType.HM_MSG.getTypeId().equals(bean.getModuleId())) {
+                        bean.setRedMsgNum(unReadMsgNumBean.getButlerMessageNumber());
+                        if (mView != null) {
+                            mView.refreshHeaderModule(bean);
+                        }
+                        continue;
+                    }
+                    if (ModuleType.REMIND_BACK_MSG.getTypeId().equals(bean.getModuleId())) {
+                        bean.setRedMsgNum(unReadMsgNumBean.getWaitRepayNumber());
+                        if (mView != null) {
+                            mView.refreshHeaderModule(bean);
+                        }
+                        continue;
+                    }
+                    if (ModuleType.NEW_APPLY_FRIEND.getTypeId().equals(bean.getModuleId())) {
+                        bean.setRedMsgNum(unReadMsgNumBean.getFriendMessageNumber());
+                        if (mView != null) {
+                            mView.refreshHeaderModule(bean);
+                        }
+                        continue;
+                    }
+                }
+            }
         }
     }
 

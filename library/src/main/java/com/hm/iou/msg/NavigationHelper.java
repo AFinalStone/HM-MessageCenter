@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.hm.iou.msg.business.apply.view.ApplyNewFriendListActivity;
+import com.hm.iou.msg.business.friend.view.AddFriendIndexActivity;
 import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
 import com.hm.iou.msg.business.friendlist.view.FriendListActivity;
 import com.hm.iou.base.utils.RouterUtil;
@@ -34,7 +35,7 @@ public class NavigationHelper {
             Router.getInstance().buildWithUrl(url).navigation(context);
             return;
         }
-        if (MsgType.TopNews.getValue() == msgType && !TextUtils.isEmpty(autoId)) {
+        if (MsgType.News.getValue() == msgType && !TextUtils.isEmpty(autoId)) {
             Router.getInstance().buildWithUrl("hmiou://m.54jietiao.com/news/detail")
                     .withString("news_id", autoId + "")
                     .withString("url", url)
@@ -90,7 +91,6 @@ public class NavigationHelper {
      * @param context
      */
     public static void toSessionDetail(Context context, String fromAccount) {
-//        P2PMessageActivity.start(context, sessionId, null, null);
         NimUIKit.startP2PSession(context, fromAccount);
     }
 
@@ -139,6 +139,16 @@ public class NavigationHelper {
         intent.putExtra(FriendDetailActivity.EXTRA_KEY_USER_ID, friendId);
         intent.putExtra(FriendDetailActivity.EXTRA_KEY_APPLY_STATUS, applyStatus);
         intent.putExtra(FriendDetailActivity.EXTRA_KEY_COMMENT_INFO, applyMsg);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 添加好友
+     *
+     * @param context
+     */
+    public static void toAddNewFriend(Context context) {
+        Intent intent = new Intent(context, AddFriendIndexActivity.class);
         context.startActivity(intent);
     }
 

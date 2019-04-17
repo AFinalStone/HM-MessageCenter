@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
-import com.hm.iou.database.MsgDbHelper;
+import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.msg.RemindBackMsgDbData;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
@@ -43,8 +43,8 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                 .map(new Function<List<RemindBackMsgDbData>, List<RemindBackMsgDbData>>() {
                     @Override
                     public List<RemindBackMsgDbData> apply(List<RemindBackMsgDbData> list) throws Exception {
-                        MsgDbHelper.saveOrUpdateRemindBackMsgList(list);
-                        List<RemindBackMsgDbData> resultList = MsgDbHelper.getRemindBackMsgList();
+                        MsgCenterDbHelper.saveOrUpdateRemindBackMsgList(list);
+                        List<RemindBackMsgDbData> resultList = MsgCenterDbHelper.getRemindBackMsgList();
                         if (resultList == null) {
                             resultList = new ArrayList<>();
                         }
@@ -91,8 +91,8 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                 .map(new Function<List<RemindBackMsgDbData>, List<RemindBackMsgDbData>>() {
                     @Override
                     public List<RemindBackMsgDbData> apply(List<RemindBackMsgDbData> list) throws Exception {
-                        MsgDbHelper.saveOrUpdateRemindBackMsgList(list);
-                        List<RemindBackMsgDbData> resultList = MsgDbHelper.getRemindBackMsgList();
+                        MsgCenterDbHelper.saveOrUpdateRemindBackMsgList(list);
+                        List<RemindBackMsgDbData> resultList = MsgCenterDbHelper.getRemindBackMsgList();
                         if (resultList == null) {
                             resultList = new ArrayList<>();
                         }
@@ -116,16 +116,6 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
                         mView.hidePullDownRefresh();
-                    }
-
-                    @Override
-                    public boolean isShowBusinessError() {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean isShowCommError() {
-                        return false;
                     }
                 });
     }

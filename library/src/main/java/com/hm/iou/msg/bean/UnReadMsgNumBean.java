@@ -15,5 +15,5 @@ public class UnReadMsgNumBean implements Serializable {
     private int contractNumber;
     private int similarContractNumber;
     private int waitRepayNumber;
-
+    private int friendMessageNumber;
 }

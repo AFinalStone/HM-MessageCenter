@@ -1,14 +1,15 @@
 package com.hm.iou.msg.dict;
 
 /**
- * Created by hjy on 2018/5/29.
+ * @author syl
+ * @time 2019/4/17 11:45 AM
  */
-
 public enum MsgType {
 
-    Sport(1, "活动"),
-    Advertisement(2, "广告"),
-    TopNews(3, "头条"),
+    Sport(40, "活动"),
+    Advertisement(10, "广告"),
+    News(20, "头条"),
+    FeedBack(30, "您有新的意见反馈结果"),
     CommuniqueIntro(100, "官方公告");
 
     private int value;

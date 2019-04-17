@@ -1,12 +1,12 @@
 package com.hm.iou.msg.api;
 
 import com.hm.iou.database.table.msg.ContractMsgDbData;
+import com.hm.iou.database.table.msg.HmMsgDbData;
 import com.hm.iou.database.table.msg.RemindBackMsgDbData;
 import com.hm.iou.database.table.msg.SimilarityContractMsgDbData;
 import com.hm.iou.msg.bean.FriendApplyRecordListBean;
 import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.bean.FriendListBean;
-import com.hm.iou.msg.bean.HmMsgBean;
 import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.AddFriendReqBean;
@@ -50,7 +50,7 @@ public class MsgApi {
      *
      * @return
      */
-    public static Flowable<BaseResponse<List<HmMsgBean>>> getHmMsgList() {
+    public static Flowable<BaseResponse<List<HmMsgDbData>>> getHmMsgList() {
         return getService().getHmMsgList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

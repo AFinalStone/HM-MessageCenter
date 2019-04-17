@@ -1,6 +1,7 @@
 package com.hm.iou.msg.api;
 
 import com.hm.iou.database.table.msg.ContractMsgDbData;
+import com.hm.iou.database.table.msg.HmMsgDbData;
 import com.hm.iou.database.table.msg.RemindBackMsgDbData;
 import com.hm.iou.database.table.msg.SimilarityContractMsgDbData;
 import com.hm.iou.msg.bean.FriendApplyRecordListBean;
@@ -34,7 +35,7 @@ public interface MsgService {
     Flowable<BaseResponse<UnReadMsgNumBean>> getUnReadMsgNum();
 
     @GET("/api/message/messageCenter/v2/getButlerMessage")
-    Flowable<BaseResponse<List<HmMsgBean>>> getHmMsgList();
+    Flowable<BaseResponse<List<HmMsgDbData>>> getHmMsgList();
 
     @GET("/api/message/messageCenter/v2/getContractMessage")
     Flowable<BaseResponse<List<ContractMsgDbData>>> getContractMsgList();

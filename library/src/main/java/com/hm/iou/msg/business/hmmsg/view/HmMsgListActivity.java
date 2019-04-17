@@ -60,7 +60,6 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
                 if (R.id.ll_adOrSport == view.getId()) {
                     IHmMsgItem item = (IHmMsgItem) adapter.getItem(position);
                     NavigationHelper.toMsgDetail(mContext, item.getMsgDetailLinkUrl(), item.getMsgAutoId(), item.getMsgType());
-                    mPresenter.markHaveRead(position);
                 }
             }
         });
@@ -93,13 +92,19 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
     }
 
     @Override
-    public void showMsgList(List<IHmMsgItem> list) {
-        mAdapter.setNewData(list);
+    public void showInitFailed() {
+        mLoadingInit.setVisibility(View.VISIBLE);
+        mLoadingInit.showDataFail(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.init();
+            }
+        });
     }
 
     @Override
-    public void refreshItem(int position) {
-        mAdapter.notifyItemChanged(position);
+    public void showMsgList(List<IHmMsgItem> list) {
+        mAdapter.setNewData(list);
     }
 
     @Override

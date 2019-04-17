@@ -95,13 +95,11 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mPresenter.getChatList();
+                mPresenter.refreshData();
             }
         });
 
-        mPresenter.getHeaderModules();
-        mPresenter.getRedFlagCount();
-        mPresenter.getChatList();
+        mPresenter.init();
     }
 
     @Override
@@ -176,7 +174,6 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
             mHeaderViewHelper.updateModuleItem(msgListHeaderBean);
         }
     }
-
 
     @Override
     public void enableRefresh() {

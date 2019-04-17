@@ -10,11 +10,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hm.iou.base.utils.ImageLoadUtil;
-import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.bean.MsgListHeaderBean;
 import com.hm.iou.msg.business.message.MsgCenterContract;
+import com.hm.iou.msg.dict.ModuleType;
 import com.hm.iou.router.Router;
 import com.hm.iou.tools.ImageLoader;
 import com.hm.iou.uikit.HMDotTextView;
@@ -23,7 +23,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * @author syl
@@ -34,8 +33,6 @@ public class HeaderViewHelper {
 
     @BindView(R2.id.ll_header)
     LinearLayout mLlHeader;
-    @BindView(R2.id.dot_module_new_friend_no_read_num)
-    HMDotTextView mDotModuleNewFriendNoReadNum;
     private View mRootView;
     private Context mContent;
     private MsgCenterContract.Presenter mPresenter;
@@ -56,9 +53,17 @@ public class HeaderViewHelper {
             return;
         }
         View viewModule = LayoutInflater.from(mContent).inflate(R.layout.msgcenter_item_msg_list_header_item, mLlHeader, false);
+        View viewTopDivider = viewModule.findViewById(R.id.view_top_divider);
         ImageView ivModule = viewModule.findViewById(R.id.iv_module);
         TextView tvModule = viewModule.findViewById(R.id.tv_module);
         HMDotTextView dotTextView = viewModule.findViewById(R.id.dot_module_red_msg_num);
+
+        //填充数据
+        if (ModuleType.NEW_APPLY_FRIEND.getTypeId().equals(moduleBean.getModuleId())) {
+            viewTopDivider.setVisibility(View.VISIBLE);
+        } else {
+            viewTopDivider.setVisibility(View.GONE);
+        }
         String imageUrl = moduleBean.getImage();
         imageUrl = ImageLoadUtil.getImageRealUrl(mContent, imageUrl);
         ImageLoader.getInstance(mContent).displayImage(imageUrl, ivModule);
@@ -67,7 +72,7 @@ public class HeaderViewHelper {
         if (redMsgNum > 99) {
             dotTextView.setVisibility(View.VISIBLE);
             dotTextView.showMoreText();
-        } else if (redMsgNum > 1) {
+        } else if (redMsgNum >= 1) {
             dotTextView.setVisibility(View.VISIBLE);
             dotTextView.setText(String.valueOf(redMsgNum));
         } else {
@@ -116,7 +121,7 @@ public class HeaderViewHelper {
                 if (redMsgNum > 99) {
                     dotTextView.setVisibility(View.VISIBLE);
                     dotTextView.showMoreText();
-                } else if (redMsgNum > 1) {
+                } else if (redMsgNum >= 1) {
                     dotTextView.setVisibility(View.VISIBLE);
                     dotTextView.setText(String.valueOf(redMsgNum));
                 } else {
@@ -131,8 +136,4 @@ public class HeaderViewHelper {
         mLlHeader.removeAllViews();
     }
 
-    @OnClick(R2.id.ll_module_new_friend)
-    public void onClick() {
-        NavigationHelper.toApplyNewFriendList(mContent);
-    }
 }

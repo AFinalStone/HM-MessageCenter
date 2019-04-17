@@ -7,6 +7,12 @@
     android:focusable="true"
     android:orientation="vertical">
 
+    <View
+        android:id="@+id/view_top_divider"
+        style="@style/UikitDivider.Horizontal"
+        android:layout_height="7dp"
+        android:background="@color/uikit_background" />
+
     <LinearLayout style="@style/MsgCenterMsgListHeaderItem">
 
         <ImageView

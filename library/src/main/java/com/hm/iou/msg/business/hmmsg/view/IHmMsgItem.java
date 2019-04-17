@@ -16,13 +16,6 @@ public interface IHmMsgItem extends MultiItemEntity {
     int TYPE_FEEDBACK = 3;           //意见反馈
 
     /**
-     * 是否已读
-     *
-     * @return
-     */
-    boolean getMsgReadState();
-
-    /**
      * 获取消息的icon
      *
      * @return

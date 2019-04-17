@@ -71,7 +71,7 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
                 IApplyNewFriend data = (IApplyNewFriend) adapter.getItem(position);
                 if (data == null)
                     return;
-                if (view.getId() == R.id.rl_content || view.getId() == R.id.btn_see) {
+                if (view.getId() == R.id.btn_see || view.getId() == R.id.rl_content) {
                     int status = data.getIStatus();
                     String applyStatus = null;
                     if (status == ApplyNewFriendStatus.NEED_TO_AGREE.getValue()) {
