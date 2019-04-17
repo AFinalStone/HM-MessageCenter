@@ -54,7 +54,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     private String mRedFlagCount;
     //  创建观察者对象
     Observer<List<RecentContact>> mChatListObserver;
-    private boolean mIsNeedRefresh = true;//是否需要刷新
+    private boolean mIsNeedRefresh = false;//是否需要刷新
 
     public MsgCenterPresenter(@NonNull Context context, @NonNull MsgCenterContract.View view) {
         super(context, view);
