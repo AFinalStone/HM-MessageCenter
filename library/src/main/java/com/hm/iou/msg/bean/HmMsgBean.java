@@ -103,11 +103,6 @@ public class HmMsgBean implements IHmMsgItem, Serializable {
     }
 
     @Override
-    public boolean getMsgReadState() {
-        return isRead;
-    }
-
-    @Override
     public int getMsgIcon() {
         if (MsgType.Sport.getValue() == type) {
             return R.mipmap.msgcenter_ic_activity;
@@ -115,7 +110,7 @@ public class HmMsgBean implements IHmMsgItem, Serializable {
         if (MsgType.Advertisement.getValue() == type) {
             return R.mipmap.msgcenter_ic_ad;
         }
-        if (MsgType.TopNews.getValue() == type) {
+        if (MsgType.News.getValue() == type) {
             return R.mipmap.msgcenter_ic_toutiao;
         }
         return R.mipmap.msgcenter_ic_official_notice;

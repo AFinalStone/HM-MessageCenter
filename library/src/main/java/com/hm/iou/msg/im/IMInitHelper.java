@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import com.hm.iou.base.file.FileUtil;
 import com.hm.iou.logger.Logger;
+import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.sharedata.UserManager;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.UIKitOptions;
@@ -64,14 +65,7 @@ public class IMInitHelper {
                     @Override
                     public void onAvatarClicked(Context context, IMMessage message) {
                         // 一般用于打开用户资料页面
-//                if (message.getMsgType() == MsgTypeEnum.robot && message.getDirect() == MsgDirectionEnum.In) {
-//                    RobotAttachment attachment = (RobotAttachment) message.getAttachment();
-//                    if (attachment.isRobotSend()) {
-//                        RobotProfileActivity.start(context, attachment.getFromRobotAccount());
-//                        return;
-//                    }
-//                }
-//                UserProfileActivity.start(context, message.getFromAccount());
+                        NavigationHelper.toFriendDetailPage(mContext, message.getFromAccount(), null, null);
                         Logger.d("onAvatarClicked");
                     }
 

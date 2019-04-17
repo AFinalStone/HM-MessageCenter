@@ -92,13 +92,19 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
     }
 
     @Override
-    public void showMsgList(List<IHmMsgItem> list) {
-        mAdapter.setNewData(list);
+    public void showInitFailed() {
+        mLoadingInit.setVisibility(View.VISIBLE);
+        mLoadingInit.showDataFail(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.init();
+            }
+        });
     }
 
     @Override
-    public void refreshItem(int position) {
-        mAdapter.notifyItemChanged(position);
+    public void showMsgList(List<IHmMsgItem> list) {
+        mAdapter.setNewData(list);
     }
 
     @Override

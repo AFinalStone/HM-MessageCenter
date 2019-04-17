@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
-import com.hm.iou.database.MsgDbHelper;
+import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.msg.SimilarityContractMsgDbData;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
@@ -43,8 +43,8 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                 .map(new Function<List<SimilarityContractMsgDbData>, List<SimilarityContractMsgDbData>>() {
                     @Override
                     public List<SimilarityContractMsgDbData> apply(List<SimilarityContractMsgDbData> list) throws Exception {
-                        MsgDbHelper.saveOrUpdateSimilarityContractMsgList(list);
-                        List<SimilarityContractMsgDbData> resultList = MsgDbHelper.getSimilarityContractMsgList();
+                        MsgCenterDbHelper.saveOrUpdateSimilarityContractMsgList(list);
+                        List<SimilarityContractMsgDbData> resultList = MsgCenterDbHelper.getSimilarityContractMsgList();
                         if (resultList == null) {
                             resultList = new ArrayList<>();
                         }
@@ -91,8 +91,8 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                 .map(new Function<List<SimilarityContractMsgDbData>, List<SimilarityContractMsgDbData>>() {
                     @Override
                     public List<SimilarityContractMsgDbData> apply(List<SimilarityContractMsgDbData> list) throws Exception {
-                        MsgDbHelper.saveOrUpdateSimilarityContractMsgList(list);
-                        List<SimilarityContractMsgDbData> resultList = MsgDbHelper.getSimilarityContractMsgList();
+                        MsgCenterDbHelper.saveOrUpdateSimilarityContractMsgList(list);
+                        List<SimilarityContractMsgDbData> resultList = MsgCenterDbHelper.getSimilarityContractMsgList();
                         if (resultList == null) {
                             resultList = new ArrayList<>();
                         }
@@ -106,7 +106,6 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                     @Override
                     public void handleResult(List<SimilarityContractMsgDbData> list) {
                         mView.hidePullDownRefresh();
-                        mView.enableRefresh();
                         if (list == null || list.size() == 0) {
                             mView.showDataEmpty();
                         } else {
@@ -119,15 +118,6 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                         mView.hidePullDownRefresh();
                     }
 
-                    @Override
-                    public boolean isShowBusinessError() {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean isShowCommError() {
-                        return false;
-                    }
                 });
     }
 

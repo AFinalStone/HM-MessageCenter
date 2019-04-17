@@ -35,7 +35,7 @@ public class NavigationHelper {
             Router.getInstance().buildWithUrl(url).navigation(context);
             return;
         }
-        if (MsgType.TopNews.getValue() == msgType && !TextUtils.isEmpty(autoId)) {
+        if (MsgType.News.getValue() == msgType && !TextUtils.isEmpty(autoId)) {
             Router.getInstance().buildWithUrl("hmiou://m.54jietiao.com/news/detail")
                     .withString("news_id", autoId + "")
                     .withString("url", url)

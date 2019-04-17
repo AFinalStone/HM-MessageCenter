@@ -148,8 +148,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
         }
         //如果是好友，则跳转到聊天页面
         if (mFriendInfo.isFriended()) {
-            //TODO 跳转到聊天页面
-
+            NavigationHelper.toSessionDetail(mContext, mFriendInfo.getFriendImAccId());
         } else {
             if (FriendDetailActivity.APPLY_OVERDUE.equals(mApplyStatus)) {
                 mView.showFriendApplyOverdueDialog();

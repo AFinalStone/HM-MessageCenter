@@ -22,13 +22,6 @@ public class HmMsgListContract {
         void showMsgList(List<IHmMsgItem> list);
 
         /**
-         * 更新条目样式
-         *
-         * @param position
-         */
-        void refreshItem(int position);
-
-        /**
          * 允许刷新
          */
         void enableRefresh();
@@ -52,6 +45,11 @@ public class HmMsgListContract {
          * 关闭初始化动画
          */
         void hideInitLoading();
+
+        /**
+         * 初始化失败
+         */
+        void showInitFailed();
     }
 
     public interface Presenter extends BaseContract.BasePresenter {

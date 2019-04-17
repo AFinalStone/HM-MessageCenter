@@ -58,5 +58,6 @@ public class ApplyNewFriendListAdapter extends BaseQuickAdapter<IApplyNewFriend,
         }
         helper.addOnClickListener(R.id.btn_delete);
         helper.addOnClickListener(R.id.rl_content);
+        helper.addOnClickListener(R.id.btn_see);
     }
 }

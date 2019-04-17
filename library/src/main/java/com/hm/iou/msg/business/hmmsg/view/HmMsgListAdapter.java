@@ -41,11 +41,6 @@ public class HmMsgListAdapter extends BaseMultiItemQuickAdapter<IHmMsgItem, Base
 
             String time = item.getMsgTime();
             helper.setText(R.id.tv_time, time);
-            if (item.getMsgReadState()) {
-                helper.setVisible(R.id.iv_noRead, false);
-            } else {
-                helper.setVisible(R.id.iv_noRead, true);
-            }
             return;
         }
         if (helper.getItemViewType() == IHmMsgItem.TYPE_COMMUNIQUE) {

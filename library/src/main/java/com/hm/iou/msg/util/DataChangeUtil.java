@@ -1,13 +1,20 @@
 package com.hm.iou.msg.util;
 
+import android.text.TextUtils;
+
 import com.hm.iou.database.table.msg.ContractMsgDbData;
+import com.hm.iou.database.table.msg.HmMsgDbData;
 import com.hm.iou.database.table.msg.RemindBackMsgDbData;
 import com.hm.iou.database.table.msg.SimilarityContractMsgDbData;
 import com.hm.iou.logger.Logger;
+import com.hm.iou.msg.R;
 import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.business.contractmsg.view.IContractMsgItem;
+import com.hm.iou.msg.business.hmmsg.view.IHmMsgItem;
 import com.hm.iou.msg.business.remindback.view.IRemindBackMsgItem;
 import com.hm.iou.msg.business.similarity.view.ISimilarityContractMsgItem;
+import com.hm.iou.msg.dict.MsgType;
+import com.hm.iou.tools.StringUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.uinfo.UserService;
@@ -16,6 +23,7 @@ import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -238,4 +246,90 @@ public class DataChangeUtil {
         return resultList;
     }
 
+    /**
+     * 管家消息
+     *
+     * @param list
+     * @return
+     */
+    public static List<IHmMsgItem> changeHmMsgDbDataToIHmMsgItem(List<HmMsgDbData> list) {
+        List<IHmMsgItem> resultList = new ArrayList<>();
+        if (list != null) {
+            for (final HmMsgDbData dbData : list) {
+                IHmMsgItem msgItem = new IHmMsgItem() {
+
+                    @Override
+                    public int getMsgIcon() {
+                        if (MsgType.Sport.getValue() == dbData.getSourceBizType()) {
+                            return R.mipmap.msgcenter_ic_activity;
+                        }
+                        if (MsgType.Advertisement.getValue() == dbData.getSourceBizType()) {
+                            return R.mipmap.msgcenter_ic_ad;
+                        }
+                        if (MsgType.News.getValue() == dbData.getSourceBizType()) {
+                            return R.mipmap.msgcenter_ic_toutiao;
+                        }
+                        return R.mipmap.msgcenter_ic_official_notice;
+                    }
+
+                    @Override
+                    public String getMsgTitle() {
+                        if (TextUtils.isEmpty(dbData.getTitle())) {
+                            return MsgType.getDescByValue(dbData.getSourceBizType()) + "：";
+                        }
+                        return MsgType.getDescByValue(dbData.getSourceBizType()) + "：" + dbData.getTitle();
+                    }
+
+                    @Override
+                    public String getMsgTime() {
+                        try {
+                            SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            Date date = timeFormat.parse(dbData.getStartTime());
+                            timeFormat = new SimpleDateFormat("MM-dd HH:mm:ss");
+                            return timeFormat.format(date);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        return "";
+                    }
+
+                    @Override
+                    public String getNotice() {
+                        return StringUtil.getUnnullString(dbData.getNotice());
+                    }
+
+                    @Override
+                    public String getMsgImage() {
+                        return dbData.getImgUrl();
+                    }
+
+                    @Override
+                    public String getMsgDetailLinkUrl() {
+                        return dbData.getJumpUrl();
+                    }
+
+                    @Override
+                    public String getMsgAutoId() {
+                        return dbData.getContentCollectId();
+                    }
+
+                    @Override
+                    public int getMsgType() {
+                        return dbData.getSourceBizType();
+                    }
+
+                    @Override
+                    public int getItemType() {
+                        if (MsgType.CommuniqueIntro.getValue() == dbData.getSourceBizType()) {
+                            return TYPE_COMMUNIQUE;
+                        }
+                        return TYPE_ADVERTISEMENT;
+                    }
+                };
+                resultList.add(msgItem);
+            }
+        }
+
+        return resultList;
+    }
 }

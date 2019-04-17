@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical">
@@ -12,10 +12,9 @@
         android:id="@+id/tv_time"
         style="@style/UikitTextView.Auxiliary.Small"
         android:layout_height="36dip"
-        android:textColor="@color/uikit_text_hint"
         android:layout_gravity="center"
         android:gravity="center"
-        />
+        android:textColor="@color/uikit_text_hint" />
 
     <LinearLayout
         android:id="@+id/ll_adOrSport"
@@ -24,17 +23,15 @@
         android:layout_marginLeft="12dip"
         android:layout_marginRight="12dip"
         android:background="@drawable/jietiao_bg_message_list_item"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="38dp"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:paddingLeft="6dip"
-            android:paddingRight="6dip"
-            >
+            android:paddingRight="6dip">
 
             <RelativeLayout
                 android:layout_width="25dp"
@@ -46,28 +43,19 @@
                     android:layout_height="18dp"
                     android:layout_centerInParent="true"
                     android:src="@mipmap/msgcenter_ic_ad" />
-
-                <com.hm.iou.uikit.ShapedImageView
-                    android:id="@+id/iv_noRead"
-                    android:layout_width="4dp"
-                    android:layout_height="4dp"
-                    android:layout_alignParentEnd="true"
-                    android:background="@color/uikit_red"
-                    app:shape_mode="circle" />
             </RelativeLayout>
 
 
             <TextView
                 android:id="@+id/tv_title"
                 style="@style/UikitTextView"
-                android:textSize="16dip"
-                android:textColor="@color/uikit_text_sub_content"
                 android:layout_marginLeft="10dp"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                tools:text="这是标题"
-                />
+                android:textColor="@color/uikit_text_sub_content"
+                android:textSize="16dip"
+                tools:text="这是标题" />
 
         </LinearLayout>
 
@@ -87,11 +75,10 @@
 
             <TextView
                 style="@style/UikitTextView.Auxiliary.Small"
+                android:layout_marginRight="12dip"
                 android:ellipsize="end"
                 android:text="查看详情 >"
-                android:textColor="@color/uikit_text_hint"
-                android:layout_marginRight="12dip"
-                />
+                android:textColor="@color/uikit_text_hint" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
