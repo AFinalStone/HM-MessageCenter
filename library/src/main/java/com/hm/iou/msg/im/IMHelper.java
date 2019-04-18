@@ -12,6 +12,7 @@ import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.bean.GetOrRefreshIMTokenBean;
+import com.hm.iou.msg.business.NotificationEntranceActivity;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.UserManager;
 import com.netease.nim.uikit.api.NimUIKit;
@@ -103,7 +104,7 @@ public class IMHelper {
 
         // 如果将新消息通知提醒托管给 SDK 完成，需要添加以下配置。否则无需设置。
         StatusBarNotificationConfig config = new StatusBarNotificationConfig();
-//        config.notificationEntrance = MainActivity.class; // 点击通知栏跳转到该Activity
+        config.notificationEntrance = NotificationEntranceActivity.class; // 点击通知栏跳转到该Activity
 //        config.notificationSmallIconId = R.drawable.ic_launcher_background;
         // 呼吸灯配置
         config.ledARGB = Color.GREEN;
