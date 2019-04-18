@@ -55,6 +55,8 @@ public class ApplyNewFriendListContract {
 
 
         void removeData(String applyId);
+
+        void removeDataByFriendId(String friendId);
     }
 
     public interface Presenter extends BaseContract.BasePresenter {

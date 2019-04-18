@@ -14,5 +14,6 @@ public class FriendApplyRecordListBean {
 
     private List<FriendApplyRecord> applyRecordRespList;
     private String lastReqDate;
+    private List<String> delList;
 
 }

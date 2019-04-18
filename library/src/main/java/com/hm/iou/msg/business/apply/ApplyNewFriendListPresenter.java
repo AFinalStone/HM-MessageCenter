@@ -15,6 +15,7 @@ import com.hm.iou.msg.bean.FriendApplyRecordListBean;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
 import com.hm.iou.msg.business.apply.view.IApplyNewFriend;
 import com.hm.iou.msg.event.AddFriendEvent;
+import com.hm.iou.msg.event.DeleteFriendEvent;
 import com.hm.iou.msg.event.UpdateMsgCenterUnReadMsgNumEvent;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
@@ -120,6 +121,16 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
                         List<FriendApplyRecord> list = result.getApplyRecordRespList();
                         //保存到数据库
                         FriendDbUtil.saveOrUpdateFriendApplyRecordList(list);
+
+                        //删除
+                        List<String> delList = result.getDelList();
+                        if (delList != null && !delList.isEmpty()) {
+                            for (String applyId : delList) {
+                                int r = FriendDbUtil.deleteFriendApplyRecordByApplyId(applyId);
+                                Logger.d("申请记录已被删除：" + r);
+                            }
+                        }
+
                         String lastPullDate = result.getLastReqDate();
                         //更新最近更新时间
                         CacheDataUtil.saveLastApplyRecordPullDate(mContext, lastPullDate);
@@ -254,6 +265,13 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
     public void onEventAddFriend(AddFriendEvent event) {
         //刷新一下状态
         loadDataFromServer();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventDeleteFriend(DeleteFriendEvent event) {
+        //删除数据
+        FriendDbUtil.deleteFriendApplyRecordByUserId(event.friendId);
+        mView.removeDataByFriendId(event.friendId);
     }
 
 }

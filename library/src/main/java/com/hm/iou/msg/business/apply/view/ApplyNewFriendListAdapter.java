@@ -27,6 +27,22 @@ public class ApplyNewFriendListAdapter extends BaseQuickAdapter<IApplyNewFriend,
             for (int i = 0; i < mData.size(); i++) {
                 if (applyId.equals(mData.get(i).getApplyId())) {
                     index = i;
+                    break;
+                }
+            }
+            if (index != -1) {
+                remove(index);
+            }
+        }
+    }
+
+    public void removeDataByFriendId(String friendId) {
+        if (mData != null) {
+            int index = -1;
+            for (int i = 0; i < mData.size(); i++) {
+                if (friendId.equals(mData.get(i).getFriendId())) {
+                    index = i;
+                    break;
                 }
             }
             if (index != -1) {

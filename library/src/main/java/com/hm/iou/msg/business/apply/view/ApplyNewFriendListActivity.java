@@ -147,4 +147,11 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
             mAdapter.removeData(applyId);
         }
     }
+
+    @Override
+    public void removeDataByFriendId(String friendId) {
+        if (mAdapter != null) {
+            mAdapter.removeDataByFriendId(friendId);
+        }
+    }
 }
