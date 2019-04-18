@@ -107,10 +107,8 @@ public class SendVerifyRequestActivity extends BaseActivity {
                     public void handleResult(Object o) {
                         dismissLoadingView();
                         ToastUtil.showStatusView(SendVerifyRequestActivity.this, "申请已发送");
-
-                        //初始化
-                        IMHelper.getInstance(mContext).initIM();
-                        IMHelper.getInstance(mContext).login();
+                        //获取token并登陆IM
+                        IMHelper.getInstance(mContext).refreshTokenAndLogin();
                         closeCurrPage();
                     }
 

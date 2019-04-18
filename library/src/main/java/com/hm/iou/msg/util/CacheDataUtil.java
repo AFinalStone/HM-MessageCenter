@@ -7,6 +7,7 @@ import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.msg.MsgCenterConstants;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.tools.ACache;
+import com.hm.iou.tools.StringUtil;
 
 import static com.hm.iou.msg.MsgCenterConstants.KEY_LAST_FRIEND_APPLY_RECORD_TIME;
 import static com.hm.iou.msg.MsgCenterConstants.KEY_LAST_FRIEND_UPDATE_TIME;
@@ -48,12 +49,12 @@ public class CacheDataUtil {
 
     public static void saveLastFriendPullDate(Context context, String lastPullDate) {
         ACache cache = ACache.get(context.getApplicationContext());
-        cache.put(KEY_LAST_FRIEND_UPDATE_TIME, lastPullDate);
+        cache.put(KEY_LAST_FRIEND_UPDATE_TIME, StringUtil.getUnnullString(lastPullDate));
     }
 
     public static void saveLastApplyRecordPullDate(Context context, String lastPullDate) {
         ACache cache = ACache.get(context.getApplicationContext());
-        cache.put(KEY_LAST_FRIEND_APPLY_RECORD_TIME, lastPullDate);
+        cache.put(KEY_LAST_FRIEND_APPLY_RECORD_TIME, StringUtil.getUnnullString(lastPullDate));
     }
 //
 //    /**

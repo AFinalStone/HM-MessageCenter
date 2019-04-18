@@ -43,7 +43,6 @@ import io.reactivex.functions.Consumer;
 
 public class IMHelper {
 
-    public static boolean mHaveInitIM = false;//是否已经初始化IM
     private static IMHelper mImHelper;
     private Context mContext;
     //  创建观察者对象
@@ -63,18 +62,30 @@ public class IMHelper {
     }
 
     public void initIM() {
-        if (!mHaveInitIM) {
-            NIMClient.init(mContext, getLoginInfo(), options());
-            String packageName = mContext.getPackageName();
-            String processName = getProcessName();
+        NIMClient.init(mContext, getLoginInfo(), options());
+        String packageName = mContext.getPackageName();
+        String processName = getProcessName();
 
-            if (packageName.equals(processName)) {
-                // 初始化UIKit模块
-                NimUIKit.init(mContext, buildUIKitOptions());
-                //黑名单
-                NimUIKit.registerTipMsgViewHolder(MsgViewHolderTip.class);
+        if (packageName.equals(processName)) {
+            // 初始化UIKit模块
+            NimUIKit.init(mContext, buildUIKitOptions());
+            //黑名单
+            NimUIKit.registerTipMsgViewHolder(MsgViewHolderTip.class);
+            //会话列表变更监听对象
+            if (mChatListObserver == null) {
+                mChatListObserver = new Observer<List<RecentContact>>() {
+                    @Override
+                    public void onEvent(List<RecentContact> messages) {
+                        if (mOnChatListChangeListenerList == null) {
+                            return;
+                        }
+                        for (OnChatListChangeListener listener : mOnChatListChangeListenerList) {
+                            List<ChatMsgBean> chatList = DataChangeUtil.changeRecentContactToIChatMsgItem(messages);
+                            listener.onDataChange(chatList);
+                        }
+                    }
+                };
             }
-            mHaveInitIM = true;
         }
     }
 
@@ -189,80 +200,82 @@ public class IMHelper {
                 .deleteRecentContact2(account, SessionTypeEnum.P2P);
     }
 
-    /**
-     * 登陆
-     */
     public void login() {
-        if (mHaveInitIM) {
-            if (UserManager.getInstance(mContext).isLoginIM()) {
-                return;
+        //登陆
+        NimUIKit.login(getLoginInfo(), new RequestCallback<LoginInfo>() {
+            @Override
+            public void onSuccess(LoginInfo param) {
+                //  观察者
+                NIMClient.getService(MsgServiceObserve.class)
+                        .observeRecentContact(mChatListObserver, true);
             }
-            if (mDisLogin != null && !mDisLogin.isDisposed()) {
-                mDisLogin.dispose();
+
+            @Override
+            public void onFailed(int code) {
+
             }
-            mDisLogin = MsgApi.getOrRefreshIMToken()
-                    .map(RxUtil.<GetOrRefreshIMTokenBean>handleResponse())
-                    .subscribe(new Consumer<GetOrRefreshIMTokenBean>() {
-                        @Override
-                        public void accept(GetOrRefreshIMTokenBean getOrRefreshIMTokenBean) throws Exception {
-                            UserManager.getInstance(mContext).updateIMId(getOrRefreshIMTokenBean.getImAccId());
-                            UserManager.getInstance(mContext).updateIMToken(getOrRefreshIMTokenBean.getImToken());
-                            //登陆
-                            NimUIKit.login(getLoginInfo(), new RequestCallback<LoginInfo>() {
-                                @Override
-                                public void onSuccess(LoginInfo param) {
-                                    if (mChatListObserver == null) {
-                                        mChatListObserver = new Observer<List<RecentContact>>() {
-                                            @Override
-                                            public void onEvent(List<RecentContact> messages) {
-                                                if (mOnChatListChangeListenerList == null) {
-                                                    return;
-                                                }
-                                                for (OnChatListChangeListener listener : mOnChatListChangeListenerList) {
-                                                    List<ChatMsgBean> chatList = DataChangeUtil.changeRecentContactToIChatMsgItem(messages);
-                                                    listener.onDataChange(chatList);
-                                                }
-                                            }
-                                        };
-                                        //  注销观察者
-                                        NIMClient.getService(MsgServiceObserve.class)
-                                                .observeRecentContact(mChatListObserver, true);
-                                    }
-                                }
 
-                                @Override
-                                public void onFailed(int code) {
+            @Override
+            public void onException(Throwable exception) {
 
-                                }
+            }
+        });
+    }
 
-                                @Override
-                                public void onException(Throwable exception) {
-
-                                }
-                            });
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-
-                        }
-                    });
+    /**
+     * 刷新token并登陆
+     */
+    public void refreshTokenAndLogin() {
+        if (mDisLogin != null && !mDisLogin.isDisposed()) {
+            mDisLogin.dispose();
         }
+        mDisLogin = MsgApi.getOrRefreshIMToken()
+                .map(RxUtil.<GetOrRefreshIMTokenBean>handleResponse())
+                .subscribe(new Consumer<GetOrRefreshIMTokenBean>() {
+                    @Override
+                    public void accept(GetOrRefreshIMTokenBean getOrRefreshIMTokenBean) throws Exception {
+                        UserManager.getInstance(mContext).updateIMId(getOrRefreshIMTokenBean.getImAccId());
+                        UserManager.getInstance(mContext).updateIMToken(getOrRefreshIMTokenBean.getImToken());
+                        //登陆
+                        NimUIKit.login(getLoginInfo(), new RequestCallback<LoginInfo>() {
+                            @Override
+                            public void onSuccess(LoginInfo param) {
+
+                                //  注销观察者
+                                NIMClient.getService(MsgServiceObserve.class)
+                                        .observeRecentContact(mChatListObserver, true);
+                            }
+
+                            @Override
+                            public void onFailed(int code) {
+
+                            }
+
+                            @Override
+                            public void onException(Throwable exception) {
+
+                            }
+                        });
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                });
     }
 
     /**
      * 登出，释放相关资源
      */
     public void logout() {
-        if (mHaveInitIM) {
-            //注销会话列表观察者
-            mChatListObserver = null;
-            mOnChatListChangeListenerList = null;
-            NIMClient.getService(MsgServiceObserve.class)
-                    .observeRecentContact(mChatListObserver, false);
-            //调用登出接口
-            NimUIKit.logout();
-        }
+        //注销会话列表观察者
+        mChatListObserver = null;
+        mOnChatListChangeListenerList = null;
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeRecentContact(mChatListObserver, false);
+        //调用登出接口
+        NimUIKit.logout();
     }
 
     /**

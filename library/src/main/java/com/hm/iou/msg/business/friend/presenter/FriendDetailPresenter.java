@@ -301,9 +301,8 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                         mApplyStatus = null;
                         mView.showButtonText("发消息");
                         EventBus.getDefault().post(new AddFriendEvent());
-                        //初始化
-                        IMHelper.getInstance(mContext).initIM();
-                        IMHelper.getInstance(mContext).login();
+                        //获取token并登陆IM
+                        IMHelper.getInstance(mContext).refreshTokenAndLogin();
                     }
 
                     @Override

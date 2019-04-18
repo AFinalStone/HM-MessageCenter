@@ -79,8 +79,6 @@ public class MsgCenterAppLike {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventLogin(LoginSuccEvent event) {
-        //初始化IM
-        IMHelper.getInstance(mContext).initIM();
         IMHelper.getInstance(mContext).login();
     }
 

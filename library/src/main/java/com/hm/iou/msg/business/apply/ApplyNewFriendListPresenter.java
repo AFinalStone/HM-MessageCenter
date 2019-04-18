@@ -9,6 +9,7 @@ import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.database.FriendDbUtil;
 import com.hm.iou.database.table.FriendApplyRecord;
+import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.FriendApplyRecordListBean;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
@@ -81,6 +82,7 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
                     public void accept(List<FriendApplyRecord> list) throws Exception {
                         mDataList = list;
                         if (list != null && !list.isEmpty()) {
+                            Logger.d("list.size==" + list.size());
                             mView.showMsgList(convertData(list));
                         }
                         if (firstLoad) {
@@ -209,7 +211,7 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
     }
 
     private List<IApplyNewFriend> convertData(List<FriendApplyRecord> list) {
-        if (list == null || list.isEmpty())
+        if (list == null || list.size() == 0)
             return new ArrayList<>();
         List<IApplyNewFriend> dataList = new ArrayList<>();
         for (final FriendApplyRecord item : list) {
