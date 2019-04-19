@@ -56,7 +56,8 @@ public class ApplyNewFriendListAdapter extends BaseQuickAdapter<IApplyNewFriend,
         //头像
         ImageView ivHeader = helper.getView(R.id.iv_from_header);
         String headerUrl = item.getIHeaderImg();
-        ImageLoader.getInstance(mContext).displayImage(headerUrl, ivHeader);
+        ImageLoader.getInstance(mContext).displayImage(headerUrl, ivHeader, R.mipmap.uikit_icon_header_unknow,
+                R.mipmap.uikit_icon_header_unknow);
         //昵称
         helper.setText(R.id.tv_from_nick, item.getINick());
         //备注
