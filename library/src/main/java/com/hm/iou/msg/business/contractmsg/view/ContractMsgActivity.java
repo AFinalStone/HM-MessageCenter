@@ -14,6 +14,7 @@ import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.contractmsg.ContractMsgContract;
 import com.hm.iou.msg.business.contractmsg.ContractMsgPresenter;
+import com.hm.iou.msg.business.hmmsg.view.IHmMsgItem;
 import com.hm.iou.tools.StatusBarUtil;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
@@ -65,7 +66,10 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                NavigationHelper.toContractMsgDetailPage(mContext);
+                IHmMsgItem item = (IHmMsgItem) adapter.getItem(position);
+                if (item != null) {
+                    NavigationHelper.toMsgDetailPage(mContext, item.getMsgDetailLinkUrl());
+                }
             }
         });
         //设置下拉刷新监听

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hm.iou.base.adver.AdBean;
@@ -48,8 +49,8 @@ public class HeaderViewHelper {
     LinearLayout mLlHeader;
     @BindView(R2.id.tv_header_tips_no_net)
     TextView mTvHeaderTipNoNet;//无网络
-    @BindView(R2.id.ll_header_tips_advertisement)
-    LinearLayout mLlHeaderTipAdvertisement;//广告
+    @BindView(R2.id.rl_header_tips_advertisement)
+    RelativeLayout mRlHeaderTipAdvertisement;//广告
     @BindView(R2.id.iv_advertisement)
     ImageView mIvAdvertisement;//广告图片
     private View mRootView;
@@ -73,6 +74,13 @@ public class HeaderViewHelper {
         checkNetwork();
     }
 
+    /**
+     * 与Fragment的生命周期同步
+     */
+    public void onDestroyView() {
+        mContent.unregisterReceiver(mReceiver);
+    }
+
     @OnClick({R2.id.iv_advertisement, R2.id.iv_close_advertisement})
     public void onClick(View view) {
         int id = view.getId();
@@ -82,7 +90,7 @@ public class HeaderViewHelper {
                 RouterUtil.clickMenuLink(mContent, jumpUrl);
             }
         } else if (R.id.iv_close_advertisement == id) {
-            mLlHeaderTipAdvertisement.setVisibility(View.GONE);
+            mRlHeaderTipAdvertisement.setVisibility(View.GONE);
             mIsHideAdvertisement = true;
         }
     }
@@ -185,12 +193,12 @@ public class HeaderViewHelper {
     public void showAdvertisement(AdBean adBean) {
         if (adBean == null) {
             mTopBannerType = BANNER_TYPE_SHOW_NOTHING;
-            mLlHeaderTipAdvertisement.setVisibility(View.GONE);
+            mRlHeaderTipAdvertisement.setVisibility(View.GONE);
             return;
         }
         if (!mIsHideAdvertisement) {
             mTopBannerType = BANNER_TYPE_ADVERTISEMENT;
-            mLlHeaderTipAdvertisement.setVisibility(View.VISIBLE);
+            mRlHeaderTipAdvertisement.setVisibility(View.VISIBLE);
             ImageLoader.getInstance(mContent)
                     .displayImage(adBean.getUrl(), mIvAdvertisement, R.drawable.uikit_bg_pic_loading_place, R.drawable.uikit_bg_pic_loading_error);
             mIvAdvertisement.setTag(adBean.getLinkUrl());
@@ -204,11 +212,11 @@ public class HeaderViewHelper {
         boolean isConnected = NetStateUtil.isNetworkConnected(mContent);
         if (!isConnected) {
             mTvHeaderTipNoNet.setVisibility(View.VISIBLE);
-            mLlHeaderTipAdvertisement.setVisibility(View.GONE);
+            mRlHeaderTipAdvertisement.setVisibility(View.GONE);
         } else {
             mTvHeaderTipNoNet.setVisibility(View.GONE);
             if (mTopBannerType == BANNER_TYPE_ADVERTISEMENT && !mIsHideAdvertisement) {
-                mLlHeaderTipAdvertisement.setVisibility(View.VISIBLE);
+                mRlHeaderTipAdvertisement.setVisibility(View.VISIBLE);
             }
         }
     }

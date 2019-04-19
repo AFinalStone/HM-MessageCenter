@@ -16,6 +16,7 @@ import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.bean.MsgListHeaderBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.dict.ModuleType;
+import com.hm.iou.msg.event.DeleteFriendEvent;
 import com.hm.iou.msg.event.UpdateMsgCenterUnReadMsgNumEvent;
 import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.msg.util.CacheDataUtil;
@@ -134,7 +135,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
      * 获取顶部广告
      */
     private void getBanner() {
-        AdApi.getAdvertiseList("banner003")
+        AdApi.getAdvertiseList("banner005")
                 .compose(getProvider().<BaseResponse<List<AdBean>>>bindUntilEvent(FragmentEvent.DESTROY_VIEW))
                 .map(RxUtil.<List<AdBean>>handleResponse())
                 .subscribeWith(new CommSubscriber<List<AdBean>>(mView) {
@@ -279,6 +280,11 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
         mIsNeedRefresh = true;
     }
 
+    /**
+     * 顶部头像未读消息数量
+     *
+     * @param commBizEvent
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvenRedFlagCount(CommBizEvent commBizEvent) {
         if ("userInfo_homeLeftMenu_redFlagCount".equals(commBizEvent.key)) {
@@ -287,6 +293,28 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
         }
     }
 
+    /**
+     * 用户在通讯录页面删除了好友，及时刷新列表
+     *
+     * @param deleteFriendEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvenDeleteFriend(DeleteFriendEvent deleteFriendEvent) {
+        String account = deleteFriendEvent.imAccId;
+        IMHelper.getInstance(mContext).deleteRecentContract(account);
+        for (int i = 0; i < mChatList.size(); i++) {
+            account.equals(mChatList.get(i).getContactId());
+            mChatList.remove(i);
+            break;
+        }
+        mView.showMsgList(mChatList);
+    }
+
+    /**
+     * 成功获取消息中心未读消息数量，及时刷新UI
+     *
+     * @param commBizEvent
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvenGetNoReadNumSuccess(CommBizEvent commBizEvent) {
         if (MsgCenterAppLike.EXTRA_KEY_GET_NO_READ_NUM_SUCCESS.equals(commBizEvent.key)) {

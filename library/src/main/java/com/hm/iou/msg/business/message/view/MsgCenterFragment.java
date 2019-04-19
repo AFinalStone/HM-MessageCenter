@@ -122,6 +122,14 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mHeaderViewHelper != null) {
+            mHeaderViewHelper.onDestroyView();
+        }
+    }
+
     @OnClick({R2.id.rl_header, R2.id.tv_right_title})
     public void onClick(View view) {
         int id = view.getId();

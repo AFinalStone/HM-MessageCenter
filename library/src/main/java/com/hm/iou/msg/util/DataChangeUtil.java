@@ -43,20 +43,22 @@ public class DataChangeUtil {
 
         if (list != null) {
             for (RecentContact contact : list) {
-                String fromNick = contact.getFromNick();
-                String fromAccount = contact.getFromAccount();
                 String contactId = contact.getContactId();
                 String content = contact.getContent();
                 String strTime = TimeUtil.formatChatListTime(contact.getTime());
                 int redMsgNum = contact.getUnreadCount();
-                NimUserInfo users = NIMClient.getService(UserService.class).getUserInfo(fromAccount);
+                String headerImgUrl = "";
+                String showName = "";
+                NimUserInfo users = NIMClient.getService(UserService.class).getUserInfo(contactId);
+                if (users != null) {
+                    headerImgUrl = users.getAvatar();
+                    showName = users.getName();
+                }
                 ChatMsgBean chatMsgBean = new ChatMsgBean();
-                Logger.d("fromName=" + fromNick + "contactId="
-                        + contactId + "content=" + content + "strTime" + strTime + "redMsgNum" + redMsgNum);
-                chatMsgBean.setFromNick(fromNick);
-                chatMsgBean.setFromHeaderImage(users.getAvatar());
-                chatMsgBean.setFromAccount(fromAccount);
+                Logger.d("contactId=" + contactId + "content=" + content + "strTime" + strTime + "redMsgNum" + redMsgNum);
                 chatMsgBean.setContactId(contactId);
+                chatMsgBean.setContractHeaderImage(headerImgUrl);
+                chatMsgBean.setContractShowName(showName);
                 chatMsgBean.setChatContent(content);
                 chatMsgBean.setRedMsgNum(redMsgNum);
                 chatMsgBean.setTime(strTime);
@@ -323,7 +325,7 @@ public class DataChangeUtil {
                         if (MsgType.CommuniqueIntro.getValue() == dbData.getSourceBizType()) {
                             return TYPE_COMMUNIQUE;
                         }
-                        return TYPE_ADVERTISEMENT;
+                        return TYPE_ADVERTISEMENT_NEWS_SPORT;
                     }
                 };
                 resultList.add(msgItem);

@@ -64,7 +64,10 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                NavigationHelper.toContractMsgDetailPage(mContext);
+                ISimilarityContractMsgItem item = (ISimilarityContractMsgItem) adapter.getItem(position);
+                if (item != null) {
+                    NavigationHelper.toMsgDetailPage(mContext, item.getIJustUrl());
+                }
             }
         });
         //设置下拉刷新监听

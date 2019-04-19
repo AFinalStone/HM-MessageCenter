@@ -19,11 +19,12 @@ import com.hm.iou.sharedata.UserManager;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.UIKitOptions;
 import com.netease.nim.uikit.api.model.session.SessionEventListener;
+import com.netease.nim.uikit.impl.NimUIKitImpl;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
-import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
+import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
@@ -66,6 +67,10 @@ public class IMHelper {
     }
 
     public void initIM() {
+        LoginInfo loginInfo = getLoginInfo();
+        if (loginInfo == null) {
+            return;
+        }
         NIMClient.init(mContext, getLoginInfo(), options());
         String packageName = mContext.getPackageName();
         String processName = getProcessName();
@@ -73,6 +78,12 @@ public class IMHelper {
         if (packageName.equals(processName)) {
             // 初始化UIKit模块
             NimUIKit.init(mContext, buildUIKitOptions());
+            //把账号初始化到NimUiKit模块
+            NimUIKitImpl.loginSuccess(loginInfo.getAccount());
+            //  注册会话列表观察者对象
+            NIMClient.getService(MsgServiceObserve.class)
+                    .observeRecentContact(mChatListObserver, true);
+            //订制聊天页面的头像点击
             NimUIKit.setSessionListener(new SessionEventListener() {
                 @Override
                 public void onAvatarClicked(Context context, IMMessage imMessage) {
@@ -107,7 +118,6 @@ public class IMHelper {
                     }
                 };
             }
-            login();
         }
     }
 
@@ -222,28 +232,6 @@ public class IMHelper {
                 .deleteRecentContact2(account, SessionTypeEnum.P2P);
     }
 
-    public void login() {
-        //登陆
-        NimUIKit.login(getLoginInfo(), new RequestCallback<LoginInfo>() {
-            @Override
-            public void onSuccess(LoginInfo param) {
-                //  观察者
-                NIMClient.getService(MsgServiceObserve.class)
-                        .observeRecentContact(mChatListObserver, true);
-            }
-
-            @Override
-            public void onFailed(int code) {
-
-            }
-
-            @Override
-            public void onException(Throwable exception) {
-
-            }
-        });
-    }
-
     /**
      * 刷新token并登陆
      */
@@ -258,26 +246,7 @@ public class IMHelper {
                     public void accept(GetOrRefreshIMTokenBean getOrRefreshIMTokenBean) throws Exception {
                         UserManager.getInstance(mContext).updateIMId(getOrRefreshIMTokenBean.getImAccId());
                         UserManager.getInstance(mContext).updateIMToken(getOrRefreshIMTokenBean.getImToken());
-                        //登陆
-                        NimUIKit.login(getLoginInfo(), new RequestCallback<LoginInfo>() {
-                            @Override
-                            public void onSuccess(LoginInfo param) {
-
-                                //  注销观察者
-                                NIMClient.getService(MsgServiceObserve.class)
-                                        .observeRecentContact(mChatListObserver, true);
-                            }
-
-                            @Override
-                            public void onFailed(int code) {
-
-                            }
-
-                            @Override
-                            public void onException(Throwable exception) {
-
-                            }
-                        });
+                        initIM();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -287,17 +256,15 @@ public class IMHelper {
                 });
     }
 
+
     /**
      * 登出，释放相关资源
      */
     public void logout() {
         //注销会话列表观察者
-        mChatListObserver = null;
         mOnChatListChangeListenerList = null;
-        NIMClient.getService(MsgServiceObserve.class)
-                .observeRecentContact(mChatListObserver, false);
         //调用登出接口
-        NimUIKit.logout();
+        NIMClient.getService(AuthService.class).logout();
     }
 
     /**

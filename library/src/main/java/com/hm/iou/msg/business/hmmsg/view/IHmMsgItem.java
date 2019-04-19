@@ -10,10 +10,8 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
  */
 public interface IHmMsgItem extends MultiItemEntity {
 
-    int TYPE_ADVERTISEMENT = 0;      //广告
-    int TYPE_NEWS = 1;               //资讯
+    int TYPE_ADVERTISEMENT_NEWS_SPORT = 1;      //广告, 头条，活动
     int TYPE_COMMUNIQUE = 2;         //官方公告
-    int TYPE_FEEDBACK = 3;           //意见反馈
 
     /**
      * 获取消息的icon

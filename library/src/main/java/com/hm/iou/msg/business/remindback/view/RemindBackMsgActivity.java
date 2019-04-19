@@ -64,7 +64,10 @@ public class RemindBackMsgActivity extends BaseActivity<RemindBackMsgPresenter> 
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                NavigationHelper.toContractMsgDetailPage(mContext);
+                IRemindBackMsgItem item = (IRemindBackMsgItem) adapter.getItem(position);
+                if (item != null) {
+                    NavigationHelper.toMsgDetailPage(mContext, item.getIJustUrl());
+                }
             }
         });
         //设置下拉刷新监听

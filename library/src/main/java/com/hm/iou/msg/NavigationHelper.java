@@ -4,17 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.hm.iou.base.utils.RouterUtil;
 import com.hm.iou.msg.business.apply.view.ApplyNewFriendListActivity;
 import com.hm.iou.msg.business.friend.view.AddFriendIndexActivity;
 import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
-import com.hm.iou.msg.business.friendlist.view.FriendListActivity;
-import com.hm.iou.base.utils.RouterUtil;
 import com.hm.iou.msg.business.friend.view.ReportUserActivity;
 import com.hm.iou.msg.business.friend.view.SendVerifyRequestActivity;
+import com.hm.iou.msg.business.friendlist.view.FriendListActivity;
 import com.hm.iou.msg.dict.MsgType;
 import com.hm.iou.router.Router;
 import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nim.uikit.business.session.activity.P2PMessageActivity;
 
 /**
  * @author syl
@@ -72,17 +71,8 @@ public class NavigationHelper {
      *
      * @param context
      */
-    public static void toContractMsgDetailPage(Context context) {
-
-    }
-
-    /**
-     * 跳转到待还提醒
-     *
-     * @param context
-     */
-    public static void toRemaindItemDetailPage(Context context) {
-
+    public static void toMsgDetailPage(Context context, String jumpUrl) {
+        RouterUtil.clickMenuLink(context, jumpUrl);
     }
 
     /**

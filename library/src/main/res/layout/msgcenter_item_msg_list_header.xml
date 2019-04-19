@@ -6,8 +6,8 @@
     android:focusable="true"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/ll_header_tips_advertisement"
+    <RelativeLayout
+        android:id="@+id/rl_header_tips_advertisement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/jietiao_bg_tips_remind_no_net"
@@ -19,18 +19,18 @@
 
         <ImageView
             android:id="@+id/iv_advertisement"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="49dp"
-            android:layout_weight="1"
             android:scaleType="fitCenter" />
 
         <ImageView
             android:id="@+id/iv_close_advertisement"
             android:layout_width="49dp"
             android:layout_height="49dp"
+            android:layout_alignParentEnd="true"
             android:padding="19dp"
             android:src="@mipmap/uikit_icon_close_black" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tv_header_tips_no_net"

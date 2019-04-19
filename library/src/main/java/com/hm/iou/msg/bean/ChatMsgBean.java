@@ -11,10 +11,9 @@ import lombok.Data;
 @Data
 public class ChatMsgBean {
 
-    String fromAccount;
-    String fromHeaderImage;
-    String fromNick;
     String contactId;
+    String contractHeaderImage;
+    String contractShowName;
     String chatContent;
     String time;
     int redMsgNum;
