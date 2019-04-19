@@ -69,9 +69,8 @@ public class FriendDetailContract {
         /**
          * 添加黑名单
          *
-         * @param userId
          */
-        void addBlackName(String userId);
+        void addBlackName();
 
         /**
          * 更新备注名
