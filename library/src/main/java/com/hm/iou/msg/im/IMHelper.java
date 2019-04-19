@@ -28,6 +28,7 @@ import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
@@ -88,6 +89,13 @@ public class IMHelper {
                 @Override
                 public void onAvatarClicked(Context context, IMMessage imMessage) {
                     String sessionId = imMessage.getSessionId();
+                    if (imMessage.getDirect() == MsgDirectionEnum.Out) {
+                        //说明点击的是 我本人的头像
+                        com.hm.iou.sharedata.model.UserInfo userInfo = UserManager.getInstance(mContext)
+                                .getUserInfo();
+                        NavigationHelper.toMyDetailPageFromSession(mContext, userInfo.getUserId());
+                        return;
+                    }
                     NavigationHelper.toFriendDetailPageFromSession(mContext, sessionId);
                 }
 
