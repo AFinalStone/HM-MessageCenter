@@ -11,6 +11,7 @@ import com.hm.iou.msg.bean.GetOrRefreshIMTokenBean;
 import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.AddFriendReqBean;
+import com.hm.iou.msg.bean.req.FriendDetailReqBean;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
 import com.hm.iou.msg.bean.req.ReportUserReqBean;
@@ -126,8 +127,18 @@ public class MsgApi {
         return getService().reportUser(data).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public static Flowable<BaseResponse<FriendInfo>> getUserInfoById(String userId) {
-        return getService().getUserInfoById(userId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    /**
+     * 获取好友详情信息
+     *
+     * @param userId 好友id
+     * @param idType 1-用户id，2-im账户
+     * @return
+     */
+    public static Flowable<BaseResponse<FriendInfo>> getUserInfoById(String userId, int idType) {
+        FriendDetailReqBean data = new FriendDetailReqBean();
+        data.setFriendId(userId);
+        data.setIdType(idType);
+        return getService().getUserInfoById(data).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     public static Flowable<BaseResponse<Object>> addFriendRequest(String userId, String applyMsg) {
@@ -192,7 +203,6 @@ public class MsgApi {
     /**
      * 获取或者更新Im_Token
      *
-     * @param applyId
      * @return
      */
     public static Flowable<BaseResponse<GetOrRefreshIMTokenBean>> getOrRefreshIMToken() {

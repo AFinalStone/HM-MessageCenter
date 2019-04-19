@@ -45,10 +45,10 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
     }
 
     @Override
-    public void getUserInfo(String userId, String applyStatus) {
+    public void getUserInfo(String userId, int idType, String applyStatus) {
         mApplyStatus = applyStatus;
         mView.showLoadingView();
-        MsgApi.getUserInfoById(userId)
+        MsgApi.getUserInfoById(userId, idType == FriendDetailActivity.ID_TYPE_IM ? 2 : 1)
                 .compose(getProvider().<BaseResponse<FriendInfo>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<FriendInfo>handleResponse())
                 .subscribeWith(new CommSubscriber<FriendInfo>(mView) {

@@ -9,6 +9,7 @@ import android.text.TextUtils;
 
 import com.hm.iou.base.file.FileUtil;
 import com.hm.iou.base.utils.RxUtil;
+import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.bean.GetOrRefreshIMTokenBean;
@@ -17,6 +18,7 @@ import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.UserManager;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.UIKitOptions;
+import com.netease.nim.uikit.api.model.session.SessionEventListener;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -26,6 +28,7 @@ import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.uinfo.model.UserInfo;
@@ -70,6 +73,23 @@ public class IMHelper {
         if (packageName.equals(processName)) {
             // 初始化UIKit模块
             NimUIKit.init(mContext, buildUIKitOptions());
+            NimUIKit.setSessionListener(new SessionEventListener() {
+                @Override
+                public void onAvatarClicked(Context context, IMMessage imMessage) {
+                    String sessionId = imMessage.getSessionId();
+                    NavigationHelper.toFriendDetailPageFromSession(mContext, sessionId);
+                }
+
+                @Override
+                public void onAvatarLongClicked(Context context, IMMessage imMessage) {
+
+                }
+
+                @Override
+                public void onAckMsgClicked(Context context, IMMessage imMessage) {
+
+                }
+            });
             //黑名单
             NimUIKit.registerTipMsgViewHolder(MsgViewHolderTip.class);
             //会话列表变更监听对象

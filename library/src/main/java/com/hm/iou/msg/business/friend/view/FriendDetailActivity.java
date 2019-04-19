@@ -1,5 +1,6 @@
 package com.hm.iou.msg.business.friend.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -31,13 +32,18 @@ import butterknife.OnClick;
 public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> implements FriendDetailContract.View {
 
     public static final String EXTRA_KEY_USER_ID = "userId";
-    //申请状态，1：表示好友申请已过期，2：等待确认好友申请
+    //值为2时，表示im账户，其他表示普通用户id
+    public static final String EXTRA_KEY_ID_TYPE = "idType";
+
+    //申请状态，1：表示好友申请已过期，2：等待确认好友申请，除了从好友申请列表页进来需要此参数外，其他均不需要考虑
     public static final String EXTRA_KEY_APPLY_STATUS = "applyStatus";
     //对方申请加你为好友时的备注信息
     public static final String EXTRA_KEY_COMMENT_INFO = "comment";
 
     public static final String APPLY_OVERDUE = "1";
     public static final String APPLY_WAIT_CONFIRM = "2";
+
+    public static final int ID_TYPE_IM = 2; //
 
     @BindView(R2.id.iv_friend_avatar)
     ImageView mIvAvatar;
@@ -61,6 +67,7 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
     TextView mTvCommentInfo;
 
     private String mUserId;
+    private int mIdType;
 
     private String mApplyStatus;        //好友申请状态，确认好友时，需要传此参数，其他状态不考虑
     private String mCommentInfo;
@@ -79,11 +86,14 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
 
     @Override
     protected void initEventAndData(Bundle bundle) {
-        mUserId = getIntent().getStringExtra(EXTRA_KEY_USER_ID);
+        Intent data = getIntent();
+        mUserId = data.getStringExtra(EXTRA_KEY_USER_ID);
+        mIdType = data.getIntExtra(EXTRA_KEY_ID_TYPE, 0);
         mApplyStatus = getIntent().getStringExtra(EXTRA_KEY_APPLY_STATUS);
         mCommentInfo = getIntent().getStringExtra(EXTRA_KEY_COMMENT_INFO);
         if (bundle != null) {
             mUserId = bundle.getString(EXTRA_KEY_USER_ID);
+            mIdType = bundle.getInt(EXTRA_KEY_ID_TYPE);
             mApplyStatus = bundle.getString(EXTRA_KEY_APPLY_STATUS);
             mCommentInfo = bundle.getString(EXTRA_KEY_COMMENT_INFO);
         }
@@ -91,13 +101,14 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
             mLlCommentInfo.setVisibility(View.VISIBLE);
             mTvCommentInfo.setText(mCommentInfo);
         }
-        mPresenter.getUserInfo(mUserId, mApplyStatus);
+        mPresenter.getUserInfo(mUserId, mIdType, mApplyStatus);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(EXTRA_KEY_USER_ID, mUserId);
+        outState.putInt(EXTRA_KEY_ID_TYPE, mIdType);
         outState.putString(EXTRA_KEY_APPLY_STATUS, mApplyStatus);
         outState.putString(EXTRA_KEY_COMMENT_INFO, mCommentInfo);
     }
@@ -120,12 +131,12 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
                 .setOnClickListener(new HMAlertDialog.OnClickListener() {
                     @Override
                     public void onPosClick() {
-                        mPresenter.getUserInfo(mUserId, mApplyStatus);
+                        mPresenter.getUserInfo(mUserId, mIdType, mApplyStatus);
                     }
 
                     @Override
                     public void onNegClick() {
-
+                        finish();
                     }
                 })
                 .setCancelable(false)

@@ -143,6 +143,20 @@ public class NavigationHelper {
     }
 
     /**
+     * 从会话里点击头像进入详情页
+     *
+     * @param context
+     * @param imAccId
+     */
+    public static void toFriendDetailPageFromSession(Context context, String imAccId) {
+        Intent intent = new Intent(context, FriendDetailActivity.class);
+        intent.putExtra(FriendDetailActivity.EXTRA_KEY_USER_ID, imAccId);
+        intent.putExtra(FriendDetailActivity.EXTRA_KEY_ID_TYPE, FriendDetailActivity.ID_TYPE_IM);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+    /**
      * 添加好友
      *
      * @param context
