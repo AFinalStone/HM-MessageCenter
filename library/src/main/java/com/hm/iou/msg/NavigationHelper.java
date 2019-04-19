@@ -142,6 +142,13 @@ public class NavigationHelper {
         context.startActivity(intent);
     }
 
+    public static void toMyDetailPageFromSession(Context context, String friendId) {
+        Intent intent = new Intent(context, FriendDetailActivity.class);
+        intent.putExtra(FriendDetailActivity.EXTRA_KEY_USER_ID, friendId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
     /**
      * 从会话里点击头像进入详情页
      *
@@ -152,6 +159,7 @@ public class NavigationHelper {
         Intent intent = new Intent(context, FriendDetailActivity.class);
         intent.putExtra(FriendDetailActivity.EXTRA_KEY_USER_ID, imAccId);
         intent.putExtra(FriendDetailActivity.EXTRA_KEY_ID_TYPE, FriendDetailActivity.ID_TYPE_IM);
+        //需要设置 flag
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
