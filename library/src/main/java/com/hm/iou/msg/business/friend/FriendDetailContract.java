@@ -55,7 +55,7 @@ public class FriendDetailContract {
 
     public interface Presenter extends BaseContract.BasePresenter {
 
-        void getUserInfo(String userId, String applyStatus);
+        void getUserInfo(String userId, int idType, String applyStatus);
 
         /**
          * 点击底部"更多"按钮

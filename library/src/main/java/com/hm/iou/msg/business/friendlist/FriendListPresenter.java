@@ -16,6 +16,7 @@ import com.hm.iou.msg.bean.req.GetFriendListReq;
 import com.hm.iou.msg.business.friendlist.view.IFriend;
 import com.hm.iou.msg.event.AddFriendEvent;
 import com.hm.iou.msg.event.DeleteFriendEvent;
+import com.hm.iou.msg.event.UpdateFriendEvent;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
@@ -226,6 +227,11 @@ public class FriendListPresenter extends MvpActivityPresenter<FriendListContract
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventDeleteFriend(DeleteFriendEvent event) {
+        loadDataFromServer();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventUpdateFriend(UpdateFriendEvent event) {
         loadDataFromServer();
     }
 

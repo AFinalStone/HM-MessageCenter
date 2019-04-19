@@ -11,6 +11,7 @@ import com.hm.iou.msg.bean.GetOrRefreshIMTokenBean;
 import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.AddFriendReqBean;
+import com.hm.iou.msg.bean.req.FriendDetailReqBean;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
 import com.hm.iou.msg.bean.req.ReportUserReqBean;
@@ -58,8 +59,8 @@ public interface MsgService {
     @POST("/api/news/friend/v1/addReportById")
     Flowable<BaseResponse<Object>> reportUser(@Body ReportUserReqBean data);
 
-    @GET("/api/news/friend/v1/getUserInfoById")
-    Flowable<BaseResponse<FriendInfo>> getUserInfoById(@Query("friendId") String userId);
+    @POST("/api/news/friend/v1/getUserInfoById")
+    Flowable<BaseResponse<FriendInfo>> getUserInfoById(@Body FriendDetailReqBean data);
 
     @POST("/api/news/friend/v1/addFriends")
     Flowable<BaseResponse<Object>> addFriendRequest(@Body AddFriendReqBean data);
