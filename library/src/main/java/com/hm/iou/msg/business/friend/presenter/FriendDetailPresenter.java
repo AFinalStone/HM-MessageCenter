@@ -183,11 +183,11 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
     }
 
     @Override
-    public void addBlackName(String userId) {
+    public void addBlackName() {
         if (mFriendInfo == null)
             return;
         mView.showLoadingView();
-        MsgApi.addBlackName(userId)
+        MsgApi.addBlackName(mFriendInfo.getFriendId())
                 .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.handleResponse())
                 .subscribeWith(new CommSubscriber<Object>(mView) {

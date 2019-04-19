@@ -221,7 +221,7 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
                 .setOnClickListener(new HMAlertDialog.OnClickListener() {
                     @Override
                     public void onPosClick() {
-                        mPresenter.addBlackName(mUserId);
+                        mPresenter.addBlackName();
                     }
 
                     @Override
