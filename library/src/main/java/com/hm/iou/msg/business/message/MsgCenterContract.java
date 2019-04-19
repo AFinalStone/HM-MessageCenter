@@ -1,5 +1,6 @@
 package com.hm.iou.msg.business.message;
 
+import com.hm.iou.base.adver.AdBean;
 import com.hm.iou.base.mvp.BaseContract;
 import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.bean.MsgListHeaderBean;
@@ -62,6 +63,11 @@ public class MsgCenterContract {
          * @param redFlagCount
          */
         void updateRedFlagCount(String redFlagCount);
+
+        /**
+         * 显示顶部banner
+         */
+        void showTopBanner(AdBean adBean);
 
     }
 

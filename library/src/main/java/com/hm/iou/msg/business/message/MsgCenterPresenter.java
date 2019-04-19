@@ -6,8 +6,11 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hm.iou.base.adver.AdApi;
+import com.hm.iou.base.adver.AdBean;
 import com.hm.iou.base.mvp.MvpFragmentPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
+import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.MsgCenterAppLike;
 import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.bean.MsgListHeaderBean;
@@ -19,6 +22,7 @@ import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.msg.util.MsgCenterMsgUtil;
 import com.hm.iou.sharedata.event.CommBizEvent;
+import com.hm.iou.sharedata.model.BaseResponse;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
@@ -98,6 +102,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
         getHeaderModules();
         getChatList();
         getRedFlagCount();
+        getBanner();
     }
 
     @Override
@@ -122,9 +127,46 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     public void refreshData() {
         getChatList();
         MsgCenterMsgUtil.getMsgCenterNoReadNumFromServer(mContext);
+        getBanner();
     }
 
+    /**
+     * 获取顶部广告
+     */
+    private void getBanner() {
+        AdApi.getAdvertiseList("banner003")
+                .compose(getProvider().<BaseResponse<List<AdBean>>>bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                .map(RxUtil.<List<AdBean>>handleResponse())
+                .subscribeWith(new CommSubscriber<List<AdBean>>(mView) {
+                    @Override
+                    public void handleResult(List<AdBean> adBeans) {
+                        if (adBeans != null && !adBeans.isEmpty()) {
+                            mView.showTopBanner(adBeans.get(0));
+                        } else {
+                            mView.showTopBanner(null);
+                        }
+                    }
 
+                    @Override
+                    public void handleException(Throwable throwable, String s, String s1) {
+
+                    }
+
+                    @Override
+                    public boolean isShowCommError() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isShowBusinessError() {
+                        return false;
+                    }
+                });
+    }
+
+    /**
+     * 获取头部模块
+     */
     private void getHeaderModules() {
         mView.showInitLoading();
         Flowable.create(new FlowableOnSubscribe<List<MsgListHeaderBean>>() {

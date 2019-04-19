@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hm.iou.base.BaseFragment;
+import com.hm.iou.base.adver.AdBean;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
@@ -19,7 +20,6 @@ import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.bean.MsgListHeaderBean;
 import com.hm.iou.msg.business.message.MsgCenterContract;
 import com.hm.iou.msg.business.message.MsgCenterPresenter;
-import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.tools.StatusBarUtil;
 import com.hm.iou.uikit.HMLoadingView;
@@ -151,6 +151,12 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
             mTvNumNoRead.setVisibility(View.VISIBLE);
             mTvNumNoRead.setText(redFlagCount);
         }
+    }
+
+    @Override
+    public void showTopBanner(AdBean adBean) {
+        if (mHeaderViewHelper != null)
+            mHeaderViewHelper.showAdvertisement(adBean);
     }
 
     @Override
