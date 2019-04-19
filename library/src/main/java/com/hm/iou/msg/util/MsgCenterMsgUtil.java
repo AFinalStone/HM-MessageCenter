@@ -30,15 +30,18 @@ public class MsgCenterMsgUtil {
     /**
      * 从服务端获取消息中心未读消息数量
      */
-    public static void getMsgCenterNoReadNumFromServer(final Context context) {
+    public static void getMsgCenterNoReadNumFromServer(Context c) {
         if (mListDisposable != null && !mListDisposable.isDisposed()) {
             mListDisposable.dispose();
+            mListDisposable = null;
         }
+        final Context context = c.getApplicationContext();
         mListDisposable = MsgApi.getUnReadMsgNum()
                 .map(RxUtil.<UnReadMsgNumBean>handleResponse())
                 .subscribe(new Consumer<UnReadMsgNumBean>() {
                     @Override
                     public void accept(UnReadMsgNumBean unReadMsgNumBean) throws Exception {
+                        mListDisposable = null;
                         int numNoRead = unReadMsgNumBean.getButlerMessageNumber()
                                 + unReadMsgNumBean.getContractNumber()
                                 + unReadMsgNumBean.getSimilarContractNumber()
@@ -50,6 +53,7 @@ public class MsgCenterMsgUtil {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        mListDisposable = null;
                         getMsgCenterNoReadNumFromCache(context);
                     }
                 });
