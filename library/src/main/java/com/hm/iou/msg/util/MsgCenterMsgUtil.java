@@ -6,6 +6,7 @@ import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.EventBusHelper;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
+import com.hm.iou.msg.im.IMHelper;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -30,25 +31,24 @@ public class MsgCenterMsgUtil {
     /**
      * 从服务端获取消息中心未读消息数量
      */
-    public static void getMsgCenterNoReadNumFromServer(Context c) {
+    public static void getMsgCenterNoReadNumFromServer(final Context context) {
         if (mListDisposable != null && !mListDisposable.isDisposed()) {
             mListDisposable.dispose();
             mListDisposable = null;
         }
-        final Context context = c.getApplicationContext();
         mListDisposable = MsgApi.getUnReadMsgNum()
                 .map(RxUtil.<UnReadMsgNumBean>handleResponse())
                 .subscribe(new Consumer<UnReadMsgNumBean>() {
                     @Override
                     public void accept(UnReadMsgNumBean unReadMsgNumBean) throws Exception {
-                        mListDisposable = null;
+                        CacheDataUtil.setNoReadMsgNum(context, unReadMsgNumBean);
                         int numNoRead = unReadMsgNumBean.getButlerMessageNumber()
                                 + unReadMsgNumBean.getContractNumber()
                                 + unReadMsgNumBean.getSimilarContractNumber()
                                 + unReadMsgNumBean.getFriendMessageNumber()
-                                + unReadMsgNumBean.getWaitRepayNumber();
+                                + unReadMsgNumBean.getWaitRepayNumber()
+                                + IMHelper.getInstance(context).getTotalUnReadMsgCount();
                         EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
-                        CacheDataUtil.setNoReadMsgNum(context, unReadMsgNumBean);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -70,7 +70,8 @@ public class MsgCenterMsgUtil {
                     + unReadMsgNumBean.getContractNumber()
                     + unReadMsgNumBean.getSimilarContractNumber()
                     + unReadMsgNumBean.getFriendMessageNumber()
-                    + unReadMsgNumBean.getWaitRepayNumber();
+                    + unReadMsgNumBean.getWaitRepayNumber()
+                    + IMHelper.getInstance(context).getTotalUnReadMsgCount();
         }
         EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
         return unReadMsgNumBean;

@@ -12,8 +12,11 @@ import com.hm.iou.msg.business.friend.view.ReportUserActivity;
 import com.hm.iou.msg.business.friend.view.SendVerifyRequestActivity;
 import com.hm.iou.msg.business.friendlist.view.FriendListActivity;
 import com.hm.iou.msg.dict.MsgType;
+import com.hm.iou.msg.event.UpdateMsgCenterUnReadMsgNumEvent;
 import com.hm.iou.router.Router;
 import com.netease.nim.uikit.api.NimUIKit;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * @author syl
@@ -82,6 +85,7 @@ public class NavigationHelper {
      */
     public static void toSessionDetail(Context context, String fromAccount) {
         NimUIKit.startP2PSession(context, fromAccount);
+        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
     }
 
     public static void toMyCardPage(Context context) {

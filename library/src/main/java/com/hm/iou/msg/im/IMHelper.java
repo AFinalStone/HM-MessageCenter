@@ -16,6 +16,7 @@ import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.bean.GetOrRefreshIMTokenBean;
 import com.hm.iou.msg.business.NotificationEntranceActivity;
 import com.hm.iou.msg.util.DataChangeUtil;
+import com.hm.iou.msg.util.MsgCenterMsgUtil;
 import com.hm.iou.sharedata.UserManager;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.UIKitOptions;
@@ -27,7 +28,6 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.StatusCode;
-import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
@@ -62,7 +62,7 @@ public class IMHelper {
 
     public static IMHelper getInstance(Context context) {
         if (mImHelper == null) {
-            mImHelper = new IMHelper(context);
+            mImHelper = new IMHelper(context.getApplicationContext());
         }
         return mImHelper;
     }
@@ -117,6 +117,9 @@ public class IMHelper {
                         if (mOnChatListChangeListenerList == null) {
                             return;
                         }
+                        //从缓存中获取
+                        MsgCenterMsgUtil.getMsgCenterNoReadNumFromCache(mContext);
+                        //监听回调
                         for (OnChatListChangeListener listener : mOnChatListChangeListenerList) {
                             List<ChatMsgBean> chatList = DataChangeUtil.changeRecentContactToIChatMsgItem(messages);
                             listener.onDataChange(chatList);
@@ -267,22 +270,22 @@ public class IMHelper {
         if (getLoginInfo() == null) {
             return;
         }
-        NimUIKitImpl.loginSuccess(getLoginInfo().getAccount());
-        //登陆
-        NIMClient.getService(AuthService.class).login(getLoginInfo()).setCallback(new RequestCallback() {
+        NimUIKit.login(getLoginInfo(), new RequestCallback<LoginInfo>() {
             @Override
-            public void onSuccess(Object param) {
-
+            public void onSuccess(LoginInfo param) {
+                //  注册会话列表观察者对象
+                NIMClient.getService(MsgServiceObserve.class)
+                        .observeRecentContact(mChatListObserver, true);
             }
 
             @Override
             public void onFailed(int code) {
-
+                NimUIKitImpl.loginSuccess(getLoginInfo().getAccount());
             }
 
             @Override
             public void onException(Throwable exception) {
-
+                NimUIKitImpl.loginSuccess(getLoginInfo().getAccount());
             }
         });
     }
@@ -295,10 +298,19 @@ public class IMHelper {
         //注销会话列表观察者
         mOnChatListChangeListenerList = null;
         //调用登出接口
-        NIMClient.getService(AuthService.class).logout();
+        NimUIKitImpl.logout();
         //  注册会话列表观察者对象
         NIMClient.getService(MsgServiceObserve.class)
                 .observeRecentContact(mChatListObserver, false);
+    }
+
+    /**
+     * 获取未读消息总数
+     *
+     * @return
+     */
+    public int getTotalUnReadMsgCount() {
+        return NIMClient.getService(MsgService.class).getTotalUnreadCount();
     }
 
     /**
