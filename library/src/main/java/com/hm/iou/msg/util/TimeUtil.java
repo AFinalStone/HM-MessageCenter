@@ -20,17 +20,12 @@ public class TimeUtil {
             if (now - time < 86400000) {
                 Calendar calc = Calendar.getInstance();
                 calc.setTimeInMillis(time);
-                int hour = calc.get(Calendar.HOUR_OF_DAY);
-                String strDay = "上午";
-                if (hour > 13) {
-                    strDay = "下午";
-                }
-                return strDay + HF_FORMAT.format(now);
+                return "今天" + HF_FORMAT.format(now);
             }
 
             if (now - time < (86400000 * 2)) {
                 //昨天
-                return "昨天";
+                return "昨天" + HF_FORMAT.format(now);
             }
 
             //前天
