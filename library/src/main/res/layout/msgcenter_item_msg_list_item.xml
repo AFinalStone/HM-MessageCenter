@@ -15,13 +15,14 @@
         android:paddingEnd="20dp"
         android:paddingStart="20dp">
 
-        <ImageView
+        <com.hm.iou.uikit.ShapedImageView
             android:id="@+id/iv_from_header"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_centerVertical="true"
             android:scaleType="fitXY"
-            android:src="@mipmap/uikit_icon_header_unknow" />
+            android:src="@mipmap/uikit_icon_header_unknow"
+            app:shape_mode="circle" />
 
         <TextView
             android:id="@+id/tv_time"

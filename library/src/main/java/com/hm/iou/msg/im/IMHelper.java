@@ -26,7 +26,9 @@ import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
+import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
@@ -76,6 +78,8 @@ public class IMHelper {
         if (packageName.equals(processName)) {
             // 初始化UIKit模块
             NimUIKit.init(mContext, buildUIKitOptions());
+            //监听登陆状态
+            listenerLoginStatus();
             //登陆
             login();
             //订制聊天页面的头像点击
@@ -259,27 +263,28 @@ public class IMHelper {
     }
 
     public void login() {
+        //为UIKIT模块保存用户账号
+        if (getLoginInfo() == null) {
+            return;
+        }
+        NimUIKitImpl.loginSuccess(getLoginInfo().getAccount());
         //登陆
-        NimUIKit.login(getLoginInfo(), new RequestCallback<LoginInfo>() {
+        NIMClient.getService(AuthService.class).login(getLoginInfo()).setCallback(new RequestCallback() {
             @Override
-            public void onSuccess(LoginInfo param) {
+            public void onSuccess(Object param) {
+
             }
 
             @Override
             public void onFailed(int code) {
-                Logger.d("发生了错误_code==" + code);
-                NimUIKitImpl.loginSuccess(getLoginInfo().getAccount());
+
             }
 
             @Override
             public void onException(Throwable exception) {
-                Logger.d("发生了异常==" + exception.getMessage());
-                NimUIKitImpl.loginSuccess(getLoginInfo().getAccount());
+
             }
         });
-        //  注册会话列表观察者对象
-        NIMClient.getService(MsgServiceObserve.class)
-                .observeRecentContact(mChatListObserver, true);
     }
 
 
@@ -294,6 +299,23 @@ public class IMHelper {
         //  注册会话列表观察者对象
         NIMClient.getService(MsgServiceObserve.class)
                 .observeRecentContact(mChatListObserver, false);
+    }
+
+    /**
+     * 监听登陆状态
+     */
+    private void listenerLoginStatus() {
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(
+                new Observer<StatusCode>() {
+                    public void onEvent(StatusCode status) {
+                        Logger.d("用户在线状态发生改变StatusCode==" + status.getValue());
+                        if (StatusCode.PWD_ERROR.getValue() == status.getValue()) {//账号或密码错误
+                            refreshTokenAndLogin();
+                        } else if (StatusCode.UNLOGIN.getValue() == status.getValue()) {
+                            login();
+                        }
+                    }
+                }, true);
     }
 
     /**
