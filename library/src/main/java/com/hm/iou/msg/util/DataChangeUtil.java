@@ -15,10 +15,11 @@ import com.hm.iou.msg.business.remindback.view.IRemindBackMsgItem;
 import com.hm.iou.msg.business.similarity.view.ISimilarityContractMsgItem;
 import com.hm.iou.msg.dict.MsgType;
 import com.hm.iou.tools.StringUtil;
+import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
-import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
+import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,18 +48,14 @@ public class DataChangeUtil {
                 String content = contact.getContent();
                 String strTime = TimeUtil.formatChatListTime(contact.getTime());
                 int redMsgNum = contact.getUnreadCount();
-                String headerImgUrl = "";
-                String showName = "";
-                NimUserInfo users = NIMClient.getService(UserService.class).getUserInfo(contactId);
-                if (users != null) {
-                    headerImgUrl = users.getAvatar();
-                    showName = users.getName();
-                }
+                String displayName = UserInfoHelper.getUserDisplayName(contactId);
+                String headerImgUrl = NIMClient.getService(UserInfo.class).getAvatar();
+//                NimUserInfo userInfo = NIMClient.getService(NimUserInfo.class);
                 ChatMsgBean chatMsgBean = new ChatMsgBean();
                 Logger.d("contactId=" + contactId + "content=" + content + "strTime" + strTime + "redMsgNum" + redMsgNum);
                 chatMsgBean.setContactId(contactId);
                 chatMsgBean.setContractHeaderImage(headerImgUrl);
-                chatMsgBean.setContractShowName(showName);
+                chatMsgBean.setContractShowName(displayName);
                 chatMsgBean.setChatContent(content);
                 chatMsgBean.setRedMsgNum(redMsgNum);
                 chatMsgBean.setTime(strTime);

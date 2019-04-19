@@ -9,6 +9,7 @@ import android.text.TextUtils;
 
 import com.hm.iou.base.file.FileUtil;
 import com.hm.iou.base.utils.RxUtil;
+import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.ChatMsgBean;
@@ -22,6 +23,7 @@ import com.netease.nim.uikit.api.model.session.SessionEventListener;
 import com.netease.nim.uikit.impl.NimUIKitImpl;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.auth.AuthService;
@@ -68,22 +70,14 @@ public class IMHelper {
     }
 
     public void initIM() {
-        LoginInfo loginInfo = getLoginInfo();
-        if (loginInfo == null) {
-            return;
-        }
         NIMClient.init(mContext, getLoginInfo(), options());
         String packageName = mContext.getPackageName();
         String processName = getProcessName();
-
         if (packageName.equals(processName)) {
             // 初始化UIKit模块
             NimUIKit.init(mContext, buildUIKitOptions());
-            //把账号初始化到NimUiKit模块
-            NimUIKitImpl.loginSuccess(loginInfo.getAccount());
-            //  注册会话列表观察者对象
-            NIMClient.getService(MsgServiceObserve.class)
-                    .observeRecentContact(mChatListObserver, true);
+            //登陆
+            login();
             //订制聊天页面的头像点击
             NimUIKit.setSessionListener(new SessionEventListener() {
                 @Override
@@ -254,7 +248,7 @@ public class IMHelper {
                     public void accept(GetOrRefreshIMTokenBean getOrRefreshIMTokenBean) throws Exception {
                         UserManager.getInstance(mContext).updateIMId(getOrRefreshIMTokenBean.getImAccId());
                         UserManager.getInstance(mContext).updateIMToken(getOrRefreshIMTokenBean.getImToken());
-                        initIM();
+                        login();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -262,6 +256,30 @@ public class IMHelper {
 
                     }
                 });
+    }
+
+    public void login() {
+        //登陆
+        NimUIKit.login(getLoginInfo(), new RequestCallback<LoginInfo>() {
+            @Override
+            public void onSuccess(LoginInfo param) {
+            }
+
+            @Override
+            public void onFailed(int code) {
+                Logger.d("发生了错误_code==" + code);
+                NimUIKitImpl.loginSuccess(getLoginInfo().getAccount());
+            }
+
+            @Override
+            public void onException(Throwable exception) {
+                Logger.d("发生了异常==" + exception.getMessage());
+                NimUIKitImpl.loginSuccess(getLoginInfo().getAccount());
+            }
+        });
+        //  注册会话列表观察者对象
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeRecentContact(mChatListObserver, true);
     }
 
 
@@ -273,6 +291,9 @@ public class IMHelper {
         mOnChatListChangeListenerList = null;
         //调用登出接口
         NIMClient.getService(AuthService.class).logout();
+        //  注册会话列表观察者对象
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeRecentContact(mChatListObserver, false);
     }
 
     /**
