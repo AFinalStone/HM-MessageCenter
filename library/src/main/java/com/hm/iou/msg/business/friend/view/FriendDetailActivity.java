@@ -43,7 +43,9 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
     public static final String APPLY_OVERDUE = "1";
     public static final String APPLY_WAIT_CONFIRM = "2";
 
-    public static final int ID_TYPE_IM = 2; //
+    public static final int ID_TYPE_IM = 2; //表示传入的id类型为 im 账户Id
+
+    public static final int REQ_SEND_VERIFY_REQUEST = 100;
 
     @BindView(R2.id.iv_friend_avatar)
     ImageView mIvAvatar;
@@ -111,6 +113,17 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
         outState.putInt(EXTRA_KEY_ID_TYPE, mIdType);
         outState.putString(EXTRA_KEY_APPLY_STATUS, mApplyStatus);
         outState.putString(EXTRA_KEY_COMMENT_INFO, mCommentInfo);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_SEND_VERIFY_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                //如果申请好友时，已经是好友了，需要重新刷新一下数据
+                mPresenter.getUserInfo(mUserId, mIdType, null);
+            }
+        }
     }
 
     @OnClick(value = {R2.id.iv_friend_more, R2.id.btn_friend_submit})
@@ -189,6 +202,11 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
     @Override
     public void showButtonText(String text) {
         mBtnSubmit.setText(text);
+    }
+
+    @Override
+    public void showApplyCommentInfo(int visibility) {
+        mLlCommentInfo.setVisibility(visibility);
     }
 
     @Override
@@ -275,7 +293,7 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
                 .setOnClickListener(new HMAlertDialog.OnClickListener() {
                     @Override
                     public void onPosClick() {
-                        NavigationHelper.toSendVerifyRequestPage(FriendDetailActivity.this, mUserId);
+                        NavigationHelper.toSendVerifyRequestPage(FriendDetailActivity.this, mUserId, REQ_SEND_VERIFY_REQUEST);
                     }
 
                     @Override

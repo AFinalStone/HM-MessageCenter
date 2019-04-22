@@ -1,5 +1,6 @@
 package com.hm.iou.msg.business.friend.presenter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -59,7 +60,8 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                         mView.showAvatar(friendInfo.getAvatarUrl());
                         mView.showNickname(friendInfo.getNickName(), friendInfo.getStageName());
                         mView.showUserId(friendInfo.getShowId());
-                        mView.showLocation(friendInfo.getLocation());
+                        String location = friendInfo.getLocation();
+                        mView.showLocation(TextUtils.isEmpty(location) ? "保密" : location);
                         mView.showUserType(friendInfo.getCustomerType() == 1 ? "实名用户" : "普通用户");
                         mView.showBlackNameTips(friendInfo.isBlackStatus() ? View.VISIBLE : View.INVISIBLE);
 
@@ -177,7 +179,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                     return;
                 }
                 //如果不是好友，则跳转到 发送好友请求 页面
-                NavigationHelper.toSendVerifyRequestPage(mContext, mFriendInfo.getFriendId());
+                NavigationHelper.toSendVerifyRequestPage((Activity) mContext, mFriendInfo.getFriendId(), FriendDetailActivity.REQ_SEND_VERIFY_REQUEST);
             }
         }
     }
@@ -300,6 +302,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                         mFriendInfo.setFriended(true);
                         mApplyStatus = null;
                         mView.showButtonText("发消息");
+                        mView.showApplyCommentInfo(View.INVISIBLE);
                         EventBus.getDefault().post(new AddFriendEvent());
                         //获取token并登陆IM
                         IMHelper.getInstance(mContext).refreshTokenAndLogin();
