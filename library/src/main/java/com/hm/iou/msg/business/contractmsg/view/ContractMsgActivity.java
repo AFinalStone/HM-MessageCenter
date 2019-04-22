@@ -66,9 +66,9 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                IHmMsgItem item = (IHmMsgItem) adapter.getItem(position);
+                IContractMsgItem item = (IContractMsgItem) adapter.getItem(position);
                 if (item != null) {
-                    NavigationHelper.toMsgDetailPage(mContext, item.getMsgDetailLinkUrl());
+                    NavigationHelper.toMsgDetailPage(mContext, item.getIJustUrl());
                 }
             }
         });
