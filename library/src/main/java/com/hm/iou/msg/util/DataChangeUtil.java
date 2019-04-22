@@ -49,8 +49,6 @@ public class DataChangeUtil {
                 String strTime = TimeUtil.formatChatListTime(contact.getTime());
                 int redMsgNum = contact.getUnreadCount();
                 String displayName = UserInfoHelper.getUserDisplayName(contactId);
-//                Friend friend = NIMClient.getService(FriendService.class).getFriendByAccount(contactId);
-//                String headerImgUrl = friend.getAlias();
                 NimUserInfo nimUserInfo = NIMClient.getService(UserService.class).getUserInfo(contactId);
                 String headerImgUrl = "";
                 if (nimUserInfo != null) {

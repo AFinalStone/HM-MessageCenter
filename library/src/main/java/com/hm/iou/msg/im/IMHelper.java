@@ -18,9 +18,11 @@ import com.hm.iou.msg.business.NotificationEntranceActivity;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.msg.util.MsgCenterMsgUtil;
 import com.hm.iou.sharedata.UserManager;
+import com.hm.iou.tools.ImageLoader;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.UIKitOptions;
 import com.netease.nim.uikit.api.model.session.SessionEventListener;
+import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nim.uikit.impl.NimUIKitImpl;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
@@ -30,6 +32,8 @@ import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.misc.DirCacheFileType;
+import com.netease.nimlib.sdk.misc.MiscService;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
@@ -37,6 +41,7 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
+import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 
 import java.util.ArrayList;
@@ -170,33 +175,18 @@ public class IMHelper {
 
             @Override
             public UserInfo getUserInfo(String account) {
-                UserInfo userInfo = new UserInfo() {
-                    @Override
-                    public String getAccount() {
-                        return "";
-                    }
-
-                    @Override
-                    public String getName() {
-                        return "";
-                    }
-
-                    @Override
-                    public String getAvatar() {
-                        return "";
-                    }
-                };
-                return userInfo;
+                return NIMClient.getService(UserService.class).getUserInfo(account);
             }
 
             @Override
             public String getDisplayNameForMessageNotifier(String account, String sessionId, SessionTypeEnum sessionType) {
-                return null;
+                return UserInfoHelper.getUserDisplayName(account);
             }
 
             @Override
             public Bitmap getAvatarForMessageNotifier(SessionTypeEnum sessionType, String sessionId) {
-                return null;
+                String headerUrl = NIMClient.getService(UserService.class).getUserInfo(sessionId).getAvatar();
+                return ImageLoader.getInstance(mContext).getImageBitmap(headerUrl);
             }
         };
         return options;
@@ -302,6 +292,32 @@ public class IMHelper {
         //  注册会话列表观察者对象
         NIMClient.getService(MsgServiceObserve.class)
                 .observeRecentContact(mChatListObserver, false);
+        deleteCache();
+    }
+
+    private void deleteCache() {
+        List<DirCacheFileType> fileTypes = new ArrayList<>();
+        fileTypes.add(DirCacheFileType.IMAGE);
+        fileTypes.add(DirCacheFileType.VIDEO);
+        fileTypes.add(DirCacheFileType.THUMB);
+        fileTypes.add(DirCacheFileType.AUDIO);
+        fileTypes.add(DirCacheFileType.OTHER);
+        fileTypes.add(DirCacheFileType.LOG);
+
+        NIMClient.getService(MiscService.class).clearDirCache(fileTypes, 0, 0).setCallback(new RequestCallback<Void>() {
+            @Override
+            public void onSuccess(Void size) {
+                // 删除成功
+            }
+
+            @Override
+            public void onFailed(int code) {
+            }
+
+            @Override
+            public void onException(Throwable exception) {
+            }
+        });
     }
 
     /**

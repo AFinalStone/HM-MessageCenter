@@ -121,6 +121,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
             IMHelper.getInstance(mContext).deleteRecentContract(msgBean.getContactId());
             mChatList.remove(msgBean);
             mView.showMsgList(mChatList);
+            MsgCenterMsgUtil.getMsgCenterNoReadNumFromCache(mContext);
         }
     }
 
