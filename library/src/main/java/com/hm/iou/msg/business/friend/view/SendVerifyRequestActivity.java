@@ -101,15 +101,21 @@ public class SendVerifyRequestActivity extends BaseActivity {
     private void sendVerifyRequest(String content) {
         showLoadingView();
         mDisposable = MsgApi.addFriendRequest(mUserId, content)
-                .map(RxUtil.handleResponse())
-                .subscribeWith(new CommSubscriber<Object>(this) {
+                .map(RxUtil.<Boolean>handleResponse())
+                .subscribeWith(new CommSubscriber<Boolean>(this) {
                     @Override
-                    public void handleResult(Object o) {
+                    public void handleResult(Boolean result) {
                         dismissLoadingView();
                         ToastUtil.showStatusView(SendVerifyRequestActivity.this, "申请已发送");
                         //获取token并登陆IM
                         IMHelper.getInstance(mContext).refreshTokenAndLogin();
-                        closeCurrPage();
+
+                        if (result != null && result) {
+                            setResult(RESULT_OK);
+                            finish();
+                        } else {
+                            finish();
+                        }
                     }
 
                     @Override

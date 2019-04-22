@@ -27,6 +27,8 @@ public class FriendDetailContract {
 
         void showBlackNameTips(int visibility);
 
+        void showApplyCommentInfo(int visibility);
+
         void showButtonText(String text);
 
         void showActionSheet(List<String> list);

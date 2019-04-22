@@ -1,5 +1,6 @@
 package com.hm.iou.msg;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
@@ -113,11 +114,12 @@ public class NavigationHelper {
      *
      * @param context
      * @param friendId
+     * @param reqCode
      */
-    public static void toSendVerifyRequestPage(Context context, String friendId) {
+    public static void toSendVerifyRequestPage(Activity context, String friendId, int reqCode) {
         Intent intent = new Intent(context, SendVerifyRequestActivity.class);
         intent.putExtra(SendVerifyRequestActivity.EXTRA_KEY_USER_ID, friendId);
-        context.startActivity(intent);
+        context.startActivityForResult(intent, reqCode);
     }
 
     /**

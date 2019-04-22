@@ -63,7 +63,7 @@ public interface MsgService {
     Flowable<BaseResponse<FriendInfo>> getUserInfoById(@Body FriendDetailReqBean data);
 
     @POST("/api/news/friend/v1/addFriends")
-    Flowable<BaseResponse<Object>> addFriendRequest(@Body AddFriendReqBean data);
+    Flowable<BaseResponse<Boolean>> addFriendRequest(@Body AddFriendReqBean data);
 
     @POST("/api/news/friend/v1/updateStageName")
     Flowable<BaseResponse<Object>> updateRemarkName(@Body UpdateRemarkNameReqBean data);
