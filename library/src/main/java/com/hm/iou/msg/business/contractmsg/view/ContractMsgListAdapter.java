@@ -28,5 +28,7 @@ public class ContractMsgListAdapter extends BaseQuickAdapter<IContractMsgItem, B
         helper.setText(R.id.tv_title, item.getITitle());
         //内容
         helper.setText(R.id.tv_content, item.getIContent());
+        //点击事件
+        helper.addOnClickListener(R.id.rl_content);
     }
 }

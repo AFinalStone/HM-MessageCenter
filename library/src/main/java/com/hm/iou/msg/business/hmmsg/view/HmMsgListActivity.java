@@ -67,7 +67,7 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mPresenter.getMsgListFromServer();
+                mPresenter.getMsgListFromServer(true);
             }
         });
 

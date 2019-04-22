@@ -19,6 +19,7 @@
         tools:text="星期六 上午 10:00" />
 
     <RelativeLayout
+        android:id="@+id/rl_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/jietiao_bg_message_list_item"

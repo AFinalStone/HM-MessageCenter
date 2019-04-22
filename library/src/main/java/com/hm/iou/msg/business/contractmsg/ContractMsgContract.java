@@ -59,7 +59,7 @@ public class ContractMsgContract {
         /**
          * 获取消息列表
          */
-        void getMsgList();
+        void getMsgList(boolean isShowTip);
 
         /**
          * 初始化

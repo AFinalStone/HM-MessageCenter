@@ -60,8 +60,10 @@ public class HmMsgListContract {
 
         /**
          * 从服务端获取消息列表
+         *
+         * @param isShowTip 提示语
          */
-        void getMsgListFromServer();
+        void getMsgListFromServer(boolean isShowTip);
 
     }
 }

@@ -52,6 +52,11 @@ public class SimilarityContractMsgContract {
          */
         void showDataEmpty();
 
+        /**
+         * 自动刷新数据
+         */
+        void autoRefresh();
+
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
@@ -59,7 +64,7 @@ public class SimilarityContractMsgContract {
         /**
          * 获取消息列表
          */
-        void getMsgList();
+        void getMsgList(boolean isShowTip);
 
         /**
          * 初始化

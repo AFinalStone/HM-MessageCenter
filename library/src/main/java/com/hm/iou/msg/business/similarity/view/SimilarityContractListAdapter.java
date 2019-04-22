@@ -25,6 +25,8 @@ public class SimilarityContractListAdapter extends BaseQuickAdapter<ISimilarityC
         helper.setText(R.id.tv_borrower_name, item.getIBorrowerName());
         helper.setText(R.id.tv_back_time, item.getIBackTime());
         helper.setText(R.id.tv_back_type, item.getIBackType());
+        //点击事件
+        helper.addOnClickListener(R.id.rl_content);
     }
 
 }

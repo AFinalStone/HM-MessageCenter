@@ -74,7 +74,7 @@ public class RemindBackMsgActivity extends BaseActivity<RemindBackMsgPresenter> 
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mPresenter.getMsgList();
+                mPresenter.getMsgList(true);
             }
         });
 

@@ -76,7 +76,7 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mPresenter.getMsgList();
+                mPresenter.getMsgList(true);
             }
         });
 

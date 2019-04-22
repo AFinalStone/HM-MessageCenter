@@ -8,8 +8,8 @@ import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.msg.RemindBackMsgDbData;
-import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
+import com.hm.iou.msg.business.remindback.view.IRemindBackMsgItem;
 import com.hm.iou.msg.event.UpdateMsgCenterUnReadMsgNumEvent;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
@@ -17,11 +17,14 @@ import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -40,87 +43,71 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
     @Override
     public void init() {
         mView.showInitLoading();
+        getMsgList(false);
+    }
+
+    @Override
+    public void getMsgList(final boolean isShowTip) {
         MsgApi.getRemindBackList()
                 .compose(getProvider().<BaseResponse<List<RemindBackMsgDbData>>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<List<RemindBackMsgDbData>>handleResponse())
-                .map(new Function<List<RemindBackMsgDbData>, List<RemindBackMsgDbData>>() {
-                    @Override
-                    public List<RemindBackMsgDbData> apply(List<RemindBackMsgDbData> list) throws Exception {
-                        MsgCenterDbHelper.saveOrUpdateRemindBackMsgList(list);
-                        List<RemindBackMsgDbData> resultList = MsgCenterDbHelper.getRemindBackMsgList();
-                        if (resultList == null) {
-                            resultList = new ArrayList<>();
-                        }
-                        Logger.d("thread_name====" + Thread.currentThread().getName());
-                        return resultList;
-                    }
-                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new CommSubscriber<List<RemindBackMsgDbData>>(mView) {
                     @Override
                     public void handleResult(List<RemindBackMsgDbData> list) {
-                        mView.hideInitLoading();
-                        mView.enableRefresh();
-                        if (list == null || list.size() == 0) {
-                            mView.showDataEmpty();
-                        } else {
-                            mView.showMsgList(DataChangeUtil.changeRemindBackMsgDbDataToIRemindBackMsgItem(list));
-                        }
                         EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
+                        getCache(list);
                     }
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
-                        mView.showInitFailed();
-                    }
-
-                    @Override
-                    public boolean isShowBusinessError() {
-                        return false;
+                        getCache(null);
                     }
 
                     @Override
                     public boolean isShowCommError() {
-                        return false;
+                        return isShowTip;
+                    }
+
+                    @Override
+                    public boolean isShowBusinessError() {
+                        return isShowTip;
                     }
                 });
     }
 
-    @Override
-    public void getMsgList() {
-        MsgApi.getRemindBackList()
-                .compose(getProvider().<BaseResponse<List<RemindBackMsgDbData>>>bindUntilEvent(ActivityEvent.DESTROY))
-                .map(RxUtil.<List<RemindBackMsgDbData>>handleResponse())
-                .map(new Function<List<RemindBackMsgDbData>, List<RemindBackMsgDbData>>() {
-                    @Override
-                    public List<RemindBackMsgDbData> apply(List<RemindBackMsgDbData> list) throws Exception {
-                        MsgCenterDbHelper.saveOrUpdateRemindBackMsgList(list);
-                        List<RemindBackMsgDbData> resultList = MsgCenterDbHelper.getRemindBackMsgList();
-                        if (resultList == null) {
-                            resultList = new ArrayList<>();
-                        }
-                        Logger.d("thread_name====" + Thread.currentThread().getName());
-                        return resultList;
-                    }
-                })
+    private void getCache(final List<RemindBackMsgDbData> list) {
+        Flowable.create(new FlowableOnSubscribe<List<IRemindBackMsgItem>>() {
+            @Override
+            public void subscribe(FlowableEmitter<List<IRemindBackMsgItem>> e) throws Exception {
+                MsgCenterDbHelper.saveOrUpdateRemindBackMsgList(list);
+                List<RemindBackMsgDbData> listCache = MsgCenterDbHelper.getRemindBackMsgList();
+                List<IRemindBackMsgItem> resultList = DataChangeUtil.changeRemindBackMsgDbDataToIRemindBackMsgItem(listCache);
+                e.onNext(resultList);
+            }
+        }, BackpressureStrategy.ERROR)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new CommSubscriber<List<RemindBackMsgDbData>>(mView) {
+                .subscribe(new Consumer<List<IRemindBackMsgItem>>() {
                     @Override
-                    public void handleResult(List<RemindBackMsgDbData> list) {
+                    public void accept(List<IRemindBackMsgItem> resultList) throws Exception {
+                        mView.hideInitLoading();
                         mView.hidePullDownRefresh();
-                        if (list == null || list.size() == 0) {
+                        mView.enableRefresh();
+                        if (resultList == null || resultList.size() == 0) {
                             mView.showDataEmpty();
                         } else {
-                            mView.showMsgList(DataChangeUtil.changeRemindBackMsgDbDataToIRemindBackMsgItem(list));
+                            mView.showMsgList(resultList);
                         }
-                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                     }
-
+                }, new Consumer<Throwable>() {
                     @Override
-                    public void handleException(Throwable throwable, String s, String s1) {
+                    public void accept(Throwable throwable) throws Exception {
+                        mView.hideInitLoading();
                         mView.hidePullDownRefresh();
+                        mView.enableRefresh();
+                        mView.showDataEmpty();
                     }
                 });
     }

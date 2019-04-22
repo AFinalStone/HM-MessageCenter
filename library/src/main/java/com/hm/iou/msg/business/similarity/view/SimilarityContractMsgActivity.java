@@ -74,7 +74,7 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mPresenter.getMsgList();
+                mPresenter.getMsgList(true);
             }
         });
 
@@ -122,5 +122,10 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
     public void showDataEmpty() {
         mLoadingInit.setVisibility(View.VISIBLE);
         mLoadingInit.showDataEmpty("");
+    }
+
+    @Override
+    public void autoRefresh() {
+        mRefreshLayout.autoRefresh();
     }
 }
