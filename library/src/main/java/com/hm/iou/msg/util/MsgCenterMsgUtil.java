@@ -31,11 +31,12 @@ public class MsgCenterMsgUtil {
     /**
      * 从服务端获取消息中心未读消息数量
      */
-    public static void getMsgCenterNoReadNumFromServer(final Context context) {
+    public static void getMsgCenterNoReadNumFromServer(Context c) {
         if (mListDisposable != null && !mListDisposable.isDisposed()) {
             mListDisposable.dispose();
             mListDisposable = null;
         }
+        final Context context = c.getApplicationContext();
         mListDisposable = MsgApi.getUnReadMsgNum()
                 .map(RxUtil.<UnReadMsgNumBean>handleResponse())
                 .subscribe(new Consumer<UnReadMsgNumBean>() {
@@ -62,7 +63,8 @@ public class MsgCenterMsgUtil {
     /**
      * 从缓存中获取消息中心未读消息数量
      */
-    public static UnReadMsgNumBean getMsgCenterNoReadNumFromCache(Context context) {
+    public static UnReadMsgNumBean getMsgCenterNoReadNumFromCache(Context c) {
+        final Context context = c.getApplicationContext();
         UnReadMsgNumBean unReadMsgNumBean = CacheDataUtil.getNoReadMsgNum(context);
         int numNoRead = 0;
         if (unReadMsgNumBean != null) {
