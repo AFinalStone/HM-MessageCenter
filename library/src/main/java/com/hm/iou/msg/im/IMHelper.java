@@ -17,7 +17,10 @@ import com.hm.iou.msg.bean.GetOrRefreshIMTokenBean;
 import com.hm.iou.msg.business.NotificationEntranceActivity;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.msg.util.MsgCenterMsgUtil;
+import com.hm.iou.network.HttpReqManager;
+import com.hm.iou.router.Router;
 import com.hm.iou.sharedata.UserManager;
+import com.hm.iou.sharedata.event.LogoutEvent;
 import com.hm.iou.tools.ImageLoader;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.UIKitOptions;
@@ -43,6 +46,8 @@ import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.model.UserInfo;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -341,6 +346,16 @@ public class IMHelper {
                             refreshTokenAndLogin();
                         } else if (StatusCode.UNLOGIN.getValue() == status.getValue()) {
                             login();
+                        } else if (StatusCode.KICKOUT.getValue() == status.getValue()
+                                || StatusCode.KICK_BY_OTHER_CLIENT.getValue() == status.getValue()
+                                || StatusCode.FORBIDDEN.getValue() == status.getValue()) {//用户被禁止登陆或者被踢下线
+                            EventBus.getDefault().post(new LogoutEvent());
+                            HttpReqManager.getInstance().setUserId("");
+                            HttpReqManager.getInstance().setToken("");
+                            UserManager.getInstance(mContext).logout();
+                            com.hm.iou.base.ActivityManager.getInstance().exitAllActivities();
+                            Router.getInstance().buildWithUrl("hmiou://m.54jietiao.com/login/selecttype")
+                                    .navigation(mContext);
                         }
                     }
                 }, true);

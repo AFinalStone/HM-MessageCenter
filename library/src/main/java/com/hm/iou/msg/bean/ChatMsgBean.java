@@ -2,6 +2,8 @@ package com.hm.iou.msg.bean;
 
 import android.text.TextUtils;
 
+import com.hm.iou.sharedata.model.SexEnum;
+
 import lombok.Data;
 
 /**
@@ -17,6 +19,7 @@ public class ChatMsgBean {
     String chatContent;
     String time;
     int redMsgNum;
+    int sex;//0未知，1男性，2女性
 
     @Override
     public boolean equals(Object obj) {

@@ -19,6 +19,7 @@ import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.uinfo.UserService;
+import com.netease.nimlib.sdk.uinfo.constant.GenderEnum;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
 import java.text.ParseException;
@@ -57,6 +58,12 @@ public class DataChangeUtil {
                 ChatMsgBean chatMsgBean = new ChatMsgBean();
                 Logger.d("contactId=" + contactId + "content=" + content + "strTime" + strTime + "redMsgNum" + redMsgNum);
                 chatMsgBean.setContactId(contactId);
+                GenderEnum genderEnum = nimUserInfo.getGenderEnum();
+                if (genderEnum == null) {
+                    chatMsgBean.setSex(0);
+                } else {
+                    chatMsgBean.setSex(genderEnum.getValue());
+                }
                 chatMsgBean.setContractHeaderImage(headerImgUrl);
                 chatMsgBean.setContractShowName(displayName);
                 chatMsgBean.setChatContent(content);
