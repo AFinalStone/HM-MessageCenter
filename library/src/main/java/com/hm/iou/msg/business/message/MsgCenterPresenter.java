@@ -17,6 +17,7 @@ import com.hm.iou.msg.bean.MsgListHeaderBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.dict.ModuleType;
 import com.hm.iou.msg.event.DeleteFriendEvent;
+import com.hm.iou.msg.event.UpdateFriendEvent;
 import com.hm.iou.msg.event.UpdateMsgCenterUnReadMsgNumEvent;
 import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.msg.util.CacheDataUtil;
@@ -292,6 +293,16 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
             mRedFlagCount = commBizEvent.content;
             mView.updateRedFlagCount(mRedFlagCount);
         }
+    }
+
+    /**
+     * 用户修改了好友备注
+     *
+     * @param updateFriendEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvenUpdateFriendEvent(UpdateFriendEvent updateFriendEvent) {
+        mIsNeedRefresh = true;
     }
 
     /**

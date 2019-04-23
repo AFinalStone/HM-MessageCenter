@@ -27,8 +27,13 @@ public class ChatMsgListAdapter extends BaseQuickAdapter<ChatMsgBean, BaseViewHo
     protected void convert(BaseViewHolder helper, ChatMsgBean item) {
         //头像
         ImageView ivHeader = helper.getView(R.id.iv_from_header);
-        ImageLoader.getInstance(mContext).displayImage(item.getContractHeaderImage(), ivHeader,
-                R.mipmap.uikit_icon_header_unknow, R.mipmap.uikit_icon_header_unknow);
+        int headerDefaultResId = R.mipmap.uikit_icon_header_unknow;
+        if (1 == item.getSex()) {
+            headerDefaultResId = R.mipmap.person_ic_header_man;
+        } else if (2 == item.getSex()) {
+            headerDefaultResId = R.mipmap.person_ic_header_wuman;
+        }
+        ImageLoader.getInstance(mContext).displayImage(item.getContractHeaderImage(), ivHeader, headerDefaultResId, headerDefaultResId);
         //名字
         helper.setText(R.id.tv_from_nick, item.getContractShowName());
         //内容

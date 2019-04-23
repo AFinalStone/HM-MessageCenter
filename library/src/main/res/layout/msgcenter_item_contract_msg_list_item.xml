@@ -26,12 +26,12 @@
         android:layout_height="wrap_content"
         android:background="@drawable/jietiao_bg_message_list_item"
         android:minHeight="85dp"
+        android:paddingBottom="5dp"
         android:paddingEnd="10dp">
 
         <ImageView
             android:layout_width="26dp"
             android:layout_height="30dp"
-            android:layout_centerVertical="true"
             android:layout_marginStart="18dp"
             android:layout_marginTop="22dp"
             android:scaleType="fitXY"
@@ -50,7 +50,7 @@
             android:layout_below="@id/tv_title"
             android:layout_marginStart="62dp"
             android:layout_marginTop="6dp"
-            tools:text="小希女士，您的合同已创建成功  " />
+            tools:text="小希女士，您的合同已创建成功 小希女士，您的合同已创建成功 小希女士，您的合同已创建成功 小希女士，您的合同已创建成功 小希女士，您的合同已创建成功  " />
     </RelativeLayout>
 
 </LinearLayout>
