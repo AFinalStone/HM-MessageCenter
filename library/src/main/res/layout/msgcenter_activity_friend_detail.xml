@@ -159,7 +159,7 @@
             android:paddingLeft="18dip"
             android:paddingRight="18dip"
             android:layout_marginTop="20dip"
-            android:visibility="gone"
+            android:visibility="visible"
             >
             <TextView
                 style="@style/UikitTextView"
@@ -167,6 +167,7 @@
                 android:textSize="16dip"
                 android:layout_weight="1"
                 android:text="附加信息"
+                android:layout_width="150dip"
                 />
 
             <TextView
@@ -176,7 +177,7 @@
                 android:textSize="16dip"
                 android:layout_weight="1"
                 android:gravity="right"
-                tools:text="杭州"
+                tools:text="我是小管家"
                 />
         </LinearLayout>
 
