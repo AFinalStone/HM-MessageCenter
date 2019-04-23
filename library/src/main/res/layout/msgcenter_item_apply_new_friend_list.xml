@@ -20,7 +20,7 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_centerVertical="true"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             app:shape_mode="circle" />
 
         <Button
@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:textColor="@color/uikit_text_main_content"
-                android:textSize="@dimen/uikit_main_content_text_size"
+                android:textSize="16dip"
                 tools:text="红烧茄子" />
 
             <TextView
