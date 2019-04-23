@@ -59,7 +59,8 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     private String mRedFlagCount;
     //  创建观察者对象
     IMHelper.OnChatListChangeListener mChatListChangeListener;
-    private boolean mIsNeedRefresh = false;//是否需要刷新
+    private boolean mIsNeedRefreshUnReadNum = false;//是否需要刷新未读消息
+    private boolean mIsNeedRefreshChatList = false;//是否需要刷新会话列表
 
     public MsgCenterPresenter(@NonNull Context context, @NonNull MsgCenterContract.View view) {
         super(context, view);
@@ -109,9 +110,14 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
 
     @Override
     public void onResume() {
-        if (mIsNeedRefresh) {
+        if (mIsNeedRefreshUnReadNum) {
             MsgCenterMsgUtil.getMsgCenterNoReadNumFromServer(mContext);
-            mIsNeedRefresh = false;
+            mIsNeedRefreshUnReadNum = false;
+        }
+
+        if (mIsNeedRefreshChatList) {
+            getChatList();
+            mIsNeedRefreshChatList = false;
         }
     }
 
@@ -279,7 +285,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvenUpdateUnReadMsgNum(UpdateMsgCenterUnReadMsgNumEvent commBizEvent) {
-        mIsNeedRefresh = true;
+        mIsNeedRefreshUnReadNum = true;
     }
 
     /**
@@ -302,7 +308,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvenUpdateFriendEvent(UpdateFriendEvent updateFriendEvent) {
-        mIsNeedRefresh = true;
+        mIsNeedRefreshChatList = true;
     }
 
     /**
