@@ -42,6 +42,7 @@
             android:layout_width="60dip"
             android:layout_height="60dip"
             app:shape_mode="circle"
+            android:scaleType="fitXY"
             android:src="@mipmap/uikit_icon_header_unknow"
             android:layout_centerVertical="true"
             />
