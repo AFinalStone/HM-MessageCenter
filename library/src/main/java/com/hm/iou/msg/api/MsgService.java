@@ -3,17 +3,18 @@ package com.hm.iou.msg.api;
 import com.hm.iou.database.table.msg.ContractMsgDbData;
 import com.hm.iou.database.table.msg.HmMsgDbData;
 import com.hm.iou.database.table.msg.RemindBackMsgDbData;
-import com.hm.iou.database.table.msg.SimilarityContractMsgDbData;
 import com.hm.iou.msg.bean.FriendApplyRecordListBean;
 import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.bean.FriendListBean;
 import com.hm.iou.msg.bean.GetOrRefreshIMTokenBean;
+import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
 import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.AddFriendReqBean;
 import com.hm.iou.msg.bean.req.FriendDetailReqBean;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
+import com.hm.iou.msg.bean.req.GetSimilarContractMessageReqBean;
 import com.hm.iou.msg.bean.req.ReportUserReqBean;
 import com.hm.iou.msg.bean.req.UpdateRemarkNameReqBean;
 import com.hm.iou.sharedata.model.BaseResponse;
@@ -44,8 +45,8 @@ public interface MsgService {
     @GET("/api/message/messageCenter/v2/getWaitRepayMessage")
     Flowable<BaseResponse<List<RemindBackMsgDbData>>> getRemindBackList();
 
-    @GET("/api/message/messageCenter/v2/getSimilarContractMessage")
-    Flowable<BaseResponse<List<SimilarityContractMsgDbData>>> getSimilarityContractList();
+    @POST("/api/message/messageCenter/v2/getSimilarContractMessage")
+    Flowable<BaseResponse<GetSimilarityContractListResBean>> getSimilarityContractList(@Body GetSimilarContractMessageReqBean req);
 
     @POST("/api/news/friend/v1/getMailList")
     Flowable<BaseResponse<FriendListBean>> getFriendList(@Body GetFriendListReq req);

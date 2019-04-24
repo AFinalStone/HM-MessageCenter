@@ -9,6 +9,7 @@ import com.hm.iou.database.table.msg.SimilarityContractMsgDbData;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.bean.ChatMsgBean;
+import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
 import com.hm.iou.msg.business.contractmsg.view.IContractMsgItem;
 import com.hm.iou.msg.business.hmmsg.view.IHmMsgItem;
 import com.hm.iou.msg.business.remindback.view.IRemindBackMsgItem;
@@ -207,10 +208,10 @@ public class DataChangeUtil {
      * @param list
      * @return
      */
-    public static List<ISimilarityContractMsgItem> changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(List<SimilarityContractMsgDbData> list) {
+    public static List<ISimilarityContractMsgItem> changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(List<GetSimilarityContractListResBean.ListBean> list) {
         List<ISimilarityContractMsgItem> resultList = new ArrayList<>();
         if (list != null) {
-            for (final SimilarityContractMsgDbData dbData : list) {
+            for (final GetSimilarityContractListResBean.ListBean dbData : list) {
                 ISimilarityContractMsgItem msgItem = new ISimilarityContractMsgItem() {
 
                     @Override
@@ -319,7 +320,11 @@ public class DataChangeUtil {
 
                     @Override
                     public String getMsgAutoId() {
-                        return dbData.getContentCollectId();
+                        String msgAutoId = dbData.getContentCollectId();
+                        if (TextUtils.isEmpty(msgAutoId) || "0".equals(msgAutoId)) {
+                            msgAutoId = "";
+                        }
+                        return msgAutoId;
                     }
 
                     @Override

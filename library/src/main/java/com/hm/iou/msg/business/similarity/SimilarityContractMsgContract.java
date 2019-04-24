@@ -40,7 +40,7 @@ public class SimilarityContractMsgContract {
         /**
          * 初始化失败
          */
-        void showInitFailed();
+        void showInitFailed(String msg);
 
         /**
          * 关闭初始化动画
@@ -57,19 +57,52 @@ public class SimilarityContractMsgContract {
          */
         void autoRefresh();
 
+
+        /**
+         * 显示更多数据
+         *
+         * @param list
+         */
+        void showMoreNewsList(List<ISimilarityContractMsgItem> list);
+
+        /**
+         * 显示加载更多失败
+         */
+        void showLoadMoreFail();
+
+        /**
+         * 显示全部数据加载完毕，没有更多数据了
+         */
+        void showLoadMoreEnd();
+
+        /**
+         * 显示数据加载成功，可以加载下一页数据了
+         */
+        void showLoadMoreComplete();
+
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
 
+//        /**
+//         * 获取消息列表
+//         */
+//        void getMsgList(boolean isShowTip);
+
         /**
-         * 获取消息列表
+         * 获取更多数据
          */
-        void getMsgList(boolean isShowTip);
+        void getMoreData();
 
         /**
          * 初始化
          */
         void init();
+
+        /**
+         * 刷新数据
+         */
+        void refreshData();
 
     }
 }

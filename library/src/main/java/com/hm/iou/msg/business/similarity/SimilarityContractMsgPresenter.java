@@ -6,9 +6,9 @@ import android.support.annotation.NonNull;
 import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
-import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.msg.SimilarityContractMsgDbData;
 import com.hm.iou.msg.api.MsgApi;
+import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
 import com.hm.iou.msg.business.similarity.view.ISimilarityContractMsgItem;
 import com.hm.iou.msg.event.UpdateMsgCenterUnReadMsgNumEvent;
 import com.hm.iou.msg.util.DataChangeUtil;
@@ -17,15 +17,14 @@ import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * 获取消息
@@ -35,6 +34,10 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class SimilarityContractMsgPresenter extends MvpActivityPresenter<SimilarityContractMsgContract.View> implements SimilarityContractMsgContract.Presenter {
 
+    private static final int PAGE_SIZE = 5;//每次请求的每页大小
+    private static final int PAGE_DEFAULT_FIRST = 1;//首页
+    private int mCurrentPage = 0;//当前请求的页码
+    private List<ISimilarityContractMsgItem> mListData = new ArrayList<>();
 
     public SimilarityContractMsgPresenter(@NonNull Context context, @NonNull SimilarityContractMsgContract.View view) {
         super(context, view);
@@ -43,72 +46,109 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
     @Override
     public void init() {
         mView.showInitLoading();
-        getMsgList(false);
-    }
-
-    @Override
-    public void getMsgList(final boolean isShowTip) {
-        mView.showInitLoading();
-        MsgApi.getSimilarityContractList()
-                .compose(getProvider().<BaseResponse<List<SimilarityContractMsgDbData>>>bindUntilEvent(ActivityEvent.DESTROY))
-                .map(RxUtil.<List<SimilarityContractMsgDbData>>handleResponse())
-                .subscribeWith(new CommSubscriber<List<SimilarityContractMsgDbData>>(mView) {
+        mCurrentPage = PAGE_DEFAULT_FIRST;
+        MsgApi.getSimilarityContractList(mCurrentPage, PAGE_SIZE)
+                .compose(getProvider().<BaseResponse<GetSimilarityContractListResBean>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<GetSimilarityContractListResBean>handleResponse())
+                .subscribeWith(new CommSubscriber<GetSimilarityContractListResBean>(mView) {
                     @Override
-                    public void handleResult(List<SimilarityContractMsgDbData> list) {
+                    public void handleResult(GetSimilarityContractListResBean resBean) {
+                        mView.hideInitLoading();
+                        mView.enableRefresh();
                         EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
-                        getCache(list);
+                        mListData.clear();
+                        if (resBean.getList() == null || resBean.getList().isEmpty()) {
+                            mView.showDataEmpty();
+                            return;
+                        }
+                        List<GetSimilarityContractListResBean.ListBean> list = resBean.getList();
+                        List<ISimilarityContractMsgItem> resultList = DataChangeUtil.changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(list);
+                        mView.showMsgList(resultList);
+                        //是否没有更多数据了
+                        mListData.addAll(resultList);
+                        if (mListData.size() >= resBean.getTotal()) {
+                            mView.showLoadMoreEnd();
+                        }
                     }
 
                     @Override
-                    public void handleException(Throwable throwable, String s, String s1) {
-                        getCache(null);
+                    public void handleException(Throwable throwable, String code, String msg) {
+                        mView.showInitFailed(msg);
                     }
 
                     @Override
                     public boolean isShowCommError() {
-                        return isShowTip;
+                        return false;
                     }
 
                     @Override
                     public boolean isShowBusinessError() {
-                        return isShowTip;
+                        return false;
                     }
                 });
     }
 
-
-    private void getCache(final List<SimilarityContractMsgDbData> list) {
-        Flowable.create(new FlowableOnSubscribe<List<ISimilarityContractMsgItem>>() {
-            @Override
-            public void subscribe(FlowableEmitter<List<ISimilarityContractMsgItem>> e) throws Exception {
-                MsgCenterDbHelper.saveOrUpdateSimilarityContractMsgList(list);
-                List<SimilarityContractMsgDbData> listCache = MsgCenterDbHelper.getSimilarityContractMsgList();
-                List<ISimilarityContractMsgItem> resultList = DataChangeUtil.changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(listCache);
-                e.onNext(resultList);
-            }
-        }, BackpressureStrategy.ERROR)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<ISimilarityContractMsgItem>>() {
+    @Override
+    public void refreshData() {
+        mCurrentPage = PAGE_DEFAULT_FIRST;
+        MsgApi.getSimilarityContractList(mCurrentPage, PAGE_SIZE)
+                .compose(getProvider().<BaseResponse<GetSimilarityContractListResBean>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<GetSimilarityContractListResBean>handleResponse())
+                .subscribeWith(new CommSubscriber<GetSimilarityContractListResBean>(mView) {
                     @Override
-                    public void accept(List<ISimilarityContractMsgItem> resultList) throws Exception {
-                        mView.hideInitLoading();
+                    public void handleResult(GetSimilarityContractListResBean resBean) {
                         mView.hidePullDownRefresh();
-                        mView.enableRefresh();
-                        if (resultList == null || resultList.size() == 0) {
+                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
+                        mListData.clear();
+                        if (resBean.getList() == null || resBean.getList().isEmpty()) {
                             mView.showDataEmpty();
-                        } else {
-                            mView.showMsgList(resultList);
+                            return;
+                        }
+                        List<GetSimilarityContractListResBean.ListBean> list = resBean.getList();
+                        List<ISimilarityContractMsgItem> resultList = DataChangeUtil.changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(list);
+                        mView.showMsgList(resultList);
+                        //是否没有更多数据了
+                        mListData.addAll(resultList);
+                        if (mListData.size() >= resBean.getTotal()) {
+                            mView.showLoadMoreEnd();
                         }
                     }
-                }, new Consumer<Throwable>() {
+
                     @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        mView.hideInitLoading();
+                    public void handleException(Throwable throwable, String s, String s1) {
                         mView.hidePullDownRefresh();
-                        mView.enableRefresh();
-                        mView.showDataEmpty();
                     }
+
+                });
+    }
+
+    @Override
+    public void getMoreData() {
+        mCurrentPage++;
+        MsgApi.getSimilarityContractList(mCurrentPage, PAGE_SIZE)
+                .compose(getProvider().<BaseResponse<GetSimilarityContractListResBean>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<GetSimilarityContractListResBean>handleResponse())
+                .subscribeWith(new CommSubscriber<GetSimilarityContractListResBean>(mView) {
+                    @Override
+                    public void handleResult(GetSimilarityContractListResBean resBean) {
+                        mView.showLoadMoreComplete();
+                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
+                        List<GetSimilarityContractListResBean.ListBean> list = resBean.getList();
+                        List<ISimilarityContractMsgItem> resultList = DataChangeUtil.changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(list);
+                        mView.showMoreNewsList(resultList);
+                        //是否没有更多数据了
+                        mListData.addAll(resultList);
+                        if (mListData.size() >= resBean.getTotal()) {
+                            mView.showLoadMoreEnd();
+                        }
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String s, String msg) {
+                        mView.showLoadMoreFail();
+                        mCurrentPage--;
+                    }
+
                 });
     }
 
