@@ -303,7 +303,7 @@
       "aclass": "com.hm.iou.msg.business.friendlist.view.FriendListActivity"
     },
     {
-      "url": "hmiou://m.54jietiao.com/message/apply_new_friend_list",
+      "url": "hmiou://m.54jietiao.com/message/new_friend_list",
       "iclass": "",
       "aclass": "com.hm.iou.msg.business.apply.view.ApplyNewFriendListActivity"
     },
