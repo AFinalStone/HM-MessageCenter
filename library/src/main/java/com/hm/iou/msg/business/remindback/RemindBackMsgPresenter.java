@@ -109,11 +109,6 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                 .subscribe(new Consumer<List<IRemindBackMsgItem>>() {
                     @Override
                     public void accept(List<IRemindBackMsgItem> resultList) throws Exception {
-                        if (resultList == null || resultList.size() == 0) {
-                            mView.showDataEmpty();
-                        } else {
-                            mView.showMsgList(resultList);
-                        }
                         //关闭动画
                         if (isInit) {
                             mView.hideInitLoading();
@@ -122,6 +117,12 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                         } else {
                             mView.hidePullDownRefresh();
                         }
+                        if (resultList == null || resultList.size() == 0) {
+                            mView.showDataEmpty();
+                        } else {
+                            mView.showMsgList(resultList);
+                        }
+
                     }
                 }, new Consumer<Throwable>() {
                     @Override

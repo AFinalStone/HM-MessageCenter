@@ -24,8 +24,7 @@
             app:srlAccentColor="@android:color/white"
             app:srlEnableLoadMore="false"
             app:srlEnablePreviewInEditMode="true"
-            app:srlEnableRefresh="false"
-            app:srlPrimaryColor="#444444">
+            app:srlEnableRefresh="false">
 
             <LinearLayout
                 android:layout_width="match_parent"

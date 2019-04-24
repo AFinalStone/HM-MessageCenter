@@ -105,24 +105,24 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                 .subscribe(new Consumer<List<IContractMsgItem>>() {
                     @Override
                     public void accept(List<IContractMsgItem> resultList) throws Exception {
+                        //关闭动画
+                        if (isInit) {
+                            mView.hideInitLoading();
+                            mView.enableRefresh();
+                            mView.scrollToBottom();
+                        } else {
+                            mView.hidePullDownRefresh();
+                        }
                         if (resultList == null || resultList.size() == 0) {
                             mView.showDataEmpty();
                         } else {
                             mView.showMsgList(resultList);
                         }
-                        //关闭动画
-                        if (isInit) {
-                            mView.hideInitLoading();
-                            mView.enableRefresh();
-                            mView.scrollToBottom();
-                        } else {
-                            mView.hidePullDownRefresh();
-                        }
+
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        mView.showDataEmpty();
                         //关闭动画
                         if (isInit) {
                             mView.hideInitLoading();
@@ -131,6 +131,7 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                         } else {
                             mView.hidePullDownRefresh();
                         }
+                        mView.showDataEmpty();
                     }
                 });
     }

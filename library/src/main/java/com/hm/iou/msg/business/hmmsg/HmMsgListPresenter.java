@@ -108,11 +108,6 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                 .subscribe(new Consumer<List<IHmMsgItem>>() {
                     @Override
                     public void accept(List<IHmMsgItem> resultList) throws Exception {
-                        if (resultList == null || resultList.size() == 0) {
-                            mView.showDataEmpty();
-                        } else {
-                            mView.showMsgList(resultList);
-                        }
                         //关闭动画
                         if (isInit) {
                             mView.hideInitLoading();
@@ -121,6 +116,12 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                         } else {
                             mView.hidePullDownRefresh();
                         }
+                        if (resultList == null || resultList.size() == 0) {
+                            mView.showDataEmpty();
+                        } else {
+                            mView.showMsgList(resultList);
+                        }
+
                     }
                 }, new Consumer<Throwable>() {
                     @Override

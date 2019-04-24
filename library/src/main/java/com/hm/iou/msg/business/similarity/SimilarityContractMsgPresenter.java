@@ -50,7 +50,7 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                         mView.enableRefresh();
                         EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                         mListData.clear();
-                        if (resBean.getList() == null || resBean.getList().isEmpty()) {
+                        if (resBean == null || resBean.getList() == null || resBean.getList().isEmpty()) {
                             mView.showDataEmpty();
                             return;
                         }
@@ -93,7 +93,7 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                         mView.hidePullDownRefresh();
                         EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                         mListData.clear();
-                        if (resBean.getList() == null || resBean.getList().isEmpty()) {
+                        if (resBean == null || resBean.getList() == null || resBean.getList().isEmpty()) {
                             mView.showDataEmpty();
                             return;
                         }
