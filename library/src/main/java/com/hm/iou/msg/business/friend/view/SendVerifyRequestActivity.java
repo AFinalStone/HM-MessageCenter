@@ -14,12 +14,15 @@ import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.api.MsgApi;
+import com.hm.iou.msg.event.AddFriendEvent;
 import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.sharedata.UserManager;
 import com.hm.iou.sharedata.model.UserInfo;
 import com.hm.iou.tools.StringUtil;
 import com.hm.iou.tools.ToastUtil;
 import com.jakewharton.rxbinding2.widget.RxTextView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -111,6 +114,7 @@ public class SendVerifyRequestActivity extends BaseActivity {
                         IMHelper.getInstance(mContext).refreshTokenAndLogin();
 
                         if (result != null && result) {
+                            EventBus.getDefault().post(new AddFriendEvent());
                             setResult(RESULT_OK);
                             finish();
                         } else {

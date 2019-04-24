@@ -15,6 +15,12 @@ public class FriendDetailContract {
          */
         void showDetailError(String errMsg);
 
+        void showDetailLoading();
+
+        void hideDetailLoading();
+
+        void showDetailContent(int visibility);
+
         void showAvatar(String avatar);
 
         void showNickname(String nickname, String remarkName);

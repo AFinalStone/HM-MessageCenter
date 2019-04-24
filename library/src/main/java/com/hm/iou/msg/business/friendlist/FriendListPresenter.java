@@ -79,6 +79,8 @@ public class FriendListPresenter extends MvpActivityPresenter<FriendListContract
                         mDataList = list;
                         if (list != null && !list.isEmpty()) {
                             mView.showMsgList(convertData(list));
+                        } else {
+                            mView.showMsgList(null);
                         }
                         if (firstLoad) {
                             loadDataFromServer();
@@ -227,7 +229,8 @@ public class FriendListPresenter extends MvpActivityPresenter<FriendListContract
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventDeleteFriend(DeleteFriendEvent event) {
-        loadDataFromServer();
+        Logger.d("好友被删除了....");
+        loadDataFromCache(true);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

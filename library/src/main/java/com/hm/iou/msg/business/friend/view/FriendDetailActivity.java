@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hm.iou.base.BaseActivity;
@@ -17,6 +18,7 @@ import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.friend.FriendDetailContract;
 import com.hm.iou.msg.business.friend.presenter.FriendDetailPresenter;
 import com.hm.iou.tools.ImageLoader;
+import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.dialog.HMActionSheetDialog;
 import com.hm.iou.uikit.dialog.HMAlertDialog;
 
@@ -67,6 +69,11 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
     LinearLayout mLlCommentInfo;
     @BindView(R2.id.tv_friend_comment)
     TextView mTvCommentInfo;
+
+    @BindView(R2.id.rl_friend_content)
+    RelativeLayout mRlContent;
+    @BindView(R2.id.loading_view)
+    HMLoadingView mLoadingView;
 
     private String mUserId;
     private int mIdType;
@@ -136,25 +143,28 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
     }
 
     @Override
-    public void showDetailError(String errMsg) {
-        new HMAlertDialog.Builder(this)
-                .setMessage(errMsg)
-                .setPositiveButton("重试")
-                .setNegativeButton("退出")
-                .setOnClickListener(new HMAlertDialog.OnClickListener() {
-                    @Override
-                    public void onPosClick() {
-                        mPresenter.getUserInfo(mUserId, mIdType, mApplyStatus);
-                    }
+    public void showDetailLoading() {
+        mLoadingView.showDataLoading();
+    }
 
-                    @Override
-                    public void onNegClick() {
-                        finish();
-                    }
-                })
-                .setCancelable(false)
-                .setCanceledOnTouchOutside(false)
-                .create().show();
+    @Override
+    public void hideDetailLoading() {
+        mLoadingView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showDetailContent(int visibility) {
+        mRlContent.setVisibility(visibility);
+    }
+
+    @Override
+    public void showDetailError(String errMsg) {
+        mLoadingView.showDataFail(errMsg, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.getUserInfo(mUserId, mIdType, mApplyStatus);
+            }
+        });
     }
 
     @Override
