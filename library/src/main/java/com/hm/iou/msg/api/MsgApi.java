@@ -67,7 +67,7 @@ public class MsgApi {
     public static Flowable<BaseResponse<List<ContractMsgDbData>>> getContractMsgList() {
         return getService().getContractMsgList()
                 .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io());
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**

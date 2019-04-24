@@ -51,14 +51,48 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new CommSubscriber<List<RemindBackMsgDbData>>(mView) {
                     @Override
-                    public void handleResult(List<RemindBackMsgDbData> list) {
+                    public void handleResult(final List<RemindBackMsgDbData> list) {
                         EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
-                        getCache(list, true);
+                        Flowable.create(new FlowableOnSubscribe<List<IRemindBackMsgItem>>() {
+                            @Override
+                            public void subscribe(FlowableEmitter<List<IRemindBackMsgItem>> e) throws Exception {
+                                MsgCenterDbHelper.saveOrUpdateRemindBackMsgList(list);
+                                List<RemindBackMsgDbData> listCache = MsgCenterDbHelper.getRemindBackMsgList();
+                                List<IRemindBackMsgItem> resultList = DataChangeUtil.changeRemindBackMsgDbDataToIRemindBackMsgItem(listCache);
+                                e.onNext(resultList);
+                            }
+                        }, BackpressureStrategy.ERROR)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .compose(getProvider().<List<IRemindBackMsgItem>>bindUntilEvent(ActivityEvent.DESTROY))
+                                .subscribe(new Consumer<List<IRemindBackMsgItem>>() {
+                                    @Override
+                                    public void accept(List<IRemindBackMsgItem> resultList) throws Exception {
+                                        //关闭动画
+                                        mView.hideInitLoading();
+                                        mView.enableRefresh();
+                                        if (resultList == null || resultList.size() == 0) {
+                                            mView.showDataEmpty();
+                                        } else {
+                                            mView.showMsgList(resultList);
+                                            mView.showLoadMoreEnd();
+                                            mView.scrollToBottom();
+                                        }
+
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        mView.hideInitLoading();
+                                        mView.enableRefresh();
+                                        mView.showDataEmpty();
+                                    }
+                                });
                     }
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
-                        getCache(null, true);
+                        mView.showInitFailed(s1);
                     }
 
                     @Override
@@ -82,62 +116,46 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new CommSubscriber<List<RemindBackMsgDbData>>(mView) {
                     @Override
-                    public void handleResult(List<RemindBackMsgDbData> list) {
+                    public void handleResult(final List<RemindBackMsgDbData> list) {
                         EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
-                        getCache(list, false);
+                        Flowable.create(new FlowableOnSubscribe<List<IRemindBackMsgItem>>() {
+                            @Override
+                            public void subscribe(FlowableEmitter<List<IRemindBackMsgItem>> e) throws Exception {
+                                MsgCenterDbHelper.saveOrUpdateRemindBackMsgList(list);
+                                List<RemindBackMsgDbData> listCache = MsgCenterDbHelper.getRemindBackMsgList();
+                                List<IRemindBackMsgItem> resultList = DataChangeUtil.changeRemindBackMsgDbDataToIRemindBackMsgItem(listCache);
+                                e.onNext(resultList);
+                            }
+                        }, BackpressureStrategy.ERROR)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .compose(getProvider().<List<IRemindBackMsgItem>>bindUntilEvent(ActivityEvent.DESTROY))
+                                .subscribe(new Consumer<List<IRemindBackMsgItem>>() {
+                                    @Override
+                                    public void accept(List<IRemindBackMsgItem> resultList) throws Exception {
+                                        //关闭动画
+                                        mView.hidePullDownRefresh();
+                                        if (resultList == null || resultList.size() == 0) {
+                                            mView.showDataEmpty();
+                                        } else {
+                                            mView.showMsgList(resultList);
+                                            mView.showLoadMoreEnd();
+                                        }
+
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        mView.hidePullDownRefresh();
+                                        mView.showDataEmpty();
+                                    }
+                                });
                     }
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
-                        getCache(null, false);
                     }
 
-                });
-    }
-
-    private void getCache(final List<RemindBackMsgDbData> list, final boolean isInit) {
-        Flowable.create(new FlowableOnSubscribe<List<IRemindBackMsgItem>>() {
-            @Override
-            public void subscribe(FlowableEmitter<List<IRemindBackMsgItem>> e) throws Exception {
-                MsgCenterDbHelper.saveOrUpdateRemindBackMsgList(list);
-                List<RemindBackMsgDbData> listCache = MsgCenterDbHelper.getRemindBackMsgList();
-                List<IRemindBackMsgItem> resultList = DataChangeUtil.changeRemindBackMsgDbDataToIRemindBackMsgItem(listCache);
-                e.onNext(resultList);
-            }
-        }, BackpressureStrategy.ERROR)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(getProvider().<List<IRemindBackMsgItem>>bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(new Consumer<List<IRemindBackMsgItem>>() {
-                    @Override
-                    public void accept(List<IRemindBackMsgItem> resultList) throws Exception {
-                        //关闭动画
-                        if (isInit) {
-                            mView.hideInitLoading();
-                            mView.enableRefresh();
-                            mView.scrollToBottom();
-                        } else {
-                            mView.hidePullDownRefresh();
-                        }
-                        if (resultList == null || resultList.size() == 0) {
-                            mView.showDataEmpty();
-                        } else {
-                            mView.showMsgList(resultList);
-                        }
-
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        if (isInit) {
-                            mView.hideInitLoading();
-                            mView.enableRefresh();
-                            mView.scrollToBottom();
-                        } else {
-                            mView.hidePullDownRefresh();
-                        }
-                        mView.showDataEmpty();
-                    }
                 });
     }
 

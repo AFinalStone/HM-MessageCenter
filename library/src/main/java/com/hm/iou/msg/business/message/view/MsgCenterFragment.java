@@ -20,6 +20,7 @@ import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.bean.MsgListHeaderBean;
 import com.hm.iou.msg.business.message.MsgCenterContract;
 import com.hm.iou.msg.business.message.MsgCenterPresenter;
+import com.hm.iou.msg.util.MsgCenterMsgUtil;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.tools.StatusBarUtil;
 import com.hm.iou.uikit.HMLoadingView;
@@ -116,6 +117,7 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
         super.onHiddenChanged(hidden);
         if (!hidden && mPresenter != null) {
             mPresenter.getRedFlagCount();
+            MsgCenterMsgUtil.getMsgCenterNoReadNumFromServer(mActivity);
         }
         if (!hidden) {
             com.hm.iou.base.utils.StatusBarUtil.setStatusBarDarkFont(mActivity, true);

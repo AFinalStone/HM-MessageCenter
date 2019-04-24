@@ -15,6 +15,7 @@ import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.remindback.RemindBackMsgContract;
 import com.hm.iou.msg.business.remindback.RemindBackMsgPresenter;
 import com.hm.iou.tools.StatusBarUtil;
+import com.hm.iou.uikit.HMLoadMoreView;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -59,6 +60,8 @@ public class RemindBackMsgActivity extends BaseActivity<RemindBackMsgPresenter> 
             mViewStatusBar.setLayoutParams(params);
         }
         mAdapter = new RemindBackListAdapter(mContext);
+        mAdapter.setLoadMoreView(new HMLoadMoreView());
+        mAdapter.setHeaderAndEmpty(true);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -103,9 +106,9 @@ public class RemindBackMsgActivity extends BaseActivity<RemindBackMsgPresenter> 
     }
 
     @Override
-    public void showInitFailed() {
+    public void showInitFailed(String msg) {
         mLoadingInit.setVisibility(View.VISIBLE);
-        mLoadingInit.showDataFail(new View.OnClickListener() {
+        mLoadingInit.showDataFail(msg, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mPresenter.init();
@@ -127,6 +130,11 @@ public class RemindBackMsgActivity extends BaseActivity<RemindBackMsgPresenter> 
     @Override
     public void scrollToBottom() {
         mRvMsgList.scrollToPosition(mAdapter.getItemCount() - 1);
+    }
+
+    @Override
+    public void showLoadMoreEnd() {
+        mAdapter.loadMoreEnd();
     }
 
 }

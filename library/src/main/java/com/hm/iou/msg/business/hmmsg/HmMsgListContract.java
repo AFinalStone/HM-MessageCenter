@@ -49,12 +49,17 @@ public class HmMsgListContract {
         /**
          * 初始化失败
          */
-        void showInitFailed();
+        void showInitFailed(String msg);
 
         /**
          * 滚动到底部
          */
         void scrollToBottom();
+
+        /**
+         * 显示全部数据加载完毕，没有更多数据了
+         */
+        void showLoadMoreEnd();
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
@@ -65,8 +70,6 @@ public class HmMsgListContract {
 
         /**
          * 从服务端获取消息列表
-         *
-         * @param isShowTip 提示语
          */
         void getMsgListFromServer();
 

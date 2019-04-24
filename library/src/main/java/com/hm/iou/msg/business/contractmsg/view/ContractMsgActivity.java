@@ -16,6 +16,7 @@ import com.hm.iou.msg.business.contractmsg.ContractMsgContract;
 import com.hm.iou.msg.business.contractmsg.ContractMsgPresenter;
 import com.hm.iou.msg.business.hmmsg.view.IHmMsgItem;
 import com.hm.iou.tools.StatusBarUtil;
+import com.hm.iou.uikit.HMLoadMoreView;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -61,6 +62,8 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
         }
 
         mAdapter = new ContractMsgListAdapter(mContext);
+        mAdapter.setLoadMoreView(new HMLoadMoreView());
+        mAdapter.setHeaderAndEmpty(true);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -105,9 +108,9 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
     }
 
     @Override
-    public void showInitFailed() {
+    public void showInitFailed(String msg) {
         mLoadingInit.setVisibility(View.VISIBLE);
-        mLoadingInit.showDataFail(new View.OnClickListener() {
+        mLoadingInit.showDataFail(msg, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mPresenter.init();
@@ -129,5 +132,10 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
     @Override
     public void scrollToBottom() {
         mRvMsgList.scrollToPosition(mAdapter.getItemCount() - 1);
+    }
+
+    @Override
+    public void showLoadMoreEnd() {
+        mAdapter.loadMoreEnd();
     }
 }

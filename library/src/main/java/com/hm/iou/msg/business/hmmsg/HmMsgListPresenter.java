@@ -51,14 +51,49 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                 .map(RxUtil.<List<HmMsgDbData>>handleResponse())
                 .subscribeWith(new CommSubscriber<List<HmMsgDbData>>(mView) {
                     @Override
-                    public void handleResult(List<HmMsgDbData> list) {
-                        getCache(list, true);
+                    public void handleResult(final List<HmMsgDbData> list) {
                         EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
+                        Flowable.create(new FlowableOnSubscribe<List<IHmMsgItem>>() {
+                            @Override
+                            public void subscribe(FlowableEmitter<List<IHmMsgItem>> e) throws Exception {
+                                MsgCenterDbHelper.saveOrUpdateHmMsgList(list);
+                                List<HmMsgDbData> listCache = MsgCenterDbHelper.getHmMsgList();
+                                List<IHmMsgItem> resultList = DataChangeUtil.changeHmMsgDbDataToIHmMsgItem(listCache);
+                                e.onNext(resultList);
+                            }
+                        }, BackpressureStrategy.ERROR)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .compose(getProvider().<List<IHmMsgItem>>bindUntilEvent(ActivityEvent.DESTROY))
+                                .subscribe(new Consumer<List<IHmMsgItem>>() {
+                                    @Override
+                                    public void accept(List<IHmMsgItem> resultList) throws Exception {
+                                        //关闭动画
+                                        mView.hideInitLoading();
+                                        mView.enableRefresh();
+                                        if (resultList == null || resultList.size() == 0) {
+                                            mView.showDataEmpty();
+                                        } else {
+                                            mView.showMsgList(resultList);
+                                            mView.showLoadMoreEnd();
+                                            mView.scrollToBottom();
+                                        }
+
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        //关闭动画
+                                        mView.hideInitLoading();
+                                        mView.enableRefresh();
+                                        mView.showDataEmpty();
+                                    }
+                                });
                     }
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
-                        getCache(null, true);
+                        mView.showInitFailed(s1);
                     }
 
                     @Override
@@ -81,62 +116,45 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                 .map(RxUtil.<List<HmMsgDbData>>handleResponse())
                 .subscribeWith(new CommSubscriber<List<HmMsgDbData>>(mView) {
                     @Override
-                    public void handleResult(List<HmMsgDbData> list) {
-                        getCache(list, false);
+                    public void handleResult(final List<HmMsgDbData> list) {
                         EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
+                        Flowable.create(new FlowableOnSubscribe<List<IHmMsgItem>>() {
+                            @Override
+                            public void subscribe(FlowableEmitter<List<IHmMsgItem>> e) throws Exception {
+                                MsgCenterDbHelper.saveOrUpdateHmMsgList(list);
+                                List<HmMsgDbData> listCache = MsgCenterDbHelper.getHmMsgList();
+                                List<IHmMsgItem> resultList = DataChangeUtil.changeHmMsgDbDataToIHmMsgItem(listCache);
+                                e.onNext(resultList);
+                            }
+                        }, BackpressureStrategy.ERROR)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .compose(getProvider().<List<IHmMsgItem>>bindUntilEvent(ActivityEvent.DESTROY))
+                                .subscribe(new Consumer<List<IHmMsgItem>>() {
+                                    @Override
+                                    public void accept(List<IHmMsgItem> resultList) throws Exception {
+                                        mView.hidePullDownRefresh();
+                                        if (resultList == null || resultList.size() == 0) {
+                                            mView.showDataEmpty();
+                                        } else {
+                                            mView.showMsgList(resultList);
+                                            mView.showLoadMoreEnd();
+                                        }
+
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        //关闭动画
+                                        mView.hidePullDownRefresh();
+                                        mView.showDataEmpty();
+                                    }
+                                });
                     }
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
-                        getCache(null, false);
-                    }
-                });
-    }
 
-
-    private void getCache(final List<HmMsgDbData> list, final boolean isInit) {
-        Flowable.create(new FlowableOnSubscribe<List<IHmMsgItem>>() {
-            @Override
-            public void subscribe(FlowableEmitter<List<IHmMsgItem>> e) throws Exception {
-                MsgCenterDbHelper.saveOrUpdateHmMsgList(list);
-                List<HmMsgDbData> listCache = MsgCenterDbHelper.getHmMsgList();
-                List<IHmMsgItem> resultList = DataChangeUtil.changeHmMsgDbDataToIHmMsgItem(listCache);
-                e.onNext(resultList);
-            }
-        }, BackpressureStrategy.ERROR)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(getProvider().<List<IHmMsgItem>>bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(new Consumer<List<IHmMsgItem>>() {
-                    @Override
-                    public void accept(List<IHmMsgItem> resultList) throws Exception {
-                        //关闭动画
-                        if (isInit) {
-                            mView.hideInitLoading();
-                            mView.enableRefresh();
-                            mView.scrollToBottom();
-                        } else {
-                            mView.hidePullDownRefresh();
-                        }
-                        if (resultList == null || resultList.size() == 0) {
-                            mView.showDataEmpty();
-                        } else {
-                            mView.showMsgList(resultList);
-                        }
-
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        //关闭动画
-                        if (isInit) {
-                            mView.hideInitLoading();
-                            mView.enableRefresh();
-                            mView.scrollToBottom();
-                        } else {
-                            mView.hidePullDownRefresh();
-                        }
-                        mView.showDataEmpty();
                     }
                 });
     }

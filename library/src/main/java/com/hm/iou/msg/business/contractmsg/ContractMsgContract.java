@@ -40,7 +40,7 @@ public class ContractMsgContract {
         /**
          * 初始化失败
          */
-        void showInitFailed();
+        void showInitFailed(String msg);
 
         /**
          * 关闭初始化动画
@@ -51,10 +51,16 @@ public class ContractMsgContract {
          * 显示数据为空
          */
         void showDataEmpty();
+
         /**
          * 滚动到底部
          */
         void scrollToBottom();
+
+        /**
+         * 显示全部数据加载完毕，没有更多数据了
+         */
+        void showLoadMoreEnd();
     }
 
     public interface Presenter extends BaseContract.BasePresenter {

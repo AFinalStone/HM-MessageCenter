@@ -48,14 +48,49 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                 .map(RxUtil.<List<ContractMsgDbData>>handleResponse())
                 .subscribeWith(new CommSubscriber<List<ContractMsgDbData>>(mView) {
                     @Override
-                    public void handleResult(List<ContractMsgDbData> list) {
+                    public void handleResult(final List<ContractMsgDbData> list) {
                         EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
-                        getCache(list, false);
+                        Flowable.create(new FlowableOnSubscribe<List<IContractMsgItem>>() {
+                            @Override
+                            public void subscribe(FlowableEmitter<List<IContractMsgItem>> e) throws Exception {
+                                MsgCenterDbHelper.saveOrUpdateContractMsgList(list);
+                                List<ContractMsgDbData> listCache = MsgCenterDbHelper.getContractMsgList();
+                                List<IContractMsgItem> resultList = DataChangeUtil.changeContractMsgDbDataToIContractMsgItem(listCache);
+                                e.onNext(resultList);
+                            }
+                        }, BackpressureStrategy.ERROR)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .compose(getProvider().<List<IContractMsgItem>>bindUntilEvent(ActivityEvent.DESTROY))
+                                .subscribe(new Consumer<List<IContractMsgItem>>() {
+                                    @Override
+                                    public void accept(List<IContractMsgItem> resultList) throws Exception {
+                                        //关闭动画
+                                        mView.hideInitLoading();
+                                        mView.enableRefresh();
+                                        if (resultList == null || resultList.size() == 0) {
+                                            mView.showDataEmpty();
+                                        } else {
+                                            mView.showMsgList(resultList);
+                                            mView.showLoadMoreEnd();
+                                            mView.scrollToBottom();
+                                        }
+
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        //关闭动画
+                                        mView.hideInitLoading();
+                                        mView.enableRefresh();
+                                        mView.showDataEmpty();
+                                    }
+                                });
                     }
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
-                        getCache(null, false);
+                        mView.showInitFailed(s1);
                     }
 
                     @Override
@@ -77,62 +112,44 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                 .map(RxUtil.<List<ContractMsgDbData>>handleResponse())
                 .subscribeWith(new CommSubscriber<List<ContractMsgDbData>>(mView) {
                     @Override
-                    public void handleResult(List<ContractMsgDbData> list) {
+                    public void handleResult(final List<ContractMsgDbData> list) {
                         EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
-                        getCache(list, false);
+                        Flowable.create(new FlowableOnSubscribe<List<IContractMsgItem>>() {
+                            @Override
+                            public void subscribe(FlowableEmitter<List<IContractMsgItem>> e) throws Exception {
+                                MsgCenterDbHelper.saveOrUpdateContractMsgList(list);
+                                List<ContractMsgDbData> listCache = MsgCenterDbHelper.getContractMsgList();
+                                List<IContractMsgItem> resultList = DataChangeUtil.changeContractMsgDbDataToIContractMsgItem(listCache);
+                                e.onNext(resultList);
+                            }
+                        }, BackpressureStrategy.ERROR)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .compose(getProvider().<List<IContractMsgItem>>bindUntilEvent(ActivityEvent.DESTROY))
+                                .subscribe(new Consumer<List<IContractMsgItem>>() {
+                                    @Override
+                                    public void accept(List<IContractMsgItem> resultList) throws Exception {
+                                        //关闭动画
+                                        mView.hidePullDownRefresh();
+                                        if (resultList == null || resultList.size() == 0) {
+                                            mView.showDataEmpty();
+                                        } else {
+                                            mView.showMsgList(resultList);
+                                            mView.showLoadMoreEnd();
+                                        }
+
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        mView.hidePullDownRefresh();
+                                        mView.showDataEmpty();
+                                    }
+                                });
                     }
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
-                        getCache(null, false);
-                    }
-                });
-    }
-
-
-    private void getCache(final List<ContractMsgDbData> list, final boolean isInit) {
-        Flowable.create(new FlowableOnSubscribe<List<IContractMsgItem>>() {
-            @Override
-            public void subscribe(FlowableEmitter<List<IContractMsgItem>> e) throws Exception {
-                MsgCenterDbHelper.saveOrUpdateContractMsgList(list);
-                List<ContractMsgDbData> listCache = MsgCenterDbHelper.getContractMsgList();
-                List<IContractMsgItem> resultList = DataChangeUtil.changeContractMsgDbDataToIContractMsgItem(listCache);
-                e.onNext(resultList);
-            }
-        }, BackpressureStrategy.ERROR)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(getProvider().<List<IContractMsgItem>>bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(new Consumer<List<IContractMsgItem>>() {
-                    @Override
-                    public void accept(List<IContractMsgItem> resultList) throws Exception {
-                        //关闭动画
-                        if (isInit) {
-                            mView.hideInitLoading();
-                            mView.enableRefresh();
-                            mView.scrollToBottom();
-                        } else {
-                            mView.hidePullDownRefresh();
-                        }
-                        if (resultList == null || resultList.size() == 0) {
-                            mView.showDataEmpty();
-                        } else {
-                            mView.showMsgList(resultList);
-                        }
-
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        //关闭动画
-                        if (isInit) {
-                            mView.hideInitLoading();
-                            mView.enableRefresh();
-                            mView.scrollToBottom();
-                        } else {
-                            mView.hidePullDownRefresh();
-                        }
-                        mView.showDataEmpty();
                     }
                 });
     }

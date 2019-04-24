@@ -13,6 +13,7 @@ import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.hmmsg.HmMsgListContract;
 import com.hm.iou.msg.business.hmmsg.HmMsgListPresenter;
+import com.hm.iou.uikit.HMLoadMoreView;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -52,6 +53,8 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
     protected void initEventAndData(Bundle bundle) {
 
         mAdapter = new HmMsgListAdapter(mContext);
+        mAdapter.setLoadMoreView(new HMLoadMoreView());
+        mAdapter.setHeaderAndEmpty(true);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -92,9 +95,9 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
     }
 
     @Override
-    public void showInitFailed() {
+    public void showInitFailed(String msg) {
         mLoadingInit.setVisibility(View.VISIBLE);
-        mLoadingInit.showDataFail(new View.OnClickListener() {
+        mLoadingInit.showDataFail(msg, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mPresenter.init();
@@ -128,5 +131,9 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
         mLoadingInit.showDataEmpty("");
     }
 
+    @Override
+    public void showLoadMoreEnd() {
+        mAdapter.loadMoreEnd();
+    }
 
 }
