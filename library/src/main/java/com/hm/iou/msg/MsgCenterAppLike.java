@@ -5,11 +5,9 @@ import android.content.Context;
 import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.MsgCenterMsgUtil;
-import com.hm.iou.sharedata.UserManager;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.event.LoginSuccEvent;
 import com.hm.iou.sharedata.event.LogoutEvent;
-import com.hm.iou.sharedata.model.UserInfo;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -93,8 +91,6 @@ public class MsgCenterAppLike {
     public void onEventLogout(LogoutEvent event) {
         CacheDataUtil.clearAllCache(mContext);
         IMHelper.getInstance(mContext).logout();
-        UserManager.getInstance(mContext).updateIMToken("");
-        UserManager.getInstance(mContext).updateIMId("");
     }
 
 
