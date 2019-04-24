@@ -33,6 +33,7 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.StatusCode;
+import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.misc.DirCacheFileType;
@@ -292,6 +293,7 @@ public class IMHelper {
     public void logout() {
         //注销会话列表观察者
         mOnChatListChangeListenerList = null;
+        NIMClient.getService(AuthService.class).logout();
         //调用登出接口
         NimUIKitImpl.logout();
         //  注册会话列表观察者对象
