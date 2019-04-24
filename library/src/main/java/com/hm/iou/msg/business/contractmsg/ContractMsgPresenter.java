@@ -102,6 +102,7 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
         }, BackpressureStrategy.ERROR)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(getProvider().<List<IContractMsgItem>>bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new Consumer<List<IContractMsgItem>>() {
                     @Override
                     public void accept(List<IContractMsgItem> resultList) throws Exception {

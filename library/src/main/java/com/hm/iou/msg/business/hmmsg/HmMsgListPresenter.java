@@ -9,6 +9,7 @@ import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.msg.HmMsgDbData;
 import com.hm.iou.msg.api.MsgApi;
+import com.hm.iou.msg.business.contractmsg.view.IContractMsgItem;
 import com.hm.iou.msg.business.hmmsg.view.IHmMsgItem;
 import com.hm.iou.msg.event.UpdateMsgCenterUnReadMsgNumEvent;
 import com.hm.iou.msg.util.DataChangeUtil;
@@ -105,6 +106,7 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
         }, BackpressureStrategy.ERROR)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(getProvider().<List<IHmMsgItem>>bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new Consumer<List<IHmMsgItem>>() {
                     @Override
                     public void accept(List<IHmMsgItem> resultList) throws Exception {

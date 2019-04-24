@@ -9,6 +9,7 @@ import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.msg.RemindBackMsgDbData;
 import com.hm.iou.msg.api.MsgApi;
+import com.hm.iou.msg.business.hmmsg.view.IHmMsgItem;
 import com.hm.iou.msg.business.remindback.view.IRemindBackMsgItem;
 import com.hm.iou.msg.event.UpdateMsgCenterUnReadMsgNumEvent;
 import com.hm.iou.msg.util.DataChangeUtil;
@@ -106,6 +107,7 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
         }, BackpressureStrategy.ERROR)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(getProvider().<List<IRemindBackMsgItem>>bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new Consumer<List<IRemindBackMsgItem>>() {
                     @Override
                     public void accept(List<IRemindBackMsgItem> resultList) throws Exception {

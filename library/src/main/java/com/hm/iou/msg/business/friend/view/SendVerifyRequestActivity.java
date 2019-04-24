@@ -35,14 +35,19 @@ import io.reactivex.functions.Consumer;
 
 public class SendVerifyRequestActivity extends BaseActivity {
 
-    public static final String EXTRA_KEY_USER_ID = "user_id";
+    public static final String EXTRA_KEY_FRIEND_ID = "friend_id";
+    public static final String EXTRA_KEY_ID_TYPE = "id_type";
+    public static final int EXTRA_ID_TYPE_USER_ID = 1;
+    public static final int EXTRA_ID_TYPE_IM_ID = 2;
+
 
     @BindView(R2.id.et_verify_content)
     EditText mEtContent;
     @BindView(R2.id.btn_verify_send)
     Button mBtnSend;
 
-    private String mUserId;
+    private String mFriendId;
+    private int mIdType;
 
     private Disposable mDisposable;
 
@@ -59,9 +64,11 @@ public class SendVerifyRequestActivity extends BaseActivity {
     @Override
     protected void initEventAndData(Bundle bundle) {
         Intent data = getIntent();
-        mUserId = data.getStringExtra(EXTRA_KEY_USER_ID);
+        mFriendId = data.getStringExtra(EXTRA_KEY_FRIEND_ID);
+        mIdType = data.getIntExtra(EXTRA_KEY_ID_TYPE, EXTRA_ID_TYPE_USER_ID);
         if (bundle != null) {
-            mUserId = bundle.getString(EXTRA_KEY_USER_ID);
+            mFriendId = bundle.getString(EXTRA_KEY_FRIEND_ID);
+            mIdType = bundle.getInt(EXTRA_KEY_ID_TYPE, EXTRA_ID_TYPE_USER_ID);
         }
         RxTextView.textChanges(mEtContent).subscribe(new Consumer<CharSequence>() {
             @Override
@@ -78,7 +85,8 @@ public class SendVerifyRequestActivity extends BaseActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(EXTRA_KEY_USER_ID, mUserId);
+        outState.putString(EXTRA_KEY_FRIEND_ID, mFriendId);
+        outState.putInt(EXTRA_KEY_ID_TYPE, mIdType);
     }
 
     @Override
@@ -103,7 +111,7 @@ public class SendVerifyRequestActivity extends BaseActivity {
 
     private void sendVerifyRequest(String content) {
         showLoadingView();
-        mDisposable = MsgApi.addFriendRequest(mUserId, content)
+        mDisposable = MsgApi.addFriendRequest(mFriendId, content, mIdType)
                 .map(RxUtil.<Boolean>handleResponse())
                 .subscribeWith(new CommSubscriber<Boolean>(this) {
                     @Override

@@ -145,10 +145,11 @@ public class MsgApi {
         return getService().getUserInfoById(data).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public static Flowable<BaseResponse<Boolean>> addFriendRequest(String userId, String applyMsg) {
+    public static Flowable<BaseResponse<Boolean>> addFriendRequest(String userIdOrImId, String applyMsg, int idType) {
         AddFriendReqBean data = new AddFriendReqBean();
-        data.setFriendId(userId);
+        data.setFriendId(userIdOrImId);
         data.setApplyMsg(applyMsg);
+        data.setIdType(idType);
         return getService().addFriendRequest(data).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 

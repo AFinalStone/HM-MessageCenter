@@ -113,13 +113,27 @@ public class NavigationHelper {
      * 跳转到好友申请页面
      *
      * @param context
-     * @param friendId
+     * @param userId
      * @param reqCode
      */
-    public static void toSendVerifyRequestPage(Activity context, String friendId, int reqCode) {
+    public static void toSendVerifyRequestPage(Activity context, String userId, int reqCode) {
         Intent intent = new Intent(context, SendVerifyRequestActivity.class);
-        intent.putExtra(SendVerifyRequestActivity.EXTRA_KEY_USER_ID, friendId);
+        intent.putExtra(SendVerifyRequestActivity.EXTRA_KEY_FRIEND_ID, userId);
+        intent.putExtra(SendVerifyRequestActivity.EXTRA_KEY_ID_TYPE, SendVerifyRequestActivity.EXTRA_ID_TYPE_USER_ID);
         context.startActivityForResult(intent, reqCode);
+    }
+
+    /**
+     * 跳转到好友申请页面
+     *
+     * @param context
+     * @param imId
+     */
+    public static void toSendVerifyRequestPage(Context context, String imId) {
+        Intent intent = new Intent(context, SendVerifyRequestActivity.class);
+        intent.putExtra(SendVerifyRequestActivity.EXTRA_KEY_FRIEND_ID, imId);
+        intent.putExtra(SendVerifyRequestActivity.EXTRA_KEY_ID_TYPE, SendVerifyRequestActivity.EXTRA_ID_TYPE_IM_ID);
+        context.startActivity(intent);
     }
 
     /**
@@ -127,7 +141,7 @@ public class NavigationHelper {
      *
      * @param context
      * @param friendId    好友的用户id
-     * @param applyStatus 从好友申请列表进入时，需要传入此参数。1-已过期，2-等待确认。{@link FriendDetailActivity.APPLY_OVERDUE}
+     * @param applyStatus 从好友申请列表进入时，需要传入此参数。1-已过期，2-等待确认。{@link }
      * @param applyMsg
      */
     public static void toFriendDetailPage(Context context, String friendId, String applyStatus, String applyMsg) {

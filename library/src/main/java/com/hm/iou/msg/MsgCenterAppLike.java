@@ -82,8 +82,6 @@ public class MsgCenterAppLike {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventLogin(LoginSuccEvent event) {
         IMHelper.getInstance(mContext).login();
-        UserManager.getInstance(mContext).updateIMToken("");
-        UserManager.getInstance(mContext).updateIMId("");
     }
 
     /**
@@ -95,6 +93,8 @@ public class MsgCenterAppLike {
     public void onEventLogout(LogoutEvent event) {
         CacheDataUtil.clearAllCache(mContext);
         IMHelper.getInstance(mContext).logout();
+        UserManager.getInstance(mContext).updateIMToken("");
+        UserManager.getInstance(mContext).updateIMId("");
     }
 
 

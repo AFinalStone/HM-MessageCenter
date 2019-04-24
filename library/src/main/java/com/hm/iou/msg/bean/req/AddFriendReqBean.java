@@ -10,5 +10,6 @@ public class AddFriendReqBean {
 
     private String friendId;
     private String applyMsg;
+    private int idType;//1用户id，2im_id
 
 }

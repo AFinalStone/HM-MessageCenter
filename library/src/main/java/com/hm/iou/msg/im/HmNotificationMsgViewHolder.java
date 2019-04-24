@@ -58,7 +58,7 @@ public class HmNotificationMsgViewHolder extends MsgViewHolderBase {
             @Override
             public void onClick(View v) {
                 if (mIsNoFriendFlag) {
-                    NavigationHelper.toFriendDetailPageFromSession(view.getContext(), message.getSessionId());
+                    NavigationHelper.toSendVerifyRequestPage(view.getContext(), message.getSessionId());
                 }
             }
         });

@@ -52,13 +52,14 @@ public class DataChangeUtil {
                 String displayName = UserInfoHelper.getUserDisplayName(contactId);
                 NimUserInfo nimUserInfo = NIMClient.getService(UserService.class).getUserInfo(contactId);
                 String headerImgUrl = "";
+                GenderEnum genderEnum = GenderEnum.UNKNOWN;
                 if (nimUserInfo != null) {
                     headerImgUrl = nimUserInfo.getAvatar();
+                    genderEnum = nimUserInfo.getGenderEnum();
                 }
                 ChatMsgBean chatMsgBean = new ChatMsgBean();
                 Logger.d("contactId=" + contactId + "content=" + content + "strTime" + strTime + "redMsgNum" + redMsgNum);
                 chatMsgBean.setContactId(contactId);
-                GenderEnum genderEnum = nimUserInfo.getGenderEnum();
                 if (genderEnum == null) {
                     chatMsgBean.setSex(0);
                 } else {
