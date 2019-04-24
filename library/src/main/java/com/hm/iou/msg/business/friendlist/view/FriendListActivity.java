@@ -132,7 +132,7 @@ public class FriendListActivity extends BaseActivity<FriendListPresenter> implem
     @Override
     public void showDataEmpty() {
         mLoadingInit.setVisibility(View.VISIBLE);
-        mLoadingInit.showDataEmpty("");
+        mLoadingInit.showDataEmpty("啊哦，空空如也~");
     }
 
 }

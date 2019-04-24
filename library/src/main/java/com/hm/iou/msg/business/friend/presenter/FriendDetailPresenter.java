@@ -9,6 +9,7 @@ import android.view.View;
 import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
+import com.hm.iou.database.FriendDbUtil;
 import com.hm.iou.msg.MsgCenterConstants;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.api.MsgApi;
@@ -24,6 +25,8 @@ import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,19 +48,29 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
 
     public FriendDetailPresenter(@NonNull Context context, @NonNull FriendDetailContract.View view) {
         super(context, view);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
     public void getUserInfo(String userId, int idType, String applyStatus) {
         mApplyStatus = applyStatus;
-        mView.showLoadingView();
+        mView.showDetailLoading();
+        mView.showDetailContent(View.GONE);
         MsgApi.getUserInfoById(userId, idType == FriendDetailActivity.ID_TYPE_IM ? 2 : 1)
                 .compose(getProvider().<BaseResponse<FriendInfo>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<FriendInfo>handleResponse())
                 .subscribeWith(new CommSubscriber<FriendInfo>(mView) {
                     @Override
                     public void handleResult(FriendInfo friendInfo) {
-                        mView.dismissLoadingView();
+                        mView.hideDetailLoading();
+                        mView.showDetailContent(View.VISIBLE);
+
                         mFriendInfo = friendInfo;
                         mView.showAvatar(friendInfo.getAvatarUrl());
                         mView.showNickname(friendInfo.getNickName(), friendInfo.getStageName());
@@ -277,6 +290,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                         mView.toastMessage("已解除好友关系");
 /*                        mFriendInfo.setFriended(false);
                         mView.showButtonText("添加朋友");*/
+                        FriendDbUtil.deleteFriendByUserId(mFriendInfo.getFriendId());
                         mView.closeCurrPage();
                         EventBus.getDefault().post(new CommBizEvent(MsgCenterConstants.KEY_DELTE_IM_FRIEND, mFriendInfo.getFriendImAccId()));
                         EventBus.getDefault().post(new DeleteFriendEvent(mFriendInfo.getFriendId(), mFriendInfo.getFriendImAccId()));
@@ -318,4 +332,10 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                     }
                 });
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventDeleteFriend(DeleteFriendEvent event) {
+        mView.closeCurrPage();
+    }
+
 }

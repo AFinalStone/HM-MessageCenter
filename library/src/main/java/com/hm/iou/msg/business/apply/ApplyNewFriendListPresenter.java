@@ -85,6 +85,8 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
                         if (list != null && !list.isEmpty()) {
                             Logger.d("list.size==" + list.size());
                             mView.showMsgList(convertData(list));
+                        } else {
+                            mView.showMsgList(null);
                         }
                         if (firstLoad) {
                             loadDataFromServer();

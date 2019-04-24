@@ -28,7 +28,7 @@ public class TimeUtil {
             if (now - time < 86400000) {
                 Calendar calc = Calendar.getInstance();
                 calc.setTimeInMillis(time);
-                return "今天" + HF_FORMAT.format(time);
+                return HF_FORMAT.format(time);
             }
 
             if (now - time < (86400000 * 2)) {

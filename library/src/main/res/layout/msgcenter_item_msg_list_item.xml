@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="visible"
                 app:dotBackgroundColor="@color/uikit_function_exception"
-                app:dotText="12"
+                app:dotText="0"
                 app:dotTextColor="@color/white"
                 app:dotTextSize="@dimen/textFontSize_12" />
 
@@ -76,6 +76,9 @@
             android:layout_marginStart="46dp"
             android:layout_toStartOf="@id/ll_dot_chat_red_msg_num"
             android:minHeight="17dp"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:ellipsize="end"
             tools:text="我有一个律师函订单请您接单" />
 
         <View
