@@ -118,7 +118,7 @@ public class IMHelper {
                 }
             });
             //黑名单
-            NimUIKit.registerTipMsgViewHolder(MsgViewHolderTip.class);
+            NimUIKit.registerTipMsgViewHolder(HmNotificationMsgViewHolder.class);
             //会话列表变更监听对象
             if (mChatListObserver == null) {
                 mChatListObserver = new Observer<List<RecentContact>>() {

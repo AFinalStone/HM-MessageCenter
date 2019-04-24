@@ -2,11 +2,14 @@ package com.hm.iou.msg.util;
 
 import android.content.Context;
 
+import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.EventBusHelper;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
+import com.hm.iou.msg.business.friend.view.SendVerifyRequestActivity;
 import com.hm.iou.msg.im.IMHelper;
+import com.hm.iou.tools.ToastUtil;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -17,7 +20,7 @@ import io.reactivex.functions.Consumer;
 
 public class MsgCenterMsgUtil {
 
-    private static Disposable mListDisposable;
+    private static Disposable mDisposableUnReadMsgNum;
     private static String mTopHeadRedFlagCount;    //导航栏上红点标记数字
 
     public static void setTopHeadRedFlagCount(String topHeadRedFlagCount) {
@@ -32,12 +35,12 @@ public class MsgCenterMsgUtil {
      * 从服务端获取消息中心未读消息数量
      */
     public static void getMsgCenterNoReadNumFromServer(Context c) {
-        if (mListDisposable != null && !mListDisposable.isDisposed()) {
-            mListDisposable.dispose();
-            mListDisposable = null;
+        if (mDisposableUnReadMsgNum != null && !mDisposableUnReadMsgNum.isDisposed()) {
+            mDisposableUnReadMsgNum.dispose();
+            mDisposableUnReadMsgNum = null;
         }
         final Context context = c.getApplicationContext();
-        mListDisposable = MsgApi.getUnReadMsgNum()
+        mDisposableUnReadMsgNum = MsgApi.getUnReadMsgNum()
                 .map(RxUtil.<UnReadMsgNumBean>handleResponse())
                 .subscribe(new Consumer<UnReadMsgNumBean>() {
                     @Override
@@ -54,7 +57,7 @@ public class MsgCenterMsgUtil {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        mListDisposable = null;
+                        mDisposableUnReadMsgNum = null;
                         getMsgCenterNoReadNumFromCache(context);
                     }
                 });
