@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
-import com.hm.iou.database.table.msg.SimilarityContractMsgDbData;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
 import com.hm.iou.msg.business.similarity.view.ISimilarityContractMsgItem;
@@ -19,12 +18,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
-import io.reactivex.FlowableOnSubscribe;
-import io.reactivex.functions.Consumer;
 
 /**
  * 获取消息

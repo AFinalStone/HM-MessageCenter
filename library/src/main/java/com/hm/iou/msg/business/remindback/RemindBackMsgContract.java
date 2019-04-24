@@ -52,6 +52,11 @@ public class RemindBackMsgContract {
          */
         void showDataEmpty();
 
+        /**
+         * 滚动到底部
+         */
+        void scrollToBottom();
+
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
@@ -59,7 +64,7 @@ public class RemindBackMsgContract {
         /**
          * 获取消息列表
          */
-        void getMsgList(boolean isShowTip);
+        void getMsgList();
 
         /**
          * 初始化

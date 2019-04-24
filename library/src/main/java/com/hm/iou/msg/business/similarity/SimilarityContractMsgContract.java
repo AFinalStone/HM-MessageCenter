@@ -84,10 +84,6 @@ public class SimilarityContractMsgContract {
 
     public interface Presenter extends BaseContract.BasePresenter {
 
-//        /**
-//         * 获取消息列表
-//         */
-//        void getMsgList(boolean isShowTip);
 
         /**
          * 获取更多数据

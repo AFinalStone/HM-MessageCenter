@@ -43,11 +43,6 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
     @Override
     public void init() {
         mView.showInitLoading();
-        getMsgList(false);
-    }
-
-    @Override
-    public void getMsgList(final boolean isShowTip) {
         MsgApi.getRemindBackList()
                 .compose(getProvider().<BaseResponse<List<RemindBackMsgDbData>>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<List<RemindBackMsgDbData>>handleResponse())
@@ -57,27 +52,49 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                     @Override
                     public void handleResult(List<RemindBackMsgDbData> list) {
                         EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
-                        getCache(list);
+                        getCache(list, true);
                     }
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
-                        getCache(null);
+                        getCache(null, true);
                     }
 
                     @Override
                     public boolean isShowCommError() {
-                        return isShowTip;
+                        return false;
                     }
 
                     @Override
                     public boolean isShowBusinessError() {
-                        return isShowTip;
+                        return false;
                     }
                 });
     }
 
-    private void getCache(final List<RemindBackMsgDbData> list) {
+    @Override
+    public void getMsgList() {
+        MsgApi.getRemindBackList()
+                .compose(getProvider().<BaseResponse<List<RemindBackMsgDbData>>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<List<RemindBackMsgDbData>>handleResponse())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new CommSubscriber<List<RemindBackMsgDbData>>(mView) {
+                    @Override
+                    public void handleResult(List<RemindBackMsgDbData> list) {
+                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
+                        getCache(list, false);
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String s, String s1) {
+                        getCache(null, false);
+                    }
+
+                });
+    }
+
+    private void getCache(final List<RemindBackMsgDbData> list, final boolean isInit) {
         Flowable.create(new FlowableOnSubscribe<List<IRemindBackMsgItem>>() {
             @Override
             public void subscribe(FlowableEmitter<List<IRemindBackMsgItem>> e) throws Exception {
@@ -92,21 +109,30 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                 .subscribe(new Consumer<List<IRemindBackMsgItem>>() {
                     @Override
                     public void accept(List<IRemindBackMsgItem> resultList) throws Exception {
-                        mView.hideInitLoading();
-                        mView.hidePullDownRefresh();
-                        mView.enableRefresh();
                         if (resultList == null || resultList.size() == 0) {
                             mView.showDataEmpty();
                         } else {
                             mView.showMsgList(resultList);
                         }
+                        //关闭动画
+                        if (isInit) {
+                            mView.hideInitLoading();
+                            mView.enableRefresh();
+                            mView.scrollToBottom();
+                        } else {
+                            mView.hidePullDownRefresh();
+                        }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        mView.hideInitLoading();
-                        mView.hidePullDownRefresh();
-                        mView.enableRefresh();
+                        if (isInit) {
+                            mView.hideInitLoading();
+                            mView.enableRefresh();
+                            mView.scrollToBottom();
+                        } else {
+                            mView.hidePullDownRefresh();
+                        }
                         mView.showDataEmpty();
                     }
                 });

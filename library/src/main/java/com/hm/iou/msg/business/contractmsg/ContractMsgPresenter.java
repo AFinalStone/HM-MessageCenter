@@ -43,11 +43,6 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
     @Override
     public void init() {
         mView.showInitLoading();
-        getMsgList(false);
-    }
-
-    @Override
-    public void getMsgList(final boolean isShowTip) {
         MsgApi.getContractMsgList()
                 .compose(getProvider().<BaseResponse<List<ContractMsgDbData>>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<List<ContractMsgDbData>>handleResponse())
@@ -55,28 +50,47 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                     @Override
                     public void handleResult(List<ContractMsgDbData> list) {
                         EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
-                        getCache(list);
+                        getCache(list, false);
                     }
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
-                        getCache(null);
-                    }
-
-                    @Override
-                    public boolean isShowCommError() {
-                        return isShowTip;
+                        getCache(null, false);
                     }
 
                     @Override
                     public boolean isShowBusinessError() {
-                        return isShowTip;
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isShowCommError() {
+                        return false;
+                    }
+                });
+    }
+
+    @Override
+    public void getMsgList() {
+        MsgApi.getContractMsgList()
+                .compose(getProvider().<BaseResponse<List<ContractMsgDbData>>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<List<ContractMsgDbData>>handleResponse())
+                .subscribeWith(new CommSubscriber<List<ContractMsgDbData>>(mView) {
+                    @Override
+                    public void handleResult(List<ContractMsgDbData> list) {
+                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
+                        getCache(list, false);
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String s, String s1) {
+                        getCache(null, false);
                     }
                 });
     }
 
 
-    private void getCache(final List<ContractMsgDbData> list) {
+    private void getCache(final List<ContractMsgDbData> list, final boolean isInit) {
         Flowable.create(new FlowableOnSubscribe<List<IContractMsgItem>>() {
             @Override
             public void subscribe(FlowableEmitter<List<IContractMsgItem>> e) throws Exception {
@@ -91,22 +105,32 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                 .subscribe(new Consumer<List<IContractMsgItem>>() {
                     @Override
                     public void accept(List<IContractMsgItem> resultList) throws Exception {
-                        mView.hideInitLoading();
-                        mView.hidePullDownRefresh();
-                        mView.enableRefresh();
                         if (resultList == null || resultList.size() == 0) {
                             mView.showDataEmpty();
                         } else {
                             mView.showMsgList(resultList);
                         }
+                        //关闭动画
+                        if (isInit) {
+                            mView.hideInitLoading();
+                            mView.enableRefresh();
+                            mView.scrollToBottom();
+                        } else {
+                            mView.hidePullDownRefresh();
+                        }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        mView.hideInitLoading();
-                        mView.hidePullDownRefresh();
-                        mView.enableRefresh();
                         mView.showDataEmpty();
+                        //关闭动画
+                        if (isInit) {
+                            mView.hideInitLoading();
+                            mView.enableRefresh();
+                            mView.scrollToBottom();
+                        } else {
+                            mView.hidePullDownRefresh();
+                        }
                     }
                 });
     }

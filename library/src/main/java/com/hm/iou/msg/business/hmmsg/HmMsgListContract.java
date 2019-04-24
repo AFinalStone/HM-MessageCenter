@@ -50,6 +50,11 @@ public class HmMsgListContract {
          * 初始化失败
          */
         void showInitFailed();
+
+        /**
+         * 滚动到底部
+         */
+        void scrollToBottom();
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
@@ -63,7 +68,7 @@ public class HmMsgListContract {
          *
          * @param isShowTip 提示语
          */
-        void getMsgListFromServer(boolean isShowTip);
+        void getMsgListFromServer();
 
     }
 }

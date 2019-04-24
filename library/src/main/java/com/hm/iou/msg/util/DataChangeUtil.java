@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.hm.iou.database.table.msg.ContractMsgDbData;
 import com.hm.iou.database.table.msg.HmMsgDbData;
 import com.hm.iou.database.table.msg.RemindBackMsgDbData;
-import com.hm.iou.database.table.msg.SimilarityContractMsgDbData;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.bean.ChatMsgBean;
@@ -88,7 +87,7 @@ public class DataChangeUtil {
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
                 final ContractMsgDbData msgBean = list.get(i);
-                final String time = msgBean.getCreateTime();
+                final String time = TimeUtil.formatContractMsgStartTime(msgBean.getCreateTime());
                 final String title = msgBean.getTitle();
                 final String content = msgBean.getContent();
                 final String justUrl = msgBean.getJumpUrl();
@@ -172,17 +171,25 @@ public class DataChangeUtil {
 
                     @Override
                     public String getITime() {
-                        return "还款日期：" + dbData.getCreateTime();
+                        return TimeUtil.formatRemindBackCreateTime(dbData.getCreateTime());
                     }
 
                     @Override
-                    public String getIBackMoneyTime() {
-                        return dbData.getRepayDateTime();
+                    public String getIBackTime() {
+                        String backTime = "还款日期：";
+                        if (0 == dbData.getThingsType()) {
+                            backTime = "归还日期：";
+                        }
+                        return backTime + TimeUtil.formatRemindBackReturnTime(dbData.getRepayDateTime());
                     }
 
                     @Override
-                    public String getIBackMoney() {
-                        return "还款日期：" + dbData.getRepayAmount() + "元";
+                    public String getIBackThingName() {
+                        String backThingName = "还款金额：";
+                        if (0 == dbData.getThingsType()) {
+                            backThingName = "物品名称：";
+                        }
+                        return backThingName + dbData.getRepayThing();
                     }
 
                     @Override
@@ -292,15 +299,7 @@ public class DataChangeUtil {
 
                     @Override
                     public String getMsgTime() {
-                        try {
-                            SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                            Date date = timeFormat.parse(dbData.getStartTime());
-                            timeFormat = new SimpleDateFormat("MM-dd HH:mm:ss");
-                            return timeFormat.format(date);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        return "";
+                        return TimeUtil.formatHmMsgStartTime(dbData.getStartTime());
                     }
 
                     @Override

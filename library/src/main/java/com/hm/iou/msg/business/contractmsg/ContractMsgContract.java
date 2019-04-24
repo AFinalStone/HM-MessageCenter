@@ -51,7 +51,10 @@ public class ContractMsgContract {
          * 显示数据为空
          */
         void showDataEmpty();
-
+        /**
+         * 滚动到底部
+         */
+        void scrollToBottom();
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
@@ -59,7 +62,7 @@ public class ContractMsgContract {
         /**
          * 获取消息列表
          */
-        void getMsgList(boolean isShowTip);
+        void getMsgList();
 
         /**
          * 初始化

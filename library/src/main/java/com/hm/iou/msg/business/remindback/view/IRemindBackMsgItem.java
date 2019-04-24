@@ -25,14 +25,14 @@ public interface IRemindBackMsgItem {
      *
      * @return
      */
-    String getIBackMoneyTime();
+    String getIBackTime();
 
     /**
-     * 还款金额
+     * 归还物件/金额
      *
      * @return
      */
-    String getIBackMoney();
+    String getIBackThingName();
 
     /**
      * 合同类型

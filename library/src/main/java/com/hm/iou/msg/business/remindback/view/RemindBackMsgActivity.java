@@ -74,7 +74,7 @@ public class RemindBackMsgActivity extends BaseActivity<RemindBackMsgPresenter> 
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mPresenter.getMsgList(true);
+                mPresenter.getMsgList();
             }
         });
 
@@ -123,4 +123,10 @@ public class RemindBackMsgActivity extends BaseActivity<RemindBackMsgPresenter> 
         mLoadingInit.setVisibility(View.VISIBLE);
         mLoadingInit.showDataEmpty("");
     }
+
+    @Override
+    public void scrollToBottom() {
+        mRvMsgList.scrollToPosition(mAdapter.getItemCount() - 1);
+    }
+
 }

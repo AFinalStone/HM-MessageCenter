@@ -44,11 +44,6 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
     @Override
     public void init() {
         mView.showInitLoading();
-        getMsgListFromServer(false);
-    }
-
-    @Override
-    public void getMsgListFromServer(final boolean isShowTip) {
         //重新获取未读消息数量
         MsgApi.getHmMsgList()
                 .compose(getProvider().<BaseResponse<List<HmMsgDbData>>>bindUntilEvent(ActivityEvent.DESTROY))
@@ -56,29 +51,49 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                 .subscribeWith(new CommSubscriber<List<HmMsgDbData>>(mView) {
                     @Override
                     public void handleResult(List<HmMsgDbData> list) {
-                        getCache(list);
+                        getCache(list, true);
                         EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                     }
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
-                        getCache(null);
+                        getCache(null, true);
                     }
 
                     @Override
                     public boolean isShowCommError() {
-                        return isShowTip;
+                        return false;
                     }
 
                     @Override
                     public boolean isShowBusinessError() {
-                        return isShowTip;
+                        return false;
+                    }
+                });
+    }
+
+    @Override
+    public void getMsgListFromServer() {
+        //重新获取未读消息数量
+        MsgApi.getHmMsgList()
+                .compose(getProvider().<BaseResponse<List<HmMsgDbData>>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<List<HmMsgDbData>>handleResponse())
+                .subscribeWith(new CommSubscriber<List<HmMsgDbData>>(mView) {
+                    @Override
+                    public void handleResult(List<HmMsgDbData> list) {
+                        getCache(list, false);
+                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String s, String s1) {
+                        getCache(null, false);
                     }
                 });
     }
 
 
-    private void getCache(final List<HmMsgDbData> list) {
+    private void getCache(final List<HmMsgDbData> list, final boolean isInit) {
         Flowable.create(new FlowableOnSubscribe<List<IHmMsgItem>>() {
             @Override
             public void subscribe(FlowableEmitter<List<IHmMsgItem>> e) throws Exception {
@@ -93,21 +108,31 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                 .subscribe(new Consumer<List<IHmMsgItem>>() {
                     @Override
                     public void accept(List<IHmMsgItem> resultList) throws Exception {
-                        mView.hideInitLoading();
-                        mView.hidePullDownRefresh();
-                        mView.enableRefresh();
                         if (resultList == null || resultList.size() == 0) {
                             mView.showDataEmpty();
                         } else {
                             mView.showMsgList(resultList);
                         }
+                        //关闭动画
+                        if (isInit) {
+                            mView.hideInitLoading();
+                            mView.enableRefresh();
+                            mView.scrollToBottom();
+                        } else {
+                            mView.hidePullDownRefresh();
+                        }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        mView.hideInitLoading();
-                        mView.hidePullDownRefresh();
-                        mView.enableRefresh();
+                        //关闭动画
+                        if (isInit) {
+                            mView.hideInitLoading();
+                            mView.enableRefresh();
+                            mView.scrollToBottom();
+                        } else {
+                            mView.hidePullDownRefresh();
+                        }
                         mView.showDataEmpty();
                     }
                 });
