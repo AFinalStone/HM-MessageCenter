@@ -9,6 +9,7 @@ import android.view.View;
 import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
+import com.hm.iou.msg.MsgCenterConstants;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.FriendInfo;
@@ -18,6 +19,7 @@ import com.hm.iou.msg.event.AddFriendEvent;
 import com.hm.iou.msg.event.DeleteFriendEvent;
 import com.hm.iou.msg.event.UpdateFriendEvent;
 import com.hm.iou.msg.im.IMHelper;
+import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -273,8 +275,10 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                     public void handleResult(Object o) {
                         mView.dismissLoadingView();
                         mView.toastMessage("已解除好友关系");
-                        mFriendInfo.setFriended(false);
-                        mView.showButtonText("添加朋友");
+/*                        mFriendInfo.setFriended(false);
+                        mView.showButtonText("添加朋友");*/
+                        mView.closeCurrPage();
+                        EventBus.getDefault().post(new CommBizEvent(MsgCenterConstants.KEY_DELTE_IM_FRIEND, mFriendInfo.getFriendImAccId()));
                         EventBus.getDefault().post(new DeleteFriendEvent(mFriendInfo.getFriendId(), mFriendInfo.getFriendImAccId()));
                     }
 
@@ -302,7 +306,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                         mFriendInfo.setFriended(true);
                         mApplyStatus = null;
                         mView.showButtonText("发消息");
-                        mView.showApplyCommentInfo(View.INVISIBLE);
+                        mView.showApplyCommentInfo(View.GONE);
                         EventBus.getDefault().post(new AddFriendEvent());
                         //获取token并登陆IM
                         IMHelper.getInstance(mContext).refreshTokenAndLogin();

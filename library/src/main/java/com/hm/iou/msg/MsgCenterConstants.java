@@ -26,4 +26,6 @@ public class MsgCenterConstants {
      */
     public static final String KEY_LAST_FRIEND_APPLY_RECORD_TIME = "msgcenter_apply_record";
 
+    public static final String KEY_DELTE_IM_FRIEND = "msgcenter_delelte_friend";
+
 }
