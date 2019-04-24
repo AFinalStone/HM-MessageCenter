@@ -13,8 +13,6 @@
         android:background="@drawable/jietiao_bg_tips_remind_no_net"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingEnd="20dp"
-        android:paddingStart="20dp"
         android:visibility="gone">
 
         <ImageView
