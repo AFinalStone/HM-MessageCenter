@@ -35,6 +35,7 @@
         android:paddingRight="18dip"
         android:layout_marginTop="60dip"
         android:gravity="center_vertical"
+        android:layout_alignParentTop="true"
         >
 
         <com.hm.iou.uikit.ShapedImageView
@@ -159,7 +160,7 @@
             android:paddingLeft="18dip"
             android:paddingRight="18dip"
             android:layout_marginTop="20dip"
-            android:visibility="visible"
+            android:visibility="invisible"
             >
             <TextView
                 style="@style/UikitTextView"
