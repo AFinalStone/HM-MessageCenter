@@ -24,6 +24,7 @@ import com.hm.iou.sharedata.event.LogoutEvent;
 import com.hm.iou.tools.ImageLoader;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.UIKitOptions;
+import com.netease.nim.uikit.api.model.main.CustomPushContentProvider;
 import com.netease.nim.uikit.api.model.session.SessionEventListener;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nim.uikit.impl.NimUIKitImpl;
@@ -52,7 +53,9 @@ import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -140,6 +143,22 @@ public class IMHelper {
                     }
                 };
             }
+
+            NimUIKit.setCustomPushContentProvider(new CustomPushContentProvider() {
+
+                @Override
+                public String getPushContent(IMMessage imMessage) {
+                    return null;
+                }
+
+                @Override
+                public Map<String, Object> getPushPayload(IMMessage imMessage) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("sessionId", UserManager.getInstance(mContext).getUserInfo().getImAccId());
+                    map.put("sessionType", SessionTypeEnum.P2P.getValue());
+                    return map;
+                }
+            });
         }
     }
 
