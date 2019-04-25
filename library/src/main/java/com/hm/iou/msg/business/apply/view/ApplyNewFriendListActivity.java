@@ -146,12 +146,20 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
         if (mAdapter != null) {
             mAdapter.removeData(applyId);
         }
+        List list = mAdapter.getData();
+        if (list == null || list.isEmpty()) {
+            showDataEmpty();
+        }
     }
 
     @Override
     public void removeDataByFriendId(String friendId) {
         if (mAdapter != null) {
             mAdapter.removeDataByFriendId(friendId);
+        }
+        List list = mAdapter.getData();
+        if (list == null || list.isEmpty()) {
+            showDataEmpty();
         }
     }
 }
