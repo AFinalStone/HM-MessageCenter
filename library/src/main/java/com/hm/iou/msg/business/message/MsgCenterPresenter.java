@@ -342,7 +342,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
      * @param updateChatListEvent
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvenAddFriendFriend(UpdateChatListEvent updateChatListEvent) {
+    public void onEvenUpdateChatList(UpdateChatListEvent updateChatListEvent) {
         getChatList();
     }
 
