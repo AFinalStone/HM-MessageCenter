@@ -47,7 +47,6 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                     public void handleResult(GetSimilarityContractListResBean resBean) {
                         mView.hideInitLoading();
                         mView.enableRefresh();
-                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                         mListData.clear();
                         if (resBean == null || resBean.getList() == null || resBean.getList().isEmpty()) {
                             mView.showDataEmpty();
@@ -90,7 +89,6 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                     @Override
                     public void handleResult(GetSimilarityContractListResBean resBean) {
                         mView.hidePullDownRefresh();
-                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                         mListData.clear();
                         if (resBean == null || resBean.getList() == null || resBean.getList().isEmpty()) {
                             mView.showDataEmpty();
@@ -124,7 +122,6 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                     @Override
                     public void handleResult(GetSimilarityContractListResBean resBean) {
                         mView.showLoadMoreComplete();
-                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                         List<GetSimilarityContractListResBean.ListBean> list = resBean.getList();
                         List<ISimilarityContractMsgItem> resultList = DataChangeUtil.changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(list);
                         mView.showMoreNewsList(resultList);

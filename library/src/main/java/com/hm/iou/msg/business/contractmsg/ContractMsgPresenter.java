@@ -48,7 +48,6 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                 .subscribeWith(new CommSubscriber<List<ContractMsgDbData>>(mView) {
                     @Override
                     public void handleResult(final List<ContractMsgDbData> list) {
-                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                         Flowable.create(new FlowableOnSubscribe<List<IContractMsgItem>>() {
                             @Override
                             public void subscribe(FlowableEmitter<List<IContractMsgItem>> e) throws Exception {
@@ -112,7 +111,6 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                 .subscribeWith(new CommSubscriber<List<ContractMsgDbData>>(mView) {
                     @Override
                     public void handleResult(final List<ContractMsgDbData> list) {
-                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                         Flowable.create(new FlowableOnSubscribe<List<IContractMsgItem>>() {
                             @Override
                             public void subscribe(FlowableEmitter<List<IContractMsgItem>> e) throws Exception {

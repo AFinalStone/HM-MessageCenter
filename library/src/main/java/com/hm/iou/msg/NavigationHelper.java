@@ -85,7 +85,6 @@ public class NavigationHelper {
      */
     public static void toSessionDetail(Context context, String fromAccount) {
         NimUIKit.startP2PSession(context, fromAccount);
-        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
     }
 
     public static void toMyCardPage(Context context) {

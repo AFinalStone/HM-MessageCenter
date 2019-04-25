@@ -50,7 +50,6 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                 .subscribeWith(new CommSubscriber<List<RemindBackMsgDbData>>(mView) {
                     @Override
                     public void handleResult(final List<RemindBackMsgDbData> list) {
-                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                         Flowable.create(new FlowableOnSubscribe<List<IRemindBackMsgItem>>() {
                             @Override
                             public void subscribe(FlowableEmitter<List<IRemindBackMsgItem>> e) throws Exception {
@@ -115,7 +114,6 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                 .subscribeWith(new CommSubscriber<List<RemindBackMsgDbData>>(mView) {
                     @Override
                     public void handleResult(final List<RemindBackMsgDbData> list) {
-                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                         Flowable.create(new FlowableOnSubscribe<List<IRemindBackMsgItem>>() {
                             @Override
                             public void subscribe(FlowableEmitter<List<IRemindBackMsgItem>> e) throws Exception {

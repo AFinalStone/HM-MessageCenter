@@ -154,7 +154,6 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
                             //刷新新的数据
                             loadDataFromCache(false);
                         }
-                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                     }
 
                     @Override

@@ -49,7 +49,6 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                 .subscribeWith(new CommSubscriber<List<HmMsgDbData>>(mView) {
                     @Override
                     public void handleResult(final List<HmMsgDbData> list) {
-                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                         Flowable.create(new FlowableOnSubscribe<List<IHmMsgItem>>() {
                             @Override
                             public void subscribe(FlowableEmitter<List<IHmMsgItem>> e) throws Exception {
@@ -114,7 +113,6 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                 .subscribeWith(new CommSubscriber<List<HmMsgDbData>>(mView) {
                     @Override
                     public void handleResult(final List<HmMsgDbData> list) {
-                        EventBus.getDefault().post(new UpdateMsgCenterUnReadMsgNumEvent());
                         Flowable.create(new FlowableOnSubscribe<List<IHmMsgItem>>() {
                             @Override
                             public void subscribe(FlowableEmitter<List<IHmMsgItem>> e) throws Exception {
