@@ -20,9 +20,7 @@
             android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:srlAccentColor="@android:color/white"
             app:srlEnableLoadMore="false"
-            app:srlEnablePreviewInEditMode="true"
             app:srlEnableRefresh="false">
 
             <LinearLayout

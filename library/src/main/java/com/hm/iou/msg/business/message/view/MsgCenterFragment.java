@@ -100,7 +100,6 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
                 mPresenter.refreshData();
             }
         });
-
         mPresenter.init();
     }
 

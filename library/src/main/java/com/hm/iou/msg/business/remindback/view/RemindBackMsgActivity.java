@@ -80,7 +80,13 @@ public class RemindBackMsgActivity extends BaseActivity<RemindBackMsgPresenter> 
                 mPresenter.getMsgList();
             }
         });
+        //设置底部刷新
+        mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
 
+            }
+        }, mRvMsgList);
         mPresenter.init();
     }
 

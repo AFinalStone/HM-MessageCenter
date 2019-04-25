@@ -73,7 +73,13 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
                 mPresenter.getMsgListFromServer();
             }
         });
+        //设置底部刷新
+        mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
 
+            }
+        }, mRvMsgList);
         mPresenter.init();
     }
 

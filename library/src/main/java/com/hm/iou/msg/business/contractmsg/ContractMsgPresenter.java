@@ -134,7 +134,7 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                                         if (resultList == null || resultList.size() == 0) {
                                             mView.showDataEmpty();
                                         } else {
-                                            mView.showMsgList(resultList);
+//                                            mView.showMsgList(resultList);
                                             mView.showLoadMoreEnd();
                                         }
 

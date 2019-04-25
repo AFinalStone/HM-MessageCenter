@@ -21,6 +21,7 @@ import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.List;
@@ -63,7 +64,6 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
 
         mAdapter = new ContractMsgListAdapter(mContext);
         mAdapter.setLoadMoreView(new HMLoadMoreView());
-        mAdapter.setHeaderAndEmpty(true);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -82,7 +82,13 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
                 mPresenter.getMsgList();
             }
         });
+        //设置底部刷新
+        mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
 
+            }
+        }, mRvMsgList);
         mPresenter.init();
     }
 
