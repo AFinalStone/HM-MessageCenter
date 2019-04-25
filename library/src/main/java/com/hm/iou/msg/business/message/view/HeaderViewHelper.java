@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,6 +27,7 @@ import com.hm.iou.router.Router;
 import com.hm.iou.tools.ImageLoader;
 import com.hm.iou.tools.NetStateUtil;
 import com.hm.iou.uikit.HMDotTextView;
+import com.hm.iou.uikit.dialog.HMAlertDialog;
 
 import java.util.List;
 
@@ -81,7 +83,7 @@ public class HeaderViewHelper {
         mContent.unregisterReceiver(mReceiver);
     }
 
-    @OnClick({R2.id.iv_advertisement, R2.id.iv_close_advertisement})
+    @OnClick({R2.id.iv_advertisement, R2.id.iv_close_advertisement, R2.id.tv_header_tips_no_net})
     public void onClick(View view) {
         int id = view.getId();
         if (R.id.iv_advertisement == id) {
@@ -92,6 +94,8 @@ public class HeaderViewHelper {
         } else if (R.id.iv_close_advertisement == id) {
             mRlHeaderTipAdvertisement.setVisibility(View.GONE);
             mIsHideAdvertisement = true;
+        } else if (R.id.tv_header_tips_no_net == id) {
+            showNetworkErrorDialog();
         }
     }
 
@@ -220,6 +224,19 @@ public class HeaderViewHelper {
             }
         }
     }
+
+    /**
+     * 显示网络不可用对话框
+     */
+    private void showNetworkErrorDialog() {
+        new HMAlertDialog.Builder(mContent)
+                .setTitle("网络不可用")
+                .setMessage(R.string.jietiao_network_error)
+                .setMessageGravity(Gravity.LEFT)
+                .setPositiveButton("最小化")
+                .create().show();
+    }
+
 
     class NetworkBroadcastReceiver extends BroadcastReceiver {
 

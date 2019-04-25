@@ -16,6 +16,7 @@ import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.bean.MsgListHeaderBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.dict.ModuleType;
+import com.hm.iou.msg.event.AddFriendEvent;
 import com.hm.iou.msg.event.DeleteFriendEvent;
 import com.hm.iou.msg.event.UpdateFriendEvent;
 import com.hm.iou.msg.event.UpdateMsgCenterUnReadMsgNumEvent;
@@ -25,14 +26,20 @@ import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.msg.util.MsgCenterMsgUtil;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.model.BaseResponse;
+import com.netease.nimlib.sdk.InvocationFuture;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.friend.model.Friend;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
+import com.netease.nimlib.sdk.uinfo.UserService;
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.reactivestreams.Publisher;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -44,6 +51,7 @@ import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -228,46 +236,64 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     }
 
     /**
-     * 获取会话列表
+     * 获取会话列表,先从服务器获取用户资料(单次最大150)，然后获取会话列表
      */
     public void getChatList() {
-        Flowable.create(new FlowableOnSubscribe<List<RecentContact>>() {
+        List<String> accounts = new ArrayList<>();
+        for (int i = 0; i < 150 && i < accounts.size(); i++) {
+            accounts.add(mChatList.get(i).getContactId());
+        }
+        IMHelper.fetchUserInfoFromServer(accounts, new IMHelper.OnFetchUserInfoListener() {
             @Override
-            public void subscribe(FlowableEmitter<List<RecentContact>> e) throws Exception {
-                List<RecentContact> recentChatList = NIMClient.getService(MsgService.class).queryRecentContactsBlock();
-                e.onNext(recentChatList);
+            public void onFetchComplete() {
+                Flowable.create(new FlowableOnSubscribe<List<ChatMsgBean>>() {
+                    @Override
+                    public void subscribe(FlowableEmitter<List<ChatMsgBean>> e) throws Exception {
+                        e.onNext(IMHelper.getRecentContactList());
+                    }
+                }, BackpressureStrategy.ERROR)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .compose(getProvider().<List<ChatMsgBean>>bindUntilEvent(FragmentEvent.DESTROY))
+                        .subscribeWith(new CommSubscriber<List<ChatMsgBean>>(mView) {
+                            @Override
+                            public void handleResult(List<ChatMsgBean> recentChatMsgList) {
+                                mChatList.clear();
+                                mChatList.addAll(recentChatMsgList);
+                                mView.showMsgList(mChatList);
+                                mView.hidePullDownRefresh();
+                                mView.enableRefresh();
+                            }
+
+                            @Override
+                            public void handleException(Throwable throwable, String s, String s1) {
+                                mView.hidePullDownRefresh();
+                                mView.enableRefresh();
+                            }
+
+                            @Override
+                            public boolean isShowBusinessError() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isShowCommError() {
+                                return false;
+                            }
+                        });
             }
-        }, BackpressureStrategy.ERROR)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(getProvider().<List<RecentContact>>bindUntilEvent(FragmentEvent.DESTROY))
-                .subscribeWith(new CommSubscriber<List<RecentContact>>(mView) {
-                    @Override
-                    public void handleResult(List<RecentContact> recentContacts) {
-                        List<ChatMsgBean> newList = DataChangeUtil.changeRecentContactToIChatMsgItem(recentContacts);
-                        mChatList.clear();
-                        mChatList.addAll(newList);
-                        mView.showMsgList(mChatList);
-                        mView.hidePullDownRefresh();
-                        mView.enableRefresh();
-                    }
+        });
+    }
 
-                    @Override
-                    public void handleException(Throwable throwable, String s, String s1) {
-                        mView.hidePullDownRefresh();
-                        mView.enableRefresh();
-                    }
-
-                    @Override
-                    public boolean isShowBusinessError() {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean isShowCommError() {
-                        return false;
-                    }
-                });
+    /**
+     * 从服务端更新所有当前会话列表的用户信息
+     */
+    private void fetchUserInfoFromServer() {
+        List<String> accounts = new ArrayList<>();
+        for (int i = 0; i < 150 && i < accounts.size(); i++) {
+            accounts.add(mChatList.get(i).getContactId());
+        }
+        InvocationFuture<List<NimUserInfo>> invocationFuture = NIMClient.getService(UserService.class).fetchUserInfo(accounts);
     }
 
     /**
@@ -308,6 +334,16 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvenUpdateFriendEvent(UpdateFriendEvent updateFriendEvent) {
+        mIsNeedRefreshChatList = true;
+    }
+
+    /**
+     * 同意添加好友
+     *
+     * @param updateFriendEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvenAddFriendFriend(AddFriendEvent updateFriendEvent) {
         mIsNeedRefreshChatList = true;
     }
 

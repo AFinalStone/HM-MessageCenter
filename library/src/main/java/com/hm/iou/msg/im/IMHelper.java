@@ -46,6 +46,7 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.uinfo.UserService;
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 
 import org.greenrobot.eventbus.EventBus;
@@ -55,6 +56,7 @@ import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+
 
 /**
  * @author syl
@@ -337,6 +339,36 @@ public class IMHelper {
     }
 
     /**
+     * 从服务端拉取用户信息，异步请求
+     */
+    public static void fetchUserInfoFromServer(List<String> accounts, final OnFetchUserInfoListener onFetchUserInfoListener) {
+        NIMClient.getService(UserService.class).fetchUserInfo(accounts).setCallback(new RequestCallback<List<NimUserInfo>>() {
+            @Override
+            public void onSuccess(List<NimUserInfo> param) {
+                onFetchUserInfoListener.onFetchComplete();
+            }
+
+            @Override
+            public void onFailed(int code) {
+                onFetchUserInfoListener.onFetchComplete();
+            }
+
+            @Override
+            public void onException(Throwable exception) {
+                onFetchUserInfoListener.onFetchComplete();
+            }
+        });
+    }
+
+    /**
+     * 获取最近的会话列表，同步请求
+     */
+    public static List<ChatMsgBean> getRecentContactList() {
+        List<RecentContact> recentContactList = NIMClient.getService(MsgService.class).queryRecentContactsBlock();
+        return DataChangeUtil.changeRecentContactToIChatMsgItem(recentContactList);
+    }
+
+    /**
      * 监听登陆状态
      */
     private void listenerLoginStatus() {
@@ -392,6 +424,17 @@ public class IMHelper {
          * @param chatMsgBeanList
          */
         void onDataChange(List<ChatMsgBean> chatMsgBeanList);
+    }
+
+    /**
+     * 拉取用户信息监听
+     */
+    public interface OnFetchUserInfoListener {
+        /**
+         * 拉取结束
+         */
+        void onFetchComplete();
+
     }
 
 }

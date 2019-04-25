@@ -33,6 +33,16 @@ public class ChatMsgListAdapter extends BaseQuickAdapter<ChatMsgBean, BaseViewHo
         } else if (2 == item.getSex()) {
             headerDefaultResId = R.mipmap.person_ic_header_wuman;
         }
+        if (0 == item.getStatus()) {
+            helper.setGone(R.id.progressBar, true);
+            helper.setGone(R.id.iv_alert, false);
+        } else if (1 == item.getStatus()) {
+            helper.setGone(R.id.progressBar, false);
+            helper.setGone(R.id.iv_alert, false);
+        } else if (2 == item.getStatus()) {
+            helper.setGone(R.id.progressBar, false);
+            helper.setGone(R.id.iv_alert, true);
+        }
         ImageLoader.getInstance(mContext).displayImage(item.getContractHeaderImage(), ivHeader, headerDefaultResId, headerDefaultResId);
         //名字
         helper.setText(R.id.tv_from_nick, item.getContractShowName());

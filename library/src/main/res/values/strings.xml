@@ -1,4 +1,5 @@
 <resources>
     <string name="messagecenter_msg_center">消息</string>
     <string name="messagecenter_no_msg">暂无消息</string>
+    <string name="jietiao_network_error">检查手机中的无线局域网设置，查看是否有可接入的无线局域网信号。检查手机是否已接入移动网络，并且手机没有被停机。\n\n如果您已接入无线局域网： 请检查您所连接的无线局域网热点是否已接入互联网，或该热点是否已允许您的设备访问互联网。\n\n客服微信号：jietiaoguanjia2018</string>
 </resources>

@@ -17,6 +17,7 @@ import com.hm.iou.msg.dict.MsgType;
 import com.hm.iou.tools.StringUtil;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.constant.GenderEnum;
@@ -25,7 +26,6 @@ import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -57,6 +57,11 @@ public class DataChangeUtil {
                     headerImgUrl = nimUserInfo.getAvatar();
                     genderEnum = nimUserInfo.getGenderEnum();
                 }
+                int msgStatus = 1;
+                MsgStatusEnum msgStatusEnum = contact.getMsgStatus();
+                if (msgStatusEnum != null) {
+                    msgStatus = msgStatusEnum.getValue();
+                }
                 ChatMsgBean chatMsgBean = new ChatMsgBean();
                 Logger.d("contactId=" + contactId + "content=" + content + "strTime" + strTime + "redMsgNum" + redMsgNum);
                 chatMsgBean.setContactId(contactId);
@@ -70,6 +75,7 @@ public class DataChangeUtil {
                 chatMsgBean.setChatContent(content);
                 chatMsgBean.setRedMsgNum(redMsgNum);
                 chatMsgBean.setTime(strTime);
+                chatMsgBean.setStatus(msgStatus);
                 resultList.add(chatMsgBean);
             }
         }

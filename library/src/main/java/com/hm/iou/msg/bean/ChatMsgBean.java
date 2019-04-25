@@ -20,6 +20,7 @@ public class ChatMsgBean {
     String time;
     int redMsgNum;
     int sex;//0未知，1男性，2女性
+    int status;// 0正在发送，1发送成功，2发送失败
 
     @Override
     public boolean equals(Object obj) {
