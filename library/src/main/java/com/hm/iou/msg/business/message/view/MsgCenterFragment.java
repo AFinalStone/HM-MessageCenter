@@ -54,6 +54,8 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
     HeaderViewHelper mHeaderViewHelper;
     ChatMsgListAdapter mAdapter;
 
+    private boolean mFragmentIsShow = true;
+
     @Override
     protected int getLayoutId() {
         return R.layout.msgcenter_fragment_msg_center;
@@ -106,20 +108,22 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
     @Override
     public void onResume() {
         super.onResume();
-        if (mPresenter != null) {
-            mPresenter.onResume();
+        if (mFragmentIsShow) {
+            if (mPresenter != null) {
+                mPresenter.onResume();
+            }
         }
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden && mPresenter != null) {
-            mPresenter.getRedFlagCount();
-            MsgCenterMsgUtil.getMsgCenterNoReadNumFromServer(mActivity);
-        }
-        if (!hidden) {
+        mFragmentIsShow = !hidden;
+        if (mFragmentIsShow) {
             com.hm.iou.base.utils.StatusBarUtil.setStatusBarDarkFont(mActivity, true);
+            if (mPresenter != null) {
+                mPresenter.onResume();
+            }
         }
     }
 

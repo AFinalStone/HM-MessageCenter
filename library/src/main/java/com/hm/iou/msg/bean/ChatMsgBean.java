@@ -36,4 +36,6 @@ public class ChatMsgBean {
         result = 31 * result + (contactId != null ? contactId.hashCode() : 0);
         return result;
     }
+
+
 }

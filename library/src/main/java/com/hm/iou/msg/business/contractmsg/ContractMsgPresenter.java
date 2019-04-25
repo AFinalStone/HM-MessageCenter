@@ -10,7 +10,6 @@ import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.msg.ContractMsgDbData;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.business.contractmsg.view.IContractMsgItem;
-import com.hm.iou.msg.event.UpdateMsgCenterUnReadMsgNumEvent;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
@@ -134,7 +133,7 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                                         if (resultList == null || resultList.size() == 0) {
                                             mView.showDataEmpty();
                                         } else {
-//                                            mView.showMsgList(resultList);
+                                            mView.showMsgList(resultList);
                                             mView.showLoadMoreEnd();
                                         }
 

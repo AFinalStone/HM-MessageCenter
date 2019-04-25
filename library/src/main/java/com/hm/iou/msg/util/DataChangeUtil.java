@@ -63,7 +63,6 @@ public class DataChangeUtil {
                     msgStatus = msgStatusEnum.getValue();
                 }
                 ChatMsgBean chatMsgBean = new ChatMsgBean();
-                Logger.d("contactId=" + contactId + "content=" + content + "strTime" + strTime + "redMsgNum" + redMsgNum);
                 chatMsgBean.setContactId(contactId);
                 if (genderEnum == null) {
                     chatMsgBean.setSex(0);
@@ -183,9 +182,9 @@ public class DataChangeUtil {
 
                     @Override
                     public String getIBackTime() {
-                        String backTime = "还款日期：";
+                        String backTime = "还款时间：";
                         if (0 == dbData.getThingsType()) {
-                            backTime = "归还日期：";
+                            backTime = "归还时间：";
                         }
                         return backTime + TimeUtil.formatRemindBackReturnTime(dbData.getRepayDateTime());
                     }
@@ -194,7 +193,7 @@ public class DataChangeUtil {
                     public String getIBackThingName() {
                         String backThingName = "还款金额：";
                         if (0 == dbData.getThingsType()) {
-                            backThingName = "物品名称：";
+                            backThingName = "待还物品：";
                         }
                         return backThingName + dbData.getRepayThing();
                     }
@@ -215,6 +214,7 @@ public class DataChangeUtil {
 
         return resultList;
     }
+
 
     /**
      * 疑似合同
@@ -245,7 +245,7 @@ public class DataChangeUtil {
 
                     @Override
                     public String getIBackTime() {
-                        return "归还时间：" + dbData.getCreateTime();
+                        return "归还时间：" + TimeUtil.formatSimilarityContractBackTime(dbData.getReturnDate());
                     }
 
                     @Override

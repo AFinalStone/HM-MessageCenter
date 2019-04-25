@@ -82,7 +82,6 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
                 mPresenter.getMsgList();
             }
         });
-        //设置底部刷新
         mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
@@ -137,7 +136,7 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
 
     @Override
     public void scrollToBottom() {
-        mRvMsgList.scrollToPosition(mAdapter.getItemCount() - 1);
+//        mRvMsgList.scrollToPosition(mAdapter.getItemCount() - 1);
     }
 
     @Override

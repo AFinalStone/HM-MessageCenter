@@ -125,5 +125,22 @@ public class TimeUtil {
         return "";
     }
 
+    /**
+     * 格式化疑似合同归还时间
+     *
+     * @param backTime
+     * @return
+     */
+    public static String formatSimilarityContractBackTime(String backTime) {
+        try {
+            Date date = YMDF_FORMAT.parse(backTime);
+            //前天
+            return new SimpleDateFormat("yyyy.MM.dd").format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
 
 }

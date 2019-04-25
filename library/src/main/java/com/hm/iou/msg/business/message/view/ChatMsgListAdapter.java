@@ -37,7 +37,7 @@ public class ChatMsgListAdapter extends BaseQuickAdapter<ChatMsgBean, BaseViewHo
         if (0 == item.getStatus()) {//正在发送
             helper.setImageResource(R.id.iv_alert, R.mipmap.msgcenter_ic_chat_sending_flag);
             helper.setGone(R.id.iv_alert, true);
-        } else if (2 == item.getStatus()) {//发送哦失败
+        } else if (2 == item.getStatus()) {//发送失败
             helper.setImageResource(R.id.iv_alert, R.drawable.nim_ic_failed);
             helper.setGone(R.id.iv_alert, true);
         } else {

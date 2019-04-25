@@ -11,6 +11,7 @@ import com.hm.iou.base.adver.AdBean;
 import com.hm.iou.base.mvp.MvpFragmentPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
+import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.MsgCenterAppLike;
 import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.bean.MsgListHeaderBean;
@@ -19,12 +20,12 @@ import com.hm.iou.msg.dict.ModuleType;
 import com.hm.iou.msg.event.AddFriendEvent;
 import com.hm.iou.msg.event.DeleteFriendEvent;
 import com.hm.iou.msg.event.UpdateFriendEvent;
-import com.hm.iou.msg.event.UpdateMsgCenterUnReadMsgNumEvent;
 import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.MsgCenterMsgUtil;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.model.BaseResponse;
+import com.netease.nim.uikit.event.UpdateChatListEvent;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,6 +41,7 @@ import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -54,9 +56,10 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     private List<MsgListHeaderBean> mHeaderList;
     private List<ChatMsgBean> mChatList;
     private String mRedFlagCount;
+    private Disposable mDisposableGetChatList;//获取会话列表
+    private Disposable mDisposableGetTopBanner;//获取顶部广告
     //  创建观察者对象
     IMHelper.OnChatListChangeListener mChatListChangeListener;
-    private boolean mIsNeedRefreshUnReadNum = false;//是否需要刷新未读消息
     private boolean mIsNeedRefreshChatList = false;//是否需要刷新会话列表
 
     public MsgCenterPresenter(@NonNull Context context, @NonNull MsgCenterContract.View view) {
@@ -71,6 +74,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
                     }
                     for (ChatMsgBean model : chatMsgBeanList) {
                         int index = mChatList.indexOf(model);
+                        Logger.d("model === " + model.toString());
                         if (index == -1) {
                             mChatList.add(0, model);
                         } else {
@@ -107,11 +111,11 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
 
     @Override
     public void onResume() {
-        if (mIsNeedRefreshUnReadNum) {
-            MsgCenterMsgUtil.getMsgCenterNoReadNumFromServer(mContext);
-            mIsNeedRefreshUnReadNum = false;
-        }
-
+        //获取未读消息
+        MsgCenterMsgUtil.getMsgCenterNoReadNumFromServer(mContext);
+        //头像未读消息数量
+        getRedFlagCount();
+        //刷新会话列表
         if (mIsNeedRefreshChatList) {
             getUserInfoFromServer();
             mIsNeedRefreshChatList = false;
@@ -140,7 +144,10 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
      * 获取顶部广告
      */
     private void getBanner() {
-        AdApi.getAdvertiseList("banner005")
+        if (mDisposableGetTopBanner != null && !mDisposableGetTopBanner.isDisposed()) {
+            mDisposableGetTopBanner.dispose();
+        }
+        mDisposableGetTopBanner = AdApi.getAdvertiseList("banner005")
                 .compose(getProvider().<BaseResponse<List<AdBean>>>bindUntilEvent(FragmentEvent.DESTROY_VIEW))
                 .map(RxUtil.<List<AdBean>>handleResponse())
                 .subscribeWith(new CommSubscriber<List<AdBean>>(mView) {
@@ -247,8 +254,11 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     /**
      * 获取会话列表,
      */
-    private void getChatList() {
-        Flowable.create(new FlowableOnSubscribe<List<ChatMsgBean>>() {
+    public void getChatList() {
+        if (mDisposableGetChatList != null && !mDisposableGetChatList.isDisposed()) {
+            mDisposableGetChatList.dispose();
+        }
+        mDisposableGetChatList = Flowable.create(new FlowableOnSubscribe<List<ChatMsgBean>>() {
             @Override
             public void subscribe(FlowableEmitter<List<ChatMsgBean>> e) throws Exception {
                 e.onNext(IMHelper.getRecentContactList());
@@ -294,16 +304,6 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     }
 
     /**
-     * 用户进入了消息列表页面，需要重新刷新页面未读消息数量
-     *
-     * @param commBizEvent
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvenUpdateUnReadMsgNum(UpdateMsgCenterUnReadMsgNumEvent commBizEvent) {
-        mIsNeedRefreshUnReadNum = true;
-    }
-
-    /**
      * 顶部头像未读消息数量
      *
      * @param commBizEvent
@@ -334,6 +334,16 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvenAddFriendFriend(AddFriendEvent updateFriendEvent) {
         mIsNeedRefreshChatList = true;
+    }
+
+    /**
+     * 刷新会话列表
+     *
+     * @param updateChatListEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvenAddFriendFriend(UpdateChatListEvent updateChatListEvent) {
+        getChatList();
     }
 
     /**

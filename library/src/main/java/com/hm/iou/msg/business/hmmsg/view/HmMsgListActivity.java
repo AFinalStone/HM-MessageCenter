@@ -84,12 +84,6 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-
-    @Override
     public void showInitLoading() {
         mLoadingInit.setVisibility(View.VISIBLE);
         mLoadingInit.showDataLoading();

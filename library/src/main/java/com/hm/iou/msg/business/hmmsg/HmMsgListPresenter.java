@@ -9,9 +9,7 @@ import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.msg.HmMsgDbData;
 import com.hm.iou.msg.api.MsgApi;
-import com.hm.iou.msg.business.contractmsg.view.IContractMsgItem;
 import com.hm.iou.msg.business.hmmsg.view.IHmMsgItem;
-import com.hm.iou.msg.event.UpdateMsgCenterUnReadMsgNumEvent;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
@@ -36,7 +34,6 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.View> implements HmMsgListContract.Presenter {
 
-    private List<HmMsgDbData> mMsgListData;
 
     public HmMsgListPresenter(@NonNull Context context, @NonNull HmMsgListContract.View view) {
         super(context, view);

@@ -75,7 +75,7 @@
             android:layout_marginStart="46dp"
             android:layout_toStartOf="@id/ll_dot_chat_red_msg_num"
             android:gravity="center_vertical"
-            android:minHeight="17dp"
+            android:minHeight="30dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -85,9 +85,9 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
-                android:src="@drawable/nim_ic_failed"
+                android:src="@mipmap/msgcenter_ic_chat_sending_flag"
                 android:visibility="gone"
-                tools:visibility="gone" />
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/tv_chat_content"
