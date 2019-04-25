@@ -33,16 +33,17 @@ public class ChatMsgListAdapter extends BaseQuickAdapter<ChatMsgBean, BaseViewHo
         } else if (2 == item.getSex()) {
             headerDefaultResId = R.mipmap.person_ic_header_wuman;
         }
-        if (0 == item.getStatus()) {
-            helper.setGone(R.id.progressBar, true);
-            helper.setGone(R.id.iv_alert, false);
-        } else if (1 == item.getStatus()) {
-            helper.setGone(R.id.progressBar, false);
-            helper.setGone(R.id.iv_alert, false);
-        } else if (2 == item.getStatus()) {
-            helper.setGone(R.id.progressBar, false);
+
+        if (0 == item.getStatus()) {//正在发送
+            helper.setImageResource(R.id.iv_alert, R.mipmap.msgcenter_ic_chat_sending_flag);
             helper.setGone(R.id.iv_alert, true);
+        } else if (2 == item.getStatus()) {//发送哦失败
+            helper.setImageResource(R.id.iv_alert, R.drawable.nim_ic_failed);
+            helper.setGone(R.id.iv_alert, true);
+        } else {
+            helper.setGone(R.id.iv_alert, false);
         }
+
         ImageLoader.getInstance(mContext).displayImage(item.getContractHeaderImage(), ivHeader, headerDefaultResId, headerDefaultResId);
         //名字
         helper.setText(R.id.tv_from_nick, item.getContractShowName());

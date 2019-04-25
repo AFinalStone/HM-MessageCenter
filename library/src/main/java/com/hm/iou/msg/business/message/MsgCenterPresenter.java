@@ -22,24 +22,14 @@ import com.hm.iou.msg.event.UpdateFriendEvent;
 import com.hm.iou.msg.event.UpdateMsgCenterUnReadMsgNumEvent;
 import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.msg.util.CacheDataUtil;
-import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.msg.util.MsgCenterMsgUtil;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.model.BaseResponse;
-import com.netease.nimlib.sdk.InvocationFuture;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.friend.model.Friend;
-import com.netease.nimlib.sdk.msg.MsgService;
-import com.netease.nimlib.sdk.msg.model.RecentContact;
-import com.netease.nimlib.sdk.uinfo.UserService;
-import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.reactivestreams.Publisher;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -51,7 +41,6 @@ import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -111,7 +100,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     @Override
     public void init() {
         getHeaderModules();
-        getChatList();
+        getUserInfoFromServer();
         getRedFlagCount();
         getBanner();
     }
@@ -124,7 +113,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
         }
 
         if (mIsNeedRefreshChatList) {
-            getChatList();
+            getUserInfoFromServer();
             mIsNeedRefreshChatList = false;
         }
     }
@@ -142,7 +131,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
 
     @Override
     public void refreshData() {
-        getChatList();
+        getUserInfoFromServer();
         MsgCenterMsgUtil.getMsgCenterNoReadNumFromServer(mContext);
         getBanner();
     }
@@ -236,64 +225,64 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     }
 
     /**
-     * 获取会话列表,先从服务器获取用户资料(单次最大150)，然后获取会话列表
+     * 从服务器获取用户资料(单次最大150)，然后获取会话列表
      */
-    public void getChatList() {
+    private void getUserInfoFromServer() {
         List<String> accounts = new ArrayList<>();
         for (int i = 0; i < 150 && i < accounts.size(); i++) {
             accounts.add(mChatList.get(i).getContactId());
         }
+        if (accounts.isEmpty()) {
+            getChatList();
+            return;
+        }
         IMHelper.fetchUserInfoFromServer(accounts, new IMHelper.OnFetchUserInfoListener() {
             @Override
             public void onFetchComplete() {
-                Flowable.create(new FlowableOnSubscribe<List<ChatMsgBean>>() {
-                    @Override
-                    public void subscribe(FlowableEmitter<List<ChatMsgBean>> e) throws Exception {
-                        e.onNext(IMHelper.getRecentContactList());
-                    }
-                }, BackpressureStrategy.ERROR)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .compose(getProvider().<List<ChatMsgBean>>bindUntilEvent(FragmentEvent.DESTROY))
-                        .subscribeWith(new CommSubscriber<List<ChatMsgBean>>(mView) {
-                            @Override
-                            public void handleResult(List<ChatMsgBean> recentChatMsgList) {
-                                mChatList.clear();
-                                mChatList.addAll(recentChatMsgList);
-                                mView.showMsgList(mChatList);
-                                mView.hidePullDownRefresh();
-                                mView.enableRefresh();
-                            }
-
-                            @Override
-                            public void handleException(Throwable throwable, String s, String s1) {
-                                mView.hidePullDownRefresh();
-                                mView.enableRefresh();
-                            }
-
-                            @Override
-                            public boolean isShowBusinessError() {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean isShowCommError() {
-                                return false;
-                            }
-                        });
+                getChatList();
             }
         });
     }
 
     /**
-     * 从服务端更新所有当前会话列表的用户信息
+     * 获取会话列表,
      */
-    private void fetchUserInfoFromServer() {
-        List<String> accounts = new ArrayList<>();
-        for (int i = 0; i < 150 && i < accounts.size(); i++) {
-            accounts.add(mChatList.get(i).getContactId());
-        }
-        InvocationFuture<List<NimUserInfo>> invocationFuture = NIMClient.getService(UserService.class).fetchUserInfo(accounts);
+    private void getChatList() {
+        Flowable.create(new FlowableOnSubscribe<List<ChatMsgBean>>() {
+            @Override
+            public void subscribe(FlowableEmitter<List<ChatMsgBean>> e) throws Exception {
+                e.onNext(IMHelper.getRecentContactList());
+            }
+        }, BackpressureStrategy.ERROR)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(getProvider().<List<ChatMsgBean>>bindUntilEvent(FragmentEvent.DESTROY))
+                .subscribeWith(new CommSubscriber<List<ChatMsgBean>>(mView) {
+                    @Override
+                    public void handleResult(List<ChatMsgBean> recentChatMsgList) {
+                        mChatList.clear();
+                        mChatList.addAll(recentChatMsgList);
+                        mView.showMsgList(mChatList);
+                        mView.hidePullDownRefresh();
+                        mView.enableRefresh();
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String s, String s1) {
+                        mView.hidePullDownRefresh();
+                        mView.enableRefresh();
+                    }
+
+                    @Override
+                    public boolean isShowBusinessError() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isShowCommError() {
+                        return false;
+                    }
+                });
     }
 
     /**

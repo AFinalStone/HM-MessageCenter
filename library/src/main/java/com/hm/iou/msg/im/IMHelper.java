@@ -345,17 +345,26 @@ public class IMHelper {
         NIMClient.getService(UserService.class).fetchUserInfo(accounts).setCallback(new RequestCallback<List<NimUserInfo>>() {
             @Override
             public void onSuccess(List<NimUserInfo> param) {
-                onFetchUserInfoListener.onFetchComplete();
+                Logger.d("拉取成功");
+                if (onFetchUserInfoListener != null) {
+                    onFetchUserInfoListener.onFetchComplete();
+                }
             }
 
             @Override
             public void onFailed(int code) {
-                onFetchUserInfoListener.onFetchComplete();
+                Logger.d("拉取失败");
+                if (onFetchUserInfoListener != null) {
+                    onFetchUserInfoListener.onFetchComplete();
+                }
             }
 
             @Override
             public void onException(Throwable exception) {
-                onFetchUserInfoListener.onFetchComplete();
+                Logger.d("拉取异常");
+                if (onFetchUserInfoListener != null) {
+                    onFetchUserInfoListener.onFetchComplete();
+                }
             }
         });
     }
