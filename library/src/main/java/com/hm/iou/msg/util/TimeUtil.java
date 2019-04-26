@@ -11,9 +11,36 @@ import java.util.Date;
 
 public class TimeUtil {
 
-    private static SimpleDateFormat HF_FORMAT = new SimpleDateFormat("HH:mm");
-    private static SimpleDateFormat YMF_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private static SimpleDateFormat YMDF_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static ThreadLocal<SimpleDateFormat> HF_FORMAT_TL = new ThreadLocal<>();
+    private static ThreadLocal<SimpleDateFormat> YMF_FORMAT_TL = new ThreadLocal<>();
+    private static ThreadLocal<SimpleDateFormat> YMDF_FORMAT_TL = new ThreadLocal<>();
+
+    public static SimpleDateFormat getHfFormat() {
+        SimpleDateFormat sdf = HF_FORMAT_TL.get();
+        if (sdf == null) {
+            sdf = new SimpleDateFormat("HH:mm");
+            HF_FORMAT_TL.set(sdf);
+        }
+        return sdf;
+    }
+
+    public static SimpleDateFormat getYmfFormat() {
+        SimpleDateFormat sdf = YMF_FORMAT_TL.get();
+        if (sdf == null) {
+            sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            YMF_FORMAT_TL.set(sdf);
+        }
+        return sdf;
+    }
+
+    public static SimpleDateFormat getYmdfFormat() {
+        SimpleDateFormat sdf = YMDF_FORMAT_TL.get();
+        if (sdf == null) {
+            sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            YMDF_FORMAT_TL.set(sdf);
+        }
+        return sdf;
+    }
 
     /**
      * 格式化会话列表的时间
@@ -22,25 +49,39 @@ public class TimeUtil {
      * @return
      */
     public static String formatChatListTime(long time) {
+        Calendar current = Calendar.getInstance();
+
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.YEAR, current.get(Calendar.YEAR));
+        today.set(Calendar.MONTH, current.get(Calendar.MONTH));
+        today.set(Calendar.DAY_OF_MONTH, current.get(Calendar.DAY_OF_MONTH));
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.SECOND, 0);
+
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.set(Calendar.YEAR, current.get(Calendar.YEAR));
+        yesterday.set(Calendar.MONTH, current.get(Calendar.MONTH));
+        yesterday.set(Calendar.DAY_OF_MONTH, current.get(Calendar.DAY_OF_MONTH));
+        yesterday.set(Calendar.HOUR_OF_DAY, 0);
+        yesterday.set(Calendar.MINUTE, 0);
+        yesterday.set(Calendar.SECOND, 0);
+        yesterday.add(Calendar.DAY_OF_MONTH, -1);
+
+        current.setTimeInMillis(time);
+
         try {
-            long now = System.currentTimeMillis();
-
-            if (now - time < 86400000) {
-                Calendar calc = Calendar.getInstance();
-                calc.setTimeInMillis(time);
-                return HF_FORMAT.format(time);
+            if (current.after(today)) {
+                return getHfFormat().format(current.getTime());
+            } else if (current.before(today) && current.after(yesterday)) {
+                return "昨天 " + getHfFormat().format(current.getTime());
+            } else {
+                return getYmfFormat().format(current.getTime());
             }
-
-            if (now - time < (86400000 * 2)) {
-                //昨天
-                return "昨天" + HF_FORMAT.format(time);
-            }
-
-            //前天
-            return YMF_FORMAT.format(time);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return "";
     }
 
@@ -53,13 +94,12 @@ public class TimeUtil {
      */
     public static String formatRemindBackCreateTime(String createTime) {
         try {
-            Date date = YMDF_FORMAT.parse(createTime);
-            //前天
-            return YMF_FORMAT.format(date);
+            long time = getYmdfFormat().parse(createTime).getTime();
+            return formatChatListTime(time);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return createTime;
     }
 
     /**
@@ -70,13 +110,12 @@ public class TimeUtil {
      */
     public static String formatRemindBackReturnTime(String returnTime) {
         try {
-            Date date = YMDF_FORMAT.parse(returnTime);
-            //前天
+            Date date = getYmdfFormat().parse(returnTime);
             return new SimpleDateFormat("yyyy年MM月dd日").format(date);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return returnTime;
     }
 
     /**
@@ -87,12 +126,12 @@ public class TimeUtil {
      */
     public static String formatHmMsgStartTime(String startTime) {
         try {
-            Date date = YMDF_FORMAT.parse(startTime);
-            return YMF_FORMAT.format(date);
+            long time = getYmdfFormat().parse(startTime).getTime();
+            return formatChatListTime(time);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return startTime;
     }
 
     /**
@@ -103,26 +142,12 @@ public class TimeUtil {
      */
     public static String formatContractMsgStartTime(String createTime) {
         try {
-            long now = System.currentTimeMillis();
-            long time = YMDF_FORMAT.parse(createTime).getTime();
-
-            if (now - time < 86400000) {
-                Calendar calc = Calendar.getInstance();
-                calc.setTimeInMillis(time);
-                return "今天" + HF_FORMAT.format(time);
-            }
-
-            if (now - time < (86400000 * 2)) {
-                //昨天
-                return "昨天" + HF_FORMAT.format(time);
-            }
-
-            //前天
-            return YMF_FORMAT.format(time);
+            long time = getYmdfFormat().parse(createTime).getTime();
+            return formatChatListTime(time);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return createTime;
     }
 
     /**
@@ -133,7 +158,7 @@ public class TimeUtil {
      */
     public static String formatSimilarityContractBackTime(String backTime) {
         try {
-            Date date = YMDF_FORMAT.parse(backTime);
+            Date date = getYmdfFormat().parse(backTime);
             //前天
             return new SimpleDateFormat("yyyy.MM.dd").format(date);
         } catch (Exception e) {
@@ -141,6 +166,5 @@ public class TimeUtil {
         }
         return "";
     }
-
 
 }
