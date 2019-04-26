@@ -43,7 +43,7 @@ public class GetSimilarityContractListResBean {
         private String borrowerName;
         private String createTime;
         private int iouKind;
-        private int iouStatus;
+        private int iouStatus;//1=草稿, 2=正式/已签署完, Del(3), Close(4), 5=已结清，12=等待确认，13=超时未签 ,
         private String jumpUrl;
         private String loanerName;
         private String returnDate;

@@ -258,9 +258,25 @@ public class DataChangeUtil {
                     }
 
                     @Override
-                    public int getIContractType() {
-                        return dbData.getIouKind();
+                    public boolean showStatusTag() {
+                        if (13 == dbData.getIouStatus() || 12 == dbData.getIouStatus() || 2 == dbData.getIouStatus()) {
+                            return true;
+                        }
+                        return false;
                     }
+
+                    @Override
+                    public int getStatusTagBg() {
+                        if (13 == dbData.getIouStatus()) {//未签超时
+                            return R.mipmap.jietiao_ic_tag_timeout;
+                        } else if (12 == dbData.getIouStatus()) {//等待确认
+                            return R.mipmap.jietiao_ic_tag_wait;
+                        } else if (2 == dbData.getIouStatus()) {//刚刚签署完成
+                            return R.mipmap.jietiao_ic_tag_new;
+                        }
+                        return 0;
+                    }
+
                 };
                 resultList.add(msgItem);
             }

@@ -21,14 +21,29 @@
         android:minHeight="114dp"
         android:padding="15dp">
 
+        <RelativeLayout
+            android:id="@+id/rl_iou"
+            android:layout_width="68dip"
+            android:layout_height="90dip"
+            android:background="#CCCCCC"
+            android:padding="1px">
+
+            <ImageView
+                android:id="@+id/iv_iou"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/jietiao_elec_borrow_placeholder" />
+
+        </RelativeLayout>
+
         <ImageView
-            android:id="@+id/iv_iou"
-            android:layout_width="68dp"
-            android:layout_height="90dp"
-            android:background="#ffd7dde4"
-            android:padding="0.5dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/jietiao_elec_borrow_placeholder" />
+            android:id="@+id/iv_iou_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/jietiao_ic_tag_new" />
 
         <TextView
             android:id="@+id/tv_title"
