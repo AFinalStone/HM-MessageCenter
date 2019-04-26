@@ -94,7 +94,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
                         IMHelper.fetchUserInfoFromServer(accounts, new IMHelper.OnFetchUserInfoListener() {
                             @Override
                             public void onFetchComplete() {
-                                getChatList(false);
+                                getChatList(true);
                             }
                         });
                     }
