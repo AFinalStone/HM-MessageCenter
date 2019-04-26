@@ -86,6 +86,11 @@ public class MsgCenterContract {
         void onResume();
 
         /**
+         * 界面是否显示
+         */
+        void viewIsShow(boolean viewIsShow);
+
+        /**
          * 删除
          *
          * @param position

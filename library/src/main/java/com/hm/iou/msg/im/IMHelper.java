@@ -133,6 +133,7 @@ public class IMHelper {
                         if (mOnChatListChangeListenerList == null) {
                             return;
                         }
+                        Logger.d("会话列表发生了变化");
                         //从缓存中获取
                         MsgCenterMsgUtil.getMsgCenterNoReadNumFromCache(mContext);
                         //监听回调
@@ -143,7 +144,9 @@ public class IMHelper {
                     }
                 };
             }
-
+            //  注册会话列表观察者对象
+            NIMClient.getService(MsgServiceObserve.class)
+                    .observeRecentContact(mChatListObserver, true);
             NimUIKit.setCustomPushContentProvider(new CustomPushContentProvider() {
 
                 @Override
@@ -290,9 +293,7 @@ public class IMHelper {
         NimUIKit.login(getLoginInfo(), new RequestCallback<LoginInfo>() {
             @Override
             public void onSuccess(LoginInfo param) {
-                //  注册会话列表观察者对象
-                NIMClient.getService(MsgServiceObserve.class)
-                        .observeRecentContact(mChatListObserver, true);
+
             }
 
             @Override
@@ -317,9 +318,9 @@ public class IMHelper {
         NIMClient.getService(AuthService.class).logout();
         //调用登出接口
         NimUIKitImpl.logout();
-        //  注册会话列表观察者对象
-        NIMClient.getService(MsgServiceObserve.class)
-                .observeRecentContact(mChatListObserver, false);
+//        //  注册会话列表观察者对象
+//        NIMClient.getService(MsgServiceObserve.class)
+//                .observeRecentContact(mChatListObserver, false);
         deleteCache();
     }
 
@@ -406,15 +407,13 @@ public class IMHelper {
                         Logger.d("用户在线状态发生改变StatusCode==" + status.getValue());
                         if (StatusCode.PWD_ERROR.getValue() == status.getValue()) {//账号或密码错误
                             refreshTokenAndLogin();
-                        } else if (StatusCode.UNLOGIN.getValue() == status.getValue()) {
-                            login();
                         } else if (StatusCode.KICKOUT.getValue() == status.getValue()
                                 || StatusCode.KICK_BY_OTHER_CLIENT.getValue() == status.getValue()
                                 || StatusCode.FORBIDDEN.getValue() == status.getValue()) {//用户被禁止登陆或者被踢下线
+                            UserManager.getInstance(mContext).logout();
                             EventBus.getDefault().post(new LogoutEvent());
                             HttpReqManager.getInstance().setUserId("");
                             HttpReqManager.getInstance().setToken("");
-                            UserManager.getInstance(mContext).logout();
                             com.hm.iou.base.ActivityManager.getInstance().exitAllActivities();
                             Router.getInstance().buildWithUrl("hmiou://m.54jietiao.com/login/selecttype")
                                     .navigation(mContext);

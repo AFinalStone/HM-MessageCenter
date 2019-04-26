@@ -110,8 +110,17 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
         super.onResume();
         if (mFragmentIsShow) {
             if (mPresenter != null) {
+                mPresenter.viewIsShow(true);
                 mPresenter.onResume();
             }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mPresenter != null) {
+            mPresenter.viewIsShow(false);
         }
     }
 
@@ -119,6 +128,9 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         mFragmentIsShow = !hidden;
+        if (mPresenter != null) {
+            mPresenter.viewIsShow(!hidden);
+        }
         if (mFragmentIsShow) {
             com.hm.iou.base.utils.StatusBarUtil.setStatusBarDarkFont(mActivity, true);
             if (mPresenter != null) {

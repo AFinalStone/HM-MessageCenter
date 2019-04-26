@@ -2,6 +2,7 @@ package com.hm.iou.msg.business.message;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
@@ -60,7 +61,9 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     private Disposable mDisposableGetTopBanner;//获取顶部广告
     //  创建观察者对象
     IMHelper.OnChatListChangeListener mChatListChangeListener;
+    private boolean mIsNeedRefreshUserInfoChatList = false;//是否需要刷新用户信息
     private boolean mIsNeedRefreshChatList = false;//是否需要刷新会话列表
+    private boolean mViewIsShow = false;
 
     public MsgCenterPresenter(@NonNull Context context, @NonNull MsgCenterContract.View view) {
         super(context, view);
@@ -115,11 +118,20 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
         MsgCenterMsgUtil.getMsgCenterNoReadNumFromServer(mContext);
         //头像未读消息数量
         getRedFlagCount();
-        //刷新会话列表
-        if (mIsNeedRefreshChatList) {
+        //刷新好友用户信息
+        if (mIsNeedRefreshUserInfoChatList) {
             getUserInfoFromServer();
-            mIsNeedRefreshChatList = false;
+            mIsNeedRefreshUserInfoChatList = false;
         }
+        //刷洗会话列表
+        if (mIsNeedRefreshChatList) {
+            getChatList(false);
+        }
+    }
+
+    @Override
+    public void viewIsShow(boolean viewIsShow) {
+        mViewIsShow = viewIsShow;
     }
 
     @Override
@@ -240,13 +252,13 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
             accounts.add(mChatList.get(i).getContactId());
         }
         if (accounts.isEmpty()) {
-            getChatList();
+            getChatList(false);
             return;
         }
         IMHelper.fetchUserInfoFromServer(accounts, new IMHelper.OnFetchUserInfoListener() {
             @Override
             public void onFetchComplete() {
-                getChatList();
+                getChatList(false);
             }
         });
     }
@@ -254,13 +266,17 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     /**
      * 获取会话列表,
      */
-    public void getChatList() {
+    public void getChatList(final boolean isSleep) {
+        Logger.d("获取会话列表");
         if (mDisposableGetChatList != null && !mDisposableGetChatList.isDisposed()) {
             mDisposableGetChatList.dispose();
         }
         mDisposableGetChatList = Flowable.create(new FlowableOnSubscribe<List<ChatMsgBean>>() {
             @Override
             public void subscribe(FlowableEmitter<List<ChatMsgBean>> e) throws Exception {
+                if (isSleep) {
+                    SystemClock.sleep(1000);
+                }
                 e.onNext(IMHelper.getRecentContactList());
             }
         }, BackpressureStrategy.ERROR)
@@ -270,6 +286,9 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
                 .subscribeWith(new CommSubscriber<List<ChatMsgBean>>(mView) {
                     @Override
                     public void handleResult(List<ChatMsgBean> recentChatMsgList) {
+                        for (ChatMsgBean bean : recentChatMsgList) {
+                            Logger.d("bean===" + bean.toString());
+                        }
                         mChatList.clear();
                         mChatList.addAll(recentChatMsgList);
                         mView.showMsgList(mChatList);
@@ -323,7 +342,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvenUpdateFriendEvent(UpdateFriendEvent updateFriendEvent) {
-        mIsNeedRefreshChatList = true;
+        mIsNeedRefreshUserInfoChatList = true;
     }
 
     /**
@@ -333,7 +352,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvenAddFriendFriend(AddFriendEvent updateFriendEvent) {
-        mIsNeedRefreshChatList = true;
+        mIsNeedRefreshUserInfoChatList = true;
     }
 
     /**
@@ -343,7 +362,11 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvenUpdateChatList(UpdateChatListEvent updateChatListEvent) {
-        getChatList();
+        if (mViewIsShow) {
+            getChatList(true);
+        } else {
+            mIsNeedRefreshChatList = true;
+        }
     }
 
     /**
