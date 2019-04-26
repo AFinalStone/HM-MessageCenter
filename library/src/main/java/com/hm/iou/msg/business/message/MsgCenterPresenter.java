@@ -64,6 +64,7 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     private boolean mIsNeedRefreshUserInfoChatList = false;//是否需要刷新用户信息
     private boolean mIsNeedRefreshChatList = false;//是否需要刷新会话列表
     private boolean mViewIsShow = false;
+    private long mLastPullFriendInfoTime;//上次拉取时间
 
     public MsgCenterPresenter(@NonNull Context context, @NonNull MsgCenterContract.View view) {
         super(context, view);
@@ -75,16 +76,28 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
                     if (chatMsgBeanList == null) {
                         return;
                     }
+                    List<String> accounts = new ArrayList<>();
                     for (ChatMsgBean model : chatMsgBeanList) {
                         int index = mChatList.indexOf(model);
                         Logger.d("model === " + model.toString());
                         if (index == -1) {
                             mChatList.add(0, model);
+                            accounts.add(model.getContactId());
                         } else {
                             mChatList.set(index, model);
                         }
                     }
                     mView.showMsgList(mChatList);
+                    //拉取好友列表数据
+                    if (!accounts.isEmpty() && System.currentTimeMillis() - mLastPullFriendInfoTime > 60000) {
+                        IMHelper.fetchUserInfoFromServer(accounts, new IMHelper.OnFetchUserInfoListener() {
+                            @Override
+                            public void onFetchComplete() {
+                                mLastPullFriendInfoTime = System.currentTimeMillis();
+                                getChatList(false);
+                            }
+                        });
+                    }
                 }
             };
         }
