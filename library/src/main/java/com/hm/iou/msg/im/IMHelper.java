@@ -37,14 +37,18 @@ import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.friend.model.AddFriendNotify;
 import com.netease.nimlib.sdk.misc.DirCacheFileType;
 import com.netease.nimlib.sdk.misc.MiscService;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.SystemMessageObserver;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
+import com.netease.nimlib.sdk.msg.model.SystemMessage;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
@@ -96,8 +100,6 @@ public class IMHelper {
             NimUIKit.init(mContext, buildUIKitOptions());
             //监听登陆状态
             listenerLoginStatus();
-            //登陆
-            login();
             //订制聊天页面的头像点击
             NimUIKit.setSessionListener(new SessionEventListener() {
                 @Override
@@ -162,6 +164,8 @@ public class IMHelper {
                     return map;
                 }
             });
+            //登陆
+            login();
         }
     }
 
@@ -424,6 +428,7 @@ public class IMHelper {
                     }
                 }, true);
     }
+
 
     /**
      * 添加监听

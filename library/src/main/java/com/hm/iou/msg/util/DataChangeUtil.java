@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.hm.iou.database.table.msg.ContractMsgDbData;
 import com.hm.iou.database.table.msg.HmMsgDbData;
 import com.hm.iou.database.table.msg.RemindBackMsgDbData;
-import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
