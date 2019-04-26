@@ -169,6 +169,9 @@ public class IMHelper {
         UIKitOptions options = new UIKitOptions();
         // 设置app图片/音频/日志等缓存目录
         options.appCacheDir = FileUtil.getExternalCacheDirPath(mContext) + "/app";
+        options.aitEnable = false;
+        options.aitTeamMember = false;
+        options.aitChatRoomRobot = false;
         return options;
     }
 
