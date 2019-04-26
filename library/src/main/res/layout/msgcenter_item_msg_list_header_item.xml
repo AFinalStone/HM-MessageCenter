@@ -46,8 +46,8 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/view_module_divider"
         style="@style/UikitDivider.Horizontal"
         android:layout_marginStart="64dp" />
-
 
 </LinearLayout>

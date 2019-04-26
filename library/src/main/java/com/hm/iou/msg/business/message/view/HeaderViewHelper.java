@@ -112,6 +112,7 @@ public class HeaderViewHelper {
         ImageView ivModule = viewModule.findViewById(R.id.iv_module);
         TextView tvModule = viewModule.findViewById(R.id.tv_module);
         HMDotTextView dotTextView = viewModule.findViewById(R.id.dot_module_red_msg_num);
+        View bottomDivider = viewModule.findViewById(R.id.view_module_divider);
 
         //填充数据
         if (ModuleType.NEW_APPLY_FRIEND.getTypeId().equals(moduleBean.getModuleId())) {
@@ -119,6 +120,11 @@ public class HeaderViewHelper {
         } else {
             viewTopDivider.setVisibility(View.GONE);
         }
+
+        if (ModuleType.HM_MSG.getTypeId().equals(moduleBean.getModuleId())) {
+            bottomDivider.setVisibility(View.GONE);
+        }
+
         String imageUrl = moduleBean.getImage();
         imageUrl = ImageLoadUtil.getImageRealUrl(mContent, imageUrl);
         ImageLoader.getInstance(mContent).displayImage(imageUrl, ivModule);
