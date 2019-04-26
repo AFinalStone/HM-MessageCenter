@@ -90,10 +90,10 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
                     mView.showMsgList(mChatList);
                     //拉取好友列表数据
                     if (!accounts.isEmpty() && System.currentTimeMillis() - mLastPullFriendInfoTime > 60000) {
+                        mLastPullFriendInfoTime = System.currentTimeMillis();
                         IMHelper.fetchUserInfoFromServer(accounts, new IMHelper.OnFetchUserInfoListener() {
                             @Override
                             public void onFetchComplete() {
-                                mLastPullFriendInfoTime = System.currentTimeMillis();
                                 getChatList(false);
                             }
                         });
