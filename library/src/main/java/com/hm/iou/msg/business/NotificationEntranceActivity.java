@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import com.hm.iou.base.ActivityManager;
 import com.hm.iou.base.BaseActivity;
 import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.NavigationHelper;
+import com.hm.iou.router.Router;
 import com.hm.iou.sharedata.UserManager;
 import com.netease.nimlib.sdk.NimIntent;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -46,7 +48,16 @@ public class NotificationEntranceActivity extends BaseActivity {
             String sessionId = message.getSessionId();
             SessionTypeEnum type = message.getSessionType();
             if (type == SessionTypeEnum.P2P) {
-                NavigationHelper.toSessionDetail(this, sessionId);
+                boolean isAppAlive = !ActivityManager.getInstance().isEmpty();
+                if (isAppAlive) {
+                    NavigationHelper.toSessionDetail(this, sessionId);
+                } else {
+                    //
+                    Router.getInstance().buildWithUrl("hmiou://m.54jietiao.com/main/index")
+                            .withString("tab_type", "tag_message")
+                            .withString("session_id", sessionId)
+                            .navigation(mContext);
+                }
                 finish();
                 return;
             }
