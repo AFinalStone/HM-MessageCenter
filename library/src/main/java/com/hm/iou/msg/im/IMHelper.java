@@ -176,6 +176,9 @@ public class IMHelper {
         options.aitEnable = false;
         options.aitTeamMember = false;
         options.aitChatRoomRobot = false;
+        options.buildTeamCache = false;
+        options.buildRobotInfoCache = false;
+        options.buildChatRoomMemberCache = false;
         return options;
     }
 
@@ -297,6 +300,8 @@ public class IMHelper {
         if (getLoginInfo() == null) {
             return;
         }
+        //设置当前IM账号
+        NimUIKitImpl.setAccount(getLoginInfo().getAccount());
         NimUIKit.login(getLoginInfo(), new RequestCallback<LoginInfo>() {
             @Override
             public void onSuccess(LoginInfo param) {
@@ -305,12 +310,10 @@ public class IMHelper {
 
             @Override
             public void onFailed(int code) {
-                NimUIKitImpl.loginSuccess(getLoginInfo().getAccount());
             }
 
             @Override
             public void onException(Throwable exception) {
-                NimUIKitImpl.loginSuccess(getLoginInfo().getAccount());
             }
         });
     }
