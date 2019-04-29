@@ -1,0 +1,61 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/uikit_background"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/view_statusbar_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/uikit_status_bar_height" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/refreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srlAccentColor="@android:color/white"
+            app:srlEnableLoadMore="false"
+            app:srlEnablePreviewInEditMode="true"
+            app:srlEnableRefresh="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:gravity="center">
+
+                <com.hm.iou.uikit.PullDownRefreshImageView
+                    android:id="@+id/iv_msg_refresh"
+                    android:layout_width="40dip"
+                    android:layout_height="40dip" />
+            </LinearLayout>
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_msgList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never" />
+
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+        <com.hm.iou.uikit.HMLoadingView
+            android:id="@+id/loading_init"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/uikit_background" />
+
+    </RelativeLayout>
+
+    <com.hm.iou.uikit.HMBottomBarView
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        app:bottomBackText="待还提醒" />
+</LinearLayout>
+

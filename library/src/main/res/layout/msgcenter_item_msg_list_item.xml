@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hm.iou.uikit.sidemenu.SideMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="63dp"
+    app:contentView="@+id/rl_content"
+    app:rightMenuView="@+id/btn_hide">
+
+    <RelativeLayout
+        android:id="@+id/rl_content"
+        android:layout_width="match_parent"
+        android:layout_height="63dp"
+        android:background="?attr/selectableItemBackground"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp">
+
+        <com.hm.iou.uikit.ShapedImageView
+            android:id="@+id/iv_from_header"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:scaleType="fitXY"
+            android:src="@mipmap/uikit_icon_header_unknow"
+            app:shape_mode="circle" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            style="@style/UikitTextView"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="12dp"
+            android:minHeight="14dp"
+            android:minWidth="20dp"
+            android:textColor="@color/uikit_text_hint"
+            android:textSize="@dimen/textFontSize_10"
+            tools:text="昨天" />
+
+
+        <LinearLayout
+            android:id="@+id/ll_dot_chat_red_msg_num"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/tv_time"
+            android:layout_marginTop="5dp"
+            android:gravity="center">
+
+            <com.hm.iou.uikit.HMDotTextView
+                android:id="@+id/dot_chat_red_msg_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:dotBackgroundColor="@color/uikit_function_exception"
+                app:dotText="0"
+                app:dotTextColor="@color/white"
+                app:dotTextSize="@dimen/textFontSize_12" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_from_nick"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginStart="46dp"
+            android:layout_marginTop="12dp"
+            android:layout_toStartOf="@id/tv_time"
+            android:textColor="@color/uikit_text_main_content"
+            android:textSize="@dimen/uikit_main_content_text_size"
+            tools:text="红烧茄子" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/ll_dot_chat_red_msg_num"
+            android:layout_marginStart="46dp"
+            android:layout_toStartOf="@id/ll_dot_chat_red_msg_num"
+            android:gravity="center_vertical"
+            android:minHeight="30dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_alert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:src="@mipmap/msgcenter_ic_chat_sending_flag"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv_chat_content"
+                style="@style/UikitTextView.Auxiliary.Small"
+                android:layout_width="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                tools:text="我有一个律师函订单请您接单" />
+        </LinearLayout>
+
+
+        <View
+            style="@style/UikitDivider.Horizontal"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="62dp" />
+
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_hide"
+        style="@style/UikitHMButton.Large.Red.Minor"
+        android:layout_width="63dp"
+        android:layout_height="match_parent"
+        android:text="隐藏"
+        android:textSize="@dimen/textFontSize_16" />
+
+</com.hm.iou.uikit.sidemenu.SideMenuLayout>

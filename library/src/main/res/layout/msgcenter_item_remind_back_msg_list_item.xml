@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingEnd="12dp"
+    android:paddingStart="12dp">
+
+    <TextView
+        android:id="@+id/tv_time"
+        style="@style/UikitTextView.Auxiliary.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:textColor="@color/uikit_text_hint"
+        tools:text="星期六 上午 10:00" />
+
+    <RelativeLayout
+        android:id="@+id/rl_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/jietiao_bg_message_list_item"
+        android:minHeight="85dp"
+        android:paddingBottom="20dp"
+        android:paddingEnd="10dp">
+
+        <ImageView
+            android:layout_width="26dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="24dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/msgcenter_ic_remind_back_flag" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/UikitTextView"
+            android:layout_marginStart="62dp"
+            android:layout_marginTop="19dp"
+            android:textSize="@dimen/textFontSize_16"
+            tools:text="小条君您好！您有一份“合同类型”即将到还款日  " />
+
+        <TextView
+            android:id="@+id/tv_back_money_time"
+            style="@style/UikitTextView.Auxiliary.Small"
+            android:layout_below="@id/tv_title"
+            android:layout_marginStart="62dp"
+            android:layout_marginTop="6dp"
+            tools:text="还款日期：2019年02月16日" />
+
+        <TextView
+            android:id="@+id/tv_back_money"
+            style="@style/UikitTextView.Auxiliary.Small"
+            android:layout_below="@id/tv_back_money_time"
+            android:layout_marginStart="62dp"
+            android:layout_marginTop="4dp"
+            tools:text="还款金额：2000元 " />
+    </RelativeLayout>
+
+</LinearLayout>

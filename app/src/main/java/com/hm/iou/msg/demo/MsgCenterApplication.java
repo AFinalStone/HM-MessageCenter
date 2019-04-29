@@ -1,6 +1,8 @@
 package com.hm.iou.msg.demo;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.hm.iou.base.BaseBizAppLike;
 import com.hm.iou.logger.Logger;
@@ -12,9 +14,9 @@ import com.hm.iou.sharedata.UserManager;
 import com.orm.SugarContext;
 
 /**
- * Created by hjy on 18/5/11.<br>
+ * @author syl
+ * @time 2019/4/4 2:08 PM
  */
-
 public class MsgCenterApplication extends Application {
 
     @Override
@@ -24,15 +26,30 @@ public class MsgCenterApplication extends Application {
         Router.init(this);
         BaseBizAppLike appLike = new BaseBizAppLike();
         appLike.onCreate(this);
-//        appLike.initServer("http://192.168.1.217", "http://192.168.1.217",
-//                "http://192.168.1.217");
-        appLike.initServer("http://192.168.1.107:3000", "http://192.168.1.107:3000",
-                "http://192.168.1.107:3000");
+        appLike.initServer("http://192.168.1.217", "http://192.168.1.217",
+                "http://192.168.1.217");
+//        appLike.initServer("http://re.54jietiao.com", "http://re.54jietiao.com",
+//                "http://re.54jietiao.com");
+//        appLike.initServer("http://192.168.1.107:3000", "http://192.168.1.107:3000",
+//                "http://192.168.1.107:3000");
         initNetwork();
+        //数据库缓存
         SugarContext.init(this);
+        //消息中心
         MsgCenterAppLike msgCenterAppLike = new MsgCenterAppLike();
         msgCenterAppLike.onCreate(this);
     }
+
+
+    /**
+     * 分包
+     */
+    @Override
+    protected void attachBaseContext(Context context) {
+        super.attachBaseContext(context);
+        MultiDex.install(this);
+    }
+
 
     private void initNetwork() {
         System.out.println("init-----------");
@@ -47,5 +64,6 @@ public class MsgCenterApplication extends Application {
                 .build();
         HttpReqManager.init(config);
     }
+
 
 }

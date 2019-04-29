@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/tv_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dip"
+        android:layout_marginRight="7dip"
+        android:background="@drawable/nim_bg_message_tip"
+        android:lineSpacingMultiplier="1.3"
+        android:paddingBottom="3dp"
+        android:paddingLeft="7dip"
+        android:paddingRight="7dip"
+        android:paddingTop="3dp"
+        android:textColor="#ffffff"
+        android:textSize="12sp"
+        tools:text="提示消息" />
+
+</merge>

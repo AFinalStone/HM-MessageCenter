@@ -1,4 +1,4 @@
-package com.hm.iou.msg.business.message.view;
+package com.hm.iou.msg.business.hmmsg.view;
 
 import android.support.annotation.DrawableRes;
 
@@ -8,17 +8,10 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
  * @author syl
  * @time 2018/5/30 上午11:51
  */
-public interface IMsgItem extends MultiItemEntity {
+public interface IHmMsgItem extends MultiItemEntity {
 
-    int TYPE_AD_OR_SPORT = 0;       //广告或者活动
-    int TYPE_COMMUNIQUE = 1;       //官方公告
-
-    /**
-     * 是否已读
-     *
-     * @return
-     */
-    boolean getMsgReadState();
+    int TYPE_ADVERTISEMENT_NEWS_SPORT = 1;      //广告, 头条，活动
+    int TYPE_COMMUNIQUE = 2;         //官方公告
 
     /**
      * 获取消息的icon

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="6dp"
+    android:paddingEnd="12dp"
+    android:paddingStart="12dp"
+    android:paddingTop="6dp">
+
+
+    <RelativeLayout
+        android:id="@+id/rl_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/jietiao_bg_message_list_item"
+        android:minHeight="114dp"
+        android:padding="15dp">
+
+        <RelativeLayout
+            android:id="@+id/rl_iou"
+            android:layout_width="68dip"
+            android:layout_height="90dip"
+            android:background="#CCCCCC"
+            android:padding="1px">
+
+            <ImageView
+                android:id="@+id/iv_iou"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/jietiao_elec_borrow_placeholder" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_iou_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/jietiao_ic_tag_new" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/UikitTextView.Large"
+            android:layout_marginStart="92dp"
+            android:text="借条：¥1,000,000"
+            android:textStyle="bold" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="95dp"
+            android:layout_marginTop="27dip"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/UikitTextView.Auxiliary.Small"
+                android:singleLine="true"
+                android:text="出借方:" />
+
+            <TextView
+                android:id="@+id/tv_lender_name"
+                style="@style/UikitTextView.Auxiliary.Small"
+                android:layout_marginLeft="9dip"
+                android:maxWidth="100dip"
+                android:singleLine="true"
+                tools:text="马云" />
+
+            <View
+                android:layout_width="1dip"
+                android:layout_height="11dip"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dip"
+                android:layout_marginRight="8dip"
+                android:background="#dcdcdc" />
+
+            <TextView
+                style="@style/UikitTextView.Auxiliary.Small"
+                android:singleLine="true"
+                android:text="借到方:" />
+
+            <TextView
+                android:id="@+id/tv_borrower_name"
+                style="@style/UikitTextView.Auxiliary.Small"
+                android:layout_marginStart="9dip"
+                android:ellipsize="end"
+                android:singleLine="true"
+                tools:text="本人" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_back_time"
+            style="@style/UikitTextView.Auxiliary.Small"
+            android:layout_marginStart="94dp"
+            android:layout_marginTop="56dp"
+            android:text="归还时间：2018.05.23"
+            android:textSize="@dimen/textFontSize_10" />
+
+        <TextView
+            android:id="@+id/tv_back_type"
+            style="@style/UikitTextView.Auxiliary.Small"
+            android:layout_marginStart="94dp"
+            android:layout_marginTop="74dp"
+            android:text="归还方式：一次性归还"
+            android:textSize="@dimen/textFontSize_10" />
+
+
+    </RelativeLayout>
+</LinearLayout>

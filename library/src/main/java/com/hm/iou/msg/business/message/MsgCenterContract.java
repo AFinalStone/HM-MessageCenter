@@ -1,7 +1,9 @@
 package com.hm.iou.msg.business.message;
 
+import com.hm.iou.base.adver.AdBean;
 import com.hm.iou.base.mvp.BaseContract;
-import com.hm.iou.msg.business.message.view.IMsgItem;
+import com.hm.iou.msg.bean.ChatMsgBean;
+import com.hm.iou.msg.bean.MsgListHeaderBean;
 
 import java.util.List;
 
@@ -19,14 +21,21 @@ public class MsgCenterContract {
          *
          * @param list
          */
-        void showMsgList(List<IMsgItem> list);
+        void showMsgList(List<ChatMsgBean> list);
 
         /**
-         * 更新条目样式
+         * 显示顶部消息
          *
-         * @param position
+         * @param list
          */
-        void refreshItem(int position);
+        void showHeaderModule(List<MsgListHeaderBean> list);
+
+        /**
+         * 更新头部条目样式
+         *
+         * @param msgListHeaderBean
+         */
+        void refreshHeaderModule(MsgListHeaderBean msgListHeaderBean);
 
         /**
          * 允许刷新
@@ -37,11 +46,6 @@ public class MsgCenterContract {
          * 隐藏下拉刷新View
          */
         void hidePullDownRefresh();
-
-        /**
-         * 显示数据为空
-         */
-        void showDataEmpty();
 
         /**
          * 显示初始化动画
@@ -60,35 +64,37 @@ public class MsgCenterContract {
          */
         void updateRedFlagCount(String redFlagCount);
 
+        /**
+         * 显示顶部banner
+         */
+        void showTopBanner(AdBean adBean);
+
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
-        /**
-         * 初始化
-         */
+
         void init();
 
         /**
-         * 从服务端获取消息列表
+         * 获取未读消息数量
          */
-        void getMsgListFromServer();
+        void refreshData();
 
         /**
-         * 从缓存中获取消息列表
+         * 需要刷新未读消息数量
          */
-        void getMsgListFromCache();
+        void onResume();
 
         /**
-         * 标记为已读
+         * 界面是否显示
+         */
+        void viewIsShow(boolean viewIsShow);
+
+        /**
+         * 删除
          *
-         * @param position 条目位置
+         * @param position
          */
-        void markHaveRead(int position);
-
-        /**
-         * 获取头部红点数量
-         */
-        void getRedFlagCount();
-
+        void deleteItemByPosition(int position);
     }
 }
