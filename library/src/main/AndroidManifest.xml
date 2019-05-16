@@ -82,8 +82,8 @@
         <!-- 消息推动点击入口 -->
         <activity
             android:name=".business.NotificationEntranceActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/UikitTranslucentThemeActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
 
@@ -127,7 +127,6 @@
 
         <!-- 网易云通信进程间通信service -->
         <service android:name="com.netease.nimlib.service.ResponseService" />
-
 
     </application>
 
