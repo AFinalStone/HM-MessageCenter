@@ -61,6 +61,7 @@
             android:layout_height="match_parent"
             android:background="?android:attr/selectableItemBackground"
             android:paddingEnd="20dp"
+            android:paddingStart="20dp"
             android:text="通讯录"
             android:textColor="@color/uikit_text_sub_content"
             android:textSize="@dimen/textFontSize_14" />
