@@ -13,6 +13,7 @@ import com.hm.iou.msg.business.hmmsg.view.IHmMsgItem;
 import com.hm.iou.msg.business.remindback.view.IRemindBackMsgItem;
 import com.hm.iou.msg.business.similarity.view.ISimilarityContractMsgItem;
 import com.hm.iou.msg.dict.MsgType;
+import com.hm.iou.sharedata.model.IOUKindEnum;
 import com.hm.iou.tools.StringUtil;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nimlib.sdk.NIMClient;
@@ -182,6 +183,9 @@ public class DataChangeUtil {
                     @Override
                     public String getIBackTime() {
                         String backTime = "还款时间：";
+                        if (IOUKindEnum.FzContract.getValue() == dbData.getIouKind()) {
+                            backTime = "付款时间：";
+                        }
                         if (0 == dbData.getThingsType()) {
                             backTime = "归还时间：";
                         }
@@ -191,6 +195,9 @@ public class DataChangeUtil {
                     @Override
                     public String getIBackThingName() {
                         String backThingName = "还款金额：";
+                        if (IOUKindEnum.FzContract.getValue() == dbData.getIouKind()) {
+                            backThingName = "付款金额：";
+                        }
                         if (0 == dbData.getThingsType()) {
                             backThingName = "待还物品：";
                         }
