@@ -2,12 +2,14 @@ package com.hm.iou.msg.util;
 
 import android.text.TextUtils;
 
+import com.hm.iou.database.table.msg.AliPayMsgDbData;
 import com.hm.iou.database.table.msg.ContractMsgDbData;
 import com.hm.iou.database.table.msg.HmMsgDbData;
 import com.hm.iou.database.table.msg.RemindBackMsgDbData;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
+import com.hm.iou.msg.business.alipay.view.IAliPayMsgItem;
 import com.hm.iou.msg.business.contractmsg.view.IContractMsgItem;
 import com.hm.iou.msg.business.hmmsg.view.IHmMsgItem;
 import com.hm.iou.msg.business.remindback.view.IRemindBackMsgItem;
@@ -113,8 +115,8 @@ public class DataChangeUtil {
                     }
 
                     @Override
-                    public boolean setIfIShowTime(boolean isShowTime) {
-                        return mIfShowTime = isShowTime;
+                    public void setIfIShowTime(boolean isShowTime) {
+                        mIfShowTime = isShowTime;
                     }
 
                     @Override
@@ -372,6 +374,81 @@ public class DataChangeUtil {
             }
         }
 
+        return resultList;
+    }
+
+    /**
+     * 支付宝回单
+     *
+     * @return
+     */
+    public static List<IAliPayMsgItem> changeAliPayDbDataToIAliPayItem(List<AliPayMsgDbData> list) {
+        List<IAliPayMsgItem> resultList = new ArrayList<>();
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                AliPayMsgDbData dbData = list.get(i);
+                final String title = dbData.getTitle();
+                final String content = dbData.getContent();
+                final String jumpUrl = dbData.getJumpUrl();
+                final String time = TimeUtil.formatAliPayMsgStartTime(dbData.getCreateTime());
+                IAliPayMsgItem item = new IAliPayMsgItem() {
+
+                    private boolean mIfShowTime = true;
+
+                    @Override
+                    public boolean isHaveRead() {
+                        return true;
+                    }
+
+                    @Override
+                    public String getITime() {
+                        return time;
+                    }
+
+                    @Override
+                    public boolean ifIShowTime() {
+                        return mIfShowTime;
+                    }
+
+                    @Override
+                    public void setIfIShowTime(boolean isShowTime) {
+                        mIfShowTime = isShowTime;
+                    }
+
+                    @Override
+                    public String getITitle() {
+                        return title;
+                    }
+
+                    @Override
+                    public String getIContent() {
+                        return content;
+                    }
+
+                    @Override
+                    public String getIJumpUrl() {
+                        return jumpUrl;
+                    }
+                };
+                try {
+                    if (i > 0) {
+                        AliPayMsgDbData previewMsgItem = list.get(i - 1);
+                        String strPreviewTime = previewMsgItem.getCreateTime();
+                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        long previewTime = df.parse(strPreviewTime).getTime();
+                        long currentTime = df.parse(time).getTime();
+                        if (currentTime - previewTime > 300000) {
+                            item.setIfIShowTime(true);
+                        } else {
+                            item.setIfIShowTime(false);
+                        }
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                resultList.add(item);
+            }
+        }
         return resultList;
     }
 }

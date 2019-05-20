@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.hm.iou.msg.MsgCenterAppLike;
+import com.hm.iou.msg.business.alipay.view.AliPayMsgActivity;
 import com.hm.iou.msg.business.contractmsg.view.ContractMsgActivity;
 import com.hm.iou.msg.business.friend.view.AddFriendIndexActivity;
 import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_add_friend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-        //        startActivity(new Intent(MainActivity.this, AddFriendIndexActivity.class));
+                //        startActivity(new Intent(MainActivity.this, AddFriendIndexActivity.class));
 
                 Intent intent = new Intent(MainActivity.this, FriendDetailActivity.class);
                 intent.putExtra(FriendDetailActivity.EXTRA_KEY_USER_ID, "1362");
@@ -114,6 +115,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, AddFriendIndexActivity.class));
+            }
+        });
+        findViewById(R.id.btn_get_alipay_msg).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, AliPayMsgActivity.class));
             }
         });
     }

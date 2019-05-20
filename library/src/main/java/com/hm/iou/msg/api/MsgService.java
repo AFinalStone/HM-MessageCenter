@@ -1,5 +1,6 @@
 package com.hm.iou.msg.api;
 
+import com.hm.iou.database.table.msg.AliPayMsgDbData;
 import com.hm.iou.database.table.msg.ContractMsgDbData;
 import com.hm.iou.database.table.msg.HmMsgDbData;
 import com.hm.iou.database.table.msg.RemindBackMsgDbData;
@@ -12,6 +13,7 @@ import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.AddFriendReqBean;
 import com.hm.iou.msg.bean.req.FriendDetailReqBean;
+import com.hm.iou.msg.bean.req.GetAliPayMsgListReq;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
 import com.hm.iou.msg.bean.req.GetSimilarContractMessageReqBean;
@@ -47,6 +49,9 @@ public interface MsgService {
 
     @POST("/api/message/messageCenter/v2/getSimilarContractMessage")
     Flowable<BaseResponse<GetSimilarityContractListResBean>> getSimilarityContractList(@Body GetSimilarContractMessageReqBean req);
+
+    @POST("/api/message/messageCenter/v2/getAliPayMessage")
+    Flowable<BaseResponse<List<AliPayMsgDbData>>> getAliPayMsgList(@Body GetAliPayMsgListReq req);
 
     @POST("/api/news/friend/v1/getMailList")
     Flowable<BaseResponse<FriendListBean>> getFriendList(@Body GetFriendListReq req);

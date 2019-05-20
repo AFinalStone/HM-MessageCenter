@@ -24,9 +24,9 @@ public class RemindBackListAdapter extends BaseQuickAdapter<IRemindBackMsgItem, 
         helper.setText(R.id.tv_time, item.getITime());
         //标题
         helper.setText(R.id.tv_title, item.getITitle());
-        //还款时间
+        //还款/付款时间
         helper.setText(R.id.tv_back_money_time, item.getIBackTime());
-        //还款金额
+        //还款/付款金额
         helper.setText(R.id.tv_back_money, item.getIBackThingName());
         //添加点击事件
         helper.addOnClickListener(R.id.rl_content);

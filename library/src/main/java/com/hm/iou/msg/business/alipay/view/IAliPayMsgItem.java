@@ -1,10 +1,16 @@
-package com.hm.iou.msg.business.contractmsg.view;
+package com.hm.iou.msg.business.alipay.view;
 
 /**
- * @author syl
- * @time 2018/5/30 上午11:51
+ * Created by syl on 2019/4/11.
  */
-public interface IContractMsgItem {
+
+public interface IAliPayMsgItem {
+    /**
+     * 是否已经阅读过
+     *
+     * @return
+     */
+    boolean isHaveRead();
 
     /**
      * 获取时间
@@ -28,31 +34,24 @@ public interface IContractMsgItem {
     void setIfIShowTime(boolean isShowTime);
 
     /**
-     * 消息标题
+     * 标题
      *
      * @return
      */
     String getITitle();
 
+
     /**
-     * 消息图片
+     * 内容
      *
      * @return
      */
     String getIContent();
 
     /**
-     * 获取跳转的url
+     * 跳转链接
      *
      * @return
      */
-    String getIJustUrl();
-
-    /**
-     * 获取合同类型
-     *
-     * @return
-     */
-    int getIContractType();
+    String getIJumpUrl();
 }
-

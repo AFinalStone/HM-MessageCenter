@@ -151,6 +151,22 @@ public class TimeUtil {
     }
 
     /**
+     * 格式化支付宝回单消息的时间
+     *
+     * @param createTime
+     * @return
+     */
+    public static String formatAliPayMsgStartTime(String createTime) {
+        try {
+            long time = getYmdfFormat().parse(createTime).getTime();
+            return formatChatListTime(time);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return createTime;
+    }
+
+    /**
      * 格式化疑似合同归还时间
      *
      * @param backTime

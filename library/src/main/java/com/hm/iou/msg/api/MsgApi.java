@@ -1,5 +1,6 @@
 package com.hm.iou.msg.api;
 
+import com.hm.iou.database.table.msg.AliPayMsgDbData;
 import com.hm.iou.database.table.msg.ContractMsgDbData;
 import com.hm.iou.database.table.msg.HmMsgDbData;
 import com.hm.iou.database.table.msg.RemindBackMsgDbData;
@@ -12,6 +13,7 @@ import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.AddFriendReqBean;
 import com.hm.iou.msg.bean.req.FriendDetailReqBean;
+import com.hm.iou.msg.bean.req.GetAliPayMsgListReq;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
 import com.hm.iou.msg.bean.req.GetSimilarContractMessageReqBean;
@@ -66,6 +68,17 @@ public class MsgApi {
      */
     public static Flowable<BaseResponse<List<ContractMsgDbData>>> getContractMsgList() {
         return getService().getContractMsgList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 获取支付宝回单消息
+     *
+     * @return
+     */
+    public static Flowable<BaseResponse<List<AliPayMsgDbData>>> getAliPayMsgList(GetAliPayMsgListReq getAliPayMsgListReq) {
+        return getService().getAliPayMsgList(getAliPayMsgListReq)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
