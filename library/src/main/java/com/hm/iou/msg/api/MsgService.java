@@ -7,16 +7,20 @@ import com.hm.iou.database.table.msg.RemindBackMsgDbData;
 import com.hm.iou.msg.bean.FriendApplyRecordListBean;
 import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.bean.FriendListBean;
+import com.hm.iou.msg.bean.GetAliPayMsgDetailResBean;
 import com.hm.iou.msg.bean.GetOrRefreshIMTokenBean;
 import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
 import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.AddFriendReqBean;
 import com.hm.iou.msg.bean.req.FriendDetailReqBean;
+import com.hm.iou.msg.bean.req.GetAliPayMsgDetailReqBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgListReq;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
 import com.hm.iou.msg.bean.req.GetSimilarContractMessageReqBean;
+import com.hm.iou.msg.bean.req.MakeMsgHaveReadReqBean;
+import com.hm.iou.msg.bean.req.MakeMsgTypeAllHaveReadReqBean;
 import com.hm.iou.msg.bean.req.ReportUserReqBean;
 import com.hm.iou.msg.bean.req.UpdateRemarkNameReqBean;
 import com.hm.iou.sharedata.model.BaseResponse;
@@ -50,8 +54,17 @@ public interface MsgService {
     @POST("/api/message/messageCenter/v2/getSimilarContractMessage")
     Flowable<BaseResponse<GetSimilarityContractListResBean>> getSimilarityContractList(@Body GetSimilarContractMessageReqBean req);
 
-    @POST("/api/message/messageCenter/v2/getAliPayMessage")
+    @POST("/api/message/messageCenter/v2/makeMsgHaveRead")
+    Flowable<BaseResponse<Object>> makeMsgHaveRead(@Body MakeMsgHaveReadReqBean req);
+
+    @POST("/api/message/messageCenter/v2/makeMsgTypeAllHaveRead")
+    Flowable<BaseResponse<Object>> makeMsgTypeAllHaveRead(@Body MakeMsgTypeAllHaveReadReqBean req);
+
+    @POST("/api/message/messageCenter/v2/getReceiptMsgCache")
     Flowable<BaseResponse<List<AliPayMsgDbData>>> getAliPayMsgList(@Body GetAliPayMsgListReq req);
+
+    @POST("/api/message/messageCenter/v2/getAliPayReceiptInfo")
+    Flowable<BaseResponse<GetAliPayMsgDetailResBean>> getAliPayMsgDetail(@Body GetAliPayMsgDetailReqBean req);
 
     @POST("/api/news/friend/v1/getMailList")
     Flowable<BaseResponse<FriendListBean>> getFriendList(@Body GetFriendListReq req);

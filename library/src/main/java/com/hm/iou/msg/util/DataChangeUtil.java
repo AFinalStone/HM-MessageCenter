@@ -9,7 +9,7 @@ import com.hm.iou.database.table.msg.RemindBackMsgDbData;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
-import com.hm.iou.msg.business.alipay.view.IAliPayMsgItem;
+import com.hm.iou.msg.business.alipay.list.view.IAliPayMsgItem;
 import com.hm.iou.msg.business.contractmsg.view.IContractMsgItem;
 import com.hm.iou.msg.business.hmmsg.view.IHmMsgItem;
 import com.hm.iou.msg.business.remindback.view.IRemindBackMsgItem;

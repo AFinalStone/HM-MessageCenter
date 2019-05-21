@@ -1,5 +1,7 @@
 package com.hm.iou.msg.api;
 
+import android.text.TextUtils;
+
 import com.hm.iou.database.table.msg.AliPayMsgDbData;
 import com.hm.iou.database.table.msg.ContractMsgDbData;
 import com.hm.iou.database.table.msg.HmMsgDbData;
@@ -7,16 +9,20 @@ import com.hm.iou.database.table.msg.RemindBackMsgDbData;
 import com.hm.iou.msg.bean.FriendApplyRecordListBean;
 import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.bean.FriendListBean;
+import com.hm.iou.msg.bean.GetAliPayMsgDetailResBean;
 import com.hm.iou.msg.bean.GetOrRefreshIMTokenBean;
 import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
 import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.AddFriendReqBean;
 import com.hm.iou.msg.bean.req.FriendDetailReqBean;
+import com.hm.iou.msg.bean.req.GetAliPayMsgDetailReqBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgListReq;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
 import com.hm.iou.msg.bean.req.GetSimilarContractMessageReqBean;
+import com.hm.iou.msg.bean.req.MakeMsgHaveReadReqBean;
+import com.hm.iou.msg.bean.req.MakeMsgTypeAllHaveReadReqBean;
 import com.hm.iou.msg.bean.req.ReportUserReqBean;
 import com.hm.iou.msg.bean.req.UpdateRemarkNameReqBean;
 import com.hm.iou.network.HttpReqManager;
@@ -73,12 +79,23 @@ public class MsgApi {
     }
 
     /**
-     * 获取支付宝回单消息
+     * 获取支付宝回单消息列表
      *
      * @return
      */
     public static Flowable<BaseResponse<List<AliPayMsgDbData>>> getAliPayMsgList(GetAliPayMsgListReq getAliPayMsgListReq) {
         return getService().getAliPayMsgList(getAliPayMsgListReq)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 获取支付宝回单详情页面
+     *
+     * @return
+     */
+    public static Flowable<BaseResponse<GetAliPayMsgDetailResBean>> getAliPayMsgDetail(GetAliPayMsgDetailReqBean reqBean) {
+        return getService().getAliPayMsgDetail(reqBean)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -106,6 +123,28 @@ public class MsgApi {
         return getService().getSimilarityContractList(req)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 把消息设置为已读
+     *
+     * @return
+     */
+    public static Flowable<BaseResponse<Object>> makeMsgHaveRead(String msgId, String msgType) {
+        if (!TextUtils.isEmpty(msgId)) {
+            MakeMsgHaveReadReqBean reqBean = new MakeMsgHaveReadReqBean();
+            reqBean.setMsgId(msgId);
+            reqBean.setMsgType(msgType);
+            return getService().makeMsgHaveRead(reqBean)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        } else {
+            MakeMsgTypeAllHaveReadReqBean reqBean = new MakeMsgTypeAllHaveReadReqBean();
+            reqBean.setMsgType(msgType);
+            return getService().makeMsgTypeAllHaveRead(reqBean)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        }
     }
 
     /**

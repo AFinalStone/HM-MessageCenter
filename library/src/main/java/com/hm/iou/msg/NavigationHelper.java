@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.hm.iou.base.utils.RouterUtil;
+import com.hm.iou.msg.business.alipay.detail.AliPayMsgDetailActivity;
+import com.hm.iou.msg.business.alipay.list.view.IAliPayMsgItem;
 import com.hm.iou.msg.business.apply.view.ApplyNewFriendListActivity;
 import com.hm.iou.msg.business.friend.view.AddFriendIndexActivity;
 import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
@@ -61,21 +63,22 @@ public class NavigationHelper {
     }
 
     /**
-     * 新的朋友列表
-     *
-     * @param context
-     */
-    public static void toApplyNewFriendList(Context context) {
-        context.startActivity(new Intent(context, ApplyNewFriendListActivity.class));
-    }
-
-    /**
      * 跳转到合同详情
      *
      * @param context
      */
     public static void toMsgDetailPage(Context context, String jumpUrl) {
         RouterUtil.clickMenuLink(context, jumpUrl);
+    }
+
+    /**
+     * 跳转到支付宝消息详情
+     *
+     * @param context
+     */
+    public static void toAliPayMsgDetailPage(Context context, IAliPayMsgItem item) {
+        Intent intent = new Intent(context, AliPayMsgDetailActivity.class);
+        context.startActivity(intent);
     }
 
     /**

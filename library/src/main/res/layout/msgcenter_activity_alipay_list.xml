@@ -55,6 +55,7 @@
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="50dip"
-        app:bottomBackText="支付宝回单" />
+        app:bottomBackText="支付宝回单"
+        app:bottomTitleIcon="@mipmap/msgcenter_ic_clear_read_msg_flag" />
 </LinearLayout>
 

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/uikit_background"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <com.hm.iou.uikit.HMTopBarView
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/uikit_status_bar_height"
+        app:backIcon="@mipmap/uikit_icon_close_black"
+        app:bottomDividerIsShow="false"
+        app:titleBackground="@color/transparent"
+        app:titleText="重命名" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/UikitTextView"
+            android:layout_marginEnd="10dp"
+            android:minHeight="60dp"
+            android:minWidth="80dp"
+            android:text="自定义"
+            android:textColor="@color/uikit_text_main_content"
+            android:textSize="@dimen/textFontSize_14" />
+
+        <EditText
+            android:id="@+id/et_name"
+            style="@style/UikitEditText.Normal"
+            android:hint="1-8个汉字"
+            android:maxLength="8"
+            android:singleLine="true"
+            android:textSize="@dimen/textFontSize_14" />
+
+    </LinearLayout>
+
+    <View
+        style="@style/UikitDivider.Horizontal"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_01"
+            android:layout_width="82dp"
+            android:layout_height="30dp"
+            android:button="@null"
+            android:gravity="center"
+            android:text="资金凭证" />
+
+        <View
+            android:layout_width="30dp"
+            android:layout_height="0dp" />
+
+        <RadioButton
+            android:id="@+id/rb_02"
+            android:layout_width="82dp"
+            android:layout_height="30dp"
+            android:button="@null"
+            android:gravity="center"
+            android:text="汇款凭证" />
+
+        <View
+            android:layout_width="30dp"
+            android:layout_height="0dp" />
+
+        <RadioButton
+            android:id="@+id/rb_03"
+            android:layout_width="82dp"
+            android:layout_height="30dp"
+            android:button="@null"
+            android:gravity="center"
+            android:text="收款凭证" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btn_ok"
+        style="@style/UikitButton.Bottom"
+        android:layout_marginTop="60dp"
+        android:text="确认信息" />
+</LinearLayout>

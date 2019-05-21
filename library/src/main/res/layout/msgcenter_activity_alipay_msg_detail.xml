@@ -1,0 +1,75 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/uikit_background"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/view_statusbar_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/uikit_status_bar_height" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.hm.iou.uikit.HMBottomBarView
+            android:id="@+id/bottomBar"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:layout_alignParentBottom="true"
+            app:bottomBackText="支付宝回单"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/bottomBar"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="137dp"
+                android:layout_height="198dp"
+                android:layout_marginTop="30dp"
+                android:src="@mipmap/msgcenter_ic_alipay_msg_detail" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                style="@style/UikitTextView"
+                android:layout_marginTop="25dp"
+                android:textColor="#578525"
+                android:textSize="@dimen/textFontSize_30"
+                tools:text="关联成功" />
+
+            <TextView
+                android:id="@+id/tv_content"
+                style="@style/UikitTextView.Auxiliary.Normal"
+                android:layout_marginTop="25dp"
+                android:lineSpacingMultiplier="1.3"
+                tools:text="关联合同：2345667788990\n发件邮箱：34567@qq.com\n关联时间：2019.10.23 13:45 " />
+        </LinearLayout>
+
+        <ViewStub
+            android:id="@+id/viewStub"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout="@layout/msgcenter_item_alipay_msg_detail_file_have_delete" />
+
+        <com.hm.iou.uikit.HMLoadingView
+            android:id="@+id/loading_init"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/bottomBar"
+            android:background="@color/uikit_background"
+            tools:visibility="gone" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>
+

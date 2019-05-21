@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.hm.iou.msg.MsgCenterAppLike;
-import com.hm.iou.msg.business.alipay.view.AliPayMsgActivity;
+import com.hm.iou.msg.business.alipay.list.view.AliPayMsgActivity;
 import com.hm.iou.msg.business.contractmsg.view.ContractMsgActivity;
 import com.hm.iou.msg.business.friend.view.AddFriendIndexActivity;
 import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
