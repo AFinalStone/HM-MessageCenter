@@ -14,8 +14,6 @@ import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.List;
 
 import io.reactivex.BackpressureStrategy;
@@ -52,8 +50,8 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                         Flowable.create(new FlowableOnSubscribe<List<IHmMsgItem>>() {
                             @Override
                             public void subscribe(FlowableEmitter<List<IHmMsgItem>> e) throws Exception {
-                                MsgCenterDbHelper.saveOrUpdateHmMsgList(list);
-                                List<HmMsgDbData> listCache = MsgCenterDbHelper.getHmMsgList();
+                                MsgCenterDbHelper.saveOrUpdateMsgList(list);
+                                List<HmMsgDbData> listCache = MsgCenterDbHelper.getMsgList(HmMsgDbData.class);
                                 List<IHmMsgItem> resultList = DataChangeUtil.changeHmMsgDbDataToIHmMsgItem(listCache);
                                 e.onNext(resultList);
                             }
@@ -116,8 +114,8 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                         Flowable.create(new FlowableOnSubscribe<List<IHmMsgItem>>() {
                             @Override
                             public void subscribe(FlowableEmitter<List<IHmMsgItem>> e) throws Exception {
-                                MsgCenterDbHelper.saveOrUpdateHmMsgList(list);
-                                List<HmMsgDbData> listCache = MsgCenterDbHelper.getHmMsgList();
+                                MsgCenterDbHelper.saveOrUpdateMsgList(list);
+                                List<HmMsgDbData> listCache = MsgCenterDbHelper.getMsgList(HmMsgDbData.class);
                                 List<IHmMsgItem> resultList = DataChangeUtil.changeHmMsgDbDataToIHmMsgItem(listCache);
                                 e.onNext(resultList);
                             }

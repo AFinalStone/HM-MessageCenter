@@ -61,6 +61,12 @@ public class SimilarityContractMsgContract {
          */
         void showLoadMoreEnd();
 
+        /**
+         * 修改条目
+         *
+         * @param item
+         */
+        void notifyItem(ISimilarityContractMsgItem item, int position);
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
@@ -80,17 +86,11 @@ public class SimilarityContractMsgContract {
         /**
          * 设置消息为已读
          *
-         * @param msgId   消息id
-         * @param msgType 消息类型
+         * @param position
          */
-        void makeSingleMsgHaveRead(String msgId, String msgType);
+        void makeSingleMsgHaveRead(ISimilarityContractMsgItem item, int position);
 
-        /**
-         * 使得某类消息全部变为已读
-         *
-         * @param msgType
-         */
-        void makeTypeMsgHaveRead(String msgType);
+        void makeTypeMsgHaveRead();
 
     }
 }

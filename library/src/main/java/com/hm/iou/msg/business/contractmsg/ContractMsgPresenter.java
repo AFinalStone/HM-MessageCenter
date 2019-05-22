@@ -14,8 +14,6 @@ import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.List;
 
 import io.reactivex.BackpressureStrategy;
@@ -51,8 +49,8 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                         Flowable.create(new FlowableOnSubscribe<List<IContractMsgItem>>() {
                             @Override
                             public void subscribe(FlowableEmitter<List<IContractMsgItem>> e) throws Exception {
-                                MsgCenterDbHelper.saveOrUpdateContractMsgList(list);
-                                List<ContractMsgDbData> listCache = MsgCenterDbHelper.getContractMsgList();
+                                MsgCenterDbHelper.saveOrUpdateMsgList(list);
+                                List<ContractMsgDbData> listCache = MsgCenterDbHelper.getMsgList(ContractMsgDbData.class);
                                 List<IContractMsgItem> resultList = DataChangeUtil.changeContractMsgDbDataToIContractMsgItem(listCache);
                                 e.onNext(resultList);
                             }
@@ -114,8 +112,8 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                         Flowable.create(new FlowableOnSubscribe<List<IContractMsgItem>>() {
                             @Override
                             public void subscribe(FlowableEmitter<List<IContractMsgItem>> e) throws Exception {
-                                MsgCenterDbHelper.saveOrUpdateContractMsgList(list);
-                                List<ContractMsgDbData> listCache = MsgCenterDbHelper.getContractMsgList();
+                                MsgCenterDbHelper.saveOrUpdateMsgList(list);
+                                List<ContractMsgDbData> listCache = MsgCenterDbHelper.getMsgList(ContractMsgDbData.class);
                                 List<IContractMsgItem> resultList = DataChangeUtil.changeContractMsgDbDataToIContractMsgItem(listCache);
                                 e.onNext(resultList);
                             }

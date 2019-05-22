@@ -76,7 +76,7 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
                             .setOnClickListener(new HMAlertDialog.OnClickListener() {
                                 @Override
                                 public void onPosClick() {
-                                    mPresenter.makeTypeMsgHaveRead("aliPay");
+                                    mPresenter.makeTypeMsgHaveRead();
                                 }
 
                                 @Override
@@ -99,6 +99,9 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 ISimilarityContractMsgItem item = (ISimilarityContractMsgItem) adapter.getItem(position);
                 if (item != null) {
+                    if (!item.isHaveRead()) {
+                        mPresenter.makeSingleMsgHaveRead(item, position);
+                    }
                     NavigationHelper.toMsgDetailPage(mContext, item.getIJustUrl());
                 }
             }
@@ -170,6 +173,11 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
     @Override
     public void showLoadMoreEnd() {
         mAdapter.loadMoreEnd();
+    }
+
+    @Override
+    public void notifyItem(ISimilarityContractMsgItem item, int position) {
+        mAdapter.setData(position, item);
     }
 
 

@@ -79,7 +79,7 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
                                     .setOnClickListener(new HMAlertDialog.OnClickListener() {
                                         @Override
                                         public void onPosClick() {
-                                            mPresenter.makeTypeMsgHaveRead("aliPay");
+                                            mPresenter.makeTypeMsgHaveRead();
                                         }
 
                                         @Override
@@ -104,7 +104,9 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 IAliPayMsgItem item = (IAliPayMsgItem) adapter.getItem(position);
                 if (item != null) {
-                    mPresenter.makeSingleMsgHaveRead(item.getIMsgId(), item.getIMsgType());
+                    if (!item.isHaveRead()) {
+                        mPresenter.makeSingleMsgHaveRead(item, position);
+                    }
                     NavigationHelper.toAliPayMsgDetailPage(mContext, item);
                 }
             }
@@ -177,6 +179,11 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
     @Override
     public void showLoadMoreEnd() {
         mAdapter.loadMoreEnd();
+    }
+
+    @Override
+    public void notifyItem(IAliPayMsgItem item, int position) {
+        mAdapter.setData(position, item);
     }
 
 

@@ -236,6 +236,8 @@ public class DataChangeUtil {
             for (final SimilarityContractMsgDbData dbData : list) {
                 ISimilarityContractMsgItem msgItem = new ISimilarityContractMsgItem() {
 
+                    private boolean mIsHaveRead = false;
+
                     @Override
                     public String getITitle() {
                         return dbData.getTitle();
@@ -296,7 +298,18 @@ public class DataChangeUtil {
                         return dbData.getType();
                     }
 
+                    @Override
+                    public boolean isHaveRead() {
+                        return mIsHaveRead;
+                    }
+
+                    @Override
+                    public void setHaveRead(boolean isHaveRead) {
+                        mIsHaveRead = isHaveRead;
+                    }
+
                 };
+                msgItem.setHaveRead(dbData.isHaveRead());
                 resultList.add(msgItem);
             }
         }
@@ -398,6 +411,7 @@ public class DataChangeUtil {
             for (int i = 0; i < list.size(); i++) {
                 AliPayMsgDbData dbData = list.get(i);
                 final String title = dbData.getTitle();
+                final boolean isHaveRead = dbData.isHaveRead();
                 final String content = dbData.getContent();
                 final String jumpUrl = dbData.getJumpUrl();
                 final String msgId = dbData.getMsgId();
@@ -406,10 +420,16 @@ public class DataChangeUtil {
                 IAliPayMsgItem item = new IAliPayMsgItem() {
 
                     private boolean mIfShowTime = true;
+                    private boolean mIsHaveRead = false;
 
                     @Override
                     public boolean isHaveRead() {
-                        return true;
+                        return mIsHaveRead;
+                    }
+
+                    @Override
+                    public void setHaveRead(boolean isHaveRead) {
+                        mIsHaveRead = isHaveRead;
                     }
 
                     @Override
@@ -468,6 +488,7 @@ public class DataChangeUtil {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                item.setHaveRead(isHaveRead);
                 resultList.add(item);
             }
         }

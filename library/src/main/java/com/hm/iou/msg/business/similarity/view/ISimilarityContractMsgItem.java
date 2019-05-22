@@ -75,4 +75,20 @@ public interface ISimilarityContractMsgItem {
      * @return
      */
     String getIMsgType();
+
+    /**
+     * 是否已经阅读过
+     *
+     * @return
+     */
+    boolean isHaveRead();
+
+    /**
+     * 设置是否已经阅读过
+     *
+     * @param isHaveRead
+     */
+    void setHaveRead(boolean isHaveRead);
+
+
 }

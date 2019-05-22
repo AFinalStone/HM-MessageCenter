@@ -29,7 +29,7 @@ public class AliPayListAdapter extends BaseQuickAdapter<IAliPayMsgItem, BaseView
         helper.setText(R.id.tv_content, item.getIContent());
         //点击事件
         if (item.isHaveRead()) {
-            helper.setAlpha(R.id.rl_content, 0.5f);
+            helper.setAlpha(R.id.rl_content, 0.618f);
         } else {
             helper.setAlpha(R.id.rl_content, 1f);
         }

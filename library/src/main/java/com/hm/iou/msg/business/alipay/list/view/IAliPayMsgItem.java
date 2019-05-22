@@ -13,6 +13,13 @@ public interface IAliPayMsgItem {
     boolean isHaveRead();
 
     /**
+     * 设置是否已经阅读过
+     *
+     * @param isHaveRead
+     */
+    void setHaveRead(boolean isHaveRead);
+
+    /**
      * 获取时间
      *
      * @return

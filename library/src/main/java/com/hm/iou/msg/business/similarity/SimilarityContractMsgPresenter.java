@@ -13,6 +13,8 @@ import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
 import com.hm.iou.msg.bean.req.GetSimilarContractMessageReqBean;
+import com.hm.iou.msg.bean.req.MakeMsgTypeAllHaveReadReqBean;
+import com.hm.iou.msg.business.alipay.list.view.IAliPayMsgItem;
 import com.hm.iou.msg.business.similarity.view.ISimilarityContractMsgItem;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.DataChangeUtil;
@@ -50,8 +52,8 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
         Flowable.create(new FlowableOnSubscribe<List<ISimilarityContractMsgItem>>() {
             @Override
             public void subscribe(FlowableEmitter<List<ISimilarityContractMsgItem>> e) throws Exception {
-                MsgCenterDbHelper.saveOrUpdateSimilarityContractList(list);
-                List<SimilarityContractMsgDbData> listCache = MsgCenterDbHelper.getSimilarityContractList();
+                MsgCenterDbHelper.saveOrUpdateMsgList(list);
+                List<SimilarityContractMsgDbData> listCache = MsgCenterDbHelper.getMsgList(SimilarityContractMsgDbData.class);
                 List<ISimilarityContractMsgItem> resultList = DataChangeUtil.changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(listCache);
                 e.onNext(resultList);
             }
@@ -137,8 +139,8 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                         Flowable.create(new FlowableOnSubscribe<List<ISimilarityContractMsgItem>>() {
                             @Override
                             public void subscribe(FlowableEmitter<List<ISimilarityContractMsgItem>> e) throws Exception {
-                                MsgCenterDbHelper.saveOrUpdateSimilarityContractList(list);
-                                List<SimilarityContractMsgDbData> listCache = MsgCenterDbHelper.getSimilarityContractList();
+                                MsgCenterDbHelper.saveOrUpdateMsgList(list);
+                                List<SimilarityContractMsgDbData> listCache = MsgCenterDbHelper.getMsgList(SimilarityContractMsgDbData.class);
                                 List<ISimilarityContractMsgItem> resultList = DataChangeUtil.changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(listCache);
                                 e.onNext(resultList);
                             }
@@ -176,14 +178,20 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
     }
 
     @Override
-    public void makeSingleMsgHaveRead(String msgId, String msgType) {
-        MsgApi.makeSingleMsgHaveRead(msgId, msgType)
+    public void makeSingleMsgHaveRead(final ISimilarityContractMsgItem item, final int position) {
+        MsgApi.makeSingleMsgHaveRead(item.getIMsgId(), item.getIMsgType())
                 .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<Object>handleResponse())
                 .subscribeWith(new CommSubscriber<Object>(mView) {
                     @Override
                     public void handleResult(Object o) {
                         Logger.d("未读消息清除完毕");
+                        List<SimilarityContractMsgDbData> listCache = MsgCenterDbHelper.getMsgList(SimilarityContractMsgDbData.class);
+                        SimilarityContractMsgDbData dbData = listCache.get(position);
+                        dbData.setHaveRead(true);
+                        MsgCenterDbHelper.saveOrUpdateMsg(dbData);
+                        item.setHaveRead(true);
+                        mView.notifyItem(item, position);
                     }
 
                     @Override
@@ -194,14 +202,27 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
     }
 
     @Override
-    public void makeTypeMsgHaveRead(String msgType) {
-        MsgApi.makeTypeMsgHaveRead(msgType)
+    public void makeTypeMsgHaveRead() {
+        //TODO
+        MakeMsgTypeAllHaveReadReqBean reqBean = new MakeMsgTypeAllHaveReadReqBean();
+        reqBean.setLastReqDate(CacheDataUtil.getLastAliPayListMsgPullTime(mContext));
+
+        MsgApi.makeTypeMsgHaveRead(reqBean)
                 .compose(getProvider().<BaseResponse<Integer>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<Integer>handleResponse())
                 .subscribeWith(new CommSubscriber<Object>(mView) {
                     @Override
                     public void handleResult(Object o) {
                         Logger.d("未读消息清除完毕");
+                        List<SimilarityContractMsgDbData> listCache = MsgCenterDbHelper.getMsgList(SimilarityContractMsgDbData.class);
+                        if (listCache != null && listCache.size() > 0) {
+                            for (SimilarityContractMsgDbData dbData : listCache) {
+                                dbData.setHaveRead(true);
+                            }
+                        }
+                        MsgCenterDbHelper.saveOrUpdateMsgList(listCache);
+                        List<ISimilarityContractMsgItem> resultList = DataChangeUtil.changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(listCache);
+                        mView.showMsgList(resultList);
                     }
 
                     @Override

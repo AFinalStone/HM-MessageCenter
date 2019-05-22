@@ -13,6 +13,7 @@ import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.GetAliPayListMsgResBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgListReq;
+import com.hm.iou.msg.bean.req.MakeMsgTypeAllHaveReadReqBean;
 import com.hm.iou.msg.business.alipay.list.view.IAliPayMsgItem;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.DataChangeUtil;
@@ -50,8 +51,8 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
         Flowable.create(new FlowableOnSubscribe<List<IAliPayMsgItem>>() {
             @Override
             public void subscribe(FlowableEmitter<List<IAliPayMsgItem>> e) throws Exception {
-                MsgCenterDbHelper.saveOrUpdateAliPayMsgList(list);
-                List<AliPayMsgDbData> listCache = MsgCenterDbHelper.getAliPayMsgList();
+                MsgCenterDbHelper.saveOrUpdateMsgList(list);
+                List<AliPayMsgDbData> listCache = MsgCenterDbHelper.getMsgList(AliPayMsgDbData.class);
                 List<IAliPayMsgItem> resultList = DataChangeUtil.changeAliPayDbDataToIAliPayItem(listCache);
                 e.onNext(resultList);
             }
@@ -130,42 +131,6 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
     }
 
     @Override
-    public void makeSingleMsgHaveRead(String msgId, String msgType) {
-        MsgApi.makeSingleMsgHaveRead(msgId, msgType)
-                .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))
-                .map(RxUtil.<Object>handleResponse())
-                .subscribeWith(new CommSubscriber<Object>(mView) {
-                    @Override
-                    public void handleResult(Object o) {
-                        Logger.d("未读消息清除完毕");
-                    }
-
-                    @Override
-                    public void handleException(Throwable throwable, String s, String s1) {
-
-                    }
-                });
-    }
-
-    @Override
-    public void makeTypeMsgHaveRead(String msgType) {
-        MsgApi.makeTypeMsgHaveRead(msgType)
-                .compose(getProvider().<BaseResponse<Integer>>bindUntilEvent(ActivityEvent.DESTROY))
-                .map(RxUtil.<Integer>handleResponse())
-                .subscribeWith(new CommSubscriber<Object>(mView) {
-                    @Override
-                    public void handleResult(Object o) {
-                        Logger.d("未读消息清除完毕");
-                    }
-
-                    @Override
-                    public void handleException(Throwable throwable, String s, String s1) {
-
-                    }
-                });
-    }
-
-    @Override
     public void getMsgList() {
         GetAliPayMsgListReq req = new GetAliPayMsgListReq();
         req.setLastReqDate(CacheDataUtil.getLastAliPayListMsgPullTime(mContext));
@@ -181,8 +146,8 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
                         Flowable.create(new FlowableOnSubscribe<List<IAliPayMsgItem>>() {
                             @Override
                             public void subscribe(FlowableEmitter<List<IAliPayMsgItem>> e) throws Exception {
-                                MsgCenterDbHelper.saveOrUpdateAliPayMsgList(list);
-                                List<AliPayMsgDbData> listCache = MsgCenterDbHelper.getAliPayMsgList();
+                                MsgCenterDbHelper.saveOrUpdateMsgList(list);
+                                List<AliPayMsgDbData> listCache = MsgCenterDbHelper.getMsgList(AliPayMsgDbData.class);
                                 List<IAliPayMsgItem> resultList = DataChangeUtil.changeAliPayDbDataToIAliPayItem(listCache);
                                 e.onNext(resultList);
                             }
@@ -215,6 +180,61 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
                         mView.hidePullDownRefresh();
+                    }
+                });
+    }
+
+    @Override
+    public void makeSingleMsgHaveRead(final IAliPayMsgItem item, final int position) {
+        MsgApi.makeSingleMsgHaveRead(item.getIMsgId(), item.getIMsgType())
+                .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<Object>handleResponse())
+                .subscribeWith(new CommSubscriber<Object>(mView) {
+                    @Override
+                    public void handleResult(Object o) {
+                        Logger.d("未读消息清除完毕");
+                        List<AliPayMsgDbData> listCache = MsgCenterDbHelper.getMsgList(AliPayMsgDbData.class);
+                        AliPayMsgDbData dbData = listCache.get(position);
+                        dbData.setHaveRead(true);
+                        MsgCenterDbHelper.saveOrUpdateMsg(dbData);
+                        item.setHaveRead(true);
+                        mView.notifyItem(item, position);
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String s, String s1) {
+
+                    }
+                });
+    }
+
+    @Override
+    public void makeTypeMsgHaveRead() {
+        //TODO
+        MakeMsgTypeAllHaveReadReqBean reqBean = new MakeMsgTypeAllHaveReadReqBean();
+        reqBean.setLastReqDate(CacheDataUtil.getLastAliPayListMsgPullTime(mContext));
+
+        MsgApi.makeTypeMsgHaveRead(reqBean)
+                .compose(getProvider().<BaseResponse<Integer>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<Integer>handleResponse())
+                .subscribeWith(new CommSubscriber<Object>(mView) {
+                    @Override
+                    public void handleResult(Object o) {
+                        Logger.d("未读消息清除完毕");
+                        List<AliPayMsgDbData> listCache = MsgCenterDbHelper.getMsgList(AliPayMsgDbData.class);
+                        if (listCache != null && listCache.size() > 0) {
+                            for (AliPayMsgDbData dbData : listCache) {
+                                dbData.setHaveRead(true);
+                            }
+                        }
+                        MsgCenterDbHelper.saveOrUpdateMsgList(listCache);
+                        List<IAliPayMsgItem> resultList = DataChangeUtil.changeAliPayDbDataToIAliPayItem(listCache);
+                        mView.showMsgList(resultList);
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String s, String s1) {
+
                     }
                 });
     }

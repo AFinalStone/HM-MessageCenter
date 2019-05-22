@@ -61,6 +61,13 @@ public class AliPayMsgContract {
          */
         void showLoadMoreEnd();
 
+        /**
+         * 修改条目
+         *
+         * @param item
+         */
+        void notifyItem(IAliPayMsgItem item, int position);
+
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
@@ -78,17 +85,14 @@ public class AliPayMsgContract {
         /**
          * 设置消息为已读
          *
-         * @param msgId   消息id
-         * @param msgType 消息类型
+         * @param position
          */
-        void makeSingleMsgHaveRead(String msgId, String msgType);
+        void makeSingleMsgHaveRead(IAliPayMsgItem item, int position);
 
         /**
          * 使得某类消息全部变为已读
-         *
-         * @param msgType
          */
-        void makeTypeMsgHaveRead(String msgType);
+        void makeTypeMsgHaveRead();
 
     }
 }

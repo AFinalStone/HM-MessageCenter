@@ -141,9 +141,7 @@ public class MsgApi {
      *
      * @return
      */
-    public static Flowable<BaseResponse<Integer>> makeTypeMsgHaveRead(String msgType) {
-        MakeMsgTypeAllHaveReadReqBean reqBean = new MakeMsgTypeAllHaveReadReqBean();
-        reqBean.setType(msgType);
+    public static Flowable<BaseResponse<Integer>> makeTypeMsgHaveRead(MakeMsgTypeAllHaveReadReqBean reqBean) {
         return getService().makeMsgTypeAllHaveRead(reqBean)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

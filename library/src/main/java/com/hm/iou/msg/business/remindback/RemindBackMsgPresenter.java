@@ -14,8 +14,6 @@ import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.List;
 
 import io.reactivex.BackpressureStrategy;
@@ -53,8 +51,8 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                         Flowable.create(new FlowableOnSubscribe<List<IRemindBackMsgItem>>() {
                             @Override
                             public void subscribe(FlowableEmitter<List<IRemindBackMsgItem>> e) throws Exception {
-                                MsgCenterDbHelper.saveOrUpdateRemindBackMsgList(list);
-                                List<RemindBackMsgDbData> listCache = MsgCenterDbHelper.getRemindBackMsgList();
+                                MsgCenterDbHelper.saveOrUpdateMsgList(list);
+                                List<RemindBackMsgDbData> listCache = MsgCenterDbHelper.getMsgList(RemindBackMsgDbData.class);
                                 List<IRemindBackMsgItem> resultList = DataChangeUtil.changeRemindBackMsgDbDataToIRemindBackMsgItem(listCache);
                                 e.onNext(resultList);
                             }
@@ -117,8 +115,8 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                         Flowable.create(new FlowableOnSubscribe<List<IRemindBackMsgItem>>() {
                             @Override
                             public void subscribe(FlowableEmitter<List<IRemindBackMsgItem>> e) throws Exception {
-                                MsgCenterDbHelper.saveOrUpdateRemindBackMsgList(list);
-                                List<RemindBackMsgDbData> listCache = MsgCenterDbHelper.getRemindBackMsgList();
+                                MsgCenterDbHelper.saveOrUpdateMsgList(list);
+                                List<RemindBackMsgDbData> listCache = MsgCenterDbHelper.getMsgList(RemindBackMsgDbData.class);
                                 List<IRemindBackMsgItem> resultList = DataChangeUtil.changeRemindBackMsgDbDataToIRemindBackMsgItem(listCache);
                                 e.onNext(resultList);
                             }
