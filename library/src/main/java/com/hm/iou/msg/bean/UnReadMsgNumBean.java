@@ -11,9 +11,10 @@ import lombok.Data;
 @Data
 public class UnReadMsgNumBean implements Serializable {
 
-    private int butlerMessageNumber;
-    private int contractNumber;
-    private int similarContractNumber;
-    private int waitRepayNumber;
-    private int friendMessageNumber;
+    private int butlerMessageNumber;//管家消息
+    private int contractNumber;//合同消息
+    private int similarContractNumber;//疑似合同
+    private int waitRepayNumber;//待还
+    private int friendMessageNumber;//新的朋友
+    private int alipayReceiptNumber;//˙支付宝回单
 }

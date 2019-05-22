@@ -9,6 +9,6 @@ import lombok.Data;
 @Data
 public class MakeMsgTypeAllHaveReadReqBean {
 
-    private String msgType;
-
+    private String lastReqDate;
+    private String type;
 }

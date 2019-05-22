@@ -19,6 +19,7 @@ import com.hm.iou.uikit.HMBottomBarView;
 import com.hm.iou.uikit.HMLoadMoreView;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
+import com.hm.iou.uikit.dialog.HMAlertDialog;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -43,6 +44,7 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
     HMBottomBarView mBottomBar;
 
     AliPayListAdapter mAdapter;
+    HMAlertDialog mDialog;
 
     @Override
     protected int getLayoutId() {
@@ -65,7 +67,31 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
         mBottomBar.setOnTitleClickListener(new HMBottomBarView.OnTitleClickListener() {
             @Override
             public void onClickTitle() {
-                mPresenter.makeMsgHaveRead("", "aliPay");
+                mBottomBar.setOnTitleClickListener(new HMBottomBarView.OnTitleClickListener() {
+                    @Override
+                    public void onClickTitle() {
+                        if (mDialog == null) {
+                            mDialog = new HMAlertDialog.Builder(mContext)
+                                    .setTitle("清扫未读状态")
+                                    .setMessage("把所有“未读”消息标成“已读”状态吗？")
+                                    .setNegativeButton("取消")
+                                    .setPositiveButton("全部已读")
+                                    .setOnClickListener(new HMAlertDialog.OnClickListener() {
+                                        @Override
+                                        public void onPosClick() {
+                                            mPresenter.makeTypeMsgHaveRead("aliPay");
+                                        }
+
+                                        @Override
+                                        public void onNegClick() {
+
+                                        }
+                                    })
+                                    .create();
+                        }
+                        mDialog.show();
+                    }
+                });
             }
         });
         mAdapter = new AliPayListAdapter(mContext);
@@ -78,6 +104,7 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 IAliPayMsgItem item = (IAliPayMsgItem) adapter.getItem(position);
                 if (item != null) {
+                    mPresenter.makeSingleMsgHaveRead(item.getIMsgId(), item.getIMsgType());
                     NavigationHelper.toAliPayMsgDetailPage(mContext, item);
                 }
             }
@@ -89,7 +116,7 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
                 mPresenter.getMsgList();
             }
         });
-        //设置底部刷新
+        //设置底部刷新,这里不设置不会出现底部底线的文案
         mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
@@ -151,5 +178,6 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
     public void showLoadMoreEnd() {
         mAdapter.loadMoreEnd();
     }
+
 
 }

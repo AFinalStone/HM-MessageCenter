@@ -21,7 +21,6 @@ public class AliPayMsgContract {
          */
         void showMsgList(List<IAliPayMsgItem> list);
 
-
         /**
          * 允许刷新
          */
@@ -82,7 +81,14 @@ public class AliPayMsgContract {
          * @param msgId   消息id
          * @param msgType 消息类型
          */
-        void makeMsgHaveRead(String msgId, String msgType);
+        void makeSingleMsgHaveRead(String msgId, String msgType);
+
+        /**
+         * 使得某类消息全部变为已读
+         *
+         * @param msgType
+         */
+        void makeTypeMsgHaveRead(String msgType);
 
     }
 }

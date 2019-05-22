@@ -19,8 +19,6 @@
             android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:srlAccentColor="@android:color/white"
-            app:srlEnableAutoLoadMore="true"
             app:srlEnableLoadMore="false"
             app:srlEnableRefresh="false">
 
@@ -53,8 +51,10 @@
     </RelativeLayout>
 
     <com.hm.iou.uikit.HMBottomBarView
+        android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="50dip"
-        app:bottomBackText="疑似合同" />
+        app:bottomBackText="疑似合同"
+        app:bottomTitleIcon="@mipmap/msgcenter_ic_clear_read_msg_flag" />
 </LinearLayout>
 

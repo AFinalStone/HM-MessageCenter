@@ -37,14 +37,15 @@ public class CacheDataUtil {
         return (UnReadMsgNumBean) cache.getAsObject(MsgCenterConstants.KEY_UN_READ_MSG_NUM);
     }
 
+    /**
+     * 通讯录
+     *
+     * @param context
+     * @return
+     */
     public static String getLastFriendPullDate(Context context) {
         ACache cache = ACache.get(context.getApplicationContext());
         return cache.getAsString(KEY_LAST_FRIEND_UPDATE_TIME);
-    }
-
-    public static String getLastApplyRecordPullDate(Context context) {
-        ACache cache = ACache.get(context.getApplicationContext());
-        return cache.getAsString(KEY_LAST_FRIEND_APPLY_RECORD_TIME);
     }
 
     public static void saveLastFriendPullDate(Context context, String lastPullDate) {
@@ -52,107 +53,71 @@ public class CacheDataUtil {
         cache.put(KEY_LAST_FRIEND_UPDATE_TIME, StringUtil.getUnnullString(lastPullDate));
     }
 
+
+    /**
+     * 新的好友申请列表
+     *
+     * @param context
+     * @return
+     */
+    public static String getLastApplyRecordPullDate(Context context) {
+        ACache cache = ACache.get(context.getApplicationContext());
+        return cache.getAsString(KEY_LAST_FRIEND_APPLY_RECORD_TIME);
+    }
+
+
     public static void saveLastApplyRecordPullDate(Context context, String lastPullDate) {
         ACache cache = ACache.get(context.getApplicationContext());
         cache.put(KEY_LAST_FRIEND_APPLY_RECORD_TIME, StringUtil.getUnnullString(lastPullDate));
     }
-//
-//    /**
-//     * 添加list到cache中
-//     *
-//     * @return
-//     */
-//    public static synchronized void addMsgListToCache(List<HmMsgBean> list) {
-//        Flowable.just(list)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .map(new Function<List<HmMsgBean>, List<MsgCenterDbData>>() {
-//                    @Override
-//                    public List<MsgCenterDbData> apply(List<HmMsgBean> list) throws Exception {
-//                        List<MsgCenterDbData> listMsgCenter = new ArrayList<>();
-//                        for (HmMsgBean hmMsgBean : list) {
-//                            MsgCenterDbData dbData = makeMsgDetailBeanToMsgCenterDbData(hmMsgBean);
-//                            listMsgCenter.add(dbData);
-//                        }
-//                        return listMsgCenter;
-//                    }
-//                })
-//                .subscribe(new Consumer<List<MsgCenterDbData>>() {
-//                    @Override
-//                    public void accept(List<MsgCenterDbData> msgCenterDbData) throws Exception {
-//                        MsgCenterDbHelper.addOrUpdateDataToMsgCenter(msgCenterDbData);
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//
-//                    }
-//                });
-//    }
 
-//    /**
-//     * 新增或者更新消息都消息中心
-//     *
-//     * @param hmMsgBean 需要新增或者更新的item
-//     */
-//    public static synchronized void updateMsgItemToCache(HmMsgBean hmMsgBean) {
-//        MsgCenterDbData dbData = makeMsgDetailBeanToMsgCenterDbData(hmMsgBean);
-//        MsgCenterDbHelper.addOrUpdateDataToMsgCenter(dbData);
-//    }
-//
-//    /**
-//     * 读取消息中心缓存列表数据,超过15天的自动丢弃掉
-//     *
-//     * @return
-//     */
-//    public static synchronized List<HmMsgBean> readMsgListFromCacheData() {
-//        List<MsgCenterDbData> listCache = MsgCenterDbHelper.queryMsgCenterListData();
-//        List<HmMsgBean> list = new ArrayList<>();
-//        for (MsgCenterDbData dbData : listCache) {
-//            HmMsgBean data = makeMsgCenterDbDataToMsgDetailBean(dbData);
-//            list.add(data);
-//        }
-//        return list;
-//    }
+    /**
+     * 支付宝回单拉取时间
+     *
+     * @param context
+     * @return
+     */
+    public static String getLastAliPayListMsgPullTime(Context context) {
+        ACache cache = ACache.get(context.getApplicationContext());
+        return cache.getAsString(MsgCenterConstants.KEY_LAST_PULL_ALIPAY_LIST_MSG_RECORD_TIME);
+    }
 
+    public static void saveLastAliPayListMsgPullTime(Context context, String lastPullDate) {
+        ACache cache = ACache.get(context.getApplicationContext());
+        cache.put(MsgCenterConstants.KEY_LAST_PULL_ALIPAY_LIST_MSG_RECORD_TIME, StringUtil.getUnnullString(lastPullDate));
+    }
 
-//    /**
-//     * 把MsgDetailBean转换为MsgCenterDbData
-//     *
-//     * @param hmMsgBean
-//     * @return
-//     */
-//    private static MsgCenterDbData makeMsgDetailBeanToMsgCenterDbData(HmMsgBean hmMsgBean) {
-//        MsgCenterDbData data = new MsgCenterDbData();
-//        data.setAutoId(hmMsgBean.getAutoId());
-//        data.setType(hmMsgBean.getType());
-//        data.setPushDate(hmMsgBean.getPushDate());
-//        data.setImageUrl(hmMsgBean.getImageUrl());
-//        data.setTitle(hmMsgBean.getTitle());
-//        data.setInfoLinkUrl(hmMsgBean.getInfoLinkUrl());
-//        data.setNotice(hmMsgBean.getNotice());
-//        data.setRead(hmMsgBean.isRead());
-//        return data;
-//    }
-//
-//    /**
-//     * 把MsgCenterDbData转换为MsgDetailBean
-//     *
-//     * @param dbData
-//     * @return
-//     */
-//    private static HmMsgBean makeMsgCenterDbDataToMsgDetailBean(MsgCenterDbData dbData) {
-//        HmMsgBean data = new HmMsgBean();
-//        data.setAutoId(dbData.getAutoId());
-//        data.setType(dbData.getType());
-//        data.setPushDate(dbData.getPushDate());
-//        data.setImageUrl(dbData.getImageUrl());
-//        data.setTitle(dbData.getTitle());
-//        data.setInfoLinkUrl(dbData.getInfoLinkUrl());
-//        data.setNotice(dbData.getNotice());
-//        data.setRead(dbData.isRead());
-//        return data;
-//    }
+    /**
+     * 条管家消息列表拉取时间
+     *
+     * @param context
+     * @return
+     */
+    public static String getLastHMListMsgPullTime(Context context) {
+        ACache cache = ACache.get(context.getApplicationContext());
+        return cache.getAsString(MsgCenterConstants.KEY_LAST_PULL_HM_LIST_MSG_RECORD_TIME);
+    }
+
+    public static void saveLastHMListMsgPullTime(Context context, String lastPullDate) {
+        ACache cache = ACache.get(context.getApplicationContext());
+        cache.put(MsgCenterConstants.KEY_LAST_PULL_HM_LIST_MSG_RECORD_TIME, StringUtil.getUnnullString(lastPullDate));
+    }
+
+    /**
+     * 疑似合同
+     *
+     * @param context
+     * @return
+     */
+    public static String getLastSimilarityContractListMsgPullTime(Context context) {
+        ACache cache = ACache.get(context.getApplicationContext());
+        return cache.getAsString(MsgCenterConstants.KEY_LAST_PULL_SIMILARITY_CONTRACT_LIST_MSG_RECORD_TIME);
+    }
+
+    public static void saveLastSimilarityContractListMsgPullTime(Context context, String lastPullDate) {
+        ACache cache = ACache.get(context.getApplicationContext());
+        cache.put(MsgCenterConstants.KEY_LAST_PULL_SIMILARITY_CONTRACT_LIST_MSG_RECORD_TIME, StringUtil.getUnnullString(lastPullDate));
+    }
 
     /**
      * 清空消息中心所有缓存

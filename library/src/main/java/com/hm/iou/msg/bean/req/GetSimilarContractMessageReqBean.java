@@ -9,6 +9,6 @@ import lombok.Data;
 @Data
 public class GetSimilarContractMessageReqBean {
 
-    private int page;
-    private int size;
+    private String lastReqDate;
+
 }

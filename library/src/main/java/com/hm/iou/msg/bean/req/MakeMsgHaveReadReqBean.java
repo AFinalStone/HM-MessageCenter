@@ -9,7 +9,13 @@ import lombok.Data;
 @Data
 public class MakeMsgHaveReadReqBean {
 
+    /**
+     * msgId : 0
+     * type : 0
+     */
+
     private String msgId;
-    private String msgType;
+    private String type;
+
 
 }

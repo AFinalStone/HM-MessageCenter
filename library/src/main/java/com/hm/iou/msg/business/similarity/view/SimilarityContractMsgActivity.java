@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,9 +15,11 @@ import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.similarity.SimilarityContractMsgContract;
 import com.hm.iou.msg.business.similarity.SimilarityContractMsgPresenter;
 import com.hm.iou.tools.StatusBarUtil;
+import com.hm.iou.uikit.HMBottomBarView;
 import com.hm.iou.uikit.HMLoadMoreView;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
+import com.hm.iou.uikit.dialog.HMAlertDialog;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -39,8 +40,11 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
     SmartRefreshLayout mRefreshLayout;
     @BindView(R2.id.loading_init)
     HMLoadingView mLoadingInit;
+    @BindView(R2.id.bottomBar)
+    HMBottomBarView mBottomBar;
 
     SimilarityContractListAdapter mAdapter;
+    HMAlertDialog mDialog;
 
     @Override
     protected int getLayoutId() {
@@ -60,6 +64,31 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
             params.height = statusBarHeight;
             mViewStatusBar.setLayoutParams(params);
         }
+        mBottomBar.setOnTitleClickListener(new HMBottomBarView.OnTitleClickListener() {
+            @Override
+            public void onClickTitle() {
+                if (mDialog == null) {
+                    mDialog = new HMAlertDialog.Builder(mContext)
+                            .setTitle("清扫未读状态")
+                            .setMessage("把所有“未读”消息标成“已读”状态吗？")
+                            .setNegativeButton("取消")
+                            .setPositiveButton("全部已读")
+                            .setOnClickListener(new HMAlertDialog.OnClickListener() {
+                                @Override
+                                public void onPosClick() {
+                                    mPresenter.makeTypeMsgHaveRead("aliPay");
+                                }
+
+                                @Override
+                                public void onNegClick() {
+
+                                }
+                            })
+                            .create();
+                }
+                mDialog.show();
+            }
+        });
         mAdapter = new SimilarityContractListAdapter(mContext);
         mAdapter.setLoadMoreView(new HMLoadMoreView());
         mAdapter.setHeaderAndEmpty(true);
@@ -78,14 +107,13 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mPresenter.refreshData();
+                mPresenter.getMsgList();
             }
         });
         //加载更多
         mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                mPresenter.getMoreData();
             }
         }, mRvMsgList);
         mPresenter.init();
@@ -134,20 +162,9 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
         mLoadingInit.showDataEmpty("");
     }
 
-
     @Override
-    public void autoRefresh() {
-        mRefreshLayout.autoRefresh();
-    }
-
-    @Override
-    public void showMoreNewsList(List<ISimilarityContractMsgItem> list) {
-        mAdapter.addData(list);
-    }
-
-    @Override
-    public void showLoadMoreFail() {
-        mAdapter.loadMoreFail();
+    public void scrollToBottom() {
+        mRvMsgList.scrollToPosition(mAdapter.getItemCount() - 1);
     }
 
     @Override
@@ -155,9 +172,5 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
         mAdapter.loadMoreEnd();
     }
 
-    @Override
-    public void showLoadMoreComplete() {
-        mAdapter.loadMoreComplete();
-    }
 
 }

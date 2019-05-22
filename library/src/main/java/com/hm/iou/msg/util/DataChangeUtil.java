@@ -6,9 +6,9 @@ import com.hm.iou.database.table.msg.AliPayMsgDbData;
 import com.hm.iou.database.table.msg.ContractMsgDbData;
 import com.hm.iou.database.table.msg.HmMsgDbData;
 import com.hm.iou.database.table.msg.RemindBackMsgDbData;
+import com.hm.iou.database.table.msg.SimilarityContractMsgDbData;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.bean.ChatMsgBean;
-import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
 import com.hm.iou.msg.business.alipay.list.view.IAliPayMsgItem;
 import com.hm.iou.msg.business.contractmsg.view.IContractMsgItem;
 import com.hm.iou.msg.business.hmmsg.view.IHmMsgItem;
@@ -230,10 +230,10 @@ public class DataChangeUtil {
      * @param list
      * @return
      */
-    public static List<ISimilarityContractMsgItem> changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(List<GetSimilarityContractListResBean.ListBean> list) {
+    public static List<ISimilarityContractMsgItem> changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(List<SimilarityContractMsgDbData> list) {
         List<ISimilarityContractMsgItem> resultList = new ArrayList<>();
         if (list != null) {
-            for (final GetSimilarityContractListResBean.ListBean dbData : list) {
+            for (final SimilarityContractMsgDbData dbData : list) {
                 ISimilarityContractMsgItem msgItem = new ISimilarityContractMsgItem() {
 
                     @Override
@@ -284,6 +284,16 @@ public class DataChangeUtil {
                             return R.mipmap.jietiao_ic_tag_new;
                         }
                         return 0;
+                    }
+
+                    @Override
+                    public String getIMsgId() {
+                        return dbData.getMsgId();
+                    }
+
+                    @Override
+                    public String getIMsgType() {
+                        return dbData.getType();
                     }
 
                 };
@@ -390,6 +400,8 @@ public class DataChangeUtil {
                 final String title = dbData.getTitle();
                 final String content = dbData.getContent();
                 final String jumpUrl = dbData.getJumpUrl();
+                final String msgId = dbData.getMsgId();
+                final String msgType = dbData.getType();
                 final String time = TimeUtil.formatAliPayMsgStartTime(dbData.getCreateTime());
                 IAliPayMsgItem item = new IAliPayMsgItem() {
 
@@ -428,6 +440,16 @@ public class DataChangeUtil {
                     @Override
                     public String getIJumpUrl() {
                         return jumpUrl;
+                    }
+
+                    @Override
+                    public String getIMsgId() {
+                        return msgId;
+                    }
+
+                    @Override
+                    public String getIMsgType() {
+                        return msgType;
                     }
                 };
                 try {

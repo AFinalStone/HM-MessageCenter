@@ -1,19 +1,21 @@
 package com.hm.iou.msg.api;
 
-import com.hm.iou.database.table.msg.AliPayMsgDbData;
 import com.hm.iou.database.table.msg.ContractMsgDbData;
 import com.hm.iou.database.table.msg.HmMsgDbData;
 import com.hm.iou.database.table.msg.RemindBackMsgDbData;
 import com.hm.iou.msg.bean.FriendApplyRecordListBean;
 import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.bean.FriendListBean;
+import com.hm.iou.msg.bean.GetAliPayListMsgResBean;
 import com.hm.iou.msg.bean.GetAliPayMsgDetailResBean;
 import com.hm.iou.msg.bean.GetOrRefreshIMTokenBean;
 import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
 import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.AddFriendReqBean;
+import com.hm.iou.msg.bean.req.ChangeAliPayEvidenceNameReqBean;
 import com.hm.iou.msg.bean.req.FriendDetailReqBean;
+import com.hm.iou.msg.bean.req.GetAliPayDetailShareUrlReqBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgDetailReqBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgListReq;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
@@ -34,34 +36,34 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
- * Created by hjy on 18/4/27.<br>
+ * @author syl
+ * @time 2019/5/22 10:15 AM
  */
-
 public interface MsgService {
 
     @GET("/api/message/messageCenter/v2/unReadMessages")
     Flowable<BaseResponse<UnReadMsgNumBean>> getUnReadMsgNum();
 
-    @GET("/api/message/messageCenter/v2/getButlerMessage")
+    @GET("/api/message/messageCenter/v2/getButlerMsgCache")
     Flowable<BaseResponse<List<HmMsgDbData>>> getHmMsgList();
 
-    @GET("/api/message/messageCenter/v2/getContractMessage")
+    @GET("/api/message/messageCenter/v2/getContractMsgCache")
     Flowable<BaseResponse<List<ContractMsgDbData>>> getContractMsgList();
 
-    @GET("/api/message/messageCenter/v2/getWaitRepayMessage")
+    @GET("/api/message/messageCenter/v2/getWaitRepayMsgCache")
     Flowable<BaseResponse<List<RemindBackMsgDbData>>> getRemindBackList();
 
-    @POST("/api/message/messageCenter/v2/getSimilarContractMessage")
+    @POST("/api/message/messageCenter/v2/getSimilarContractMsgCach")
     Flowable<BaseResponse<GetSimilarityContractListResBean>> getSimilarityContractList(@Body GetSimilarContractMessageReqBean req);
 
-    @POST("/api/message/messageCenter/v2/makeMsgHaveRead")
+    @POST("/api/message/messageCenter/v2/readSingle")
     Flowable<BaseResponse<Object>> makeMsgHaveRead(@Body MakeMsgHaveReadReqBean req);
 
-    @POST("/api/message/messageCenter/v2/makeMsgTypeAllHaveRead")
-    Flowable<BaseResponse<Object>> makeMsgTypeAllHaveRead(@Body MakeMsgTypeAllHaveReadReqBean req);
+    @POST("/api/message/messageCenter/v2/readBatch")
+    Flowable<BaseResponse<Integer>> makeMsgTypeAllHaveRead(@Body MakeMsgTypeAllHaveReadReqBean req);
 
     @POST("/api/message/messageCenter/v2/getReceiptMsgCache")
-    Flowable<BaseResponse<List<AliPayMsgDbData>>> getAliPayMsgList(@Body GetAliPayMsgListReq req);
+    Flowable<BaseResponse<GetAliPayListMsgResBean>> getAliPayMsgList(@Body GetAliPayMsgListReq req);
 
     @POST("/api/message/messageCenter/v2/getAliPayReceiptInfo")
     Flowable<BaseResponse<GetAliPayMsgDetailResBean>> getAliPayMsgDetail(@Body GetAliPayMsgDetailReqBean req);
@@ -107,5 +109,14 @@ public interface MsgService {
 
     @GET("/api/news/friend/v1/getOrRefreshToken")
     Flowable<BaseResponse<GetOrRefreshIMTokenBean>> getOrRefreshIMToken();
+
+    @GET("/api/news/friend/v1/exEvidence/del")
+    Flowable<BaseResponse<Integer>> delAliPayEvidence(@Query("exEvidenceId") String exEvidenceId);
+
+    @POST("/api/news/friend/v1/exEvidence/rename")
+    Flowable<BaseResponse<Object>> changeAliPayEvidenceName(@Body ChangeAliPayEvidenceNameReqBean reqBean);
+
+    @POST("/api/news/friend/v2/iouAndExtShare")
+    Flowable<BaseResponse<String>> getAliPayDetailShareUrl(@Body GetAliPayDetailShareUrlReqBean reqBean);
 
 }

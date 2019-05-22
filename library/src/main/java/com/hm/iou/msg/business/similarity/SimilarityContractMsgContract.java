@@ -21,7 +21,6 @@ public class SimilarityContractMsgContract {
          */
         void showMsgList(List<ISimilarityContractMsgItem> list);
 
-
         /**
          * 允许刷新
          */
@@ -53,32 +52,14 @@ public class SimilarityContractMsgContract {
         void showDataEmpty();
 
         /**
-         * 自动刷新数据
+         * 滚动到底部
          */
-        void autoRefresh();
-
-
-        /**
-         * 显示更多数据
-         *
-         * @param list
-         */
-        void showMoreNewsList(List<ISimilarityContractMsgItem> list);
-
-        /**
-         * 显示加载更多失败
-         */
-        void showLoadMoreFail();
+        void scrollToBottom();
 
         /**
          * 显示全部数据加载完毕，没有更多数据了
          */
         void showLoadMoreEnd();
-
-        /**
-         * 显示数据加载成功，可以加载下一页数据了
-         */
-        void showLoadMoreComplete();
 
     }
 
@@ -86,19 +67,30 @@ public class SimilarityContractMsgContract {
 
 
         /**
-         * 获取更多数据
-         */
-        void getMoreData();
-
-        /**
          * 初始化
          */
         void init();
 
         /**
-         * 刷新数据
+         * 获取消息列表
          */
-        void refreshData();
+        void getMsgList();
+
+
+        /**
+         * 设置消息为已读
+         *
+         * @param msgId   消息id
+         * @param msgType 消息类型
+         */
+        void makeSingleMsgHaveRead(String msgId, String msgType);
+
+        /**
+         * 使得某类消息全部变为已读
+         *
+         * @param msgType
+         */
+        void makeTypeMsgHaveRead(String msgType);
 
     }
 }

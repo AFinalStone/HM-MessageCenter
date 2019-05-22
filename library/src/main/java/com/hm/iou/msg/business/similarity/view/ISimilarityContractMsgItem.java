@@ -61,4 +61,18 @@ public interface ISimilarityContractMsgItem {
      * @return
      */
     int getStatusTagBg();
+
+    /**
+     * 消息id
+     *
+     * @return
+     */
+    String getIMsgId();
+
+    /**
+     * 消息类型
+     *
+     * @return
+     */
+    String getIMsgType();
 }
