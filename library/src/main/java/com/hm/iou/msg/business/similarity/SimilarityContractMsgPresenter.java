@@ -14,8 +14,8 @@ import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
 import com.hm.iou.msg.bean.req.GetSimilarContractMessageReqBean;
 import com.hm.iou.msg.bean.req.MakeMsgTypeAllHaveReadReqBean;
-import com.hm.iou.msg.business.alipay.list.view.IAliPayMsgItem;
 import com.hm.iou.msg.business.similarity.view.ISimilarityContractMsgItem;
+import com.hm.iou.msg.dict.ModuleType;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
@@ -203,10 +203,9 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
 
     @Override
     public void makeTypeMsgHaveRead() {
-        //TODO
         MakeMsgTypeAllHaveReadReqBean reqBean = new MakeMsgTypeAllHaveReadReqBean();
         reqBean.setLastReqDate(CacheDataUtil.getLastAliPayListMsgPullTime(mContext));
-
+        reqBean.setType(ModuleType.SIMILARITY_CONTRACT_MSG.getTypeValue());
         MsgApi.makeTypeMsgHaveRead(reqBean)
                 .compose(getProvider().<BaseResponse<Integer>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<Integer>handleResponse())

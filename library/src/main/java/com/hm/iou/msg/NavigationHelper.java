@@ -8,17 +8,14 @@ import android.text.TextUtils;
 import com.hm.iou.base.utils.RouterUtil;
 import com.hm.iou.msg.business.alipay.detail.AliPayMsgDetailActivity;
 import com.hm.iou.msg.business.alipay.list.view.IAliPayMsgItem;
-import com.hm.iou.msg.business.apply.view.ApplyNewFriendListActivity;
 import com.hm.iou.msg.business.friend.view.AddFriendIndexActivity;
 import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
 import com.hm.iou.msg.business.friend.view.ReportUserActivity;
 import com.hm.iou.msg.business.friend.view.SendVerifyRequestActivity;
 import com.hm.iou.msg.business.friendlist.view.FriendListActivity;
-import com.hm.iou.msg.dict.MsgType;
+import com.hm.iou.msg.dict.HMMsgType;
 import com.hm.iou.router.Router;
 import com.netease.nim.uikit.api.NimUIKit;
-
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * @author syl
@@ -27,11 +24,11 @@ import org.greenrobot.eventbus.EventBus;
 public class NavigationHelper {
 
     /**
-     * 跳转到消息详情
+     * 跳转到管家消息详情
      *
      * @param context
      */
-    public static void toMsgDetail(Context context, String url, String autoId, int msgType) {
+    public static void toHMMsgDetail(Context context, String url, String autoId, int msgType) {
         if (TextUtils.isEmpty(url)) {
             return;
         }
@@ -39,7 +36,7 @@ public class NavigationHelper {
             Router.getInstance().buildWithUrl(url).navigation(context);
             return;
         }
-        if (MsgType.News.getValue() == msgType && !TextUtils.isEmpty(autoId)) {
+        if (HMMsgType.News.getValue() == msgType && !TextUtils.isEmpty(autoId)) {
             Router.getInstance().buildWithUrl("hmiou://m.54jietiao.com/news/detail")
                     .withString("news_id", autoId + "")
                     .withString("url", url)

@@ -9,27 +9,27 @@ import lombok.Data;
 @Data
 public class GetAliPayMsgDetailResBean {
 
+
     /**
-     * status : 1
-     * contractId : 5756745645
-     * senderEmail : 602392342@qq.com
-     * pdfUrl : https://www.baidu.com
-     * creatorName : 2019-05-12 12:20:34
-     * deleteStats : 1
-     * operatorShowId : 1234353453
+     * appliyReceiptStatus : 0
+     * createTime : 2019-05-12 12:20:34
+     * deleted : true
+     * justiceId : string
+     * operatorDate : 2019-05-13 08:33:21
      * operatorName : 李隆基
-     * operatorDeleteTime : 2019-05-13 08:33:21
+     * operatorShowId : 1234353453
+     * pdfUrl : https://www.baidu.com
+     * senderMail : 602392342@qq.com
      */
 
-    private int status;
-    private String contractId;
-    private String senderEmail;
-    private String pdfUrl;
-    private String creatorName;
+    private int appliyReceiptStatus;// 1、成功 2、没有发现附件 3、附件不合规 4、非关联回单 ,
     private String createTime;
-    private int deleteStats;
-    private String operatorShowId;
+    private boolean deleted;
+    private String justiceId;
+    private String operatorDate;
     private String operatorName;
-    private String operatorDeleteTime;
+    private String operatorShowId;
+    private String pdfUrl;
+    private String senderMail;
 
 }

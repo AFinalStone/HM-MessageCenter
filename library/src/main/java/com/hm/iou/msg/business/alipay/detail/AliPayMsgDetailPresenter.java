@@ -42,9 +42,9 @@ public class AliPayMsgDetailPresenter extends MvpActivityPresenter<AliPayMsgDeta
                             return;
                         }
                         StringBuffer sb = new StringBuffer();
-                        String contractId = detail.getContractId();
-                        if (1 == detail.getDeleteStats()) {
-                            String deleteTime = detail.getOperatorDeleteTime();
+                        String contractId = detail.getJusticeId();
+                        if (detail.isDeleted()) {
+                            String deleteTime = detail.getOperatorDate();
                             if (!TextUtils.isEmpty(deleteTime)) {
                                 deleteTime = deleteTime.replaceAll("\\.", "-");
                             } else {
@@ -56,7 +56,7 @@ public class AliPayMsgDetailPresenter extends MvpActivityPresenter<AliPayMsgDeta
                             mView.showFileHaveDelete(sb.toString());
                             return;
                         }
-                        String email = detail.getSenderEmail();
+                        String email = detail.getSenderMail();
                         String time = detail.getCreateTime();
                         if (!TextUtils.isEmpty(time)) {
                             time = time.replaceAll("\\.", "-");
@@ -67,16 +67,16 @@ public class AliPayMsgDetailPresenter extends MvpActivityPresenter<AliPayMsgDeta
                                 .append("\n发送邮箱：").append(email)
                                 .append("\n关联时间：").append(time);
                         mView.showContentText(sb.toString());
-                        if (0 == detail.getStatus()) {
+                        if (1 == detail.getAppliyReceiptStatus()) {
                             mView.showTitle("关联成功", 0xFF578525);
                             mView.showSeeBtn(detail.getPdfUrl());
-                        } else if (1 == detail.getStatus()) {
+                        } else if (2 == detail.getAppliyReceiptStatus()) {
                             mView.showTitle("没有发现附件", 0xFFBD0400);
                             mView.showHelpBtn(email, contractId);
-                        } else if (2 == detail.getStatus()) {
+                        } else if (3 == detail.getAppliyReceiptStatus()) {
                             mView.showTitle("附件不合规", 0xFFBD0400);
                             mView.showHelpBtn(email, contractId);
-                        } else if (3 == detail.getStatus()) {
+                        } else if (4 == detail.getAppliyReceiptStatus()) {
                             mView.showTitle("非关联回单", 0xFFBD0400);
                             mView.showHelpBtn(email, contractId);
                         }

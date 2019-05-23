@@ -14,7 +14,7 @@ import com.hm.iou.msg.business.contractmsg.view.IContractMsgItem;
 import com.hm.iou.msg.business.hmmsg.view.IHmMsgItem;
 import com.hm.iou.msg.business.remindback.view.IRemindBackMsgItem;
 import com.hm.iou.msg.business.similarity.view.ISimilarityContractMsgItem;
-import com.hm.iou.msg.dict.MsgType;
+import com.hm.iou.msg.dict.HMMsgType;
 import com.hm.iou.sharedata.model.IOUKindEnum;
 import com.hm.iou.tools.StringUtil;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
@@ -94,15 +94,19 @@ public class DataChangeUtil {
         List<IContractMsgItem> resultList = new ArrayList<>();
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
-                final ContractMsgDbData msgBean = list.get(i);
-                final String time = TimeUtil.formatContractMsgStartTime(msgBean.getCreateTime());
-                final String title = msgBean.getTitle();
-                final String content = msgBean.getContent();
-                final String justUrl = msgBean.getJumpUrl();
-                final int contractType = msgBean.getSourceBizType();
+                final ContractMsgDbData dbData = list.get(i);
+                final String time = TimeUtil.formatContractMsgStartTime(dbData.getCreateTime());
+                final String title = dbData.getTitle();
+                final String content = dbData.getContent();
+                final String justUrl = dbData.getJumpUrl();
+                final boolean isHaveRead = dbData.isHaveRead();
+                final String msgId = dbData.getMsgId();
+                final String msgType = dbData.getType();
+                final int contractType = dbData.getSourceBizType();
                 IContractMsgItem iMsgItem = new IContractMsgItem() {
 
                     private boolean mIfShowTime = true;
+                    private boolean mIsHaveRead = false;
 
                     @Override
                     public String getITime() {
@@ -138,6 +142,26 @@ public class DataChangeUtil {
                     public int getIContractType() {
                         return contractType;
                     }
+
+                    @Override
+                    public String getIMsgId() {
+                        return msgId;
+                    }
+
+                    @Override
+                    public String getIMsgType() {
+                        return msgType;
+                    }
+
+                    @Override
+                    public boolean isHaveRead() {
+                        return mIsHaveRead;
+                    }
+
+                    @Override
+                    public void setHaveRead(boolean isHaveRead) {
+                        mIsHaveRead = isHaveRead;
+                    }
                 };
                 try {
                     if (i > 0) {
@@ -155,6 +179,7 @@ public class DataChangeUtil {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                iMsgItem.setHaveRead(isHaveRead);
                 resultList.add(iMsgItem);
             }
         }
@@ -172,6 +197,9 @@ public class DataChangeUtil {
         if (list != null) {
             for (final RemindBackMsgDbData dbData : list) {
                 IRemindBackMsgItem msgItem = new IRemindBackMsgItem() {
+
+                    private boolean mIsHaveRead = false;
+
                     @Override
                     public String getITitle() {
                         return dbData.getTitle();
@@ -215,7 +243,28 @@ public class DataChangeUtil {
                     public String getIJustUrl() {
                         return dbData.getJumpUrl();
                     }
+
+                    @Override
+                    public String getIMsgId() {
+                        return dbData.getMsgId();
+                    }
+
+                    @Override
+                    public String getIMsgType() {
+                        return dbData.getType();
+                    }
+
+                    @Override
+                    public boolean isHaveRead() {
+                        return mIsHaveRead;
+                    }
+
+                    @Override
+                    public void setHaveRead(boolean isHaveRead) {
+                        mIsHaveRead = isHaveRead;
+                    }
                 };
+                msgItem.setHaveRead(dbData.isHaveRead());
                 resultList.add(msgItem);
             }
         }
@@ -329,15 +378,17 @@ public class DataChangeUtil {
             for (final HmMsgDbData dbData : list) {
                 IHmMsgItem msgItem = new IHmMsgItem() {
 
+                    private boolean mIsHaveRead = false;
+
                     @Override
                     public int getMsgIcon() {
-                        if (MsgType.Sport.getValue() == dbData.getSourceBizType()) {
+                        if (HMMsgType.Sport.getValue() == dbData.getSourceBizType()) {
                             return R.mipmap.msgcenter_ic_activity;
                         }
-                        if (MsgType.Advertisement.getValue() == dbData.getSourceBizType()) {
+                        if (HMMsgType.Advertisement.getValue() == dbData.getSourceBizType()) {
                             return R.mipmap.msgcenter_ic_ad;
                         }
-                        if (MsgType.News.getValue() == dbData.getSourceBizType()) {
+                        if (HMMsgType.News.getValue() == dbData.getSourceBizType()) {
                             return R.mipmap.msgcenter_ic_toutiao;
                         }
                         return R.mipmap.msgcenter_ic_official_notice;
@@ -346,9 +397,9 @@ public class DataChangeUtil {
                     @Override
                     public String getMsgTitle() {
                         if (TextUtils.isEmpty(dbData.getTitle())) {
-                            return MsgType.getDescByValue(dbData.getSourceBizType()) + "：";
+                            return HMMsgType.getDescByValue(dbData.getSourceBizType()) + "：";
                         }
-                        return MsgType.getDescByValue(dbData.getSourceBizType()) + "：" + dbData.getTitle();
+                        return HMMsgType.getDescByValue(dbData.getSourceBizType()) + "：" + dbData.getTitle();
                     }
 
                     @Override
@@ -381,18 +432,39 @@ public class DataChangeUtil {
                     }
 
                     @Override
-                    public int getMsgType() {
+                    public int getHMMsgType() {
                         return dbData.getSourceBizType();
                     }
 
                     @Override
+                    public String getIMsgId() {
+                        return dbData.getMsgId();
+                    }
+
+                    @Override
+                    public String getIMsgType() {
+                        return dbData.getType();
+                    }
+
+                    @Override
+                    public boolean isHaveRead() {
+                        return mIsHaveRead;
+                    }
+
+                    @Override
+                    public void setHaveRead(boolean isHaveRead) {
+                        mIsHaveRead = isHaveRead;
+                    }
+
+                    @Override
                     public int getItemType() {
-                        if (MsgType.CommuniqueIntro.getValue() == dbData.getSourceBizType()) {
+                        if (HMMsgType.CommuniqueIntro.getValue() == dbData.getSourceBizType()) {
                             return TYPE_COMMUNIQUE;
                         }
                         return TYPE_ADVERTISEMENT_NEWS_SPORT;
                     }
                 };
+                msgItem.setHaveRead(dbData.isHaveRead());
                 resultList.add(msgItem);
             }
         }
@@ -411,9 +483,9 @@ public class DataChangeUtil {
             for (int i = 0; i < list.size(); i++) {
                 AliPayMsgDbData dbData = list.get(i);
                 final String title = dbData.getTitle();
-                final boolean isHaveRead = dbData.isHaveRead();
                 final String content = dbData.getContent();
                 final String jumpUrl = dbData.getJumpUrl();
+                final boolean isHaveRead = dbData.isHaveRead();
                 final String msgId = dbData.getMsgId();
                 final String msgType = dbData.getType();
                 final String time = TimeUtil.formatAliPayMsgStartTime(dbData.getCreateTime());

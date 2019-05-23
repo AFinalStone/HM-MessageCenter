@@ -1,14 +1,14 @@
 package com.hm.iou.msg.api;
 
-import com.hm.iou.database.table.msg.ContractMsgDbData;
-import com.hm.iou.database.table.msg.HmMsgDbData;
-import com.hm.iou.database.table.msg.RemindBackMsgDbData;
 import com.hm.iou.msg.bean.FriendApplyRecordListBean;
 import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.bean.FriendListBean;
 import com.hm.iou.msg.bean.GetAliPayListMsgResBean;
 import com.hm.iou.msg.bean.GetAliPayMsgDetailResBean;
+import com.hm.iou.msg.bean.GetContractMsgListResBean;
+import com.hm.iou.msg.bean.GetHMMsgListResBean;
 import com.hm.iou.msg.bean.GetOrRefreshIMTokenBean;
+import com.hm.iou.msg.bean.GetRemindBackListMsgResBean;
 import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
 import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
@@ -19,7 +19,10 @@ import com.hm.iou.msg.bean.req.GetAliPayDetailShareUrlReqBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgDetailReqBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgListReq;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
+import com.hm.iou.msg.bean.req.GetContractMsgListReq;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
+import com.hm.iou.msg.bean.req.GetHMMsgListReq;
+import com.hm.iou.msg.bean.req.GetRemindBackListReq;
 import com.hm.iou.msg.bean.req.GetSimilarContractMessageReqBean;
 import com.hm.iou.msg.bean.req.MakeMsgHaveReadReqBean;
 import com.hm.iou.msg.bean.req.MakeMsgTypeAllHaveReadReqBean;
@@ -44,14 +47,14 @@ public interface MsgService {
     @GET("/api/message/messageCenter/v2/unReadMessages")
     Flowable<BaseResponse<UnReadMsgNumBean>> getUnReadMsgNum();
 
-    @GET("/api/message/messageCenter/v2/getButlerMsgCache")
-    Flowable<BaseResponse<List<HmMsgDbData>>> getHmMsgList();
+    @POST("/api/message/messageCenter/v2/getButlerMsgCache")
+    Flowable<BaseResponse<GetHMMsgListResBean>> getHmMsgList(@Body GetHMMsgListReq req);
 
-    @GET("/api/message/messageCenter/v2/getContractMsgCache")
-    Flowable<BaseResponse<List<ContractMsgDbData>>> getContractMsgList();
+    @POST("/api/message/messageCenter/v2/getContractMsgCache")
+    Flowable<BaseResponse<GetContractMsgListResBean>> getContractMsgList(@Body GetContractMsgListReq req);
 
-    @GET("/api/message/messageCenter/v2/getWaitRepayMsgCache")
-    Flowable<BaseResponse<List<RemindBackMsgDbData>>> getRemindBackList();
+    @POST("/api/message/messageCenter/v2/getWaitRepayMsgCache")
+    Flowable<BaseResponse<GetRemindBackListMsgResBean>> getRemindBackList(@Body GetRemindBackListReq req);
 
     @POST("/api/message/messageCenter/v2/getSimilarContractMsgCach")
     Flowable<BaseResponse<GetSimilarityContractListResBean>> getSimilarityContractList(@Body GetSimilarContractMessageReqBean req);

@@ -62,7 +62,7 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 if (R.id.ll_adOrSport == view.getId()) {
                     IHmMsgItem item = (IHmMsgItem) adapter.getItem(position);
-                    NavigationHelper.toMsgDetail(mContext, item.getMsgDetailLinkUrl(), item.getMsgAutoId(), item.getMsgType());
+                    NavigationHelper.toHMMsgDetail(mContext, item.getMsgDetailLinkUrl(), item.getMsgAutoId(), item.getHMMsgType());
                 }
             }
         });
@@ -70,7 +70,7 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mPresenter.getMsgListFromServer();
+                mPresenter.getMsgList();
             }
         });
         //设置底部刷新
@@ -134,6 +134,11 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
     @Override
     public void showLoadMoreEnd() {
         mAdapter.loadMoreEnd();
+    }
+
+    @Override
+    public void notifyItem(IHmMsgItem item, int position) {
+        mAdapter.setData(position, item);
     }
 
 }

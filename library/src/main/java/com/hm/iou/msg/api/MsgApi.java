@@ -1,14 +1,14 @@
 package com.hm.iou.msg.api;
 
-import com.hm.iou.database.table.msg.ContractMsgDbData;
-import com.hm.iou.database.table.msg.HmMsgDbData;
-import com.hm.iou.database.table.msg.RemindBackMsgDbData;
 import com.hm.iou.msg.bean.FriendApplyRecordListBean;
 import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.bean.FriendListBean;
 import com.hm.iou.msg.bean.GetAliPayListMsgResBean;
 import com.hm.iou.msg.bean.GetAliPayMsgDetailResBean;
+import com.hm.iou.msg.bean.GetContractMsgListResBean;
+import com.hm.iou.msg.bean.GetHMMsgListResBean;
 import com.hm.iou.msg.bean.GetOrRefreshIMTokenBean;
+import com.hm.iou.msg.bean.GetRemindBackListMsgResBean;
 import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
 import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
@@ -19,7 +19,10 @@ import com.hm.iou.msg.bean.req.GetAliPayDetailShareUrlReqBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgDetailReqBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgListReq;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
+import com.hm.iou.msg.bean.req.GetContractMsgListReq;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
+import com.hm.iou.msg.bean.req.GetHMMsgListReq;
+import com.hm.iou.msg.bean.req.GetRemindBackListReq;
 import com.hm.iou.msg.bean.req.GetSimilarContractMessageReqBean;
 import com.hm.iou.msg.bean.req.MakeMsgHaveReadReqBean;
 import com.hm.iou.msg.bean.req.MakeMsgTypeAllHaveReadReqBean;
@@ -61,8 +64,8 @@ public class MsgApi {
      *
      * @return
      */
-    public static Flowable<BaseResponse<List<HmMsgDbData>>> getHmMsgList() {
-        return getService().getHmMsgList()
+    public static Flowable<BaseResponse<GetHMMsgListResBean>> getHmMsgList(GetHMMsgListReq req) {
+        return getService().getHmMsgList(req)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -72,8 +75,8 @@ public class MsgApi {
      *
      * @return
      */
-    public static Flowable<BaseResponse<List<ContractMsgDbData>>> getContractMsgList() {
-        return getService().getContractMsgList()
+    public static Flowable<BaseResponse<GetContractMsgListResBean>> getContractMsgList(GetContractMsgListReq req) {
+        return getService().getContractMsgList(req)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -105,8 +108,8 @@ public class MsgApi {
      *
      * @return
      */
-    public static Flowable<BaseResponse<List<RemindBackMsgDbData>>> getRemindBackList() {
-        return getService().getRemindBackList()
+    public static Flowable<BaseResponse<GetRemindBackListMsgResBean>> getRemindBackList(GetRemindBackListReq req) {
+        return getService().getRemindBackList(req)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

@@ -438,6 +438,13 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
                         }
                         continue;
                     }
+                    if (ModuleType.ALIPAY_MSG.getTypeId().equals(bean.getModuleId())) {
+                        bean.setRedMsgNum(unReadMsgNumBean.getAlipayReceiptNumber());
+                        if (mView != null) {
+                            mView.refreshHeaderModule(bean);
+                        }
+                        continue;
+                    }
                     if (ModuleType.NEW_APPLY_FRIEND.getTypeId().equals(bean.getModuleId())) {
                         bean.setRedMsgNum(unReadMsgNumBean.getFriendMessageNumber());
                         if (mView != null) {

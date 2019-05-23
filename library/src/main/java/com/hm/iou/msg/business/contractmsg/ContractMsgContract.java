@@ -21,7 +21,6 @@ public class ContractMsgContract {
          */
         void showMsgList(List<IContractMsgItem> list);
 
-
         /**
          * 允许刷新
          */
@@ -61,9 +60,21 @@ public class ContractMsgContract {
          * 显示全部数据加载完毕，没有更多数据了
          */
         void showLoadMoreEnd();
+
+        /**
+         * 修改条目
+         *
+         * @param item
+         */
+        void notifyItem(IContractMsgItem item, int position);
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
+
+        /**
+         * 初始化
+         */
+        void init();
 
         /**
          * 获取消息列表
@@ -71,9 +82,13 @@ public class ContractMsgContract {
         void getMsgList();
 
         /**
-         * 初始化
+         * 设置消息为已读
+         *
+         * @param position
          */
-        void init();
+        void makeSingleMsgHaveRead(IContractMsgItem item, int position);
+
+        void makeTypeMsgHaveRead();
 
     }
 }

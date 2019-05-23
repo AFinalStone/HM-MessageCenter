@@ -54,5 +54,33 @@ public interface IContractMsgItem {
      * @return
      */
     int getIContractType();
+
+    /**
+     * 消息id
+     *
+     * @return
+     */
+    String getIMsgId();
+
+    /**
+     * 消息类型
+     *
+     * @return
+     */
+    String getIMsgType();
+
+    /**
+     * 是否已经阅读过
+     *
+     * @return
+     */
+    boolean isHaveRead();
+
+    /**
+     * 设置是否已经阅读过
+     *
+     * @param isHaveRead
+     */
+    void setHaveRead(boolean isHaveRead);
 }
 

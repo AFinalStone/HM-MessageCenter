@@ -104,6 +104,38 @@ public class CacheDataUtil {
     }
 
     /**
+     * 合同消息
+     *
+     * @param context
+     * @return
+     */
+    public static String getLastContractMsgPullTime(Context context) {
+        ACache cache = ACache.get(context.getApplicationContext());
+        return cache.getAsString(MsgCenterConstants.KEY_LAST_PULL_CONTRACT_LIST_MSG_RECORD_TIME);
+    }
+
+    public static void saveLastContractMsgPullTime(Context context, String lastPullDate) {
+        ACache cache = ACache.get(context.getApplicationContext());
+        cache.put(MsgCenterConstants.KEY_LAST_PULL_CONTRACT_LIST_MSG_RECORD_TIME, StringUtil.getUnnullString(lastPullDate));
+    }
+
+    /**
+     * 待还提醒
+     *
+     * @param context
+     * @return
+     */
+    public static String getLasRemindBackPullTime(Context context) {
+        ACache cache = ACache.get(context.getApplicationContext());
+        return cache.getAsString(MsgCenterConstants.KEY_LAST_PULL_REMIND_BACK_LIST_MSG_RECORD_TIME);
+    }
+
+    public static void saveLastRemindBackPullTime(Context context, String lastPullDate) {
+        ACache cache = ACache.get(context.getApplicationContext());
+        cache.put(MsgCenterConstants.KEY_LAST_PULL_REMIND_BACK_LIST_MSG_RECORD_TIME, StringUtil.getUnnullString(lastPullDate));
+    }
+
+    /**
      * 疑似合同
      *
      * @param context

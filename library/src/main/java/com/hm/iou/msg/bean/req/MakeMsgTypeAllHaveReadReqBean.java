@@ -10,5 +10,5 @@ import lombok.Data;
 public class MakeMsgTypeAllHaveReadReqBean {
 
     private String lastReqDate;
-    private String type;
+    private int type;
 }

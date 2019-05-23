@@ -14,6 +14,7 @@ public class HmMsgListContract {
 
     public interface View extends BaseContract.BaseView {
 
+
         /**
          * 显示消息数据列表
          *
@@ -32,14 +33,14 @@ public class HmMsgListContract {
         void hidePullDownRefresh();
 
         /**
-         * 显示数据为空
-         */
-        void showDataEmpty();
-
-        /**
          * 显示初始化动画
          */
         void showInitLoading();
+
+        /**
+         * 初始化失败
+         */
+        void showInitFailed(String msg);
 
         /**
          * 关闭初始化动画
@@ -47,9 +48,9 @@ public class HmMsgListContract {
         void hideInitLoading();
 
         /**
-         * 初始化失败
+         * 显示数据为空
          */
-        void showInitFailed(String msg);
+        void showDataEmpty();
 
         /**
          * 滚动到底部
@@ -60,6 +61,13 @@ public class HmMsgListContract {
          * 显示全部数据加载完毕，没有更多数据了
          */
         void showLoadMoreEnd();
+
+        /**
+         * 修改条目
+         *
+         * @param item
+         */
+        void notifyItem(IHmMsgItem item, int position);
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
@@ -69,9 +77,18 @@ public class HmMsgListContract {
         void init();
 
         /**
-         * 从服务端获取消息列表
+         * 获取消息列表
          */
-        void getMsgListFromServer();
+        void getMsgList();
+
+        /**
+         * 设置消息为已读
+         *
+         * @param position
+         */
+        void makeSingleMsgHaveRead(IHmMsgItem item, int position);
+
+        void makeTypeMsgHaveRead();
 
     }
 }

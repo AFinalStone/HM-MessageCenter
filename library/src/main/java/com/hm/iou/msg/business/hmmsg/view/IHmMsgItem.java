@@ -64,9 +64,38 @@ public interface IHmMsgItem extends MultiItemEntity {
     String getMsgAutoId();
 
     /**
-     * 获取消息类型
+     * 获取条管家消息类型
      *
      * @return
      */
-    int getMsgType();
+    int getHMMsgType();
+
+    /**
+     * 消息id
+     *
+     * @return
+     */
+    String getIMsgId();
+
+    /**
+     * 消息类型
+     *
+     * @return
+     */
+    String getIMsgType();
+
+    /**
+     * 是否已经阅读过
+     *
+     * @return
+     */
+    boolean isHaveRead();
+
+    /**
+     * 设置是否已经阅读过
+     *
+     * @param isHaveRead
+     */
+    void setHaveRead(boolean isHaveRead);
+
 }

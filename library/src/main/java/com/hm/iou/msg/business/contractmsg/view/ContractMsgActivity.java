@@ -14,14 +14,12 @@ import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.contractmsg.ContractMsgContract;
 import com.hm.iou.msg.business.contractmsg.ContractMsgPresenter;
-import com.hm.iou.msg.business.hmmsg.view.IHmMsgItem;
 import com.hm.iou.tools.StatusBarUtil;
 import com.hm.iou.uikit.HMLoadMoreView;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.List;
@@ -136,11 +134,16 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
 
     @Override
     public void scrollToBottom() {
-//        mRvMsgList.scrollToPosition(mAdapter.getItemCount() - 1);
+        mRvMsgList.scrollToPosition(mAdapter.getItemCount() - 1);
     }
 
     @Override
     public void showLoadMoreEnd() {
         mAdapter.loadMoreEnd();
+    }
+
+    @Override
+    public void notifyItem(IContractMsgItem item, int position) {
+        mAdapter.setData(position, item);
     }
 }

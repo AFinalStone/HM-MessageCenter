@@ -4,7 +4,7 @@ package com.hm.iou.msg.dict;
  * @author syl
  * @time 2019/4/17 11:45 AM
  */
-public enum MsgType {
+public enum HMMsgType {
 
     Sport(10, "活动"),
     News(20, "头条"),
@@ -15,7 +15,7 @@ public enum MsgType {
     private int value;
     private String desc;
 
-    MsgType(int value, String desc) {
+    HMMsgType(int value, String desc) {
         this.value = value;
         this.desc = desc;
     }
@@ -37,8 +37,8 @@ public enum MsgType {
     }
 
     public static String getDescByValue(int value) {
-        MsgType[] arr = MsgType.values();
-        for (MsgType kind : arr) {
+        HMMsgType[] arr = HMMsgType.values();
+        for (HMMsgType kind : arr) {
             if (kind.value == value) {
                 return kind.desc;
             }

@@ -28,6 +28,13 @@
     "redMsgNum": 0
   },
   {
+    "name": "支付宝回单",
+    "moduleId": "msg_center_msg_list_header_alipay_msg",
+    "image": "hmiou://mipmap/msgcenter_ic_msg_list_alipay_msg",
+    "url": "hmiou://m.54jietiao.com/message/alipay_msg",
+    "redMsgNum": 0
+  },
+  {
     "name": "新的朋友",
     "moduleId": "msg_center_msg_list_new_apply_friend",
     "image": "hmiou://mipmap/msgcenter_ic_msg_list_new_friend",

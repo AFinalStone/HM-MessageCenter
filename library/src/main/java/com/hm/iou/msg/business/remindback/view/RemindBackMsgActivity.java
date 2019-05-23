@@ -143,4 +143,9 @@ public class RemindBackMsgActivity extends BaseActivity<RemindBackMsgPresenter> 
         mAdapter.loadMoreEnd();
     }
 
+    @Override
+    public void notifyItem(IRemindBackMsgItem item, int position) {
+        mAdapter.setData(position, item);
+    }
+
 }

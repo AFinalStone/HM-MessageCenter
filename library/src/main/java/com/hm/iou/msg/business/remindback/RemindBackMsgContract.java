@@ -21,7 +21,6 @@ public class RemindBackMsgContract {
          */
         void showMsgList(List<IRemindBackMsgItem> list);
 
-
         /**
          * 允许刷新
          */
@@ -62,19 +61,36 @@ public class RemindBackMsgContract {
          */
         void showLoadMoreEnd();
 
+        /**
+         * 修改条目
+         *
+         * @param item
+         */
+        void notifyItem(IRemindBackMsgItem item, int position);
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
+
+
+        /**
+         * 初始化
+         */
+        void init();
 
         /**
          * 获取消息列表
          */
         void getMsgList();
 
+
         /**
-         * 初始化
+         * 设置消息为已读
+         *
+         * @param position
          */
-        void init();
+        void makeSingleMsgHaveRead(IRemindBackMsgItem item, int position);
+
+        void makeTypeMsgHaveRead();
 
     }
 }

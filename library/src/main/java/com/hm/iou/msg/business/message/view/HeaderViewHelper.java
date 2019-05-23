@@ -121,7 +121,7 @@ public class HeaderViewHelper {
             viewTopDivider.setVisibility(View.GONE);
         }
 
-        if (ModuleType.HM_MSG.getTypeId().equals(moduleBean.getModuleId())) {
+        if (ModuleType.ALIPAY_MSG.getTypeId().equals(moduleBean.getModuleId())) {
             bottomDivider.setVisibility(View.GONE);
         }
 
