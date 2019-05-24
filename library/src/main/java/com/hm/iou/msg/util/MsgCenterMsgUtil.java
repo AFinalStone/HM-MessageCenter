@@ -51,6 +51,7 @@ public class MsgCenterMsgUtil {
                                 + unReadMsgNumBean.getSimilarContractNumber()
                                 + unReadMsgNumBean.getFriendMessageNumber()
                                 + unReadMsgNumBean.getWaitRepayNumber()
+                                + unReadMsgNumBean.getAlipayReceiptNumber()
                                 + IMHelper.getInstance(context).getTotalUnReadMsgCount();
                         EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));
                     }
@@ -76,6 +77,7 @@ public class MsgCenterMsgUtil {
                     + unReadMsgNumBean.getSimilarContractNumber()
                     + unReadMsgNumBean.getFriendMessageNumber()
                     + unReadMsgNumBean.getWaitRepayNumber()
+                    + unReadMsgNumBean.getAlipayReceiptNumber()
                     + IMHelper.getInstance(context).getTotalUnReadMsgCount();
         }
         EventBusHelper.postEventBusGetMsgNoReadNumSuccess(String.valueOf(numNoRead));

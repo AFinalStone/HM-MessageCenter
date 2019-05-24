@@ -13,9 +13,7 @@ import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
 import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.AddFriendReqBean;
-import com.hm.iou.msg.bean.req.ChangeAliPayEvidenceNameReqBean;
 import com.hm.iou.msg.bean.req.FriendDetailReqBean;
-import com.hm.iou.msg.bean.req.GetAliPayDetailShareUrlReqBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgDetailReqBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgListReq;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
@@ -54,7 +52,7 @@ public class MsgApi {
      * @return
      */
     public static Flowable<BaseResponse<UnReadMsgNumBean>> getUnReadMsgNum() {
-        return getService().getUnReadMsgNum()
+        return getService().getUnReadMsgNum(1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -103,6 +101,7 @@ public class MsgApi {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+
     /**
      * 获取待还消息
      *
@@ -146,46 +145,6 @@ public class MsgApi {
      */
     public static Flowable<BaseResponse<Integer>> makeTypeMsgHaveRead(MakeMsgTypeAllHaveReadReqBean reqBean) {
         return getService().makeMsgTypeAllHaveRead(reqBean)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    /**
-     * 删除支付宝回单凭证
-     *
-     * @return
-     */
-    public static Flowable<BaseResponse<Integer>> deleteAliPayEvidence(String exEvidenceId) {
-        return getService().delAliPayEvidence(exEvidenceId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    /**
-     * 修改支付宝回单凭证名称
-     *
-     * @return
-     */
-    public static Flowable<BaseResponse<Object>> changeAliPayEvidenceName(String exEvidenceId, String newName) {
-        ChangeAliPayEvidenceNameReqBean reqBean = new ChangeAliPayEvidenceNameReqBean();
-        reqBean.setExEvidenceId(exEvidenceId);
-        reqBean.setName(newName);
-        return getService().changeAliPayEvidenceName(reqBean)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    /**
-     * 获取支付宝回单详情分享链接
-     *
-     * @param contractId 合同id
-     * @return
-     */
-    public static Flowable<BaseResponse<String>> getAliPayDetailShareUrl(String contractId) {
-        GetAliPayDetailShareUrlReqBean reqBean = new GetAliPayDetailShareUrlReqBean();
-        reqBean.setId(contractId);
-        reqBean.setShareType(2);//代表凭证
-        return getService().getAliPayDetailShareUrl(reqBean)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

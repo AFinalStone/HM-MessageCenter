@@ -12,7 +12,6 @@ import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.MsgCenterConstants;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
-import com.hm.iou.msg.business.alipay.pdf.ALiPayPdfActivity;
 import com.hm.iou.router.Router;
 import com.hm.iou.uikit.HMBottomBarView;
 import com.hm.iou.uikit.HMLoadingView;
@@ -21,6 +20,12 @@ import butterknife.BindView;
 
 public class AliPayMsgDetailActivity extends BaseActivity<AliPayMsgDetailPresenter> implements AliPayMsgDetailContract.View {
 
+    public static final String EXTRA_KEY_EMAIL_ID = "email_id";
+    public static final String EXTRA_KEY_TYPE = "type";
+
+
+    protected String mEmailId;
+    protected String mType;
 
     @BindView(R2.id.bottomBar)
     HMBottomBarView mBottomBar;
@@ -45,7 +50,30 @@ public class AliPayMsgDetailActivity extends BaseActivity<AliPayMsgDetailPresent
 
     @Override
     protected void initEventAndData(Bundle bundle) {
-        mPresenter.getDetail();
+        Intent intent = getIntent();
+        mEmailId = intent.getStringExtra(EXTRA_KEY_EMAIL_ID);
+        mType = intent.getStringExtra(EXTRA_KEY_TYPE);
+        if (bundle != null) {
+            mEmailId = bundle.getString(EXTRA_KEY_EMAIL_ID);
+            mType = bundle.getString(EXTRA_KEY_TYPE);
+        }
+        try {
+            int emailId = Integer.parseInt(mEmailId);
+            int type = Integer.parseInt(mType);
+            mPresenter.getDetail(emailId, type);
+        } catch (Exception e) {
+            e.printStackTrace();
+            toastErrorMessage("数据异常");
+            finish();
+        }
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(EXTRA_KEY_EMAIL_ID, mEmailId);
+        outState.putString(EXTRA_KEY_TYPE, mType);
     }
 
     @Override
@@ -60,7 +88,13 @@ public class AliPayMsgDetailActivity extends BaseActivity<AliPayMsgDetailPresent
         mLoadingInit.showDataFail(msg, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.getDetail();
+                try {
+                    int emailId = Integer.parseInt(mEmailId);
+                    int type = Integer.parseInt(mType);
+                    mPresenter.getDetail(emailId, type);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -79,22 +113,6 @@ public class AliPayMsgDetailActivity extends BaseActivity<AliPayMsgDetailPresent
     @Override
     public void showContentText(String content) {
         mTvContent.setText(content);
-    }
-
-    @Override
-    public void showSeeBtn(final String pdfUrl) {
-        mBottomBar.setTitleVisible(true);
-        mBottomBar.updateTitle("查看");
-        mBottomBar.setTitleBackgournd(R.drawable.uikit_selector_btn_bordered_minor_small);
-        mBottomBar.setOnTitleClickListener(new HMBottomBarView.OnTitleClickListener() {
-            @Override
-            public void onClickTitle() {
-                Logger.d("查看的Pdf链接为====" + pdfUrl);
-                Intent intent = new Intent(mContext, ALiPayPdfActivity.class);
-                intent.putExtra(ALiPayPdfActivity.EXTRA_KEY_PDF_URL, "https://www.baidu.com");
-                startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -127,6 +145,24 @@ public class AliPayMsgDetailActivity extends BaseActivity<AliPayMsgDetailPresent
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+    }
+
+    @Override
+    public void showSeeBtn(final String pdfUrl, final String evidenceId, final String evidenceName) {
+        mBottomBar.setTitleVisible(true);
+        mBottomBar.updateTitle("查看");
+        mBottomBar.setTitleBackgournd(R.drawable.uikit_selector_btn_bordered_minor_small);
+        mBottomBar.setOnTitleClickListener(new HMBottomBarView.OnTitleClickListener() {
+            @Override
+            public void onClickTitle() {
+                Logger.d("查看的Pdf链接为====" + pdfUrl);
+                Router.getInstance().buildWithUrl("hmiou://m.54jietiao.com/iou/contract_evidence_pdf_detail")
+                        .withString("pdf_url", pdfUrl)
+                        .withString("evidence_id", evidenceId)
+                        .withString("evidence_name", evidenceName)
+                        .navigation(mContext);
             }
         });
     }

@@ -62,14 +62,7 @@
             android:name=".business.alipay.detail.AliPayMsgDetailActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
-        <activity
-            android:name=".business.alipay.pdf.ALiPayPdfActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
-        <activity
-            android:name=".business.alipay.pdf.ChangeAliPayPdfNameActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+
 
         <!-- 添加朋友 -->
         <activity

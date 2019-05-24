@@ -34,6 +34,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     //图片选择
     compile 'com.heima.iou:hmselectpiclocal:1.0.0'
+    //首页、借条创建、编辑、展示等相关功能
+    compile 'com.heima.iou:hmjietiaolocal:1.0.0'
     compile project(':library')
     compile 'com.android.support:multidex:1.0.0'
 }

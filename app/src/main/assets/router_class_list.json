@@ -293,7 +293,7 @@
       "aclass": "com.hm.iou.msg.business.alipay.list.view.AliPayMsgActivity"
     },
     {
-      "url": "hmiou://m.54jietiao.com/message/alipay_result",
+      "url": "hmiou://m.54jietiao.com/messge/alipay_result?email_id=*&type=*",
       "iclass": "",
       "aclass": "com.hm.iou.msg.business.alipay.detail.AliPayMsgDetailActivity"
     },
@@ -311,6 +311,13 @@
       "url": "hmiou://m.54jietiao.com/message/firend_detail?userId=*",
       "iclass": "",
       "aclass": "com.hm.iou.msg.business.friend.view.FriendDetailActivity"
+    }
+  ],
+  "messge": [
+    {
+      "url": "hmiou://m.54jietiao.com/messge/alipay_result",
+      "iclass": "",
+      "aclass": "com.hm.iou.msg.business.alipay.detail.AliPayMsgDetailActivity"
     }
   ],
   "webview": [
@@ -451,6 +458,11 @@
       "url": "hmiou://m.54jietiao.com/iou/contract_pdf_include?contract_id=*",
       "iclass": "",
       "aclass": "com.hm.iou.jietiao.business.detail.v2.PdfContractViewActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/iou/contract_evidence_pdf_detail?pdf_url=*&evidence_name=*&evidence_id=*",
+      "iclass": "",
+      "aclass": "com.hm.iou.jietiao.business.detailv2.elec.evidence.EvidencePdfActivity"
     }
   ],
   "iou_create": [

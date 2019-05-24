@@ -23,9 +23,11 @@ public class GetAliPayMsgDetailResBean {
      */
 
     private int appliyReceiptStatus;// 1、成功 2、没有发现附件 3、附件不合规 4、非关联回单 ,
+    private String name;
     private String createTime;
     private boolean deleted;
     private String justiceId;
+    private String exEvidenceId;
     private String operatorDate;
     private String operatorName;
     private String operatorShowId;

@@ -162,6 +162,11 @@ public class CacheDataUtil {
         cache.remove(MsgCenterConstants.KEY_UN_READ_MSG_NUM);
         cache.remove(MsgCenterConstants.KEY_LAST_FRIEND_APPLY_RECORD_TIME);
         cache.remove(MsgCenterConstants.KEY_LAST_FRIEND_UPDATE_TIME);
+        cache.remove(MsgCenterConstants.KEY_LAST_PULL_ALIPAY_LIST_MSG_RECORD_TIME);
+        cache.remove(MsgCenterConstants.KEY_LAST_PULL_CONTRACT_LIST_MSG_RECORD_TIME);
+        cache.remove(MsgCenterConstants.KEY_LAST_PULL_HM_LIST_MSG_RECORD_TIME);
+        cache.remove(MsgCenterConstants.KEY_LAST_PULL_SIMILARITY_CONTRACT_LIST_MSG_RECORD_TIME);
+        cache.remove(MsgCenterConstants.KEY_LAST_PULL_REMIND_BACK_LIST_MSG_RECORD_TIME);
         //合同消息缓存
         //删除相关好友数据
         FriendDbUtil.deleteAllFriendData();

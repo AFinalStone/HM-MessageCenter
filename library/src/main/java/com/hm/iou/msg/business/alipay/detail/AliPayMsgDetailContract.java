@@ -48,9 +48,11 @@ public class AliPayMsgDetailContract {
         /**
          * 显示查看按钮
          *
-         * @param pdfUrl
+         * @param pdfUrl       pdf链接
+         * @param evidenceId   凭证id
+         * @param evidenceName 凭证名称
          */
-        void showSeeBtn(String pdfUrl);
+        void showSeeBtn(String pdfUrl, String evidenceId, String evidenceName);
 
         /**
          * 显示帮助按钮
@@ -59,6 +61,7 @@ public class AliPayMsgDetailContract {
          * @param contractId
          */
         void showHelpBtn(String email, String contractId);
+
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
@@ -66,7 +69,7 @@ public class AliPayMsgDetailContract {
         /**
          * 获取详情
          */
-        void getDetail();
+        void getDetail(int emailId, int type);
 
     }
 }

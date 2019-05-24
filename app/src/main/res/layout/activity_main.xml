@@ -80,4 +80,10 @@
         android:layout_height="wrap_content"
         android:text="添加朋友" />
 
+    <Button
+        android:id="@+id/btn_open_webview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="打开浏览器" />
+
 </LinearLayout>

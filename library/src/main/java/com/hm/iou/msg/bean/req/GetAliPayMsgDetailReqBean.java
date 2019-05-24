@@ -9,7 +9,13 @@ import lombok.Data;
 @Data
 public class GetAliPayMsgDetailReqBean {
 
-    private String msgId;
-    private String msgType;
+
+    /**
+     * emailId : 0
+     * type : 0
+     */
+
+    private int emailId;
+    private int type;
 
 }

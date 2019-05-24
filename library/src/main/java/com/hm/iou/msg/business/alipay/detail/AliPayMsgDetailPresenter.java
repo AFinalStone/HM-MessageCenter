@@ -10,8 +10,13 @@ import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.GetAliPayMsgDetailResBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgDetailReqBean;
+import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * 支付宝详情页
@@ -24,12 +29,21 @@ public class AliPayMsgDetailPresenter extends MvpActivityPresenter<AliPayMsgDeta
 
     public AliPayMsgDetailPresenter(@NonNull Context context, @NonNull AliPayMsgDetailContract.View view) {
         super(context, view);
+        EventBus.getDefault().register(this);
     }
 
     @Override
-    public void getDetail() {
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void getDetail(int emailId, int type) {
         mView.showInitLoading();
         GetAliPayMsgDetailReqBean reqBean = new GetAliPayMsgDetailReqBean();
+        reqBean.setEmailId(emailId);
+        reqBean.setType(type);
         MsgApi.getAliPayMsgDetail(reqBean)
                 .compose(getProvider().<BaseResponse<GetAliPayMsgDetailResBean>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<GetAliPayMsgDetailResBean>handleResponse())
@@ -46,7 +60,7 @@ public class AliPayMsgDetailPresenter extends MvpActivityPresenter<AliPayMsgDeta
                         if (detail.isDeleted()) {
                             String deleteTime = detail.getOperatorDate();
                             if (!TextUtils.isEmpty(deleteTime)) {
-                                deleteTime = deleteTime.replaceAll("\\.", "-");
+                                deleteTime = deleteTime.substring(0, deleteTime.length() - 3).replaceAll("\\.", "-");
                             } else {
                                 deleteTime = "";
                             }
@@ -59,7 +73,7 @@ public class AliPayMsgDetailPresenter extends MvpActivityPresenter<AliPayMsgDeta
                         String email = detail.getSenderMail();
                         String time = detail.getCreateTime();
                         if (!TextUtils.isEmpty(time)) {
-                            time = time.replaceAll("\\.", "-");
+                            time = time.substring(0, time.length() - 3).replaceAll("\\.", "-");
                         } else {
                             time = "";
                         }
@@ -69,7 +83,7 @@ public class AliPayMsgDetailPresenter extends MvpActivityPresenter<AliPayMsgDeta
                         mView.showContentText(sb.toString());
                         if (1 == detail.getAppliyReceiptStatus()) {
                             mView.showTitle("关联成功", 0xFF578525);
-                            mView.showSeeBtn(detail.getPdfUrl());
+                            mView.showSeeBtn(detail.getPdfUrl(), detail.getExEvidenceId(), detail.getName());
                         } else if (2 == detail.getAppliyReceiptStatus()) {
                             mView.showTitle("没有发现附件", 0xFFBD0400);
                             mView.showHelpBtn(email, contractId);
@@ -98,4 +112,18 @@ public class AliPayMsgDetailPresenter extends MvpActivityPresenter<AliPayMsgDeta
                     }
                 });
     }
+
+    /**
+     * 存证删除成功
+     *
+     * @param commBizEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventDeleteEvidenceSuccess(CommBizEvent commBizEvent) {
+        if ("jietiao_event_delete_elec_evidence_success".equals(commBizEvent.key)) {
+            mView.closeCurrPage();
+        }
+    }
+
+
 }

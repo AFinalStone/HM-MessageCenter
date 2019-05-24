@@ -6,7 +6,6 @@ package com.hm.iou.msg;
  */
 public class MsgCenterConstants {
 
-
     /**
      * 消息中心未读消息数量
      */

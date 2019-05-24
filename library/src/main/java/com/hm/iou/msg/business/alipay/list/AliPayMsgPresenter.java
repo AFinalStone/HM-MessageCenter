@@ -15,6 +15,7 @@ import com.hm.iou.msg.bean.GetAliPayListMsgResBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgListReq;
 import com.hm.iou.msg.bean.req.MakeMsgTypeAllHaveReadReqBean;
 import com.hm.iou.msg.business.alipay.list.view.IAliPayMsgItem;
+import com.hm.iou.msg.dict.ModuleType;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
@@ -210,9 +211,9 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
 
     @Override
     public void makeTypeMsgHaveRead() {
-        //TODO
         MakeMsgTypeAllHaveReadReqBean reqBean = new MakeMsgTypeAllHaveReadReqBean();
         reqBean.setLastReqDate(CacheDataUtil.getLastAliPayListMsgPullTime(mContext));
+        reqBean.setType(ModuleType.ALIPAY_MSG.getTypeValue());
 
         MsgApi.makeTypeMsgHaveRead(reqBean)
                 .compose(getProvider().<BaseResponse<Integer>>bindUntilEvent(ActivityEvent.DESTROY))

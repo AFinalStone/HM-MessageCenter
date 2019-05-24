@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.hm.iou.base.utils.RouterUtil;
-import com.hm.iou.msg.business.alipay.detail.AliPayMsgDetailActivity;
 import com.hm.iou.msg.business.alipay.list.view.IAliPayMsgItem;
 import com.hm.iou.msg.business.friend.view.AddFriendIndexActivity;
 import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
@@ -74,8 +73,11 @@ public class NavigationHelper {
      * @param context
      */
     public static void toAliPayMsgDetailPage(Context context, IAliPayMsgItem item) {
-        Intent intent = new Intent(context, AliPayMsgDetailActivity.class);
-        context.startActivity(intent);
+        Router.getInstance()
+                .buildWithUrl(item.getIJumpUrl())
+//                .withInt("email_id", 17)
+//                .withInt("type", 401)
+                .navigation(context);
     }
 
     /**

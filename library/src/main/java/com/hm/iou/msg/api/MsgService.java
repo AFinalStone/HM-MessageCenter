@@ -13,9 +13,7 @@ import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
 import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.AddFriendReqBean;
-import com.hm.iou.msg.bean.req.ChangeAliPayEvidenceNameReqBean;
 import com.hm.iou.msg.bean.req.FriendDetailReqBean;
-import com.hm.iou.msg.bean.req.GetAliPayDetailShareUrlReqBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgDetailReqBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgListReq;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
@@ -45,7 +43,7 @@ import retrofit2.http.Query;
 public interface MsgService {
 
     @GET("/api/message/messageCenter/v2/unReadMessages")
-    Flowable<BaseResponse<UnReadMsgNumBean>> getUnReadMsgNum();
+    Flowable<BaseResponse<UnReadMsgNumBean>> getUnReadMsgNum(@Query("tab") int tab);
 
     @POST("/api/message/messageCenter/v2/getButlerMsgCache")
     Flowable<BaseResponse<GetHMMsgListResBean>> getHmMsgList(@Body GetHMMsgListReq req);
@@ -56,7 +54,7 @@ public interface MsgService {
     @POST("/api/message/messageCenter/v2/getWaitRepayMsgCache")
     Flowable<BaseResponse<GetRemindBackListMsgResBean>> getRemindBackList(@Body GetRemindBackListReq req);
 
-    @POST("/api/message/messageCenter/v2/getSimilarContractMsgCach")
+    @POST("/api/message/messageCenter/v2/getSimilarContractMsgCache")
     Flowable<BaseResponse<GetSimilarityContractListResBean>> getSimilarityContractList(@Body GetSimilarContractMessageReqBean req);
 
     @POST("/api/message/messageCenter/v2/readSingle")
@@ -68,7 +66,7 @@ public interface MsgService {
     @POST("/api/message/messageCenter/v2/getReceiptMsgCache")
     Flowable<BaseResponse<GetAliPayListMsgResBean>> getAliPayMsgList(@Body GetAliPayMsgListReq req);
 
-    @POST("/api/message/messageCenter/v2/getAliPayReceiptInfo")
+    @POST("/api/message/messageCenter/v2/getAlipayReceiptInfo")
     Flowable<BaseResponse<GetAliPayMsgDetailResBean>> getAliPayMsgDetail(@Body GetAliPayMsgDetailReqBean req);
 
     @POST("/api/news/friend/v1/getMailList")
@@ -112,14 +110,5 @@ public interface MsgService {
 
     @GET("/api/news/friend/v1/getOrRefreshToken")
     Flowable<BaseResponse<GetOrRefreshIMTokenBean>> getOrRefreshIMToken();
-
-    @GET("/api/news/friend/v1/exEvidence/del")
-    Flowable<BaseResponse<Integer>> delAliPayEvidence(@Query("exEvidenceId") String exEvidenceId);
-
-    @POST("/api/news/friend/v1/exEvidence/rename")
-    Flowable<BaseResponse<Object>> changeAliPayEvidenceName(@Body ChangeAliPayEvidenceNameReqBean reqBean);
-
-    @POST("/api/news/friend/v2/iouAndExtShare")
-    Flowable<BaseResponse<String>> getAliPayDetailShareUrl(@Body GetAliPayDetailShareUrlReqBean reqBean);
 
 }
