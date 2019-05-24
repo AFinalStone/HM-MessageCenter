@@ -150,6 +150,17 @@ public class MsgApi {
     }
 
     /**
+     * 批量收录吕约借条
+     *
+     * @return
+     */
+    public static Flowable<BaseResponse<Integer>> includeBatch(MakeMsgTypeAllHaveReadReqBean reqBean) {
+        return getService().includeBatch()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
      * 通讯录
      *
      * @return
