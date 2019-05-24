@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hm.iou.base.BaseActivity;
@@ -13,9 +14,12 @@ import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.hmmsg.HmMsgListContract;
 import com.hm.iou.msg.business.hmmsg.HmMsgListPresenter;
+import com.hm.iou.tools.StatusBarUtil;
+import com.hm.iou.uikit.HMBottomBarView;
 import com.hm.iou.uikit.HMLoadMoreView;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
+import com.hm.iou.uikit.dialog.HMAlertDialog;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -36,8 +40,11 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
     SmartRefreshLayout mRefreshLayout;
     @BindView(R2.id.loading_init)
     HMLoadingView mLoadingInit;
+    @BindView(R2.id.bottomBar)
+    HMBottomBarView mBottomBar;
 
     HmMsgListAdapter mAdapter;
+    HMAlertDialog mDialog;
 
     @Override
     protected int getLayoutId() {
@@ -51,7 +58,42 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
 
     @Override
     protected void initEventAndData(Bundle bundle) {
+        int statusBarHeight = StatusBarUtil.getStatusBarHeight(mContext);
+        if (statusBarHeight > 0) {
+            ViewGroup.LayoutParams params = mViewStatusBar.getLayoutParams();
+            params.height = statusBarHeight;
+            mViewStatusBar.setLayoutParams(params);
+        }
+        mBottomBar.setOnTitleClickListener(new HMBottomBarView.OnTitleClickListener() {
+            @Override
+            public void onClickTitle() {
+                mBottomBar.setOnTitleClickListener(new HMBottomBarView.OnTitleClickListener() {
+                    @Override
+                    public void onClickTitle() {
+                        if (mDialog == null) {
+                            mDialog = new HMAlertDialog.Builder(mContext)
+                                    .setTitle("清扫未读状态")
+                                    .setMessage("把所有“未读”消息标成“已读”状态吗？")
+                                    .setNegativeButton("取消")
+                                    .setPositiveButton("全部已读")
+                                    .setOnClickListener(new HMAlertDialog.OnClickListener() {
+                                        @Override
+                                        public void onPosClick() {
+                                            mPresenter.makeTypeMsgHaveRead();
+                                        }
 
+                                        @Override
+                                        public void onNegClick() {
+
+                                        }
+                                    })
+                                    .create();
+                        }
+                        mDialog.show();
+                    }
+                });
+            }
+        });
         mAdapter = new HmMsgListAdapter(mContext);
         mAdapter.setLoadMoreView(new HMLoadMoreView());
         mAdapter.setHeaderAndEmpty(true);

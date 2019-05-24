@@ -205,6 +205,7 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
 
     @Override
     public void includeAllSimilarity() {
+        mView.showLoadingView();
         Flowable.create(new FlowableOnSubscribe<List<String>>() {
             @Override
             public void subscribe(FlowableEmitter<List<String>> e) throws Exception {
@@ -229,6 +230,7 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                 .subscribeWith(new CommSubscriber<Integer>(mView) {
                     @Override
                     public void handleResult(Integer integer) {
+                        mView.dismissLoadingView();
                         Logger.d("疑似合同收录完毕");
                         List<SimilarityContractMsgDbData> listCache = MsgCenterDbHelper.getMsgList(SimilarityContractMsgDbData.class);
                         if (listCache != null && listCache.size() > 0) {
@@ -243,7 +245,7 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
-
+                        mView.dismissLoadingView();
                     }
                 });
     }

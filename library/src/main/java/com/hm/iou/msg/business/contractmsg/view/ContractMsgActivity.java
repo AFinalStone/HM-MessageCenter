@@ -15,9 +15,11 @@ import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.contractmsg.ContractMsgContract;
 import com.hm.iou.msg.business.contractmsg.ContractMsgPresenter;
 import com.hm.iou.tools.StatusBarUtil;
+import com.hm.iou.uikit.HMBottomBarView;
 import com.hm.iou.uikit.HMLoadMoreView;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
+import com.hm.iou.uikit.dialog.HMAlertDialog;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -38,8 +40,11 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
     SmartRefreshLayout mRefreshLayout;
     @BindView(R2.id.loading_init)
     HMLoadingView mLoadingInit;
+    @BindView(R2.id.bottomBar)
+    HMBottomBarView mBottomBar;
 
     ContractMsgListAdapter mAdapter;
+    HMAlertDialog mDialog;
 
     @Override
     protected int getLayoutId() {
@@ -59,7 +64,36 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
             params.height = statusBarHeight;
             mViewStatusBar.setLayoutParams(params);
         }
+        mBottomBar.setOnTitleClickListener(new HMBottomBarView.OnTitleClickListener() {
+            @Override
+            public void onClickTitle() {
+                mBottomBar.setOnTitleClickListener(new HMBottomBarView.OnTitleClickListener() {
+                    @Override
+                    public void onClickTitle() {
+                        if (mDialog == null) {
+                            mDialog = new HMAlertDialog.Builder(mContext)
+                                    .setTitle("清扫未读状态")
+                                    .setMessage("把所有“未读”消息标成“已读”状态吗？")
+                                    .setNegativeButton("取消")
+                                    .setPositiveButton("全部已读")
+                                    .setOnClickListener(new HMAlertDialog.OnClickListener() {
+                                        @Override
+                                        public void onPosClick() {
+                                            mPresenter.makeTypeMsgHaveRead();
+                                        }
 
+                                        @Override
+                                        public void onNegClick() {
+
+                                        }
+                                    })
+                                    .create();
+                        }
+                        mDialog.show();
+                    }
+                });
+            }
+        });
         mAdapter = new ContractMsgListAdapter(mContext);
         mAdapter.setLoadMoreView(new HMLoadMoreView());
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
