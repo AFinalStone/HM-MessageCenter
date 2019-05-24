@@ -105,7 +105,7 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
                 IAliPayMsgItem item = (IAliPayMsgItem) adapter.getItem(position);
                 if (item != null) {
                     if (!item.isHaveRead()) {
-//                        mPresenter.makeSingleMsgHaveRead(item, position);
+                        mPresenter.makeSingleMsgHaveRead(item, position);
                     }
                     NavigationHelper.toAliPayMsgDetailPage(mContext, item);
                 }

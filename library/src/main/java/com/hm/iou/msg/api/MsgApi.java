@@ -154,8 +154,8 @@ public class MsgApi {
      *
      * @return
      */
-    public static Flowable<BaseResponse<Integer>> includeBatch(MakeMsgTypeAllHaveReadReqBean reqBean) {
-        return getService().includeBatch()
+    public static Flowable<BaseResponse<Integer>> includeAllSimilarity(List<String> listId) {
+        return getService().includeBatch(listId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

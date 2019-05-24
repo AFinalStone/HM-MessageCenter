@@ -69,14 +69,14 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
             public void onClickTitle() {
                 if (mDialog == null) {
                     mDialog = new HMAlertDialog.Builder(mContext)
-                            .setTitle("清扫未读状态")
-                            .setMessage("把所有“未读”消息标成“已读”状态吗？")
+                            .setTitle("温馨提示")
+                            .setMessage("是否全部将您的疑似合同收录到首页中？")
                             .setNegativeButton("取消")
-                            .setPositiveButton("全部已读")
+                            .setPositiveButton("全部收录")
                             .setOnClickListener(new HMAlertDialog.OnClickListener() {
                                 @Override
                                 public void onPosClick() {
-                                    mPresenter.makeTypeMsgHaveRead();
+                                    mPresenter.includeAllSimilarity();
                                 }
 
                                 @Override

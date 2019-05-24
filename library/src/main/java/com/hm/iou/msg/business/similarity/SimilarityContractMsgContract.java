@@ -90,7 +90,10 @@ public class SimilarityContractMsgContract {
          */
         void makeSingleMsgHaveRead(ISimilarityContractMsgItem item, int position);
 
-        void makeTypeMsgHaveRead();
+        /**
+         * 收录所有的疑似合同
+         */
+        void includeAllSimilarity();
 
     }
 }

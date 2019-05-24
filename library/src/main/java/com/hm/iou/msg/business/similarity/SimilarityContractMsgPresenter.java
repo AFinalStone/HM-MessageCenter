@@ -13,14 +13,15 @@ import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
 import com.hm.iou.msg.bean.req.GetSimilarContractMessageReqBean;
-import com.hm.iou.msg.bean.req.MakeMsgTypeAllHaveReadReqBean;
 import com.hm.iou.msg.business.similarity.view.ISimilarityContractMsgItem;
-import com.hm.iou.msg.dict.ModuleType;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
+import org.reactivestreams.Publisher;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.BackpressureStrategy;
@@ -29,6 +30,7 @@ import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -202,17 +204,32 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
     }
 
     @Override
-    public void makeTypeMsgHaveRead() {
-        MakeMsgTypeAllHaveReadReqBean reqBean = new MakeMsgTypeAllHaveReadReqBean();
-        reqBean.setLastReqDate(CacheDataUtil.getLastAliPayListMsgPullTime(mContext));
-        reqBean.setType(ModuleType.SIMILARITY_CONTRACT_MSG.getTypeValue());
-        MsgApi.makeTypeMsgHaveRead(reqBean)
+    public void includeAllSimilarity() {
+        Flowable.create(new FlowableOnSubscribe<List<String>>() {
+            @Override
+            public void subscribe(FlowableEmitter<List<String>> e) throws Exception {
+                List<SimilarityContractMsgDbData> listCache = MsgCenterDbHelper.getMsgList(SimilarityContractMsgDbData.class);
+                List<String> listId = new ArrayList<>();
+                for (int i = 0; i < listCache.size(); i++) {
+                    listId.add(listCache.get(i).getJusticeId());
+                }
+                e.onNext(listId);
+            }
+        }, BackpressureStrategy.ERROR)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Function<List<String>, Publisher<BaseResponse<Integer>>>() {
+                    @Override
+                    public Publisher<BaseResponse<Integer>> apply(List<String> list) throws Exception {
+                        return MsgApi.includeAllSimilarity(list);
+                    }
+                })
                 .compose(getProvider().<BaseResponse<Integer>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<Integer>handleResponse())
-                .subscribeWith(new CommSubscriber<Object>(mView) {
+                .subscribeWith(new CommSubscriber<Integer>(mView) {
                     @Override
-                    public void handleResult(Object o) {
-                        Logger.d("未读消息清除完毕");
+                    public void handleResult(Integer integer) {
+                        Logger.d("疑似合同收录完毕");
                         List<SimilarityContractMsgDbData> listCache = MsgCenterDbHelper.getMsgList(SimilarityContractMsgDbData.class);
                         if (listCache != null && listCache.size() > 0) {
                             for (SimilarityContractMsgDbData dbData : listCache) {

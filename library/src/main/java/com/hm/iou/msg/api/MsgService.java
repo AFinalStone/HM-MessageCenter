@@ -111,7 +111,7 @@ public interface MsgService {
     @GET("/api/news/friend/v1/getOrRefreshToken")
     Flowable<BaseResponse<GetOrRefreshIMTokenBean>> getOrRefreshIMToken();
 
-    @POST("/api/iou/front/v2/includeBatch")
-    Flowable<BaseResponse<Integer>> includeBatch();
+    @POST("/api/iou/front/v2/moneyV2/includeBatch")
+    Flowable<BaseResponse<Integer>> includeBatch(@Body List<String> list);
 
 }
