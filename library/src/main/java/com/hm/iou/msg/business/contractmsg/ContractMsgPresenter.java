@@ -9,7 +9,6 @@ import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.msg.ContractMsgDbData;
-import com.hm.iou.database.table.msg.HmMsgDbData;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.GetContractMsgListResBean;
@@ -77,6 +76,7 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                             mView.showLoadMoreEnd();
                             mView.scrollToBottom();
                         }
+                        getUnReadMsgNum();
 
                     }
                 }, new Consumer<Throwable>() {
@@ -88,6 +88,14 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                         mView.showDataEmpty();
                     }
                 });
+    }
+
+    /**
+     * 获取未读消息数量
+     */
+    private void getUnReadMsgNum() {
+        long unReadMsg = MsgCenterDbHelper.getMsgUnReadNum(ContractMsgDbData.class);
+        mView.setBottomClearIconVisible(unReadMsg > 0);
     }
 
     @Override
@@ -188,12 +196,12 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                     @Override
                     public void handleResult(Object o) {
                         Logger.d("未读消息清除完毕");
-                        List<ContractMsgDbData> listCache = MsgCenterDbHelper.getMsgList(ContractMsgDbData.class);
-                        ContractMsgDbData dbData = listCache.get(position);
+                        ContractMsgDbData dbData = MsgCenterDbHelper.getMsgByMsgId(ContractMsgDbData.class, item.getIMsgId());
                         dbData.setHaveRead(true);
                         MsgCenterDbHelper.saveOrUpdateMsg(dbData);
                         item.setHaveRead(true);
                         mView.notifyItem(item, position);
+                        getUnReadMsgNum();
                     }
 
                     @Override
@@ -224,6 +232,8 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                         MsgCenterDbHelper.saveOrUpdateMsgList(listCache);
                         List<IContractMsgItem> resultList = DataChangeUtil.changeContractMsgDbDataToIContractMsgItem(listCache);
                         mView.showMsgList(resultList);
+                        mView.showLoadMoreEnd();
+                        mView.setBottomClearIconVisible(false);
                     }
 
                     @Override

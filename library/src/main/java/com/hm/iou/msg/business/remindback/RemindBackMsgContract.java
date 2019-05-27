@@ -67,6 +67,14 @@ public class RemindBackMsgContract {
          * @param item
          */
         void notifyItem(IRemindBackMsgItem item, int position);
+
+
+        /**
+         * 设置是否显示底部清空icon
+         *
+         * @param isShow
+         */
+        void setBottomClearIconVisible(boolean isShow);
     }
 
     public interface Presenter extends BaseContract.BasePresenter {

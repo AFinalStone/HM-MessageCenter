@@ -186,5 +186,10 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
         mAdapter.setData(position, item);
     }
 
+    @Override
+    public void setBottomClearIconVisible(boolean isShow) {
+        mBottomBar.setTitleIconVisible(isShow);
+    }
+
 
 }

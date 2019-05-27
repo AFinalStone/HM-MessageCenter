@@ -68,6 +68,14 @@ public class HmMsgListContract {
          * @param item
          */
         void notifyItem(IHmMsgItem item, int position);
+
+
+        /**
+         * 设置是否显示底部清空icon
+         *
+         * @param isShow
+         */
+        void setBottomClearIconVisible(boolean isShow);
     }
 
     public interface Presenter extends BaseContract.BasePresenter {

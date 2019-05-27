@@ -75,7 +75,7 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                             mView.showLoadMoreEnd();
                             mView.scrollToBottom();
                         }
-
+                        getUnReadMsgNum();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -88,6 +88,13 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                 });
     }
 
+    /**
+     * 获取未读消息数量
+     */
+    private void getUnReadMsgNum() {
+        long unReadMsg = MsgCenterDbHelper.getMsgUnReadNum(HmMsgDbData.class);
+        mView.setBottomClearIconVisible(unReadMsg > 0);
+    }
 
     @Override
     public void init() {
@@ -187,12 +194,12 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                     @Override
                     public void handleResult(Object o) {
                         Logger.d("未读消息清除完毕");
-                        List<HmMsgDbData> listCache = MsgCenterDbHelper.getMsgList(HmMsgDbData.class);
-                        HmMsgDbData dbData = listCache.get(position);
+                        HmMsgDbData dbData = MsgCenterDbHelper.getMsgByMsgId(HmMsgDbData.class, item.getIMsgId());
                         dbData.setHaveRead(true);
                         MsgCenterDbHelper.saveOrUpdateMsg(dbData);
                         item.setHaveRead(true);
                         mView.notifyItem(item, position);
+                        getUnReadMsgNum();
                     }
 
                     @Override
@@ -223,6 +230,8 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                         MsgCenterDbHelper.saveOrUpdateMsgList(listCache);
                         List<IHmMsgItem> resultList = DataChangeUtil.changeHmMsgDbDataToIHmMsgItem(listCache);
                         mView.showMsgList(resultList);
+                        mView.showLoadMoreEnd();
+                        mView.setBottomClearIconVisible(false);
                     }
 
                     @Override

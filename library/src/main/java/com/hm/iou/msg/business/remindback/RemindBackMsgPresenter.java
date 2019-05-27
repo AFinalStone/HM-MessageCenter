@@ -9,6 +9,7 @@ import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.msg.RemindBackMsgDbData;
+import com.hm.iou.database.table.msg.SimilarityContractMsgDbData;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.GetRemindBackListMsgResBean;
@@ -74,6 +75,7 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                             mView.showLoadMoreEnd();
                             mView.scrollToBottom();
                         }
+                        getUnReadMsgNum();
 
                     }
                 }, new Consumer<Throwable>() {
@@ -87,6 +89,13 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                 });
     }
 
+    /**
+     * 获取未读消息数量
+     */
+    private void getUnReadMsgNum() {
+        long unReadMsg = MsgCenterDbHelper.getMsgUnReadNum(RemindBackMsgDbData.class);
+        mView.setBottomClearIconVisible(unReadMsg > 0);
+    }
 
     @Override
     public void init() {
@@ -186,12 +195,12 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                     @Override
                     public void handleResult(Object o) {
                         Logger.d("未读消息清除完毕");
-                        List<RemindBackMsgDbData> listCache = MsgCenterDbHelper.getMsgList(RemindBackMsgDbData.class);
-                        RemindBackMsgDbData dbData = listCache.get(position);
+                        RemindBackMsgDbData dbData = MsgCenterDbHelper.getMsgByMsgId(RemindBackMsgDbData.class, item.getIMsgId());
                         dbData.setHaveRead(true);
                         MsgCenterDbHelper.saveOrUpdateMsg(dbData);
                         item.setHaveRead(true);
                         mView.notifyItem(item, position);
+                        getUnReadMsgNum();
                     }
 
                     @Override
@@ -205,7 +214,7 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
     public void makeTypeMsgHaveRead() {
         MakeMsgTypeAllHaveReadReqBean reqBean = new MakeMsgTypeAllHaveReadReqBean();
         reqBean.setLastReqDate(CacheDataUtil.getLasRemindBackPullTime(mContext));
-        reqBean.setType(ModuleType.SIMILARITY_CONTRACT_MSG.getTypeValue());
+        reqBean.setType(ModuleType.REMIND_BACK_MSG.getTypeValue());
         MsgApi.makeTypeMsgHaveRead(reqBean)
                 .compose(getProvider().<BaseResponse<Integer>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<Integer>handleResponse())
@@ -222,6 +231,8 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                         MsgCenterDbHelper.saveOrUpdateMsgList(listCache);
                         List<IRemindBackMsgItem> resultList = DataChangeUtil.changeRemindBackMsgDbDataToIRemindBackMsgItem(listCache);
                         mView.showMsgList(resultList);
+                        mView.showLoadMoreEnd();
+                        mView.setBottomClearIconVisible(false);
                     }
 
                     @Override

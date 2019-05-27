@@ -76,7 +76,7 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                             mView.showLoadMoreEnd();
                             mView.scrollToBottom();
                         }
-
+                        getUnReadMsgNum();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -87,6 +87,14 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                         mView.showDataEmpty();
                     }
                 });
+    }
+
+    /**
+     * 获取未读消息数量
+     */
+    private void getUnReadMsgNum() {
+        long unReadMsg = MsgCenterDbHelper.getMsgUnReadNum(SimilarityContractMsgDbData.class);
+        mView.setBottomClearIconVisible(unReadMsg > 0);
     }
 
 
@@ -188,12 +196,12 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                     @Override
                     public void handleResult(Object o) {
                         Logger.d("未读消息清除完毕");
-                        List<SimilarityContractMsgDbData> listCache = MsgCenterDbHelper.getMsgList(SimilarityContractMsgDbData.class);
-                        SimilarityContractMsgDbData dbData = listCache.get(position);
+                        SimilarityContractMsgDbData dbData = MsgCenterDbHelper.getMsgByMsgId(SimilarityContractMsgDbData.class, item.getIMsgId());
                         dbData.setHaveRead(true);
                         MsgCenterDbHelper.saveOrUpdateMsg(dbData);
                         item.setHaveRead(true);
                         mView.notifyItem(item, position);
+                        getUnReadMsgNum();
                     }
 
                     @Override
@@ -241,6 +249,8 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                         MsgCenterDbHelper.saveOrUpdateMsgList(listCache);
                         List<ISimilarityContractMsgItem> resultList = DataChangeUtil.changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(listCache);
                         mView.showMsgList(resultList);
+                        mView.showLoadMoreEnd();
+                        mView.setBottomClearIconVisible(false);
                     }
 
                     @Override

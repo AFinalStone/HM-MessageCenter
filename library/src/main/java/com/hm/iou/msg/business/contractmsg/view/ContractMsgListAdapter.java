@@ -30,5 +30,10 @@ public class ContractMsgListAdapter extends BaseQuickAdapter<IContractMsgItem, B
         helper.setText(R.id.tv_content, item.getIContent());
         //点击事件
         helper.addOnClickListener(R.id.rl_content);
+        if (item.isHaveRead()) {
+            helper.setAlpha(R.id.rl_content, 0.618f);
+        } else {
+            helper.setAlpha(R.id.rl_content, 1f);
+        }
     }
 }

@@ -28,7 +28,11 @@ public class HmMsgListAdapter extends BaseMultiItemQuickAdapter<IHmMsgItem, Base
         helper.setText(R.id.tv_title, item.getMsgTitle());
         String time = item.getMsgTime();
         helper.setText(R.id.tv_time, time);
-
+        if (item.isHaveRead()) {
+            helper.setAlpha(R.id.ll_content, 0.618f);
+        } else {
+            helper.setAlpha(R.id.ll_content, 1f);
+        }
         if (helper.getItemViewType() == IHmMsgItem.TYPE_ADVERTISEMENT_NEWS_SPORT) {
             String msgImage = item.getMsgImage();
             if (TextUtils.isEmpty(msgImage)) {
@@ -38,7 +42,7 @@ public class HmMsgListAdapter extends BaseMultiItemQuickAdapter<IHmMsgItem, Base
                         R.drawable.uikit_bg_pic_loading_place, R.mipmap.msgcenter_icon_load_image_error_default);
             }
             helper.setImageResource(R.id.iv_icon, item.getMsgIcon());
-            helper.addOnClickListener(R.id.ll_adOrSport);
+            helper.addOnClickListener(R.id.ll_content);
             return;
         }
         if (helper.getItemViewType() == IHmMsgItem.TYPE_COMMUNIQUE) {

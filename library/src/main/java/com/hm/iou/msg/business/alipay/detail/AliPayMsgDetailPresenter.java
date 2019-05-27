@@ -18,6 +18,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import io.reactivex.disposables.Disposable;
+
 /**
  * 支付宝详情页
  *
@@ -26,6 +28,8 @@ import org.greenrobot.eventbus.ThreadMode;
  */
 public class AliPayMsgDetailPresenter extends MvpActivityPresenter<AliPayMsgDetailContract.View> implements AliPayMsgDetailContract.Presenter {
 
+    GetAliPayMsgDetailReqBean mReqBean;
+    private Disposable mDisposable;
 
     public AliPayMsgDetailPresenter(@NonNull Context context, @NonNull AliPayMsgDetailContract.View view) {
         super(context, view);
@@ -41,10 +45,17 @@ public class AliPayMsgDetailPresenter extends MvpActivityPresenter<AliPayMsgDeta
     @Override
     public void getDetail(int emailId, int type) {
         mView.showInitLoading();
-        GetAliPayMsgDetailReqBean reqBean = new GetAliPayMsgDetailReqBean();
-        reqBean.setEmailId(emailId);
-        reqBean.setType(type);
-        MsgApi.getAliPayMsgDetail(reqBean)
+        mReqBean = new GetAliPayMsgDetailReqBean();
+        mReqBean.setEmailId(emailId);
+        mReqBean.setType(type);
+        getMsg();
+    }
+
+    private void getMsg() {
+        if (mDisposable != null && !mDisposable.isDisposed()) {
+            mDisposable.dispose();
+        }
+        mDisposable = MsgApi.getAliPayMsgDetail(mReqBean)
                 .compose(getProvider().<BaseResponse<GetAliPayMsgDetailResBean>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<GetAliPayMsgDetailResBean>handleResponse())
                 .subscribeWith(new CommSubscriber<GetAliPayMsgDetailResBean>(mView) {
@@ -125,5 +136,15 @@ public class AliPayMsgDetailPresenter extends MvpActivityPresenter<AliPayMsgDeta
         }
     }
 
-
+    /**
+     * 存证名称修改
+     *
+     * @param commBizEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventChangeEvidenceName(CommBizEvent commBizEvent) {
+        if ("jietiao_event_change_elec_evidence_name".equals(commBizEvent.key)) {
+            getMsg();
+        }
+    }
 }

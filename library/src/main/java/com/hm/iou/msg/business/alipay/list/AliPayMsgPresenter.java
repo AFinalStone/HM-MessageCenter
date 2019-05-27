@@ -9,6 +9,7 @@ import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.msg.AliPayMsgDbData;
+import com.hm.iou.database.table.msg.ContractMsgDbData;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.GetAliPayListMsgResBean;
@@ -74,7 +75,7 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
                             mView.showLoadMoreEnd();
                             mView.scrollToBottom();
                         }
-
+                        getUnReadMsgNum();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -86,6 +87,15 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
                     }
                 });
     }
+
+    /**
+     * 获取未读消息数量
+     */
+    private void getUnReadMsgNum() {
+        long unReadMsg = MsgCenterDbHelper.getMsgUnReadNum(AliPayMsgDbData.class);
+        mView.setBottomClearIconVisible(unReadMsg > 0);
+    }
+
 
     @Override
     public void init() {
@@ -194,12 +204,12 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
                     @Override
                     public void handleResult(Object o) {
                         Logger.d("未读消息清除完毕");
-                        List<AliPayMsgDbData> listCache = MsgCenterDbHelper.getMsgList(AliPayMsgDbData.class);
-                        AliPayMsgDbData dbData = listCache.get(position);
+                        AliPayMsgDbData dbData = MsgCenterDbHelper.getMsgByMsgId(AliPayMsgDbData.class, item.getIMsgId());
                         dbData.setHaveRead(true);
                         MsgCenterDbHelper.saveOrUpdateMsg(dbData);
                         item.setHaveRead(true);
                         mView.notifyItem(item, position);
+                        getUnReadMsgNum();
                     }
 
                     @Override
@@ -231,6 +241,8 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
                         MsgCenterDbHelper.saveOrUpdateMsgList(listCache);
                         List<IAliPayMsgItem> resultList = DataChangeUtil.changeAliPayDbDataToIAliPayItem(listCache);
                         mView.showMsgList(resultList);
+                        mView.showLoadMoreEnd();
+                        mView.setBottomClearIconVisible(false);
                     }
 
                     @Override

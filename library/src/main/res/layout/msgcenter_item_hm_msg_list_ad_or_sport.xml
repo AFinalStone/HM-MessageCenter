@@ -17,7 +17,7 @@
         android:textColor="@color/uikit_text_hint" />
 
     <LinearLayout
-        android:id="@+id/ll_adOrSport"
+        android:id="@+id/ll_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dip"

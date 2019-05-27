@@ -103,6 +103,9 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 IContractMsgItem item = (IContractMsgItem) adapter.getItem(position);
                 if (item != null) {
+                    if (!item.isHaveRead()) {
+                        mPresenter.makeSingleMsgHaveRead(item, position);
+                    }
                     NavigationHelper.toMsgDetailPage(mContext, item.getIJustUrl());
                 }
             }
@@ -179,5 +182,10 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
     @Override
     public void notifyItem(IContractMsgItem item, int position) {
         mAdapter.setData(position, item);
+    }
+
+    @Override
+    public void setBottomClearIconVisible(boolean isShow) {
+        mBottomBar.setTitleIconVisible(isShow);
     }
 }

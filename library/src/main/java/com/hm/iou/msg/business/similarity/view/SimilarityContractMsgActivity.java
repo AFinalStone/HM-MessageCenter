@@ -180,5 +180,10 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
         mAdapter.setData(position, item);
     }
 
+    @Override
+    public void setBottomClearIconVisible(boolean isShow) {
+        mBottomBar.setTitleIconVisible(isShow);
+    }
+
 
 }

@@ -102,9 +102,14 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                if (R.id.ll_adOrSport == view.getId()) {
+                if (R.id.ll_content == view.getId()) {
                     IHmMsgItem item = (IHmMsgItem) adapter.getItem(position);
-                    NavigationHelper.toHMMsgDetail(mContext, item.getMsgDetailLinkUrl(), item.getMsgAutoId(), item.getHMMsgType());
+                    if (item != null) {
+                        if (!item.isHaveRead()) {
+                            mPresenter.makeSingleMsgHaveRead(item, position);
+                        }
+                        NavigationHelper.toHMMsgDetail(mContext, item.getMsgDetailLinkUrl(), item.getMsgAutoId(), item.getHMMsgType());
+                    }
                 }
             }
         });
@@ -181,6 +186,11 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
     @Override
     public void notifyItem(IHmMsgItem item, int position) {
         mAdapter.setData(position, item);
+    }
+
+    @Override
+    public void setBottomClearIconVisible(boolean isShow) {
+        mBottomBar.setTitleIconVisible(isShow);
     }
 
 }

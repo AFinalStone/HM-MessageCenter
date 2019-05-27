@@ -104,6 +104,9 @@ public class RemindBackMsgActivity extends BaseActivity<RemindBackMsgPresenter> 
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 IRemindBackMsgItem item = (IRemindBackMsgItem) adapter.getItem(position);
                 if (item != null) {
+                    if (!item.isHaveRead()) {
+                        mPresenter.makeSingleMsgHaveRead(item, position);
+                    }
                     NavigationHelper.toMsgDetailPage(mContext, item.getIJustUrl());
                 }
             }
@@ -181,6 +184,11 @@ public class RemindBackMsgActivity extends BaseActivity<RemindBackMsgPresenter> 
     @Override
     public void notifyItem(IRemindBackMsgItem item, int position) {
         mAdapter.setData(position, item);
+    }
+
+    @Override
+    public void setBottomClearIconVisible(boolean isShow) {
+        mBottomBar.setTitleIconVisible(isShow);
     }
 
 }
