@@ -70,7 +70,7 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
                 if (mDialog == null) {
                     mDialog = new HMAlertDialog.Builder(mContext)
                             .setTitle("温馨提示")
-                            .setMessage("是否全部将您的疑似合同收录到首页中？")
+                            .setMessage("是否将全部疑似合同收录至首页中？")
                             .setNegativeButton("取消")
                             .setPositiveButton("全部收录")
                             .setOnClickListener(new HMAlertDialog.OnClickListener() {
