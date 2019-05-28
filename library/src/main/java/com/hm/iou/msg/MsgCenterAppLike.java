@@ -2,16 +2,23 @@ package com.hm.iou.msg;
 
 import android.content.Context;
 
+import com.hm.iou.database.IouDbHelper;
+import com.hm.iou.database.MsgCenterDbHelper;
+import com.hm.iou.database.table.IouData;
+import com.hm.iou.database.table.msg.SimilarityContractMsgDbData;
 import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.MsgCenterMsgUtil;
 import com.hm.iou.sharedata.event.CommBizEvent;
+import com.hm.iou.sharedata.event.IouDeleteEvent;
 import com.hm.iou.sharedata.event.LoginSuccEvent;
 import com.hm.iou.sharedata.event.LogoutEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 
 /**
@@ -91,6 +98,29 @@ public class MsgCenterAppLike {
     public void onEventLogout(LogoutEvent event) {
         CacheDataUtil.clearAllCache(mContext);
         IMHelper.getInstance(mContext).logout();
+    }
+
+    /**
+     * 用户隐藏了借条，这个时候把疑似合同中已经读取的消息，且被用户删除了的疑似合同消息删除掉
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onEventDelete(IouDeleteEvent event) {
+        List<SimilarityContractMsgDbData> result = MsgCenterDbHelper.getMsgList(SimilarityContractMsgDbData.class, "is_have_read = ?", "1");
+        if (result != null && !result.isEmpty()) {
+            for (int i = 0; i < result.size(); i++) {
+                SimilarityContractMsgDbData item = result.get(i);
+                if (item != null) {
+                    String justiceId = item.getJusticeId();
+                    IouData iouData = IouDbHelper.queryIOUByJusticeId(justiceId);
+                    if (iouData == null) {
+                        MsgCenterDbHelper.deleteSimilarityContractByJustId(justiceId);
+                    }
+                }
+            }
+        }
+
     }
 
 
