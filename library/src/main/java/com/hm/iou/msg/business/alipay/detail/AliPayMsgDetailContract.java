@@ -62,6 +62,10 @@ public class AliPayMsgDetailContract {
          */
         void showHelpBtn(String email, String contractId);
 
+        /**
+         * 显示名称
+         */
+        void showAliPayMsgName(String aliPayMsgName);
     }
 
     public interface Presenter extends BaseContract.BasePresenter {

@@ -12,6 +12,7 @@ import com.hm.iou.msg.bean.GetAliPayMsgDetailResBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgDetailReqBean;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.model.BaseResponse;
+import com.hm.iou.tools.StringUtil;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -66,6 +67,8 @@ public class AliPayMsgDetailPresenter extends MvpActivityPresenter<AliPayMsgDeta
                             mView.closeCurrPage();
                             return;
                         }
+                        String name = detail.getName();
+                        mView.showAliPayMsgName(StringUtil.getUnnullString(name));
                         StringBuffer sb = new StringBuffer();
                         String contractId = detail.getJusticeId();
                         if (detail.isDeleted()) {

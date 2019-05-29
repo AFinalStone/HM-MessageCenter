@@ -183,4 +183,20 @@ public class TimeUtil {
         return "";
     }
 
+    /**
+     * 格式化疑似合合同消息创建时间
+     *
+     * @param createTime
+     * @return
+     */
+    public static String formatSimilarityContractStartTime(String createTime) {
+        try {
+            long time = getYmdfFormat().parse(createTime).getTime();
+            return formatChatListTime(time);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return createTime;
+    }
+
 }

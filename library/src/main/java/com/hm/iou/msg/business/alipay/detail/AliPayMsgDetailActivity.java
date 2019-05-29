@@ -138,6 +138,11 @@ public class AliPayMsgDetailActivity extends BaseActivity<AliPayMsgDetailPresent
     }
 
     @Override
+    public void showAliPayMsgName(String aliPayMsgName) {
+        mBottomBar.updateBackText(aliPayMsgName);
+    }
+
+    @Override
     public void showFileHaveDelete(String content) {
         View view = mViewStub.inflate();
         ((TextView) view.findViewById(R.id.tv_content)).setText(content);

@@ -20,16 +20,13 @@ public class SimilarityContractListAdapter extends BaseQuickAdapter<ISimilarityC
 
     @Override
     protected void convert(BaseViewHolder helper, ISimilarityContractMsgItem item) {
+        helper.setText(R.id.tv_time, item.getITime());
         helper.setText(R.id.tv_title, item.getITitle());
         helper.setText(R.id.tv_lender_name, item.getILenderName());
         helper.setText(R.id.tv_borrower_name, item.getIBorrowerName());
         helper.setText(R.id.tv_back_time, item.getIBackTime());
         helper.setText(R.id.tv_back_type, item.getIBackType());
 
-        helper.setGone(R.id.iv_iou_tag, item.showStatusTag());
-        if (item.showStatusTag()) {
-            helper.setImageResource(R.id.iv_iou_tag, item.getStatusTagBg());
-        }
         //点击事件
         helper.addOnClickListener(R.id.rl_content);
         if (item.isHaveRead()) {

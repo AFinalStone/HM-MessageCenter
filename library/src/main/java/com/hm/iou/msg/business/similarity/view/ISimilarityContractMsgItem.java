@@ -28,6 +28,13 @@ public interface ISimilarityContractMsgItem {
     String getIBorrowerName();
 
     /**
+     * 时间
+     *
+     * @return
+     */
+    String getITime();
+
+    /**
      * 归还时间
      *
      * @return
@@ -47,20 +54,6 @@ public interface ISimilarityContractMsgItem {
      * @return
      */
     String getIJustUrl();
-
-    /**
-     * 是否显示"待确认"、"已失效"标记
-     *
-     * @return
-     */
-    boolean showStatusTag();
-
-    /**
-     * 显示"待确认"、"已失效"标记的背景图片
-     *
-     * @return
-     */
-    int getStatusTagBg();
 
     /**
      * 消息id

@@ -7,11 +7,16 @@
     android:focusable="true"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingBottom="6dp"
     android:paddingEnd="12dp"
-    android:paddingStart="12dp"
-    android:paddingTop="6dp">
+    android:paddingStart="12dp">
 
+    <TextView
+        android:id="@+id/tv_time"
+        style="@style/UikitTextView.Auxiliary.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:textColor="@color/uikit_text_hint"
+        tools:text="星期六 上午 10:00" />
 
     <RelativeLayout
         android:id="@+id/rl_content"
@@ -38,12 +43,6 @@
                 android:src="@mipmap/jietiao_elec_borrow_placeholder" />
 
         </RelativeLayout>
-
-        <ImageView
-            android:id="@+id/iv_iou_tag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/jietiao_ic_tag_new" />
 
         <TextView
             android:id="@+id/tv_title"
