@@ -98,7 +98,7 @@ public class SimilarityContractMsgContract {
         void makeSingleMsgHaveRead(ISimilarityContractMsgItem item, int position);
 
         /**
-         * 收录所有的疑似合同
+         * 收录所有的疑似合同，并把所有疑似合同消息设置为已读
          */
         void includeAllSimilarity();
 

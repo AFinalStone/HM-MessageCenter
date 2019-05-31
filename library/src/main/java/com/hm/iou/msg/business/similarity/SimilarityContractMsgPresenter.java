@@ -13,7 +13,9 @@ import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
 import com.hm.iou.msg.bean.req.GetSimilarContractMessageReqBean;
+import com.hm.iou.msg.bean.req.MakeMsgTypeAllHaveReadReqBean;
 import com.hm.iou.msg.business.similarity.view.ISimilarityContractMsgItem;
+import com.hm.iou.msg.dict.ModuleType;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
@@ -233,13 +235,22 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                         return MsgApi.includeAllSimilarity(list);
                     }
                 })
+                .flatMap(new Function<BaseResponse<Integer>, Publisher<BaseResponse<Integer>>>() {
+                    @Override
+                    public Publisher<BaseResponse<Integer>> apply(BaseResponse<Integer> integerBaseResponse) throws Exception {
+                        MakeMsgTypeAllHaveReadReqBean reqBean = new MakeMsgTypeAllHaveReadReqBean();
+                        reqBean.setLastReqDate(CacheDataUtil.getLastAliPayListMsgPullTime(mContext));
+                        reqBean.setType(ModuleType.SIMILARITY_CONTRACT_MSG.getTypeValue());
+                        return MsgApi.makeTypeMsgHaveRead(reqBean);
+                    }
+                })
                 .compose(getProvider().<BaseResponse<Integer>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<Integer>handleResponse())
                 .subscribeWith(new CommSubscriber<Integer>(mView) {
                     @Override
                     public void handleResult(Integer integer) {
                         mView.dismissLoadingView();
-                        Logger.d("疑似合同收录完毕");
+                        Logger.d("未读消息清除完毕");
                         List<SimilarityContractMsgDbData> listCache = MsgCenterDbHelper.getMsgList(SimilarityContractMsgDbData.class);
                         if (listCache != null && listCache.size() > 0) {
                             for (SimilarityContractMsgDbData dbData : listCache) {
@@ -259,5 +270,4 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                     }
                 });
     }
-
 }

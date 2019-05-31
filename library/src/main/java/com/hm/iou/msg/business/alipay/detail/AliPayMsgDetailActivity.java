@@ -118,8 +118,8 @@ public class AliPayMsgDetailActivity extends BaseActivity<AliPayMsgDetailPresent
     @Override
     public void showHelpBtn(final String email, final String contractId) {
         mBottomBar.setTitleVisible(true);
-        mBottomBar.updateTitle("帮助");
-        mBottomBar.setTitleBackgournd(R.drawable.uikit_selector_btn_main_small);
+        mBottomBar.updateTitle("  帮助  ");
+        mBottomBar.setTitleBackgournd(R.drawable.uikit_selector_btn_bordered_minor_small);
         mBottomBar.setOnTitleClickListener(new HMBottomBarView.OnTitleClickListener() {
             @Override
             public void onClickTitle() {
@@ -157,8 +157,8 @@ public class AliPayMsgDetailActivity extends BaseActivity<AliPayMsgDetailPresent
     @Override
     public void showSeeBtn(final String pdfUrl, final String evidenceId, final String evidenceName) {
         mBottomBar.setTitleVisible(true);
-        mBottomBar.updateTitle("查看");
-        mBottomBar.setTitleBackgournd(R.drawable.uikit_selector_btn_bordered_minor_small);
+        mBottomBar.updateTitle("  查看  ");
+        mBottomBar.setTitleBackgournd(R.drawable.uikit_selector_btn_main_small);
         mBottomBar.setOnTitleClickListener(new HMBottomBarView.OnTitleClickListener() {
             @Override
             public void onClickTitle() {

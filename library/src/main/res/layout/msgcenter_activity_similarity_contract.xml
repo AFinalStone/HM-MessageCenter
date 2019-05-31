@@ -55,6 +55,8 @@
         android:layout_width="match_parent"
         android:layout_height="50dip"
         app:bottomBackText="疑似合同"
-        app:bottomTitleIcon="@mipmap/msgcenter_ic_msg_list_alipay_include" />
+        app:bottomTitleIcon="@mipmap/msgcenter_ic_msg_list_alipay_include"
+        app:bottomTitleIconIsShow="false"
+        app:bottomTitleIconWidth="55dip" />
 </LinearLayout>
 

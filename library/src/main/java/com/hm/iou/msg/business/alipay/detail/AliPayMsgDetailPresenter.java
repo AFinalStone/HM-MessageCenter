@@ -12,7 +12,6 @@ import com.hm.iou.msg.bean.GetAliPayMsgDetailResBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgDetailReqBean;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.model.BaseResponse;
-import com.hm.iou.tools.StringUtil;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -68,18 +67,19 @@ public class AliPayMsgDetailPresenter extends MvpActivityPresenter<AliPayMsgDeta
                             return;
                         }
                         String name = detail.getName();
-                        mView.showAliPayMsgName(StringUtil.getUnnullString(name));
+                        mView.showAliPayMsgName(TextUtils.isEmpty(name) ? "支付宝回单" : name);
                         StringBuffer sb = new StringBuffer();
                         String contractId = detail.getJusticeId();
                         if (detail.isDeleted()) {
                             String deleteTime = detail.getOperatorDate();
                             if (!TextUtils.isEmpty(deleteTime)) {
-                                deleteTime = deleteTime.substring(0, deleteTime.length() - 3).replaceAll("\\.", "-");
+                                deleteTime = deleteTime.substring(0, deleteTime.length() - 3).replaceAll("-", "\\.");
                             } else {
                                 deleteTime = "";
                             }
                             sb.append("删除时间：").append(deleteTime)
                                     .append("\n用户名称：").append(detail.getOperatorName())
+                                    .append("（ID：").append(detail.getOperatorShowId()).append("）")
                                     .append("\n关联合同：").append(contractId);
                             mView.showFileHaveDelete(sb.toString());
                             return;
@@ -87,7 +87,7 @@ public class AliPayMsgDetailPresenter extends MvpActivityPresenter<AliPayMsgDeta
                         String email = detail.getSenderMail();
                         String time = detail.getCreateTime();
                         if (!TextUtils.isEmpty(time)) {
-                            time = time.substring(0, time.length() - 3).replaceAll("\\.", "-");
+                            time = time.substring(0, time.length() - 3).replaceAll("-", "\\.");
                         } else {
                             time = "";
                         }

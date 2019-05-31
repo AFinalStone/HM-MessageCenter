@@ -9,24 +9,25 @@
 
 
     <ImageView
-        android:layout_width="137dp"
-        android:layout_height="198dp"
-        android:layout_marginTop="30dp"
-        android:src="@mipmap/msgcenter_ic_alipay_msg_detail" />
+        android:layout_width="115dp"
+        android:layout_height="103dp"
+        android:layout_marginTop="60dp"
+        android:src="@mipmap/msgcenter_ic_warn" />
 
     <TextView
         android:id="@+id/tv_title"
         style="@style/UikitTextView"
         android:layout_marginTop="25dp"
         android:text="文件已被删除"
-        android:textColor="#578525"
-        android:textSize="@dimen/textFontSize_30" />
+        android:textColor="@color/uikit_text_sub_content"
+        android:textSize="@dimen/textFontSize_24" />
 
     <TextView
         android:id="@+id/tv_content"
         style="@style/UikitTextView.Auxiliary.Normal"
         android:layout_marginTop="25dp"
         android:lineSpacingMultiplier="1.3"
+        android:textIsSelectable="true"
         tools:text="删除时间：2018.10.23 14:45 \n用户名称：张先生（ID：234563） \n关联合同：283847466377373828" />
 
     <View
