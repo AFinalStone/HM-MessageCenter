@@ -83,5 +83,18 @@ public interface ISimilarityContractMsgItem {
      */
     void setHaveRead(boolean isHaveRead);
 
+    /**
+     * 是否显示时间
+     *
+     * @return
+     */
+    boolean ifIShowTime();
+
+    /**
+     * 设置是否显示时间
+     *
+     * @return
+     */
+    void setIfIShowTime(boolean isShowTime);
 
 }

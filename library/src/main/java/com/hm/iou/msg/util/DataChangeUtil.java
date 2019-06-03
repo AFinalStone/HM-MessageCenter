@@ -282,9 +282,12 @@ public class DataChangeUtil {
     public static List<ISimilarityContractMsgItem> changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(List<SimilarityContractMsgDbData> list) {
         List<ISimilarityContractMsgItem> resultList = new ArrayList<>();
         if (list != null) {
-            for (final SimilarityContractMsgDbData dbData : list) {
-                ISimilarityContractMsgItem msgItem = new ISimilarityContractMsgItem() {
+            for (int i = 0; i < list.size(); i++) {
+                final SimilarityContractMsgDbData dbData = list.get(i);
+                final String time = TimeUtil.formatSimilarityContractStartTime(dbData.getCreateTime());
+                ISimilarityContractMsgItem iMsgItem = new ISimilarityContractMsgItem() {
 
+                    private boolean mIfShowTime = true;
                     private boolean mIsHaveRead = false;
 
                     @Override
@@ -304,7 +307,7 @@ public class DataChangeUtil {
 
                     @Override
                     public String getITime() {
-                        return TimeUtil.formatSimilarityContractStartTime(dbData.getCreateTime());
+                        return time;
                     }
 
                     @Override
@@ -343,9 +346,35 @@ public class DataChangeUtil {
                         mIsHaveRead = isHaveRead;
                     }
 
+                    @Override
+                    public boolean ifIShowTime() {
+                        return mIfShowTime;
+                    }
+
+                    @Override
+                    public void setIfIShowTime(boolean isShowTime) {
+                        mIfShowTime = isShowTime;
+                    }
+
                 };
-                msgItem.setHaveRead(dbData.isHaveRead());
-                resultList.add(msgItem);
+                try {
+                    if (i > 0) {
+                        SimilarityContractMsgDbData previewMsgItem = list.get(i - 1);
+                        String strPreviewTime = previewMsgItem.getCreateTime();
+                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                        long previewTime = df.parse(strPreviewTime).getTime();
+                        long currentTime = df.parse(time).getTime();
+                        if (currentTime - previewTime > 300000) {
+                            iMsgItem.setIfIShowTime(true);
+                        } else {
+                            iMsgItem.setIfIShowTime(false);
+                        }
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                iMsgItem.setHaveRead(dbData.isHaveRead());
+                resultList.add(iMsgItem);
             }
         }
 

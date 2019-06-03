@@ -21,6 +21,7 @@ public class SimilarityContractListAdapter extends BaseQuickAdapter<ISimilarityC
     @Override
     protected void convert(BaseViewHolder helper, ISimilarityContractMsgItem item) {
         helper.setText(R.id.tv_time, item.getITime());
+        helper.setGone(R.id.tv_time, item.ifIShowTime());
         helper.setText(R.id.tv_title, item.getITitle());
         helper.setText(R.id.tv_lender_name, item.getILenderName());
         helper.setText(R.id.tv_borrower_name, item.getIBorrowerName());

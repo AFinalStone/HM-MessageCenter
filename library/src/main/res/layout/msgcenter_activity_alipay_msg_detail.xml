@@ -34,7 +34,7 @@
             <ImageView
                 android:layout_width="137dp"
                 android:layout_height="198dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="60dp"
                 android:src="@mipmap/msgcenter_ic_alipay_msg_detail" />
 
             <TextView

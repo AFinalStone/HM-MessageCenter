@@ -7,8 +7,10 @@
     android:focusable="true"
     android:gravity="center"
     android:orientation="vertical"
+    android:paddingBottom="3dp"
     android:paddingEnd="12dp"
-    android:paddingStart="12dp">
+    android:paddingStart="12dp"
+    android:paddingTop="3dp">
 
     <TextView
         android:id="@+id/tv_time"
