@@ -214,7 +214,7 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
     @Override
     public void makeTypeMsgHaveRead() {
         MakeMsgTypeAllHaveReadReqBean reqBean = new MakeMsgTypeAllHaveReadReqBean();
-        reqBean.setLastReqDate(CacheDataUtil.getLastAliPayListMsgPullTime(mContext));
+        reqBean.setLastReqDate(CacheDataUtil.getLastContractMsgPullTime(mContext));
         reqBean.setType(ModuleType.CONTRACT_MSG.getTypeValue());
         MsgApi.makeTypeMsgHaveRead(reqBean)
                 .compose(getProvider().<BaseResponse<Integer>>bindUntilEvent(ActivityEvent.DESTROY))

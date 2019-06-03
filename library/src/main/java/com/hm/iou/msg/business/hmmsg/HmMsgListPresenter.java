@@ -212,7 +212,7 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
     @Override
     public void makeTypeMsgHaveRead() {
         MakeMsgTypeAllHaveReadReqBean reqBean = new MakeMsgTypeAllHaveReadReqBean();
-        reqBean.setLastReqDate(CacheDataUtil.getLastAliPayListMsgPullTime(mContext));
+        reqBean.setLastReqDate(CacheDataUtil.getLastHMListMsgPullTime(mContext));
         reqBean.setType(ModuleType.HM_MSG.getTypeValue());
         MsgApi.makeTypeMsgHaveRead(reqBean)
                 .compose(getProvider().<BaseResponse<Integer>>bindUntilEvent(ActivityEvent.DESTROY))

@@ -22,6 +22,7 @@ public class RemindBackListAdapter extends BaseQuickAdapter<IRemindBackMsgItem, 
     protected void convert(BaseViewHolder helper, IRemindBackMsgItem item) {
         //时间
         helper.setText(R.id.tv_time, item.getITime());
+        helper.setGone(R.id.tv_time, item.ifIShowTime());
         //标题
         helper.setText(R.id.tv_title, item.getITitle());
         //还款/付款时间
@@ -32,9 +33,15 @@ public class RemindBackListAdapter extends BaseQuickAdapter<IRemindBackMsgItem, 
         helper.addOnClickListener(R.id.rl_content);
 
         if (item.isHaveRead()) {
-            helper.setAlpha(R.id.rl_content, 0.618f);
+            helper.setAlpha(R.id.iv_logo, 0.618f);
+            helper.setTextColor(R.id.tv_title, mContext.getResources().getColor(R.color.uikit_text_auxiliary));
+            helper.setTextColor(R.id.tv_back_money_time, mContext.getResources().getColor(R.color.uikit_text_hint));
+            helper.setTextColor(R.id.tv_back_money, mContext.getResources().getColor(R.color.uikit_text_hint));
         } else {
-            helper.setAlpha(R.id.rl_content, 1f);
+            helper.setAlpha(R.id.iv_logo, 1.0f);
+            helper.setTextColor(R.id.tv_title, mContext.getResources().getColor(R.color.uikit_text_main_content));
+            helper.setTextColor(R.id.tv_back_money_time, mContext.getResources().getColor(R.color.uikit_text_auxiliary));
+            helper.setTextColor(R.id.tv_back_money, mContext.getResources().getColor(R.color.uikit_text_auxiliary));
         }
     }
 

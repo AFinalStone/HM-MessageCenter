@@ -28,13 +28,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/bottomBar"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
                 android:layout_width="137dp"
                 android:layout_height="198dp"
-                android:layout_marginTop="60dp"
                 android:src="@mipmap/msgcenter_ic_alipay_msg_detail" />
 
             <TextView

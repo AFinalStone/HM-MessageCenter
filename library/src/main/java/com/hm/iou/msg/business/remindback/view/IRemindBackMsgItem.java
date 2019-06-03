@@ -21,6 +21,20 @@ public interface IRemindBackMsgItem {
     String getITime();
 
     /**
+     * 是否显示时间
+     *
+     * @return
+     */
+    boolean ifIShowTime();
+
+    /**
+     * 设置是否显示时间
+     *
+     * @return
+     */
+    void setIfIShowTime(boolean isShowTime);
+
+    /**
      * 还款日期
      *
      * @return

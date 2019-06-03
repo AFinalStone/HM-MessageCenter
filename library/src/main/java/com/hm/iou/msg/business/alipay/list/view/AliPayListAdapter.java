@@ -30,9 +30,13 @@ public class AliPayListAdapter extends BaseQuickAdapter<IAliPayMsgItem, BaseView
         //点击事件
         helper.addOnClickListener(R.id.rl_content);
         if (item.isHaveRead()) {
-            helper.setAlpha(R.id.rl_content, 0.618f);
+            helper.setAlpha(R.id.iv_logo, 0.618f);
+            helper.setTextColor(R.id.tv_title, mContext.getResources().getColor(R.color.uikit_text_auxiliary));
+            helper.setTextColor(R.id.tv_content, mContext.getResources().getColor(R.color.uikit_text_hint));
         } else {
-            helper.setAlpha(R.id.rl_content, 1f);
+            helper.setAlpha(R.id.iv_logo, 1.0f);
+            helper.setTextColor(R.id.tv_title, mContext.getResources().getColor(R.color.uikit_text_main_content));
+            helper.setTextColor(R.id.tv_content, mContext.getResources().getColor(R.color.uikit_text_auxiliary));
         }
     }
 

@@ -87,12 +87,12 @@ public class TimeUtil {
 
 
     /**
-     * 格式化待还提醒消息的创建时间
+     * 格式化消息的创建时间
      *
      * @param createTime
      * @return
      */
-    public static String formatRemindBackCreateTime(String createTime) {
+    public static String formatMsgItemCreateTime(String createTime) {
         try {
             long time = getYmdfFormat().parse(createTime).getTime();
             return formatChatListTime(time);
@@ -118,53 +118,6 @@ public class TimeUtil {
         return returnTime;
     }
 
-    /**
-     * 格式化管家消息的时间
-     *
-     * @param startTime
-     * @return
-     */
-    public static String formatHmMsgStartTime(String startTime) {
-        try {
-            long time = getYmdfFormat().parse(startTime).getTime();
-            return formatChatListTime(time);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return startTime;
-    }
-
-    /**
-     * 格式化合同消息的时间
-     *
-     * @param createTime
-     * @return
-     */
-    public static String formatContractMsgStartTime(String createTime) {
-        try {
-            long time = getYmdfFormat().parse(createTime).getTime();
-            return formatChatListTime(time);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return createTime;
-    }
-
-    /**
-     * 格式化支付宝回单消息的时间
-     *
-     * @param createTime
-     * @return
-     */
-    public static String formatAliPayMsgStartTime(String createTime) {
-        try {
-            long time = getYmdfFormat().parse(createTime).getTime();
-            return formatChatListTime(time);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return createTime;
-    }
 
     /**
      * 格式化疑似合同归还时间
@@ -183,20 +136,5 @@ public class TimeUtil {
         return "";
     }
 
-    /**
-     * 格式化疑似合合同消息创建时间
-     *
-     * @param createTime
-     * @return
-     */
-    public static String formatSimilarityContractStartTime(String createTime) {
-        try {
-            long time = getYmdfFormat().parse(createTime).getTime();
-            return formatChatListTime(time);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return createTime;
-    }
 
 }
