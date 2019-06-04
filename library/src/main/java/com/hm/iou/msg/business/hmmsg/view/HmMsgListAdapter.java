@@ -28,11 +28,6 @@ public class HmMsgListAdapter extends BaseMultiItemQuickAdapter<IHmMsgItem, Base
         helper.setText(R.id.tv_title, item.getMsgTitle());
         String time = item.getMsgTime();
         helper.setText(R.id.tv_time, time);
-        if (item.isHaveRead()) {
-            helper.setAlpha(R.id.ll_content, 0.618f);
-        } else {
-            helper.setAlpha(R.id.ll_content, 1f);
-        }
         if (helper.getItemViewType() == IHmMsgItem.TYPE_ADVERTISEMENT_NEWS_SPORT) {
             String msgImage = item.getMsgImage();
             if (TextUtils.isEmpty(msgImage)) {
@@ -43,10 +38,32 @@ public class HmMsgListAdapter extends BaseMultiItemQuickAdapter<IHmMsgItem, Base
             }
             helper.setImageResource(R.id.iv_icon, item.getMsgIcon());
             helper.addOnClickListener(R.id.ll_content);
+            if (item.isHaveRead()) {
+                helper.setAlpha(R.id.iv_icon, 0.618f);
+                helper.setAlpha(R.id.imageView, 0.618f);
+                helper.setTextColor(R.id.tv_title, mContext.getResources().getColor(R.color.uikit_text_auxiliary));
+                helper.setTextColor(R.id.tv_see_detail, mContext.getResources().getColor(R.color.uikit_text_hint));
+            } else {
+                helper.setAlpha(R.id.iv_icon, 1.0f);
+                helper.setAlpha(R.id.imageView, 1.0f);
+                helper.setTextColor(R.id.tv_title, mContext.getResources().getColor(R.color.uikit_text_main_content));
+                helper.setTextColor(R.id.tv_see_detail, mContext.getResources().getColor(R.color.uikit_text_auxiliary));
+            }
             return;
         }
         if (helper.getItemViewType() == IHmMsgItem.TYPE_COMMUNIQUE) {
             helper.setText(R.id.tv_intro, item.getNotice());
+            if (item.isHaveRead()) {
+                helper.setAlpha(R.id.iv_icon, 0.618f);
+                helper.setAlpha(R.id.imageView, 0.618f);
+                helper.setTextColor(R.id.tv_title, mContext.getResources().getColor(R.color.uikit_text_auxiliary));
+                helper.setTextColor(R.id.tv_intro, mContext.getResources().getColor(R.color.uikit_text_hint));
+            } else {
+                helper.setAlpha(R.id.iv_icon, 1.0f);
+                helper.setAlpha(R.id.imageView, 1.0f);
+                helper.setTextColor(R.id.tv_title, mContext.getResources().getColor(R.color.uikit_text_main_content));
+                helper.setTextColor(R.id.tv_intro, mContext.getResources().getColor(R.color.uikit_text_auxiliary));
+            }
             return;
         }
     }

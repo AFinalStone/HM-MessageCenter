@@ -48,11 +48,11 @@
                 android:gravity="center_vertical"
                 android:singleLine="true"
                 android:text="官方公告："
-                android:textColor="@color/uikit_text_sub_content"
                 android:textSize="@dimen/textFontSize_16" />
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:scaleType="centerCrop"
