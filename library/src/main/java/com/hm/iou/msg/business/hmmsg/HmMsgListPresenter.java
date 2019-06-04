@@ -54,7 +54,7 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
             @Override
             public void subscribe(FlowableEmitter<List<IHmMsgItem>> e) throws Exception {
                 MsgCenterDbHelper.saveOrUpdateMsgList(list);
-                List<HmMsgDbData> listCache = MsgCenterDbHelper.getMsgList(HmMsgDbData.class);
+                List<HmMsgDbData> listCache = MsgCenterDbHelper.getHmMsgList();
                 List<IHmMsgItem> resultList = DataChangeUtil.changeHmMsgDbDataToIHmMsgItem(listCache);
                 e.onNext(resultList);
             }
@@ -148,7 +148,7 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                             @Override
                             public void subscribe(FlowableEmitter<List<IHmMsgItem>> e) throws Exception {
                                 MsgCenterDbHelper.saveOrUpdateMsgList(list);
-                                List<HmMsgDbData> listCache = MsgCenterDbHelper.getMsgList(HmMsgDbData.class);
+                                List<HmMsgDbData> listCache = MsgCenterDbHelper.getHmMsgList();
                                 List<IHmMsgItem> resultList = DataChangeUtil.changeHmMsgDbDataToIHmMsgItem(listCache);
                                 e.onNext(resultList);
                             }
@@ -221,7 +221,7 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                     @Override
                     public void handleResult(Object o) {
                         Logger.d("未读消息清除完毕");
-                        List<HmMsgDbData> listCache = MsgCenterDbHelper.getMsgList(HmMsgDbData.class);
+                        List<HmMsgDbData> listCache = MsgCenterDbHelper.getHmMsgList();
                         if (listCache != null && listCache.size() > 0) {
                             for (HmMsgDbData dbData : listCache) {
                                 dbData.setHaveRead(true);
