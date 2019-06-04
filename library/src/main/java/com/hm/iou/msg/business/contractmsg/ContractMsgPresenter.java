@@ -208,6 +208,10 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                     public void handleException(Throwable throwable, String s, String s1) {
 
                     }
+                    @Override
+                    public boolean isShowBusinessError() {
+                        return false;
+                    }
                 });
     }
 
