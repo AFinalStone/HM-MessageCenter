@@ -67,31 +67,26 @@ public class RemindBackMsgActivity extends BaseActivity<RemindBackMsgPresenter> 
         mBottomBar.setOnTitleClickListener(new HMBottomBarView.OnTitleClickListener() {
             @Override
             public void onClickTitle() {
-                mBottomBar.setOnTitleClickListener(new HMBottomBarView.OnTitleClickListener() {
-                    @Override
-                    public void onClickTitle() {
-                        if (mDialog == null) {
-                            mDialog = new HMAlertDialog.Builder(mContext)
-                                    .setTitle("清扫未读状态")
-                                    .setMessage("把所有“未读”消息标成“已读”状态吗？")
-                                    .setNegativeButton("取消")
-                                    .setPositiveButton("全部已读")
-                                    .setOnClickListener(new HMAlertDialog.OnClickListener() {
-                                        @Override
-                                        public void onPosClick() {
-                                            mPresenter.makeTypeMsgHaveRead();
-                                        }
+                if (mDialog == null) {
+                    mDialog = new HMAlertDialog.Builder(mContext)
+                            .setTitle("清扫未读状态")
+                            .setMessage("把所有“未读”消息标成“已读”状态吗？")
+                            .setNegativeButton("取消")
+                            .setPositiveButton("全部已读")
+                            .setOnClickListener(new HMAlertDialog.OnClickListener() {
+                                @Override
+                                public void onPosClick() {
+                                    mPresenter.makeTypeMsgHaveRead();
+                                }
 
-                                        @Override
-                                        public void onNegClick() {
+                                @Override
+                                public void onNegClick() {
 
-                                        }
-                                    })
-                                    .create();
-                        }
-                        mDialog.show();
-                    }
-                });
+                                }
+                            })
+                            .create();
+                }
+                mDialog.show();
             }
         });
         mAdapter = new RemindBackListAdapter(mContext);
