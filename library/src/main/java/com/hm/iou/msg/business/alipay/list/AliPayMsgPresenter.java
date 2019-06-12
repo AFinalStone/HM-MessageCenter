@@ -216,6 +216,10 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
                     public void handleException(Throwable throwable, String s, String s1) {
 
                     }
+                    @Override
+                    public boolean isShowBusinessError() {
+                        return false;
+                    }
                 });
     }
 

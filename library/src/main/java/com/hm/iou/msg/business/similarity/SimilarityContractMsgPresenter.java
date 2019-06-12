@@ -210,6 +210,11 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                     public void handleException(Throwable throwable, String s, String s1) {
 
                     }
+
+                    @Override
+                    public boolean isShowBusinessError() {
+                        return false;
+                    }
                 });
     }
 
@@ -239,7 +244,7 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                     @Override
                     public Publisher<BaseResponse<Integer>> apply(BaseResponse<Integer> integerBaseResponse) throws Exception {
                         MakeMsgTypeAllHaveReadReqBean reqBean = new MakeMsgTypeAllHaveReadReqBean();
-                        reqBean.setLastReqDate(CacheDataUtil.getLastAliPayListMsgPullTime(mContext));
+                        reqBean.setLastReqDate(CacheDataUtil.getLastSimilarityContractListMsgPullTime(mContext));
                         reqBean.setType(ModuleType.SIMILARITY_CONTRACT_MSG.getTypeValue());
                         return MsgApi.makeTypeMsgHaveRead(reqBean);
                     }

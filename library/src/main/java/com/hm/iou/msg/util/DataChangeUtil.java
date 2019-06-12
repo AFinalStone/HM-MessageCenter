@@ -95,7 +95,7 @@ public class DataChangeUtil {
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
                 final ContractMsgDbData dbData = list.get(i);
-                final String time = TimeUtil.formatContractMsgStartTime(dbData.getCreateTime());
+                final String time = TimeUtil.formatMsgItemCreateTime(dbData.getCreateTime());
                 final String title = dbData.getTitle();
                 final String content = dbData.getContent();
                 final String justUrl = dbData.getJumpUrl();
@@ -165,11 +165,12 @@ public class DataChangeUtil {
                 };
                 try {
                     if (i > 0) {
-                        ContractMsgDbData previewMsgItem = list.get(i - 1);
-                        String strPreviewTime = previewMsgItem.getCreateTime();
+                        ContractMsgDbData previewDbData = list.get(i - 1);
+                        String strPreviewTime = previewDbData.getCreateTime();
+                        String strCurrentTime = dbData.getCreateTime();
                         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         long previewTime = df.parse(strPreviewTime).getTime();
-                        long currentTime = df.parse(time).getTime();
+                        long currentTime = df.parse(strCurrentTime).getTime();
                         if (currentTime - previewTime > 300000) {
                             iMsgItem.setIfIShowTime(true);
                         } else {
@@ -195,10 +196,14 @@ public class DataChangeUtil {
     public static List<IRemindBackMsgItem> changeRemindBackMsgDbDataToIRemindBackMsgItem(List<RemindBackMsgDbData> list) {
         List<IRemindBackMsgItem> resultList = new ArrayList<>();
         if (list != null) {
-            for (final RemindBackMsgDbData dbData : list) {
-                IRemindBackMsgItem msgItem = new IRemindBackMsgItem() {
+            for (int i = 0; i < list.size(); i++) {
+                final RemindBackMsgDbData dbData = list.get(i);
+                final String time = TimeUtil.formatMsgItemCreateTime(dbData.getCreateTime());
+
+                IRemindBackMsgItem iMsgItem = new IRemindBackMsgItem() {
 
                     private boolean mIsHaveRead = false;
+                    private boolean mIfShowTime = true;
 
                     @Override
                     public String getITitle() {
@@ -207,7 +212,17 @@ public class DataChangeUtil {
 
                     @Override
                     public String getITime() {
-                        return TimeUtil.formatRemindBackCreateTime(dbData.getCreateTime());
+                        return time;
+                    }
+
+                    @Override
+                    public boolean ifIShowTime() {
+                        return mIfShowTime;
+                    }
+
+                    @Override
+                    public void setIfIShowTime(boolean isShowTime) {
+                        mIfShowTime = isShowTime;
                     }
 
                     @Override
@@ -264,8 +279,25 @@ public class DataChangeUtil {
                         mIsHaveRead = isHaveRead;
                     }
                 };
-                msgItem.setHaveRead(dbData.isHaveRead());
-                resultList.add(msgItem);
+                try {
+                    if (i > 0) {
+                        RemindBackMsgDbData previewDbData = list.get(i - 1);
+                        String strPreviewTime = previewDbData.getCreateTime();
+                        String strCurrentTime = dbData.getCreateTime();
+                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        long previewTime = df.parse(strPreviewTime).getTime();
+                        long currentTime = df.parse(strCurrentTime).getTime();
+                        if (currentTime - previewTime > 300000) {
+                            iMsgItem.setIfIShowTime(true);
+                        } else {
+                            iMsgItem.setIfIShowTime(false);
+                        }
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                iMsgItem.setHaveRead(dbData.isHaveRead());
+                resultList.add(iMsgItem);
             }
         }
 
@@ -284,7 +316,7 @@ public class DataChangeUtil {
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
                 final SimilarityContractMsgDbData dbData = list.get(i);
-                final String time = TimeUtil.formatSimilarityContractStartTime(dbData.getCreateTime());
+                final String time = TimeUtil.formatMsgItemCreateTime(dbData.getCreateTime());
                 ISimilarityContractMsgItem iMsgItem = new ISimilarityContractMsgItem() {
 
                     private boolean mIfShowTime = true;
@@ -359,11 +391,12 @@ public class DataChangeUtil {
                 };
                 try {
                     if (i > 0) {
-                        SimilarityContractMsgDbData previewMsgItem = list.get(i - 1);
-                        String strPreviewTime = previewMsgItem.getCreateTime();
-                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                        SimilarityContractMsgDbData previewDbData = list.get(i - 1);
+                        String strPreviewTime = previewDbData.getCreateTime();
+                        String strCurrentTime = dbData.getCreateTime();
+                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         long previewTime = df.parse(strPreviewTime).getTime();
-                        long currentTime = df.parse(time).getTime();
+                        long currentTime = df.parse(strCurrentTime).getTime();
                         if (currentTime - previewTime > 300000) {
                             iMsgItem.setIfIShowTime(true);
                         } else {
@@ -419,7 +452,7 @@ public class DataChangeUtil {
 
                     @Override
                     public String getMsgTime() {
-                        return TimeUtil.formatHmMsgStartTime(dbData.getStartTime());
+                        return TimeUtil.formatMsgItemCreateTime(dbData.getStartTime());
                     }
 
                     @Override
@@ -503,8 +536,8 @@ public class DataChangeUtil {
                 final boolean isHaveRead = dbData.isHaveRead();
                 final String msgId = dbData.getMsgId();
                 final String msgType = dbData.getType();
-                final String time = TimeUtil.formatAliPayMsgStartTime(dbData.getCreateTime());
-                IAliPayMsgItem item = new IAliPayMsgItem() {
+                final String time = TimeUtil.formatMsgItemCreateTime(dbData.getCreateTime());
+                IAliPayMsgItem iMsgItem = new IAliPayMsgItem() {
 
                     private boolean mIfShowTime = true;
                     private boolean mIsHaveRead = false;
@@ -561,22 +594,23 @@ public class DataChangeUtil {
                 };
                 try {
                     if (i > 0) {
-                        AliPayMsgDbData previewMsgItem = list.get(i - 1);
-                        String strPreviewTime = previewMsgItem.getCreateTime();
+                        AliPayMsgDbData previewDbData = list.get(i - 1);
+                        String strPreviewTime = previewDbData.getCreateTime();
+                        String strCurrentTime = dbData.getCreateTime();
                         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         long previewTime = df.parse(strPreviewTime).getTime();
-                        long currentTime = df.parse(time).getTime();
+                        long currentTime = df.parse(strCurrentTime).getTime();
                         if (currentTime - previewTime > 300000) {
-                            item.setIfIShowTime(true);
+                            iMsgItem.setIfIShowTime(true);
                         } else {
-                            item.setIfIShowTime(false);
+                            iMsgItem.setIfIShowTime(false);
                         }
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                item.setHaveRead(isHaveRead);
-                resultList.add(item);
+                iMsgItem.setHaveRead(isHaveRead);
+                resultList.add(iMsgItem);
             }
         }
         return resultList;

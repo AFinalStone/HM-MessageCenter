@@ -54,7 +54,7 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
             @Override
             public void subscribe(FlowableEmitter<List<IHmMsgItem>> e) throws Exception {
                 MsgCenterDbHelper.saveOrUpdateMsgList(list);
-                List<HmMsgDbData> listCache = MsgCenterDbHelper.getMsgList(HmMsgDbData.class);
+                List<HmMsgDbData> listCache = MsgCenterDbHelper.getHmMsgList();
                 List<IHmMsgItem> resultList = DataChangeUtil.changeHmMsgDbDataToIHmMsgItem(listCache);
                 e.onNext(resultList);
             }
@@ -148,7 +148,7 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                             @Override
                             public void subscribe(FlowableEmitter<List<IHmMsgItem>> e) throws Exception {
                                 MsgCenterDbHelper.saveOrUpdateMsgList(list);
-                                List<HmMsgDbData> listCache = MsgCenterDbHelper.getMsgList(HmMsgDbData.class);
+                                List<HmMsgDbData> listCache = MsgCenterDbHelper.getHmMsgList();
                                 List<IHmMsgItem> resultList = DataChangeUtil.changeHmMsgDbDataToIHmMsgItem(listCache);
                                 e.onNext(resultList);
                             }
@@ -206,13 +206,18 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                     public void handleException(Throwable throwable, String s, String s1) {
 
                     }
+
+                    @Override
+                    public boolean isShowBusinessError() {
+                        return false;
+                    }
                 });
     }
 
     @Override
     public void makeTypeMsgHaveRead() {
         MakeMsgTypeAllHaveReadReqBean reqBean = new MakeMsgTypeAllHaveReadReqBean();
-        reqBean.setLastReqDate(CacheDataUtil.getLastAliPayListMsgPullTime(mContext));
+        reqBean.setLastReqDate(CacheDataUtil.getLastHMListMsgPullTime(mContext));
         reqBean.setType(ModuleType.HM_MSG.getTypeValue());
         MsgApi.makeTypeMsgHaveRead(reqBean)
                 .compose(getProvider().<BaseResponse<Integer>>bindUntilEvent(ActivityEvent.DESTROY))
@@ -221,7 +226,7 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                     @Override
                     public void handleResult(Object o) {
                         Logger.d("未读消息清除完毕");
-                        List<HmMsgDbData> listCache = MsgCenterDbHelper.getMsgList(HmMsgDbData.class);
+                        List<HmMsgDbData> listCache = MsgCenterDbHelper.getHmMsgList();
                         if (listCache != null && listCache.size() > 0) {
                             for (HmMsgDbData dbData : listCache) {
                                 dbData.setHaveRead(true);

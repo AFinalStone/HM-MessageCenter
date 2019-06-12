@@ -207,6 +207,10 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                     public void handleException(Throwable throwable, String s, String s1) {
 
                     }
+                    @Override
+                    public boolean isShowBusinessError() {
+                        return false;
+                    }
                 });
     }
 
