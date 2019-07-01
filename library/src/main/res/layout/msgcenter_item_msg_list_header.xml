@@ -19,15 +19,15 @@
             android:id="@+id/iv_advertisement"
             android:layout_width="match_parent"
             android:layout_height="49dp"
-            android:scaleType="fitCenter" />
+            android:adjustViewBounds="true" />
 
         <ImageView
             android:id="@+id/iv_close_advertisement"
             android:layout_width="49dp"
             android:layout_height="49dp"
             android:layout_alignParentEnd="true"
-            android:padding="19dp"
-            android:src="@mipmap/uikit_icon_close_black" />
+            android:padding="16dp"
+            android:src="@mipmap/msgcenter_ic_close_black" />
     </RelativeLayout>
 
     <TextView
