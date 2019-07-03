@@ -58,6 +58,7 @@
             android:id="@+id/viewStub"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@id/bottomBar"
             android:layout="@layout/msgcenter_item_alipay_msg_detail_file_have_delete" />
 
         <com.hm.iou.uikit.HMLoadingView
