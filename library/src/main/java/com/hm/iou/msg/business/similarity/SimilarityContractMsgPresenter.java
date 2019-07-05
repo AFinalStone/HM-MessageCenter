@@ -18,9 +18,11 @@ import com.hm.iou.msg.business.similarity.view.ISimilarityContractMsgItem;
 import com.hm.iou.msg.dict.ModuleType;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.DataChangeUtil;
+import com.hm.iou.sharedata.event.IouAddEvent;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
+import org.greenrobot.eventbus.EventBus;
 import org.reactivestreams.Publisher;
 
 import java.util.ArrayList;
@@ -267,6 +269,7 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                         mView.showMsgList(resultList);
                         mView.showLoadMoreEnd();
                         mView.setBottomClearIconVisible(false);
+                        EventBus.getDefault().post(new IouAddEvent());
                     }
 
                     @Override
