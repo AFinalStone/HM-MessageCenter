@@ -217,25 +217,13 @@
         >
     </com.hm.iou.uikit.HMLoadingView>
 
-    <View
-        style="@style/UikitDivider.Horizontal"
-        android:layout_above="@+id/ll_friend_bottom" />
-
     <com.hm.iou.uikit.HMBottomBarView
         android:id="@+id/ll_friend_bottom"
         android:layout_width="match_parent"
         android:layout_height="50dip"
         android:layout_alignParentBottom="true"
-        app:bottomBackText="详细资料" />
-
-    <ImageView
-        android:id="@+id/iv_friend_more"
-        android:layout_width="50dip"
-        android:layout_height="50dip"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:background="?android:attr/selectableItemBackground"
-        android:scaleType="center"
-        android:src="@mipmap/uikit_ic_more_black" />
+        app:bottomBackText="详细资料"
+        app:bottomTitleIcon="@mipmap/uikit_ic_more_black"
+        />
 
 </RelativeLayout>
