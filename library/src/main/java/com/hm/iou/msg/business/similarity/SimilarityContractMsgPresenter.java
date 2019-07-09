@@ -12,10 +12,12 @@ import com.hm.iou.database.table.msg.SimilarityContractMsgDbData;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
+import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.GetSimilarContractMessageReqBean;
 import com.hm.iou.msg.bean.req.MakeMsgTypeAllHaveReadReqBean;
 import com.hm.iou.msg.business.similarity.view.ISimilarityContractMsgItem;
 import com.hm.iou.msg.dict.ModuleType;
+import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.event.IouAddEvent;
@@ -75,12 +77,13 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                         mView.enableRefresh();
                         if (resultList == null || resultList.size() == 0) {
                             mView.showDataEmpty();
+                            mView.setBottomMoreIconVisible(false);
                         } else {
                             mView.showMsgList(resultList);
+                            mView.setBottomMoreIconVisible(true);
                             mView.showLoadMoreEnd();
                             mView.scrollToBottom();
                         }
-                        getUnReadMsgNum();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -89,6 +92,7 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                         mView.hideInitLoading();
                         mView.enableRefresh();
                         mView.showDataEmpty();
+                        mView.setBottomMoreIconVisible(false);
                     }
                 });
     }
@@ -97,8 +101,17 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
      * 获取未读消息数量
      */
     private void getUnReadMsgNum() {
-        long unReadMsg = MsgCenterDbHelper.getMsgUnReadNum(SimilarityContractMsgDbData.class);
-        mView.setBottomClearIconVisible(unReadMsg > 0);
+        UnReadMsgNumBean unReadMsgNumBean = CacheDataUtil.getNoReadMsgNum(mContext);
+        int numNoRead = 0;
+        if (unReadMsgNumBean != null) {
+            numNoRead = unReadMsgNumBean.getButlerMessageNumber()
+                    + unReadMsgNumBean.getContractNumber()
+                    + unReadMsgNumBean.getFriendMessageNumber()
+                    + unReadMsgNumBean.getWaitRepayNumber()
+                    + unReadMsgNumBean.getAlipayReceiptNumber()
+                    + IMHelper.getInstance(mContext).getTotalUnReadMsgCount();
+        }
+        mView.showRedDot(numNoRead);
     }
 
 
@@ -135,6 +148,8 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                     }
 
                 });
+
+        getUnReadMsgNum();
     }
 
     @Override
@@ -169,8 +184,10 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                                         mView.hidePullDownRefresh();
                                         if (resultList == null || resultList.size() == 0) {
                                             mView.showDataEmpty();
+                                            mView.setBottomMoreIconVisible(false);
                                         } else {
                                             mView.showMsgList(resultList);
+                                            mView.setBottomMoreIconVisible(true);
                                             mView.showLoadMoreEnd();
                                         }
 
@@ -180,6 +197,7 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                                     public void accept(Throwable throwable) throws Exception {
                                         mView.hidePullDownRefresh();
                                         mView.showDataEmpty();
+                                        mView.setBottomMoreIconVisible(false);
                                     }
                                 });
                     }
@@ -204,8 +222,7 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                         dbData.setHaveRead(true);
                         MsgCenterDbHelper.saveOrUpdateMsg(dbData);
                         item.setHaveRead(true);
-                        mView.notifyItem(item, position);
-                        getUnReadMsgNum();
+                        mView.updateData(item);
                     }
 
                     @Override
@@ -268,7 +285,6 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                         List<ISimilarityContractMsgItem> resultList = DataChangeUtil.changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(listCache);
                         mView.showMsgList(resultList);
                         mView.showLoadMoreEnd();
-                        mView.setBottomClearIconVisible(false);
                         EventBus.getDefault().post(new IouAddEvent());
                     }
 
@@ -277,5 +293,37 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                         mView.dismissLoadingView();
                     }
                 });
+    }
+
+    @Override
+    public void deleteMsg(final ISimilarityContractMsgItem item) {
+        if (item.isHaveRead()) {
+            MsgCenterDbHelper.deleteMsgByMsgId(SimilarityContractMsgDbData.class, item.getIMsgId());
+            mView.removeData(item.getIMsgId());
+        } else {
+            mView.showLoadingView();
+            MsgApi.makeSingleMsgHaveRead(item.getIMsgId(), item.getIMsgType())
+                    .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))
+                    .map(RxUtil.<Object>handleResponse())
+                    .subscribeWith(new CommSubscriber<Object>(mView) {
+                        @Override
+                        public void handleResult(Object o) {
+                            mView.dismissLoadingView();
+                            MsgCenterDbHelper.deleteMsgByMsgId(SimilarityContractMsgDbData.class, item.getIMsgId());
+                            mView.removeData(item.getIMsgId());
+                        }
+
+                        @Override
+                        public void handleException(Throwable throwable, String s, String s1) {
+                            mView.dismissLoadingView();
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public void clearAllReadData() {
+        MsgCenterDbHelper.deleteAllReadMsgData(SimilarityContractMsgDbData.class);
+        getListFromCache(null);
     }
 }

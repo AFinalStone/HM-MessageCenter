@@ -9,6 +9,8 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.hm.iou.msg.R;
 import com.hm.iou.tools.ImageLoader;
 
+import java.util.List;
+
 
 /**
  * Created by syl on 18/4/28.<br>
@@ -21,6 +23,44 @@ public class HmMsgListAdapter extends BaseMultiItemQuickAdapter<IHmMsgItem, Base
         mContext = context;
         addItemType(IHmMsgItem.TYPE_ADVERTISEMENT_NEWS_SPORT, R.layout.msgcenter_item_hm_msg_list_ad_or_sport);
         addItemType(IHmMsgItem.TYPE_COMMUNIQUE, R.layout.msgcenter_item_hm_msg_list_notice);
+    }
+
+    public void removeDataByMsgId(String msgId) {
+        if (TextUtils.isEmpty(msgId)) {
+            return;
+        }
+        List<IHmMsgItem> list = getData();
+        if (list != null) {
+            int index = -1;
+            for (int i = 0; i < list.size(); i++) {
+                if (msgId.equals(list.get(i).getIMsgId())) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index >= 0) {
+                remove(index);
+            }
+        }
+    }
+
+    public void updateData(IHmMsgItem msgItem) {
+        if (msgItem == null || TextUtils.isEmpty(msgItem.getIMsgId())) {
+            return;
+        }
+        List<IHmMsgItem> list = getData();
+        if (list != null) {
+            int index = -1;
+            for (int i = 0; i < list.size(); i++) {
+                if (msgItem.getIMsgId().equals(list.get(i).getIMsgId())) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index >= 0) {
+                setData(index, msgItem);
+            }
+        }
     }
 
     @Override

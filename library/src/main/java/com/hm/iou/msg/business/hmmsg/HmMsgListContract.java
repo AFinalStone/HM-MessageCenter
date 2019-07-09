@@ -63,19 +63,21 @@ public class HmMsgListContract {
         void showLoadMoreEnd();
 
         /**
-         * 修改条目
-         *
-         * @param item
-         */
-        void notifyItem(IHmMsgItem item, int position);
-
-
-        /**
          * 设置是否显示底部清空icon
          *
          * @param isShow
          */
-        void setBottomClearIconVisible(boolean isShow);
+        void setBottomMoreIconVisible(boolean isShow);
+
+        /**
+         * 显示红点数
+         *
+         * @param c
+         */
+        void showRedDot(int c);
+
+        void removeData(String msgId);
+        void updateData(IHmMsgItem msgItem);
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
@@ -97,6 +99,18 @@ public class HmMsgListContract {
         void makeSingleMsgHaveRead(IHmMsgItem item, int position);
 
         void makeTypeMsgHaveRead();
+
+        /**
+         * 删除单条消息
+         *
+         * @param item
+         */
+        void deleteMsg(IHmMsgItem item);
+
+        /**
+         * 清空所有已读数据
+         */
+        void clearAllReadData();
 
     }
 }

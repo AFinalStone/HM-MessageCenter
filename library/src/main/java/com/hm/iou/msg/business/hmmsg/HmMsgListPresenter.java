@@ -12,10 +12,12 @@ import com.hm.iou.database.table.msg.HmMsgDbData;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.GetHMMsgListResBean;
+import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.GetHMMsgListReq;
 import com.hm.iou.msg.bean.req.MakeMsgTypeAllHaveReadReqBean;
 import com.hm.iou.msg.business.hmmsg.view.IHmMsgItem;
 import com.hm.iou.msg.dict.ModuleType;
+import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
@@ -70,12 +72,13 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                         mView.enableRefresh();
                         if (resultList == null || resultList.size() == 0) {
                             mView.showDataEmpty();
+                            mView.setBottomMoreIconVisible(false);
                         } else {
                             mView.showMsgList(resultList);
+                            mView.setBottomMoreIconVisible(true);
                             mView.showLoadMoreEnd();
                             mView.scrollToBottom();
                         }
-                        getUnReadMsgNum();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -84,6 +87,7 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                         mView.hideInitLoading();
                         mView.enableRefresh();
                         mView.showDataEmpty();
+                        mView.setBottomMoreIconVisible(false);
                     }
                 });
     }
@@ -92,8 +96,17 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
      * 获取未读消息数量
      */
     private void getUnReadMsgNum() {
-        long unReadMsg = MsgCenterDbHelper.getMsgUnReadNum(HmMsgDbData.class);
-        mView.setBottomClearIconVisible(unReadMsg > 0);
+        UnReadMsgNumBean unReadMsgNumBean = CacheDataUtil.getNoReadMsgNum(mContext);
+        int numNoRead = 0;
+        if (unReadMsgNumBean != null) {
+            numNoRead = unReadMsgNumBean.getContractNumber()
+                    + unReadMsgNumBean.getSimilarContractNumber()
+                    + unReadMsgNumBean.getFriendMessageNumber()
+                    + unReadMsgNumBean.getWaitRepayNumber()
+                    + unReadMsgNumBean.getAlipayReceiptNumber()
+                    + IMHelper.getInstance(mContext).getTotalUnReadMsgCount();
+        }
+        mView.showRedDot(numNoRead);
     }
 
     @Override
@@ -129,6 +142,8 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                     }
 
                 });
+
+        getUnReadMsgNum();
     }
 
     @Override
@@ -163,17 +178,19 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                                         mView.hidePullDownRefresh();
                                         if (resultList == null || resultList.size() == 0) {
                                             mView.showDataEmpty();
+                                            mView.setBottomMoreIconVisible(false);
                                         } else {
                                             mView.showMsgList(resultList);
+                                            mView.setBottomMoreIconVisible(true);
                                             mView.showLoadMoreEnd();
                                         }
-
                                     }
                                 }, new Consumer<Throwable>() {
                                     @Override
                                     public void accept(Throwable throwable) throws Exception {
                                         mView.hidePullDownRefresh();
                                         mView.showDataEmpty();
+                                        mView.setBottomMoreIconVisible(false);
                                     }
                                 });
                     }
@@ -198,8 +215,7 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                         dbData.setHaveRead(true);
                         MsgCenterDbHelper.saveOrUpdateMsg(dbData);
                         item.setHaveRead(true);
-                        mView.notifyItem(item, position);
-                        getUnReadMsgNum();
+                        mView.updateData(item);
                     }
 
                     @Override
@@ -236,7 +252,6 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                         List<IHmMsgItem> resultList = DataChangeUtil.changeHmMsgDbDataToIHmMsgItem(listCache);
                         mView.showMsgList(resultList);
                         mView.showLoadMoreEnd();
-                        mView.setBottomClearIconVisible(false);
                     }
 
                     @Override
@@ -245,4 +260,16 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                     }
                 });
     }
+
+    @Override
+    public void deleteMsg(IHmMsgItem item) {
+
+    }
+
+    @Override
+    public void clearAllReadData() {
+        MsgCenterDbHelper.deleteAllReadMsgData(HmMsgDbData.class);
+        getListFromCache(null);
+    }
+
 }

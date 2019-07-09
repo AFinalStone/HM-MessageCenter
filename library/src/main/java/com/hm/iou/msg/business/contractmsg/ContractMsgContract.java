@@ -62,18 +62,21 @@ public class ContractMsgContract {
         void showLoadMoreEnd();
 
         /**
-         * 修改条目
-         *
-         * @param item
-         */
-        void notifyItem(IContractMsgItem item, int position);
-
-        /**
          * 设置是否显示底部清空icon
          *
          * @param isShow
          */
-        void setBottomClearIconVisible(boolean isShow);
+        void setBottomMoreIconVisible(boolean isShow);
+
+        /**
+         * 显示红点数
+         *
+         * @param c
+         */
+        void showRedDot(int c);
+
+        void removeData(String msgId);
+        void updateData(IContractMsgItem msgItem);
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
@@ -97,5 +100,16 @@ public class ContractMsgContract {
 
         void makeTypeMsgHaveRead();
 
+        /**
+         * 删除单条消息
+         *
+         * @param item
+         */
+        void deleteMsg(IContractMsgItem item);
+
+        /**
+         * 清空所有已读数据
+         */
+        void clearAllReadData();
     }
 }

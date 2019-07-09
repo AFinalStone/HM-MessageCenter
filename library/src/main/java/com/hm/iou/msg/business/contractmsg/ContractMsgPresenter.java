@@ -12,10 +12,12 @@ import com.hm.iou.database.table.msg.ContractMsgDbData;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.GetContractMsgListResBean;
+import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.GetContractMsgListReq;
 import com.hm.iou.msg.bean.req.MakeMsgTypeAllHaveReadReqBean;
 import com.hm.iou.msg.business.contractmsg.view.IContractMsgItem;
 import com.hm.iou.msg.dict.ModuleType;
+import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
@@ -46,7 +48,6 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
         super(context, view);
     }
 
-
     /**
      * 从缓存中拉取数据
      */
@@ -71,12 +72,13 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                         mView.enableRefresh();
                         if (resultList == null || resultList.size() == 0) {
                             mView.showDataEmpty();
+                            mView.setBottomMoreIconVisible(false);
                         } else {
                             mView.showMsgList(resultList);
+                            mView.setBottomMoreIconVisible(true);
                             mView.showLoadMoreEnd();
                             mView.scrollToBottom();
                         }
-                        getUnReadMsgNum();
 
                     }
                 }, new Consumer<Throwable>() {
@@ -86,6 +88,7 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                         mView.hideInitLoading();
                         mView.enableRefresh();
                         mView.showDataEmpty();
+                        mView.setBottomMoreIconVisible(false);
                     }
                 });
     }
@@ -94,8 +97,17 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
      * 获取未读消息数量
      */
     private void getUnReadMsgNum() {
-        long unReadMsg = MsgCenterDbHelper.getMsgUnReadNum(ContractMsgDbData.class);
-        mView.setBottomClearIconVisible(unReadMsg > 0);
+        UnReadMsgNumBean unReadMsgNumBean = CacheDataUtil.getNoReadMsgNum(mContext);
+        int numNoRead = 0;
+        if (unReadMsgNumBean != null) {
+            numNoRead = unReadMsgNumBean.getButlerMessageNumber()
+                    + unReadMsgNumBean.getSimilarContractNumber()
+                    + unReadMsgNumBean.getFriendMessageNumber()
+                    + unReadMsgNumBean.getWaitRepayNumber()
+                    + unReadMsgNumBean.getAlipayReceiptNumber()
+                    + IMHelper.getInstance(mContext).getTotalUnReadMsgCount();
+        }
+        mView.showRedDot(numNoRead);
     }
 
     @Override
@@ -131,6 +143,8 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                     }
 
                 });
+
+        getUnReadMsgNum();
     }
 
     @Override
@@ -165,17 +179,19 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                                         mView.hidePullDownRefresh();
                                         if (resultList == null || resultList.size() == 0) {
                                             mView.showDataEmpty();
+                                            mView.setBottomMoreIconVisible(false);
                                         } else {
                                             mView.showMsgList(resultList);
+                                            mView.setBottomMoreIconVisible(true);
                                             mView.showLoadMoreEnd();
                                         }
-
                                     }
                                 }, new Consumer<Throwable>() {
                                     @Override
                                     public void accept(Throwable throwable) throws Exception {
                                         mView.hidePullDownRefresh();
                                         mView.showDataEmpty();
+                                        mView.setBottomMoreIconVisible(false);
                                     }
                                 });
                     }
@@ -200,8 +216,7 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                         dbData.setHaveRead(true);
                         MsgCenterDbHelper.saveOrUpdateMsg(dbData);
                         item.setHaveRead(true);
-                        mView.notifyItem(item, position);
-                        getUnReadMsgNum();
+                        mView.updateData(item);
                     }
 
                     @Override
@@ -237,7 +252,7 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                         List<IContractMsgItem> resultList = DataChangeUtil.changeContractMsgDbDataToIContractMsgItem(listCache);
                         mView.showMsgList(resultList);
                         mView.showLoadMoreEnd();
-                        mView.setBottomClearIconVisible(false);
+
                     }
 
                     @Override
@@ -247,5 +262,35 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                 });
     }
 
+    @Override
+    public void deleteMsg(final IContractMsgItem item) {
+        if (item.isHaveRead()) {
+            MsgCenterDbHelper.deleteMsgByMsgId(ContractMsgDbData.class, item.getIMsgId());
+            mView.removeData(item.getIMsgId());
+        } else {
+            mView.showLoadingView();
+            MsgApi.makeSingleMsgHaveRead(item.getIMsgId(), item.getIMsgType())
+                    .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))
+                    .map(RxUtil.<Object>handleResponse())
+                    .subscribeWith(new CommSubscriber<Object>(mView) {
+                        @Override
+                        public void handleResult(Object o) {
+                            mView.dismissLoadingView();
+                            MsgCenterDbHelper.deleteMsgByMsgId(ContractMsgDbData.class, item.getIMsgId());
+                            mView.removeData(item.getIMsgId());
+                        }
 
+                        @Override
+                        public void handleException(Throwable throwable, String s, String s1) {
+                            mView.dismissLoadingView();
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public void clearAllReadData() {
+        MsgCenterDbHelper.deleteAllReadMsgData(ContractMsgDbData.class);
+        getListFromCache(null);
+    }
 }

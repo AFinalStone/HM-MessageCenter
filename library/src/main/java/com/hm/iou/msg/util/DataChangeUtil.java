@@ -199,7 +199,6 @@ public class DataChangeUtil {
             for (int i = 0; i < list.size(); i++) {
                 final RemindBackMsgDbData dbData = list.get(i);
                 final String time = TimeUtil.formatMsgItemCreateTime(dbData.getCreateTime());
-
                 IRemindBackMsgItem iMsgItem = new IRemindBackMsgItem() {
 
                     private boolean mIsHaveRead = false;
