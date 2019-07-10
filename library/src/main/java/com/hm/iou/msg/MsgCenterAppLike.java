@@ -29,6 +29,7 @@ public class MsgCenterAppLike {
 
     public static final String EXTRA_KEY_GET_NO_READ_NUM = "MsgCenter_getNoReadNum";
     public static final String EXTRA_KEY_GET_NO_READ_NUM_SUCCESS = "MsgCenter_getNoReadNumSuccess";
+    public static final String EXTRA_KEY_REFRESH_IM_TOKEN_AND = "MsgCenter_refresh_im_token_and_login";
 
     private static MsgCenterAppLike mApp;
 
@@ -87,6 +88,18 @@ public class MsgCenterAppLike {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventLogin(LoginSuccEvent event) {
         IMHelper.getInstance(mContext).login();
+    }
+
+    /**
+     * 刷新用户IM token并登陆
+     *
+     * @param -commBizEvent.key == MsgCenter_refresh_im_token
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventRefreshTokenAndLogin(CommBizEvent commBizEvent) {
+        if (EXTRA_KEY_REFRESH_IM_TOKEN_AND.equals(commBizEvent.key)) {
+            IMHelper.getInstance(mContext).refreshTokenAndLogin();
+        }
     }
 
     /**

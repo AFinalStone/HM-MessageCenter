@@ -79,7 +79,7 @@ public class IMHelper {
     //  创建观察者对象
     private Observer<List<RecentContact>> mChatListObserver;
     private List<OnChatListChangeListener> mOnChatListChangeListenerList;
-    private Disposable mDisLogin;
+    private Disposable mDisRefreshIMToken;
 
     public static IMHelper getInstance(Context context) {
         if (mImHelper == null) {
@@ -276,10 +276,10 @@ public class IMHelper {
      * 刷新token并登陆
      */
     public void refreshTokenAndLogin() {
-        if (mDisLogin != null && !mDisLogin.isDisposed()) {
-            mDisLogin.dispose();
+        if (mDisRefreshIMToken != null && !mDisRefreshIMToken.isDisposed()) {
+            mDisRefreshIMToken.dispose();
         }
-        mDisLogin = MsgApi.getOrRefreshIMToken()
+        mDisRefreshIMToken = MsgApi.getOrRefreshIMToken()
                 .map(RxUtil.<GetOrRefreshIMTokenBean>handleResponse())
                 .subscribe(new Consumer<GetOrRefreshIMTokenBean>() {
                     @Override
