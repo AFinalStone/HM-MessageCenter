@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,10 +8,10 @@
     android:focusable="true"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingBottom="3dp"
-    android:paddingEnd="12dp"
     android:paddingStart="12dp"
-    android:paddingTop="3dp">
+    android:paddingTop="3dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="3dp">
 
     <TextView
         android:id="@+id/tv_time"
@@ -20,38 +21,52 @@
         android:textColor="@color/uikit_text_hint"
         tools:text="星期六 上午 10:00" />
 
-    <RelativeLayout
-        android:id="@+id/rl_content"
+    <com.hm.iou.uikit.sidemenu.SideMenuLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/jietiao_bg_message_list_item"
-        android:minHeight="85dp"
-        android:paddingBottom="5dp"
-        android:paddingEnd="10dp">
+        app:contentView="@+id/rl_content"
+        app:rightMenuView="@+id/btn_delete">
 
-        <ImageView
-            android:id="@+id/iv_logo"
-            android:layout_width="26dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="22dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/msgcenter_ic_contract_flag" />
+        <RelativeLayout
+            android:id="@+id/rl_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/jietiao_bg_message_list_item"
+            android:minHeight="85dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="5dp">
 
-        <TextView
-            android:id="@+id/tv_title"
-            style="@style/UikitTextView"
-            android:layout_marginStart="62dp"
-            android:layout_marginTop="19dp"
-            tools:text="合同创建成功 " />
+            <ImageView
+                android:id="@+id/iv_logo"
+                android:layout_width="26dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="22dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/msgcenter_ic_contract_flag" />
 
-        <TextView
-            android:id="@+id/tv_content"
-            style="@style/UikitTextView.Auxiliary.Small"
-            android:layout_below="@id/tv_title"
-            android:layout_marginStart="62dp"
-            android:layout_marginTop="6dp"
-            tools:text="小希女士，您的合同已创建成功 小希女士，您的合同已创建成功 小希女士，您的合同已创建成功 小希女士，您的合同已创建成功 小希女士，您的合同已创建成功  " />
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_title"
+                style="@style/UikitTextView"
+                android:layout_marginStart="62dp"
+                android:layout_marginTop="19dp"
+                tools:text="合同创建成功 " />
 
+            <TextView
+                android:id="@+id/tv_content"
+                style="@style/UikitTextView.Auxiliary.Small"
+                android:layout_below="@id/tv_title"
+                android:layout_marginStart="62dp"
+                android:layout_marginTop="6dp"
+                tools:text="小希女士，您的合同已创建成功 小希女士，您的合同已创建成功 小希女士，您的合同已创建成功 小希女士，您的合同已创建成功 小希女士，您的合同已创建成功  " />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btn_delete"
+            style="@style/UikitHMButton.Large.Red.Minor"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:text="删除"
+            android:textSize="@dimen/textFontSize_16" />
+    </com.hm.iou.uikit.sidemenu.SideMenuLayout>
 </LinearLayout>

@@ -24,6 +24,8 @@ import com.hm.iou.msg.bean.MsgListHeaderBean;
 import com.hm.iou.msg.business.message.MsgCenterContract;
 import com.hm.iou.msg.dict.ModuleType;
 import com.hm.iou.router.Router;
+import com.hm.iou.sharedata.UserManager;
+import com.hm.iou.sharedata.model.UserInfo;
 import com.hm.iou.tools.ImageLoader;
 import com.hm.iou.tools.NetStateUtil;
 import com.hm.iou.uikit.HMDotTextView;
@@ -125,9 +127,20 @@ public class HeaderViewHelper {
             bottomDivider.setVisibility(View.GONE);
         }
 
-        String imageUrl = moduleBean.getImage();
-        imageUrl = ImageLoadUtil.getImageRealUrl(mContent, imageUrl);
-        ImageLoader.getInstance(mContent).displayImage(imageUrl, ivModule);
+        if (ModuleType.NEW_APPLY_FRIEND.getTypeId().equals(moduleBean.getModuleId())) {
+            //添加好友的 icon 用用户自己的头像
+            String avatar = UserManager.getInstance(mContent).getUserInfo().getAvatarUrl();
+            if (!TextUtils.isEmpty(avatar)) {
+                ImageLoader.getInstance(mContent).displayImage(avatar, ivModule);
+            } else {
+                ivModule.setImageResource(R.mipmap.uikit_icon_header_unknow);
+            }
+        } else {
+            String imageUrl = moduleBean.getImage();
+            imageUrl = ImageLoadUtil.getImageRealUrl(mContent, imageUrl);
+            ImageLoader.getInstance(mContent).displayImage(imageUrl, ivModule);
+        }
+
         tvModule.setText(moduleBean.getName());
         int redMsgNum = moduleBean.getRedMsgNum();
         if (redMsgNum > 99) {
@@ -174,9 +187,21 @@ public class HeaderViewHelper {
                 ImageView ivModule = childView.findViewById(R.id.iv_module);
                 TextView tvModule = childView.findViewById(R.id.tv_module);
                 HMDotTextView dotTextView = childView.findViewById(R.id.dot_module_red_msg_num);
-                String imageUrl = moduleBean.getImage();
-                imageUrl = ImageLoadUtil.getImageRealUrl(mContent, imageUrl);
-                ImageLoader.getInstance(mContent).displayImage(imageUrl, ivModule);
+
+                if (ModuleType.NEW_APPLY_FRIEND.getTypeId().equals(moduleBean.getModuleId())) {
+                    //添加好友的 icon 用用户自己的头像
+                    String avatar = UserManager.getInstance(mContent).getUserInfo().getAvatarUrl();
+                    if (!TextUtils.isEmpty(avatar)) {
+                        ImageLoader.getInstance(mContent).displayImage(avatar, ivModule);
+                    } else {
+                        ivModule.setImageResource(R.mipmap.uikit_icon_header_unknow);
+                    }
+                } else {
+                    String imageUrl = moduleBean.getImage();
+                    imageUrl = ImageLoadUtil.getImageRealUrl(mContent, imageUrl);
+                    ImageLoader.getInstance(mContent).displayImage(imageUrl, ivModule);
+                }
+
                 tvModule.setText(moduleBean.getName());
                 int redMsgNum = moduleBean.getRedMsgNum();
                 if (redMsgNum > 99) {

@@ -18,6 +18,7 @@ import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.friend.FriendDetailContract;
 import com.hm.iou.msg.business.friend.presenter.FriendDetailPresenter;
 import com.hm.iou.tools.ImageLoader;
+import com.hm.iou.uikit.HMBottomBarView;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.dialog.HMActionSheetDialog;
 import com.hm.iou.uikit.dialog.HMAlertDialog;
@@ -49,6 +50,8 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
 
     public static final int REQ_SEND_VERIFY_REQUEST = 100;
 
+    @BindView(R2.id.ll_friend_bottom)
+    HMBottomBarView mBottomBarView;
     @BindView(R2.id.iv_friend_avatar)
     ImageView mIvAvatar;
     @BindView(R2.id.tv_friend_name1)
@@ -110,6 +113,14 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
             mLlCommentInfo.setVisibility(View.VISIBLE);
             mTvCommentInfo.setText(mCommentInfo);
         }
+
+        mBottomBarView.setOnTitleIconClickListener(new HMBottomBarView.OnTitleIconClickListener() {
+            @Override
+            public void onClickIcon() {
+                mPresenter.clickBottomMore();
+            }
+        });
+
         mPresenter.getUserInfo(mUserId, mIdType, mApplyStatus);
     }
 
@@ -133,11 +144,9 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
         }
     }
 
-    @OnClick(value = {R2.id.iv_friend_more, R2.id.btn_friend_submit})
+    @OnClick(value = {R2.id.btn_friend_submit})
     void onClick(View v) {
-        if (v.getId() == R.id.iv_friend_more) {
-            mPresenter.clickBottomMore();
-        } else if (v.getId() == R.id.btn_friend_submit) {
+        if (v.getId() == R.id.btn_friend_submit) {
             mPresenter.clickSubmitButton();
         }
     }

@@ -9,14 +9,15 @@ import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.msg.AliPayMsgDbData;
-import com.hm.iou.database.table.msg.ContractMsgDbData;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.GetAliPayListMsgResBean;
+import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgListReq;
 import com.hm.iou.msg.bean.req.MakeMsgTypeAllHaveReadReqBean;
 import com.hm.iou.msg.business.alipay.list.view.IAliPayMsgItem;
 import com.hm.iou.msg.dict.ModuleType;
+import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
@@ -70,12 +71,13 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
                         mView.enableRefresh();
                         if (resultList == null || resultList.size() == 0) {
                             mView.showDataEmpty();
+                            mView.setBottomMoreIconVisible(false);
                         } else {
                             mView.showMsgList(resultList);
+                            mView.setBottomMoreIconVisible(true);
                             mView.showLoadMoreEnd();
                             mView.scrollToBottom();
                         }
-                        getUnReadMsgNum();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -84,6 +86,7 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
                         mView.hideInitLoading();
                         mView.enableRefresh();
                         mView.showDataEmpty();
+                        mView.setBottomMoreIconVisible(false);
                     }
                 });
     }
@@ -92,8 +95,17 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
      * 获取未读消息数量
      */
     private void getUnReadMsgNum() {
-        long unReadMsg = MsgCenterDbHelper.getMsgUnReadNum(AliPayMsgDbData.class);
-        mView.setBottomClearIconVisible(unReadMsg > 0);
+        UnReadMsgNumBean unReadMsgNumBean = CacheDataUtil.getNoReadMsgNum(mContext);
+        int numNoRead = 0;
+        if (unReadMsgNumBean != null) {
+            numNoRead = unReadMsgNumBean.getButlerMessageNumber()
+                    + unReadMsgNumBean.getContractNumber()
+                    + unReadMsgNumBean.getSimilarContractNumber()
+                    + unReadMsgNumBean.getFriendMessageNumber()
+                    + unReadMsgNumBean.getWaitRepayNumber()
+                    + IMHelper.getInstance(mContext).getTotalUnReadMsgCount();
+        }
+        mView.showRedDot(numNoRead);
     }
 
 
@@ -108,6 +120,9 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
             mIsFirstPullData = false;
             req.setLastReqDate(pullTime);
         }
+
+        getUnReadMsgNum();
+
         MsgApi.getAliPayMsgList(req)
                 .compose(getProvider().<BaseResponse<GetAliPayListMsgResBean>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<GetAliPayListMsgResBean>handleResponse())
@@ -173,8 +188,10 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
                                         mView.hidePullDownRefresh();
                                         if (resultList == null || resultList.size() == 0) {
                                             mView.showDataEmpty();
+                                            mView.setBottomMoreIconVisible(false);
                                         } else {
                                             mView.showMsgList(resultList);
+                                            mView.setBottomMoreIconVisible(true);
                                             mView.showLoadMoreEnd();
                                         }
 
@@ -184,6 +201,7 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
                                     public void accept(Throwable throwable) throws Exception {
                                         mView.hidePullDownRefresh();
                                         mView.showDataEmpty();
+                                        mView.setBottomMoreIconVisible(false);
                                     }
                                 });
                     }
@@ -208,14 +226,14 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
                         dbData.setHaveRead(true);
                         MsgCenterDbHelper.saveOrUpdateMsg(dbData);
                         item.setHaveRead(true);
-                        mView.notifyItem(item, position);
-                        getUnReadMsgNum();
+                        mView.updateData(item);
                     }
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
 
                     }
+
                     @Override
                     public boolean isShowBusinessError() {
                         return false;
@@ -246,7 +264,6 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
                         List<IAliPayMsgItem> resultList = DataChangeUtil.changeAliPayDbDataToIAliPayItem(listCache);
                         mView.showMsgList(resultList);
                         mView.showLoadMoreEnd();
-                        mView.setBottomClearIconVisible(false);
                     }
 
                     @Override
@@ -254,5 +271,37 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
 
                     }
                 });
+    }
+
+    @Override
+    public void deleteMsg(final IAliPayMsgItem item) {
+        if (item.isHaveRead()) {
+            MsgCenterDbHelper.deleteMsgByMsgId(AliPayMsgDbData.class, item.getIMsgId());
+            mView.removeData(item.getIMsgId());
+        } else {
+            mView.showLoadingView();
+            MsgApi.makeSingleMsgHaveRead(item.getIMsgId(), item.getIMsgType())
+                    .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))
+                    .map(RxUtil.<Object>handleResponse())
+                    .subscribeWith(new CommSubscriber<Object>(mView) {
+                        @Override
+                        public void handleResult(Object o) {
+                            mView.dismissLoadingView();
+                            MsgCenterDbHelper.deleteMsgByMsgId(AliPayMsgDbData.class, item.getIMsgId());
+                            mView.removeData(item.getIMsgId());
+                        }
+
+                        @Override
+                        public void handleException(Throwable throwable, String s, String s1) {
+                            mView.dismissLoadingView();
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public void clearAllReadData() {
+        MsgCenterDbHelper.deleteAllReadMsgData(AliPayMsgDbData.class);
+        getListFromCache(null);
     }
 }

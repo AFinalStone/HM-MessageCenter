@@ -9,14 +9,15 @@ import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.database.MsgCenterDbHelper;
 import com.hm.iou.database.table.msg.RemindBackMsgDbData;
-import com.hm.iou.database.table.msg.SimilarityContractMsgDbData;
 import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.GetRemindBackListMsgResBean;
+import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.GetRemindBackListReq;
 import com.hm.iou.msg.bean.req.MakeMsgTypeAllHaveReadReqBean;
 import com.hm.iou.msg.business.remindback.view.IRemindBackMsgItem;
 import com.hm.iou.msg.dict.ModuleType;
+import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.msg.util.DataChangeUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
@@ -70,12 +71,13 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                         mView.enableRefresh();
                         if (resultList == null || resultList.size() == 0) {
                             mView.showDataEmpty();
+                            mView.setBottomMoreIconVisible(false);
                         } else {
                             mView.showMsgList(resultList);
+                            mView.setBottomMoreIconVisible(true);
                             mView.showLoadMoreEnd();
                             mView.scrollToBottom();
                         }
-                        getUnReadMsgNum();
 
                     }
                 }, new Consumer<Throwable>() {
@@ -85,6 +87,7 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                         mView.hideInitLoading();
                         mView.enableRefresh();
                         mView.showDataEmpty();
+                        mView.setBottomMoreIconVisible(false);
                     }
                 });
     }
@@ -93,8 +96,17 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
      * 获取未读消息数量
      */
     private void getUnReadMsgNum() {
-        long unReadMsg = MsgCenterDbHelper.getMsgUnReadNum(RemindBackMsgDbData.class);
-        mView.setBottomClearIconVisible(unReadMsg > 0);
+        UnReadMsgNumBean unReadMsgNumBean = CacheDataUtil.getNoReadMsgNum(mContext);
+        int numNoRead = 0;
+        if (unReadMsgNumBean != null) {
+            numNoRead = unReadMsgNumBean.getButlerMessageNumber()
+                    + unReadMsgNumBean.getContractNumber()
+                    + unReadMsgNumBean.getSimilarContractNumber()
+                    + unReadMsgNumBean.getFriendMessageNumber()
+                    + unReadMsgNumBean.getAlipayReceiptNumber()
+                    + IMHelper.getInstance(mContext).getTotalUnReadMsgCount();
+        }
+        mView.showRedDot(numNoRead);
     }
 
     @Override
@@ -130,6 +142,8 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                     }
 
                 });
+
+        getUnReadMsgNum();
     }
 
     @Override
@@ -164,8 +178,10 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                                         mView.hidePullDownRefresh();
                                         if (resultList == null || resultList.size() == 0) {
                                             mView.showDataEmpty();
+                                            mView.setBottomMoreIconVisible(false);
                                         } else {
                                             mView.showMsgList(resultList);
+                                            mView.setBottomMoreIconVisible(true);
                                             mView.showLoadMoreEnd();
                                         }
 
@@ -175,6 +191,7 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                                     public void accept(Throwable throwable) throws Exception {
                                         mView.hidePullDownRefresh();
                                         mView.showDataEmpty();
+                                        mView.setBottomMoreIconVisible(false);
                                     }
                                 });
                     }
@@ -199,14 +216,14 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                         dbData.setHaveRead(true);
                         MsgCenterDbHelper.saveOrUpdateMsg(dbData);
                         item.setHaveRead(true);
-                        mView.notifyItem(item, position);
-                        getUnReadMsgNum();
+                        mView.updateData(item);
                     }
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
 
                     }
+
                     @Override
                     public boolean isShowBusinessError() {
                         return false;
@@ -236,7 +253,6 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                         List<IRemindBackMsgItem> resultList = DataChangeUtil.changeRemindBackMsgDbDataToIRemindBackMsgItem(listCache);
                         mView.showMsgList(resultList);
                         mView.showLoadMoreEnd();
-                        mView.setBottomClearIconVisible(false);
                     }
 
                     @Override
@@ -244,5 +260,37 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
 
                     }
                 });
+    }
+
+    @Override
+    public void deleteMsg(final IRemindBackMsgItem item) {
+        if (item.isHaveRead()) {
+            MsgCenterDbHelper.deleteMsgByMsgId(RemindBackMsgDbData.class, item.getIMsgId());
+            mView.removeData(item.getIMsgId());
+        } else {
+            mView.showLoadingView();
+            MsgApi.makeSingleMsgHaveRead(item.getIMsgId(), item.getIMsgType())
+                    .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))
+                    .map(RxUtil.<Object>handleResponse())
+                    .subscribeWith(new CommSubscriber<Object>(mView) {
+                        @Override
+                        public void handleResult(Object o) {
+                            mView.dismissLoadingView();
+                            MsgCenterDbHelper.deleteMsgByMsgId(RemindBackMsgDbData.class, item.getIMsgId());
+                            mView.removeData(item.getIMsgId());
+                        }
+
+                        @Override
+                        public void handleException(Throwable throwable, String s, String s1) {
+                            mView.dismissLoadingView();
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public void clearAllReadData() {
+        MsgCenterDbHelper.deleteAllReadMsgData(RemindBackMsgDbData.class);
+        getListFromCache(null);
     }
 }
