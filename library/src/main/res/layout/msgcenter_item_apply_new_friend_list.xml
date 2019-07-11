@@ -19,8 +19,7 @@
             android:id="@+id/iv_from_header"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_centerVertical="true"
-            android:scaleType="fitXY" />
+            android:layout_centerVertical="true" />
 
         <Button
             android:id="@+id/btn_see"

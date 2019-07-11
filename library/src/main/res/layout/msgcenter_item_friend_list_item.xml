@@ -14,8 +14,7 @@
         <com.hm.iou.uikit.CircleImageView
             android:id="@+id/iv_header"
             android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:scaleType="centerCrop" />
+            android:layout_height="35dp" />
 
         <TextView
             android:id="@+id/tv_nick"
