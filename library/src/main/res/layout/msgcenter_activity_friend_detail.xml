@@ -27,7 +27,6 @@
                 android:id="@+id/iv_friend_avatar"
                 android:layout_width="60dip"
                 android:layout_height="60dip"
-                android:scaleType="fitXY"
                 android:layout_centerVertical="true"
                 android:src="@mipmap/uikit_icon_header_unknow"
                 />

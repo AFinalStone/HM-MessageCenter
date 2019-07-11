@@ -19,8 +19,7 @@
             android:id="@+id/iv_from_header"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_centerVertical="true"
-            android:scaleType="fitXY"/>
+            android:layout_centerVertical="true" />
 
         <Button
             android:id="@+id/btn_see"
@@ -81,7 +80,7 @@
         android:id="@+id/btn_delete"
         style="@style/UikitHMButton.Large.Red.Minor"
         android:layout_width="63dp"
-        android:textSize="@dimen/textFontSize_16"
         android:layout_height="match_parent"
-        android:text="删除" />
+        android:text="删除"
+        android:textSize="@dimen/textFontSize_16" />
 </com.hm.iou.uikit.sidemenu.SideMenuLayout>
