@@ -137,6 +137,12 @@
         <!-- 网易云通信进程间通信service -->
         <service android:name="com.netease.nimlib.service.ResponseService" />
 
+        <provider
+            android:name="com.netease.nimlib.ipc.NIMContentProvider"
+            android:authorities="${applicationId}.ipc.provider"
+            android:exported="false"
+            android:process=":core" />
+
     </application>
 
 </manifest>
