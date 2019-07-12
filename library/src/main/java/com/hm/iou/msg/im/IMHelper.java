@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import com.hm.iou.base.file.FileUtil;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.logger.Logger;
+import com.hm.iou.msg.MsgCenterAppLike;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.ChatMsgBean;
@@ -40,6 +41,7 @@ import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.misc.DirCacheFileType;
 import com.netease.nimlib.sdk.misc.MiscService;
+import com.netease.nimlib.sdk.mixpush.MixPushConfig;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
@@ -226,6 +228,11 @@ public class IMHelper {
                 return ImageLoader.getInstance(mContext).getImageBitmap(headerUrl);
             }
         };
+
+        MixPushConfig pushConfig = MsgCenterAppLike.getInstance().getPushConfig();
+        if (pushConfig != null)
+            options.mixPushConfig = pushConfig;
+
         return options;
     }
 

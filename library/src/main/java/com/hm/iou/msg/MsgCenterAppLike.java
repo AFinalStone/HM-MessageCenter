@@ -13,6 +13,7 @@ import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.event.IouDeleteEvent;
 import com.hm.iou.sharedata.event.LoginSuccEvent;
 import com.hm.iou.sharedata.event.LogoutEvent;
+import com.netease.nimlib.sdk.mixpush.MixPushConfig;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -41,6 +42,7 @@ public class MsgCenterAppLike {
     }
 
     private Context mContext;
+    private MixPushConfig mPushConfig;
 
     public void onCreate(Context context) {
         mContext = context;
@@ -48,6 +50,14 @@ public class MsgCenterAppLike {
         EventBus.getDefault().register(this);
         //初始化IM
         IMHelper.getInstance(mContext).initIM();
+    }
+
+    public void setPushConfig(MixPushConfig config) {
+        mPushConfig = config;
+    }
+
+    public MixPushConfig getPushConfig() {
+        return mPushConfig;
     }
 
     /**
