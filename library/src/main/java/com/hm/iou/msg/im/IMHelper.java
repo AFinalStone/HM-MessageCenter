@@ -29,10 +29,6 @@ import com.netease.nim.uikit.api.model.session.SessionEventListener;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nim.uikit.impl.NimUIKitImpl;
 import com.netease.nim.uikit.impl.cache.DataCacheManager;
-import com.netease.nim.uikit.impl.cache.FriendDataCache;
-import com.netease.nim.uikit.impl.cache.NimUserInfoCache;
-import com.netease.nim.uikit.impl.cache.RobotInfoCache;
-import com.netease.nim.uikit.impl.cache.TeamDataCache;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -196,7 +192,7 @@ public class IMHelper {
         config.ledOnMs = 1000;
         config.ledOffMs = 1500;
         // 通知铃声的uri字符串
-        config.notificationSound = "android.resource://" + mContext.getPackageName() + "/raw/msg";
+//        config.notificationSound = "android.resource://" + mContext.getPackageName() + "/raw/msg";
         options.statusBarNotificationConfig = config;
 
         // 配置保存图片，文件，log 等数据的目录
