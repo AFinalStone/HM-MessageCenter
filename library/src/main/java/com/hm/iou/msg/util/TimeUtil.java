@@ -27,7 +27,7 @@ public class TimeUtil {
     public static SimpleDateFormat getYmfFormat() {
         SimpleDateFormat sdf = YMF_FORMAT_TL.get();
         if (sdf == null) {
-            sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
             YMF_FORMAT_TL.set(sdf);
         }
         return sdf;

@@ -13,7 +13,6 @@ import com.hm.iou.base.BaseActivity;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
-import com.hm.iou.msg.business.contractmsg.view.IContractMsgItem;
 import com.hm.iou.msg.business.hmmsg.HmMsgListContract;
 import com.hm.iou.msg.business.hmmsg.HmMsgListPresenter;
 import com.hm.iou.uikit.HMDotTextView;
@@ -223,7 +222,7 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
     @Override
     public void showRedDot(int c) {
         if (c > 0) {
-            mTvRedDot.setText(c > 99 ? "..." : c + "");
+            mTvRedDot.setText(c > 99 ? "···" : c + "");
             mTvRedDot.setVisibility(View.VISIBLE);
         } else {
             mTvRedDot.setVisibility(View.GONE);

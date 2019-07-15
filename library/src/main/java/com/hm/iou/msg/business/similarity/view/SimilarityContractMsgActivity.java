@@ -15,7 +15,6 @@ import com.hm.iou.base.BaseActivity;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
-import com.hm.iou.msg.business.remindback.view.IRemindBackMsgItem;
 import com.hm.iou.msg.business.similarity.SimilarityContractMsgContract;
 import com.hm.iou.msg.business.similarity.SimilarityContractMsgPresenter;
 import com.hm.iou.uikit.HMDotTextView;
@@ -226,7 +225,7 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
     @Override
     public void showRedDot(int c) {
         if (c > 0) {
-            mTvRedDot.setText(c > 99 ? "..." : c + "");
+            mTvRedDot.setText(c > 99 ? "···" : c + "");
             mTvRedDot.setVisibility(View.VISIBLE);
         } else {
             mTvRedDot.setVisibility(View.GONE);

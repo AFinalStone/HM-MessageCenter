@@ -11,7 +11,10 @@
         android:layout_height="36dip"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textColor="@color/uikit_text_hint" />
+        android:text=""
+        android:textColor="@color/uikit_text_hint"
+        android:layout_marginTop="5dp"
+        />
 
     <LinearLayout
         android:id="@+id/ll_content"

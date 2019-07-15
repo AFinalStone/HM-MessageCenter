@@ -49,7 +49,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
                     android:scaleType="centerCrop"
-                    android:src="@mipmap/jietiao_elec_borrow_placeholder" />
+                    android:src="@mipmap/jietiao_ic_cover_elec_borrow_money" />
 
             </RelativeLayout>
 

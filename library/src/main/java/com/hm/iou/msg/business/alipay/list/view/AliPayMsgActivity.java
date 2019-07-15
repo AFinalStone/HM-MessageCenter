@@ -17,7 +17,6 @@ import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.alipay.list.AliPayMsgContract;
 import com.hm.iou.msg.business.alipay.list.AliPayMsgPresenter;
-import com.hm.iou.msg.business.remindback.view.IRemindBackMsgItem;
 import com.hm.iou.uikit.HMDotTextView;
 import com.hm.iou.uikit.HMLoadMoreView;
 import com.hm.iou.uikit.HMLoadingView;
@@ -227,7 +226,7 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
     @Override
     public void showRedDot(int c) {
         if (c > 0) {
-            mTvRedDot.setText(c > 99 ? "..." : c + "");
+            mTvRedDot.setText(c > 99 ? "···" : c + "");
             mTvRedDot.setVisibility(View.VISIBLE);
         } else {
             mTvRedDot.setVisibility(View.GONE);
