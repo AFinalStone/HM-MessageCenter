@@ -226,7 +226,7 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
     @Override
     public void showRedDot(int c) {
         if (c > 0) {
-            mTvRedDot.setText(c + "");
+            mTvRedDot.setText(c > 99 ? "..." : c + "");
             mTvRedDot.setVisibility(View.VISIBLE);
         } else {
             mTvRedDot.setVisibility(View.GONE);

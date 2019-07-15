@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Process;
 import android.text.TextUtils;
 
+import com.hm.iou.base.BaseBizAppLike;
 import com.hm.iou.base.file.FileUtil;
 import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.logger.Logger;
@@ -233,6 +234,7 @@ public class IMHelper {
         if (pushConfig != null)
             options.mixPushConfig = pushConfig;
 
+        options.checkManifestConfig = BaseBizAppLike.getInstance().isDebug();
         return options;
     }
 

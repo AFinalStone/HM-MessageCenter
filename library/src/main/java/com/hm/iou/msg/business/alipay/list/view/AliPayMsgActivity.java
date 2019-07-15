@@ -227,7 +227,7 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
     @Override
     public void showRedDot(int c) {
         if (c > 0) {
-            mTvRedDot.setText(c + "");
+            mTvRedDot.setText(c > 99 ? "..." : c + "");
             mTvRedDot.setVisibility(View.VISIBLE);
         } else {
             mTvRedDot.setVisibility(View.GONE);
@@ -259,9 +259,9 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
         String str = getResources().getString(R.string.messagecenter_rule_alipay);
         SpannableString spanStr = new SpannableString(str);
         int index = str.indexOf("www.54hima.com");
-        spanStr.setSpan(new ForegroundColorSpan(0xFFEF5350), index, index + 14, 0);
+        spanStr.setSpan(new ForegroundColorSpan(0xFF2782E2), index, index + 14, 0);
         index = str.indexOf("app@54hima.com");
-        spanStr.setSpan(new ForegroundColorSpan(0xFFEF5350), index, index + 14, 0);
+        spanStr.setSpan(new ForegroundColorSpan(0xFF2782E2), index, index + 14, 0);
         new HMAlertDialog.Builder(this)
                 .setTitle(R.string.messagecenter_remind_rule)
                 .setMessage(spanStr)

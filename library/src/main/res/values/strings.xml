@@ -6,7 +6,7 @@
     <string name="messagecenter_remind_rule">提醒规则</string>
     <string name="messagecenter_i_know">知道了</string>
     <string name="messagecenter_rule_contract">场景适用《吕约借条》和“附属合同”：\n\n1）收到一份待自己签署的合同，有提醒；\n2）我发起的合同对方完成签署，有提醒；\n3）等待对方签署的合同即将超时，有提醒；\n4）我未签完的合同被发起方撤回，有提醒；\n5）我输入的信息有误，被签署方退回，有提醒；\n6）仲裁受理有纠纷的合同，有提醒；</string>
-    <string name="messagecenter_rule_wait_return">场景适用“纸质合同”和“吕约合同”：\n\n1）合同逾期前2天，有提醒；\n2）合同逾期前1天，有提醒；\n3）合同逾期前0天，有提醒；\n4）合同已过期1天，有提醒；\n\n备注：分期的纸质合同债务按期提醒。；</string>
+    <string name="messagecenter_rule_wait_return">场景适用“纸质合同”和“吕约合同”：\n\n1）合同逾期前2天，有提醒；\n2）合同逾期前1天，有提醒；\n3）合同逾期前0天，有提醒；\n4）合同已过期1天，有提醒；\n\n备注：分期的纸质合同债务按期提醒。</string>
     <string name="messagecenter_rule_similar_contract"> 1）所有与自己（实名）信息相关且未被收录到当前账户下的电子合同，会收到疑似提醒；\n\n2）如果您已通过实名认证就可享受全网智能查询服务。</string>
     <string name="messagecenter_rule_hm_msg">场景适用“全体用户”和“指定人群”：\n\n 1）公共消息：[官方公告]、[官方活动]、[头条资讯]、[个性化推荐]。\n\n2）私密消息：[反馈回复]、[升级提醒]、[增值服务]、[免费特权]。</string>
     <string name="messagecenter_rule_alipay">场景适用《吕约借条》电子凭证的上传\n\n方法1：通过PC网页上传PDF文件：\n1）登录官网www.54hima.com;\n2）选择顶部导航 “文件上传”频道上传。\n\n方法2：通过APP邮箱客户端上传PDF文件；\n1）打开《吕约借条》合同内约定的联系人邮箱；\n2）发件箱输入收件人“app@54hima.com” \n3）邮件名称格式为“合同”2个中文+借条“编号”。\n\n备注：具体操作请在指定“吕约借条”详情页执行。</string>
