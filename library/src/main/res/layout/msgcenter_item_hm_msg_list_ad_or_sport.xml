@@ -14,7 +14,10 @@
         android:layout_height="36dip"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textColor="@color/uikit_text_hint" />
+        android:textColor="@color/uikit_text_hint"
+        android:layout_marginTop="8dp"
+        tools:text="2018-12-20"
+        />
 
     <LinearLayout
         android:id="@+id/ll_content"
