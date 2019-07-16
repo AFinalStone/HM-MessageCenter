@@ -84,7 +84,7 @@ public interface MsgService {
     @POST("/api/news/friend/v1/getUserInfoById")
     Flowable<BaseResponse<FriendInfo>> getUserInfoById(@Body FriendDetailReqBean data);
 
-    @POST("/api/news/friend/v1/addFriends")
+    @POST("/api/news/friend/v2/addFriends")
     Flowable<BaseResponse<Boolean>> addFriendRequest(@Body AddFriendReqBean data);
 
     @POST("/api/news/friend/v1/updateStageName")
