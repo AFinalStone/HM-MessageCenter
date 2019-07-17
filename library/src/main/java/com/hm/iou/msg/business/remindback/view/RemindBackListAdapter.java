@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.hm.iou.msg.R;
+import com.hm.iou.msg.business.alipay.list.view.IAliPayMsgItem;
 
 import java.util.List;
 
@@ -35,6 +36,14 @@ public class RemindBackListAdapter extends BaseQuickAdapter<IRemindBackMsgItem, 
                 }
             }
             if (index >= 0) {
+                int next = index + 1;
+                if (next < list.size()) {
+                    IRemindBackMsgItem currMsg = list.get(index);
+                    IRemindBackMsgItem nextMsg = list.get(next);
+                    if (currMsg.ifIShowTime()) {
+                        nextMsg.setIfIShowTime(true);
+                    }
+                }
                 remove(index);
             }
         }

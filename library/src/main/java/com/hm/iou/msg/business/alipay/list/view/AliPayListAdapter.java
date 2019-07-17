@@ -35,6 +35,14 @@ public class AliPayListAdapter extends BaseQuickAdapter<IAliPayMsgItem, BaseView
                 }
             }
             if (index >= 0) {
+                int next = index + 1;
+                if (next < list.size()) {
+                    IAliPayMsgItem currMsg = list.get(index);
+                    IAliPayMsgItem nextMsg = list.get(next);
+                    if (currMsg.ifIShowTime()) {
+                        nextMsg.setIfIShowTime(true);
+                    }
+                }
                 remove(index);
             }
         }

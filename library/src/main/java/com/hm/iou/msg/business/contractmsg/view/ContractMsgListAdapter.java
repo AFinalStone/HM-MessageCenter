@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.hm.iou.msg.R;
+import com.hm.iou.msg.business.similarity.view.ISimilarityContractMsgItem;
 
 import java.util.List;
 
@@ -36,6 +37,14 @@ public class ContractMsgListAdapter extends BaseQuickAdapter<IContractMsgItem, B
                 }
             }
             if (index >= 0) {
+                int next = index + 1;
+                if (next < list.size()) {
+                    IContractMsgItem currMsg = list.get(index);
+                    IContractMsgItem nextMsg = list.get(next);
+                    if (currMsg.ifIShowTime()) {
+                        nextMsg.setIfIShowTime(true);
+                    }
+                }
                 remove(index);
             }
         }
