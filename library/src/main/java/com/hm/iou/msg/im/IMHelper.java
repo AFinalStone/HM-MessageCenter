@@ -273,6 +273,8 @@ public class IMHelper {
      * @param account
      */
     public void deleteRecentContract(String account) {
+        if (TextUtils.isEmpty(account))
+            return;
         NIMClient.getService(MsgService.class)
                 .deleteRecentContact2(account, SessionTypeEnum.P2P);
     }

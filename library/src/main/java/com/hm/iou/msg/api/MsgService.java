@@ -3,6 +3,7 @@ package com.hm.iou.msg.api;
 import com.hm.iou.msg.bean.FriendApplyRecordListBean;
 import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.bean.FriendListBean;
+import com.hm.iou.msg.bean.FriendRelationResBean;
 import com.hm.iou.msg.bean.GetAliPayListMsgResBean;
 import com.hm.iou.msg.bean.GetAliPayMsgDetailResBean;
 import com.hm.iou.msg.bean.GetContractMsgListResBean;
@@ -13,6 +14,7 @@ import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
 import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.AddFriendReqBean;
+import com.hm.iou.msg.bean.req.AgreeFriendReqBean;
 import com.hm.iou.msg.bean.req.FriendDetailReqBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgDetailReqBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgListReq;
@@ -25,6 +27,7 @@ import com.hm.iou.msg.bean.req.GetSimilarContractMessageReqBean;
 import com.hm.iou.msg.bean.req.MakeMsgHaveReadReqBean;
 import com.hm.iou.msg.bean.req.MakeMsgTypeAllHaveReadReqBean;
 import com.hm.iou.msg.bean.req.ReportUserReqBean;
+import com.hm.iou.msg.bean.req.UpdateApplyRemarkReqBean;
 import com.hm.iou.msg.bean.req.UpdateRemarkNameReqBean;
 import com.hm.iou.sharedata.model.BaseResponse;
 
@@ -84,14 +87,21 @@ public interface MsgService {
     @POST("/api/news/friend/v1/getUserInfoById")
     Flowable<BaseResponse<FriendInfo>> getUserInfoById(@Body FriendDetailReqBean data);
 
-    @POST("/api/news/friend/v1/addFriends")
+    @POST("/api/news/friend/v2/addFriends")
     Flowable<BaseResponse<Boolean>> addFriendRequest(@Body AddFriendReqBean data);
 
     @POST("/api/news/friend/v1/updateStageName")
     Flowable<BaseResponse<Object>> updateRemarkName(@Body UpdateRemarkNameReqBean data);
 
+    @POST("/api/news/friend/v1/updatetApplyMsg")
+    Flowable<BaseResponse<Object>> updateApplyRemarkName(@Body UpdateApplyRemarkReqBean data);
+
+
     @GET("/api/news/friend/v1/addBlackById")
     Flowable<BaseResponse<Object>> addBlackName(@Query("friendId") String friendId);
+
+    @GET("/api/news/friend/v1/addBlackAndRemoveFriend")
+    Flowable<BaseResponse<Object>> addBlackAndRemoveFriend(@Query("friendId") String friendId);
 
     @GET("/api/news/friend/v1/removeBlackById")
     Flowable<BaseResponse<Object>> removeBlackName(@Query("friendId") String friendId);
@@ -102,8 +112,8 @@ public interface MsgService {
     @GET("/api/iou/front/v2/countSameIOU")
     Flowable<BaseResponse<Integer>> countSameIOU(@Query("friendId") String friendId);
 
-    @GET("/api/news/friend/v1/agreeApply")
-    Flowable<BaseResponse<Object>> agreeApply(@Query("friendId") String friendId);
+    @POST("/api/news/friend/v2/agreeApply")
+    Flowable<BaseResponse<Object>> agreeApply(@Body AgreeFriendReqBean reqBean);
 
     @GET("/api/news/friend/v1/delApplyRecord")
     Flowable<BaseResponse<Object>> deleteApplyRecord(@Query("applyId") String applyId);
@@ -113,5 +123,11 @@ public interface MsgService {
 
     @POST("/api/iou/front/v2/moneyV2/includeBatch")
     Flowable<BaseResponse<Integer>> includeBatch(@Body List<String> list);
+
+    @GET("/api/news/friend/v1/friendRelation")
+    Flowable<BaseResponse<FriendRelationResBean>> findFriendRelation(@Query("friendId") String friendId);
+
+    @GET("/api/news/friend/v1/refreshFriendApply")
+    Flowable<BaseResponse<String>> refreshFriendApply(@Query("friendId") String friendId);
 
 }

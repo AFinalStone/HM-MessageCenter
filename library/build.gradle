@@ -1,5 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
+
 
 android {
     compileSdkVersion 26
@@ -40,5 +43,7 @@ dependencies {
     compile 'com.heima.iou:hmbasebizlocal:1.0.0'
     compile 'com.heima.iou:hmdbcenterlocal:1.0.0'
     compile 'com.heima.iou:nimessagelocal:1.0.0'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 apply from: './maven_local.gradle'

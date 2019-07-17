@@ -23,6 +23,10 @@ android {
     sourceSets.main {
         jniLibs.srcDirs = ['jniLibs']
     }
+
+    packagingOptions {
+        exclude 'META-INF/library_release.kotlin_module'
+    }
 }
 
 dependencies {
