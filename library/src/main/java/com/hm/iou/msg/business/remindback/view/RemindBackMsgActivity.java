@@ -160,6 +160,9 @@ public class RemindBackMsgActivity extends BaseActivity<RemindBackMsgPresenter> 
     @Override
     public void showMsgList(List<IRemindBackMsgItem> list) {
         mAdapter.setNewData(list);
+        if (mAdapter.getData() != null && !mAdapter.getData().isEmpty()) {
+            hideInitLoading();
+        }
     }
 
     @Override

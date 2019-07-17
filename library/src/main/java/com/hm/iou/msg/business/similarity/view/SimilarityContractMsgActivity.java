@@ -161,6 +161,9 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
     @Override
     public void showMsgList(List<ISimilarityContractMsgItem> list) {
         mAdapter.setNewData(list);
+        if (mAdapter.getData() != null && !mAdapter.getData().isEmpty()) {
+            hideInitLoading();
+        }
     }
 
     @Override

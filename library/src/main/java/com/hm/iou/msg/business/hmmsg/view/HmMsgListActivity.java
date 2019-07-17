@@ -185,6 +185,9 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
     @Override
     public void showMsgList(List<IHmMsgItem> list) {
         mAdapter.setNewData(list);
+        if (mAdapter.getData() != null && !mAdapter.getData().isEmpty()) {
+            hideInitLoading();
+        }
     }
 
     @Override

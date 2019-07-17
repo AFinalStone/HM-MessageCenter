@@ -87,7 +87,7 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
                     return;
                 if (view.getId() == R.id.btn_delete) {
                     mPresenter.deleteMsg(item);
-                } else if(view.getId() == R.id.rl_content) {
+                } else if (view.getId() == R.id.rl_content) {
                     if (!item.isHaveRead()) {
                         mPresenter.makeSingleMsgHaveRead(item, position);
                     }
@@ -158,6 +158,9 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
     @Override
     public void showMsgList(List<IContractMsgItem> list) {
         mAdapter.setNewData(list);
+        if (mAdapter.getData() != null && !mAdapter.getData().isEmpty()) {
+            hideInitLoading();
+        }
     }
 
     @Override

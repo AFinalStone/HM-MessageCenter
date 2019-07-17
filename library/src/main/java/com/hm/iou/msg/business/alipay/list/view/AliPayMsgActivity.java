@@ -162,6 +162,9 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
     @Override
     public void showMsgList(List<IAliPayMsgItem> list) {
         mAdapter.setNewData(list);
+        if (mAdapter.getData() != null && !mAdapter.getData().isEmpty()) {
+            hideInitLoading();
+        }
     }
 
     @Override
