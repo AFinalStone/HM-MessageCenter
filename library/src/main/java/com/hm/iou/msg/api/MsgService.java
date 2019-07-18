@@ -72,7 +72,7 @@ public interface MsgService {
     @POST("/api/news/friend/v1/getMailList")
     Flowable<BaseResponse<FriendListBean>> getFriendList(@Body GetFriendListReq req);
 
-    @POST("/api/news/friend/v1/getApplyRecordList")
+    @POST("/api/news/friend/v2/getApplyRecordList")
     Flowable<BaseResponse<FriendApplyRecordListBean>> getApplyNewFriendList(@Body GetApplyNewFriendListReq req);
 
     @GET("/api/iou/user/v1/getCustomerFeedback")
