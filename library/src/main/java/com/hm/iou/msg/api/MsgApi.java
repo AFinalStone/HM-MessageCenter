@@ -3,6 +3,7 @@ package com.hm.iou.msg.api;
 import com.hm.iou.msg.bean.FriendApplyRecordListBean;
 import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.bean.FriendListBean;
+import com.hm.iou.msg.bean.FriendRelationResBean;
 import com.hm.iou.msg.bean.GetAliPayListMsgResBean;
 import com.hm.iou.msg.bean.GetAliPayMsgDetailResBean;
 import com.hm.iou.msg.bean.GetContractMsgListResBean;
@@ -13,6 +14,7 @@ import com.hm.iou.msg.bean.GetSimilarityContractListResBean;
 import com.hm.iou.msg.bean.ReportItemBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.AddFriendReqBean;
+import com.hm.iou.msg.bean.req.AgreeFriendReqBean;
 import com.hm.iou.msg.bean.req.FriendDetailReqBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgDetailReqBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgListReq;
@@ -25,6 +27,7 @@ import com.hm.iou.msg.bean.req.GetSimilarContractMessageReqBean;
 import com.hm.iou.msg.bean.req.MakeMsgHaveReadReqBean;
 import com.hm.iou.msg.bean.req.MakeMsgTypeAllHaveReadReqBean;
 import com.hm.iou.msg.bean.req.ReportUserReqBean;
+import com.hm.iou.msg.bean.req.UpdateApplyRemarkReqBean;
 import com.hm.iou.msg.bean.req.UpdateRemarkNameReqBean;
 import com.hm.iou.network.HttpReqManager;
 import com.hm.iou.sharedata.model.BaseResponse;
@@ -234,8 +237,30 @@ public class MsgApi {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 更新申请记录里的好友备注
+     *
+     * @param applyId    申请id
+     * @param remarkName
+     * @return
+     */
+    public static Flowable<BaseResponse<Object>> updateApplyRemarkName(String applyId, String remarkName) {
+        UpdateApplyRemarkReqBean data = new UpdateApplyRemarkReqBean();
+        data.setApplyId(applyId);
+        data.setStageName(remarkName);
+        return getService().updateApplyRemarkName(data)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
     public static Flowable<BaseResponse<Object>> addBlackName(String friendId) {
         return getService().addBlackName(friendId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Flowable<BaseResponse<Object>> addBlackAndRemoveFriend(String friendId) {
+        return getService().addBlackAndRemoveFriend(friendId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -258,8 +283,11 @@ public class MsgApi {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public static Flowable<BaseResponse<Object>> agreeApply(String friendId) {
-        return getService().agreeApply(friendId)
+    public static Flowable<BaseResponse<Object>> agreeApply(String friendId, String applyId) {
+        AgreeFriendReqBean data = new AgreeFriendReqBean();
+        data.setFriendId(friendId);
+        data.setApplyId(applyId);
+        return getService().agreeApply(data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -277,6 +305,30 @@ public class MsgApi {
      */
     public static Flowable<BaseResponse<GetOrRefreshIMTokenBean>> getOrRefreshIMToken() {
         return getService().getOrRefreshIMToken()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 查找与好友的关系
+     *
+     * @param friendId
+     * @return
+     */
+    public static Flowable<BaseResponse<FriendRelationResBean>> findFriendRelation(String friendId) {
+        return getService().findFriendRelation(friendId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 重新刷新好友申请请求
+     *
+     * @param friendId
+     * @return
+     */
+    public static Flowable<BaseResponse<String>> refreshFriendApply(String friendId) {
+        return getService().refreshFriendApply(friendId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

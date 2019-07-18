@@ -30,10 +30,6 @@ public class MsgCenterApplication extends Application {
                 "http://dev.54jietiao.com");
 //        appLike.initServer("http://re.54jietiao.com", "http://re.54jietiao.com",
 //                "http://re.54jietiao.com");
-//        appLike.initServer("http://192.168.1.107:3000", "http://192.168.1.107:3000",
-//                "http://192.168.1.107:3000");
-//        appLike.initServer("http://192.168.1.224:8071", "http://192.168.1.224:8071",
-//                "http://192.168.1.224:8071");
         initNetwork();
         //数据库缓存
         SugarContext.init(this);

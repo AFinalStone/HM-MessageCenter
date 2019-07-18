@@ -1,89 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.hm.iou.msg.demo.MainActivity">
+    android:layout_height="match_parent">
 
-
-    <Button
-        android:id="@+id/btn_login"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="login" />
-
-    <Button
-        android:id="@+id/btn_test"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="网易云IM" />
-
-    <Button
-        android:id="@+id/btn_feedback"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="反馈" />
-
-    <Button
-        android:id="@+id/btn_msgCenter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="消息中心" />
-
-    <Button
-        android:id="@+id/btn_getMsgCenterNoReadNum"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="获取消息中心未读消息数量" />
-
-    <Button
-        android:id="@+id/btn_get_contract_msg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="合同消息" />
-
-    <Button
-        android:id="@+id/btn_get_remind_back"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="待还提醒" />
-
-    <Button
-        android:id="@+id/btn_get_similarity_contract"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="疑似合同" />
-
-    <Button
-        android:id="@+id/btn_get_hm_msg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="管家消息" />
-
-    <Button
-        android:id="@+id/btn_get_alipay_msg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="支付宝回单" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.hm.iou.msg.demo.MainActivity">
 
 
-    <Button
-        android:id="@+id/btn_add_friend"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="好友详情" />
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="login" />
 
-    <Button
-        android:id="@+id/btn_add_friend2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="添加朋友" />
+        <Button
+            android:id="@+id/btn_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="网易云IM" />
 
-    <Button
-        android:id="@+id/btn_open_webview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="打开浏览器" />
+        <Button
+            android:id="@+id/btn_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="反馈" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btn_msgCenter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="消息中心" />
+
+        <Button
+            android:id="@+id/btn_getMsgCenterNoReadNum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="获取消息中心未读消息数量" />
+
+        <Button
+            android:id="@+id/btn_get_contract_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="合同消息" />
+
+        <Button
+            android:id="@+id/btn_get_remind_back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="待还提醒" />
+
+        <Button
+            android:id="@+id/btn_get_similarity_contract"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="疑似合同" />
+
+        <Button
+            android:id="@+id/btn_get_hm_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="管家消息" />
+
+        <Button
+            android:id="@+id/btn_get_alipay_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="支付宝回单" />
+
+
+        <Button
+            android:id="@+id/btn_add_friend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="好友详情" />
+
+        <Button
+            android:id="@+id/btn_add_friend2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="添加朋友" />
+
+        <Button
+            android:id="@+id/btn_open_webview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="打开浏览器" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="黑名单"
+            android:onClick="toBlackName"
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="等待好友处理"
+            android:onClick="toWaitProcess"
+            />
+
+    </LinearLayout>
+</ScrollView>
