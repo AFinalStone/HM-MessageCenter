@@ -1,9 +1,11 @@
 package com.hm.iou.msg.business.apply;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.hm.iou.base.BaseBizAppLike;
 import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
@@ -17,7 +19,11 @@ import com.hm.iou.msg.business.apply.view.IApplyNewFriend;
 import com.hm.iou.msg.event.AddFriendEvent;
 import com.hm.iou.msg.event.DeleteFriendEvent;
 import com.hm.iou.msg.util.CacheDataUtil;
+import com.hm.iou.scancode.CodeUtils;
+import com.hm.iou.sharedata.UserManager;
 import com.hm.iou.sharedata.model.BaseResponse;
+import com.hm.iou.sharedata.model.UserInfo;
+import com.hm.iou.tools.DensityUtil;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -54,7 +60,21 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
 
     @Override
     public void init() {
-        mView.showInitLoading();
+
+        UserInfo userInfo = UserManager.getInstance(mContext).getUserInfo();
+        if (userInfo != null) {
+            //头像，昵称，id
+            String headerUrl = userInfo.getAvatarUrl();
+            String nickName = userInfo.getNickName();
+            String showId = userInfo.getShowId();
+            mView.showHeaderData(headerUrl, TextUtils.isEmpty(nickName) ? "无" : nickName, showId);
+            //个人二维码
+            int length = DensityUtil.dip2px(mContext, 60);
+            String qrCodeUrl = String.format("%s/userQrcode/index.html?showId=%s", BaseBizAppLike.getInstance().getH5Server(), showId);
+            Logger.d("QrCodeUrl: " + qrCodeUrl);
+            Bitmap bitmap = CodeUtils.createImage(qrCodeUrl, length, length, null);
+            mView.showQRCodeImage(bitmap);
+        }
         loadDataFromCache(true);
     }
 
@@ -145,11 +165,6 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
                             //说明没有新增数据
                             mView.hidePullDownRefresh();
                             mView.enableRefresh(true);
-                            if (mDataList == null || mDataList.isEmpty()) {
-                                mView.showDataEmpty();
-                            } else {
-                                mView.hideInitLoading();
-                            }
                         } else {
                             //刷新新的数据
                             loadDataFromCache(false);
@@ -177,15 +192,12 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
         if (mDataList == null || mDataList.isEmpty()) {
             //显示数据加载失败，重试
             if (TextUtils.isEmpty(errMsg)) {
-                mView.showDataEmpty();
                 mView.enableRefresh(true);
             } else {
-                mView.showInitFailed();
                 mView.enableRefresh(false);
             }
             mView.hidePullDownRefresh();
         } else {
-            mView.hideInitLoading();
             mView.enableRefresh(true);
             mView.hidePullDownRefresh();
             if (!TextUtils.isEmpty(errMsg)) {
@@ -255,6 +267,11 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
                 @Override
                 public String getApplyId() {
                     return item.getApplyId();
+                }
+
+                @Override
+                public int getSexType() {
+                    return item.getSex();
                 }
             });
         }

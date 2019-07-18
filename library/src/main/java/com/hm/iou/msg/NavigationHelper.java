@@ -184,4 +184,15 @@ public class NavigationHelper {
         context.startActivity(intent);
     }
 
+    /**
+     * 邀请好友添加自己
+     *
+     * @param context
+     */
+    public static void toAddMySelf(Context context) {
+        Router.getInstance()
+                .buildWithUrl("hmiou://m.54jietiao.com/qrcode/personal_card")
+                .navigation(context);
+    }
+
 }

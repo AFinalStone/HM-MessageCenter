@@ -1,11 +1,13 @@
 package com.hm.iou.msg.business.apply.view;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hm.iou.base.BaseActivity;
@@ -16,7 +18,10 @@ import com.hm.iou.msg.business.apply.ApplyNewFriendListContract;
 import com.hm.iou.msg.business.apply.ApplyNewFriendListPresenter;
 import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
 import com.hm.iou.msg.dict.ApplyNewFriendStatus;
-import com.hm.iou.tools.StatusBarUtil;
+import com.hm.iou.router.Router;
+import com.hm.iou.tools.ImageLoader;
+import com.hm.iou.uikit.CircleImageView;
+import com.hm.iou.uikit.HMBottomBarView;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -26,21 +31,29 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListPresenter> implements ApplyNewFriendListContract.View {
 
-    @BindView(R2.id.view_statusbar_placeholder)
-    View mViewStatusBar;
     @BindView(R2.id.iv_msg_refresh)
     PullDownRefreshImageView mIvMsgRefresh;
     @BindView(R2.id.rv_msgList)
     RecyclerView mRvMsgList;
     @BindView(R2.id.refreshLayout)
     SmartRefreshLayout mRefreshLayout;
-    @BindView(R2.id.loading_init)
-    HMLoadingView mLoadingInit;
+    @BindView(R2.id.iv_header)
+    CircleImageView mIvHeader;
+    @BindView(R2.id.tv_nickname)
+    TextView mTvNickname;
+    @BindView(R2.id.tv_show_id)
+    TextView mTvShowId;
+    @BindView(R2.id.iv_qr_code)
+    ImageView mIvQrCode;
+    @BindView(R2.id.bottomBar)
+    HMBottomBarView mBottomBar;
 
     ApplyNewFriendListAdapter mAdapter;
+
 
     @Override
     protected int getLayoutId() {
@@ -54,17 +67,21 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
 
     @Override
     protected void initEventAndData(Bundle bundle) {
-        int statusBarHeight = StatusBarUtil.getStatusBarHeight(mContext);
-        if (statusBarHeight > 0) {
-            ViewGroup.LayoutParams params = mViewStatusBar.getLayoutParams();
-            params.height = statusBarHeight;
-            mViewStatusBar.setLayoutParams(params);
-        }
-
+        mBottomBar.setOnTitleClickListener(new HMBottomBarView.OnTitleClickListener() {
+            @Override
+            public void onClickTitle() {
+                Router.getInstance()
+                        .buildWithUrl("hmiou://m.54jietiao.com/person/set_type_of_add_friend_by_other")
+                        .navigation(mContext);
+            }
+        });
         mAdapter = new ApplyNewFriendListAdapter(mContext);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
 
+        HMLoadingView load = new HMLoadingView(mContext);
+        load.showDataEmpty("");
+        mAdapter.setEmptyView(load);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -98,6 +115,25 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
         mPresenter.init();
     }
 
+
+    @OnClick({R2.id.ll_search, R2.id.ll_mobile_contract, R2.id.ll_sweep_qr_code, R2.id.ll_add_my_self})
+    public void onClick(View view) {
+        int id = view.getId();
+        if (R.id.ll_search == id) {
+            Router.getInstance()
+                    .buildWithUrl("hmiou://m.54jietiao.com/iou_search/search")
+                    .navigation(mContext);
+        } else if (R.id.ll_sweep_qr_code == id) {
+            Router.getInstance()
+                    .buildWithUrl("hmiou://m.54jietiao.com/qrcode/index")
+                    .withString("show_type", "show_scan_code")
+                    .navigation(mContext);
+        } else if (R.id.ll_add_my_self == id) {
+            NavigationHelper.toAddMySelf(mContext);
+        }
+
+    }
+
     @Override
     public void showMsgList(List<IApplyNewFriend> list) {
         mAdapter.setNewData(list);
@@ -114,41 +150,9 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
     }
 
     @Override
-    public void showInitLoading() {
-        mLoadingInit.setVisibility(View.VISIBLE);
-        mLoadingInit.showDataLoading();
-    }
-
-    @Override
-    public void showInitFailed() {
-        mLoadingInit.setVisibility(View.VISIBLE);
-        mLoadingInit.showDataFail(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter.init();
-            }
-        });
-    }
-
-    @Override
-    public void hideInitLoading() {
-        mLoadingInit.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showDataEmpty() {
-        mLoadingInit.setVisibility(View.VISIBLE);
-        mLoadingInit.showDataEmpty("");
-    }
-
-    @Override
     public void removeData(String applyId) {
         if (mAdapter != null) {
             mAdapter.removeData(applyId);
-        }
-        List list = mAdapter.getData();
-        if (list == null || list.isEmpty()) {
-            showDataEmpty();
         }
     }
 
@@ -157,9 +161,18 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
         if (mAdapter != null) {
             mAdapter.removeDataByFriendId(friendId);
         }
-        List list = mAdapter.getData();
-        if (list == null || list.isEmpty()) {
-            showDataEmpty();
-        }
     }
+
+    @Override
+    public void showHeaderData(String headerUrl, String nickName, String showId) {
+        ImageLoader.getInstance(mContext).displayImage(headerUrl, mIvHeader, R.drawable.uikit_bg_pic_loading_place, R.mipmap.uikit_icon_header_unknow);
+        mTvNickname.setText(nickName);
+        mTvShowId.setText("ID：" + showId);
+    }
+
+    @Override
+    public void showQRCodeImage(Bitmap bitmap) {
+        mIvQrCode.setImageBitmap(bitmap);
+    }
+
 }

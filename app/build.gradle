@@ -1,10 +1,12 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.hm.iou.msg.demo"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -23,6 +25,10 @@ android {
     sourceSets.main {
         jniLibs.srcDirs = ['jniLibs']
     }
+    //兼容ndk,能够让ndk正常编译
+    packagingOptions {
+        exclude 'META-INF/library_release.kotlin_module'
+    }
 }
 
 dependencies {
@@ -32,10 +38,18 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
     //图片选择
     compile 'com.heima.iou:hmselectpiclocal:1.0.0'
     //首页、借条创建、编辑、展示等相关功能
     compile 'com.heima.iou:hmjietiaolocal:1.0.0'
+    //个人中心
+    compile 'com.heima.iou:hmuserinfolocal:1.0.0'
+    //个人名片和扫码
+    compile 'com.heima.iou:hmqrcodelocal:1.0.0'
+    //搜索电子借条/收条，收录
+    compile 'com.heima.iou:hmiousearchlocal:1.0.0'
     compile project(':library')
     compile 'com.android.support:multidex:1.0.0'
 }

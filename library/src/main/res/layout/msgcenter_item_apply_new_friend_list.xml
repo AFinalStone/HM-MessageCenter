@@ -21,6 +21,16 @@
             android:layout_height="35dp"
             android:layout_centerVertical="true" />
 
+        <ImageView
+            android:id="@+id/iv_sex"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignBottom="@id/iv_from_header"
+            android:layout_alignEnd="@id/iv_from_header"
+            android:layout_marginBottom="-1dp"
+            android:layout_marginEnd="-1dp"
+            tools:src="@mipmap/uikit_ic_gender_man" />
+
         <Button
             android:id="@+id/btn_see"
             style="@style/UikitHMButton.Small.Main"

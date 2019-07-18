@@ -1,61 +1,67 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/uikit_background"
     android:orientation="vertical">
 
-    <View
-        android:id="@+id/view_statusbar_placeholder"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/uikit_status_bar_height" />
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingTop="@dimen/uikit_status_bar_height"
+        app:elevation="0dp">
 
-    <RelativeLayout
+        <include layout="@layout/msgcenter_layout_apply_new_friend_list_header" />
+
+        <TextView
+            style="@style/UikitTextView.Auxiliary"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:background="@color/uikit_background"
+            android:gravity="center_vertical"
+            android:paddingStart="18dp"
+            android:text="等待确认"
+            android:textSize="@dimen/textFontSize_13" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="10dip"
-        >
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:srlAccentColor="@android:color/white"
+        app:srlEnableLoadMore="false"
+        app:srlEnablePreviewInEditMode="true"
+        app:srlEnableRefresh="false">
 
-        <com.scwang.smartrefresh.layout.SmartRefreshLayout
-            android:id="@+id/refreshLayout"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:srlAccentColor="@android:color/white"
-            app:srlEnableLoadMore="false"
-            app:srlEnablePreviewInEditMode="true"
-            app:srlEnableRefresh="false">
+            android:layout_height="50dip"
+            android:gravity="center">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dip"
-                android:gravity="center">
-
-                <com.hm.iou.uikit.PullDownRefreshImageView
-                    android:id="@+id/iv_msg_refresh"
-                    android:layout_width="40dip"
-                    android:layout_height="40dip" />
-            </LinearLayout>
+            <com.hm.iou.uikit.PullDownRefreshImageView
+                android:id="@+id/iv_msg_refresh"
+                android:layout_width="40dip"
+                android:layout_height="40dip" />
+        </LinearLayout>
 
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_msgList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:overScrollMode="never" />
-
-        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-
-        <com.hm.iou.uikit.HMLoadingView
-            android:id="@+id/loading_init"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_msgList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:overScrollMode="never" />
 
-    </RelativeLayout>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
     <com.hm.iou.uikit.HMBottomBarView
+        android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="50dip"
-        app:bottomBackText="新的朋友" />
-</LinearLayout>
+        android:layout_gravity="bottom"
+        app:bottomTitleIcon="@mipmap/uikit_ic_menu_more" />
+</android.support.design.widget.CoordinatorLayout>
 

@@ -37,5 +37,12 @@ public interface IApplyNewFriend {
     String getFriendId();
 
     String getApplyId();
+
+    /**
+     * 获取性别类型
+     *
+     * @return
+     */
+    int getSexType();
 }
 

@@ -1,12 +1,14 @@
 package com.hm.iou.msg.business.apply.view;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.dict.ApplyNewFriendStatus;
+import com.hm.iou.sharedata.model.SexEnum;
 import com.hm.iou.tools.ImageLoader;
 
 
@@ -58,6 +60,18 @@ public class ApplyNewFriendListAdapter extends BaseQuickAdapter<IApplyNewFriend,
         String headerUrl = item.getIHeaderImg();
         ImageLoader.getInstance(mContext).displayImage(headerUrl, ivHeader, R.mipmap.uikit_icon_header_unknow,
                 R.mipmap.uikit_icon_header_unknow);
+        //性别
+        int sex = item.getSexType();
+        ImageView ivSex = helper.getView(R.id.iv_sex);
+        if (sex == SexEnum.FEMALE.getValue()) {
+            ivSex.setVisibility(View.VISIBLE);
+            ImageLoader.getInstance(mContext).displayImage(R.mipmap.uikit_ic_gender_woman, ivSex);
+        } else if (sex == SexEnum.MALE.getValue()) {
+            ivSex.setVisibility(View.VISIBLE);
+            ImageLoader.getInstance(mContext).displayImage(R.mipmap.uikit_ic_gender_man, ivSex);
+        } else {
+            ivSex.setVisibility(View.INVISIBLE);
+        }
         //昵称
         helper.setText(R.id.tv_from_nick, item.getINick());
         //备注
