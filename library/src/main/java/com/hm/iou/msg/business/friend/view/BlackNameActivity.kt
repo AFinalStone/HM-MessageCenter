@@ -3,9 +3,11 @@ package com.hm.iou.msg.business.friend.view
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import com.hm.iou.base.BaseActivity
 import com.hm.iou.msg.NavigationHelper
 import com.hm.iou.msg.R
+import com.hm.iou.msg.bean.FriendInfo
 import com.hm.iou.msg.business.friend.BlackNameContract
 import com.hm.iou.msg.business.friend.presenter.BlackNamePresenter
 import com.hm.iou.tools.kt.click
@@ -22,14 +24,16 @@ class BlackNameActivity : BaseActivity<BlackNamePresenter>(), BlackNameContract.
 
         const val EXTRA_KEY_FRIEND_ID = "friendId"
         const val EXTRA_KEY_DESC = "desc"
+        const val EXTRA_KEY_BLOCKED_BY_OTHER = "blocked_by_other"
+        const val EXTRA_KEY_FRIEND_INFO = "friend_info"       //好友详情信息
 
         private const val REQ_ADD_FRIEND = 100
     }
 
     private var mFriendId: String? by extraDelegate(EXTRA_KEY_FRIEND_ID, null)
-    private var mSex: Int? by extraDelegate(WaitFriendProcessActivity.EXTRA_KEY_SEX, 3)
-    private var mAvatar: String? by extraDelegate(WaitFriendProcessActivity.EXTRA_KEY_AVATAR, null)
-    private var mDesc: String? by extraDelegate(WaitFriendProcessActivity.EXTRA_KEY_DESC, null)
+    private var mDesc: String? by extraDelegate(EXTRA_KEY_DESC, null)
+    private var mBlockedByOther: Boolean? by extraDelegate(EXTRA_KEY_BLOCKED_BY_OTHER, false)
+    private var mFriendInfo: FriendInfo? by extraDelegate(EXTRA_KEY_FRIEND_INFO, null)
 
     override fun initPresenter(): BlackNamePresenter = BlackNamePresenter(this, this)
 
@@ -39,15 +43,23 @@ class BlackNameActivity : BaseActivity<BlackNamePresenter>(), BlackNameContract.
         bundle?.let {
             mFriendId = unPackData(bundle, EXTRA_KEY_FRIEND_ID)
             mDesc = unPackData(bundle, EXTRA_KEY_DESC)
+            mBlockedByOther = unPackData(bundle, EXTRA_KEY_BLOCKED_BY_OTHER)
+            mFriendInfo = unPackData(bundle, EXTRA_KEY_FRIEND_INFO)
         }
 
         showBlackNameDesc(mDesc)
+
+        if (mBlockedByOther == true) {
+            tv_black_title.text = "含泪把你拉黑"
+            btn_back_relieve.visibility = View.INVISIBLE
+            btn_back_add.visibility = View.INVISIBLE
+        }
 
         btn_back_relieve.click {
             mPresenter.removeBlackName(mFriendId)
         }
         btn_back_add.click {
-            NavigationHelper.toSendVerifyRequestPage(this, mFriendId, true, null, REQ_ADD_FRIEND)
+            NavigationHelper.toSendVerifyRequestPage(this, mFriendId, true, mFriendInfo, REQ_ADD_FRIEND)
         }
     }
 
@@ -56,6 +68,8 @@ class BlackNameActivity : BaseActivity<BlackNamePresenter>(), BlackNameContract.
         outState?.let {
             outState.putString(EXTRA_KEY_FRIEND_ID, mFriendId)
             outState.putString(EXTRA_KEY_DESC, mDesc)
+            outState.putBoolean(EXTRA_KEY_BLOCKED_BY_OTHER, mBlockedByOther ?: false)
+            outState.putParcelable(EXTRA_KEY_FRIEND_INFO, mFriendInfo)
         }
     }
 

@@ -240,13 +240,13 @@ public class MsgApi {
     /**
      * 更新申请记录里的好友备注
      *
-     * @param applyId    申请id
+     * @param friendId
      * @param remarkName
      * @return
      */
-    public static Flowable<BaseResponse<Object>> updateApplyRemarkName(String applyId, String remarkName) {
+    public static Flowable<BaseResponse<Object>> updateApplyRemarkName(String friendId, String remarkName) {
         UpdateApplyRemarkReqBean data = new UpdateApplyRemarkReqBean();
-        data.setApplyId(applyId);
+        data.setFriendId(friendId);
         data.setStageName(remarkName);
         return getService().updateApplyRemarkName(data)
                 .subscribeOn(Schedulers.io())
@@ -283,10 +283,10 @@ public class MsgApi {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public static Flowable<BaseResponse<Object>> agreeApply(String friendId, String applyId) {
+    public static Flowable<BaseResponse<Object>> agreeApply(String friendId, String stageName) {
         AgreeFriendReqBean data = new AgreeFriendReqBean();
         data.setFriendId(friendId);
-        data.setApplyId(applyId);
+        data.setStageName(stageName);
         return getService().agreeApply(data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

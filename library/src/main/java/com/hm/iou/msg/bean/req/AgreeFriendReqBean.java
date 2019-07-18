@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class AgreeFriendReqBean {
 
-    private String applyId;
+    private String stageName;
     private String friendId;
 
 }

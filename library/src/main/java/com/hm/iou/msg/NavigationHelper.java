@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.hm.iou.base.utils.RouterUtil;
+import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.business.alipay.list.view.IAliPayMsgItem;
+import com.hm.iou.msg.business.friend.view.AccountClosedActivity;
 import com.hm.iou.msg.business.friend.view.AddFriendIndexActivity;
 import com.hm.iou.msg.business.friend.view.BlackNameActivity;
 import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
@@ -118,15 +120,15 @@ public class NavigationHelper {
      * @param context
      * @param userId
      * @param isAddFriend true-表示添加好友，false-表示确认好友申请
-     * @param applyId     确认好友申请的id
+     * @param friendInfo  好友信息，从添加好友界面进来，需传此参数
      * @param reqCode
      */
-    public static void toSendVerifyRequestPage(Activity context, String userId, boolean isAddFriend, String applyId, int reqCode) {
+    public static void toSendVerifyRequestPage(Activity context, String userId, boolean isAddFriend, FriendInfo friendInfo, int reqCode) {
         Intent intent = new Intent(context, SendVerifyRequestActivity.class);
         intent.putExtra(SendVerifyRequestActivity.EXTRA_KEY_FRIEND_ID, userId);
         intent.putExtra(SendVerifyRequestActivity.EXTRA_KEY_ID_TYPE, IdType.COMM.type);
         intent.putExtra(SendVerifyRequestActivity.EXTRA_KEY_IS_ADD_FRIEND, isAddFriend);
-        intent.putExtra(SendVerifyRequestActivity.EXTRA_KEY_APPLY_ID, applyId);
+        intent.putExtra(SendVerifyRequestActivity.EXTRA_KEY_FRIEND_INFO, friendInfo);
         context.startActivityForResult(intent, reqCode);
     }
 
@@ -232,11 +234,17 @@ public class NavigationHelper {
      * 进入黑名单界面
      *
      * @param context
+     * @param friendId       好友id
+     * @param desc           拉黑原因
+     * @param blockedByOther 是否被别人拉黑
+     * @param friendInfo     好友信息
      */
-    public static void toBlackNamePage(Context context, String friendId, String desc) {
+    public static void toBlackNamePage(Context context, String friendId, String desc, boolean blockedByOther, FriendInfo friendInfo) {
         Intent intent = new Intent(context, BlackNameActivity.class);
         intent.putExtra(BlackNameActivity.EXTRA_KEY_FRIEND_ID, friendId);
         intent.putExtra(BlackNameActivity.EXTRA_KEY_DESC, desc);
+        intent.putExtra(BlackNameActivity.EXTRA_KEY_BLOCKED_BY_OTHER, blockedByOther);
+        intent.putExtra(BlackNameActivity.EXTRA_KEY_FRIEND_INFO, friendInfo);
         context.startActivity(intent);
     }
 
@@ -257,6 +265,24 @@ public class NavigationHelper {
         intent.putExtra(WaitFriendProcessActivity.EXTRA_KEY_AVATAR, avatar);
         intent.putExtra(WaitFriendProcessActivity.EXTRA_KEY_DESC, desc);
         intent.putExtra(WaitFriendProcessActivity.EXTRA_KEY_OVER_48H, over48h);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 进入好友账号已注销或已拉黑界面
+     *
+     * @param context
+     * @param sex      性别
+     * @param avatar   头像
+     * @param desc     描述信息
+     * @param isClosed true-表示账户注销，false-表示账户被平台拉黑
+     */
+    public static void toAccountClosedPage(Context context, int sex, String avatar, String desc, boolean isClosed) {
+        Intent intent = new Intent(context, AccountClosedActivity.class);
+        intent.putExtra(AccountClosedActivity.EXTRA_KEY_SEX, sex);
+        intent.putExtra(AccountClosedActivity.EXTRA_KEY_AVATAR, avatar);
+        intent.putExtra(AccountClosedActivity.EXTRA_KEY_DESC, desc);
+        intent.putExtra(AccountClosedActivity.EXTRA_KEY_TITLE, isClosed ? "【账号已注销】" : "【账户被拉黑】");
         context.startActivity(intent);
     }
 

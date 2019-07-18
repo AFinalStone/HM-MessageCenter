@@ -217,7 +217,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                 mView.showFriendApplyOverdueDialog();
             } else if (FriendDetailActivity.APPLY_WAIT_CONFIRM.equals(mApplyStatus)) {
                 //同意添加好友
-                NavigationHelper.toSendVerifyRequestPage((Activity) mContext, mFriendInfo.getFriendId(), false, mApplyId, REQ_AGREE_ADD_FRIEND);
+                NavigationHelper.toSendVerifyRequestPage((Activity) mContext, mFriendInfo.getFriendId(), false, mFriendInfo, REQ_AGREE_ADD_FRIEND);
             } else {
                 checkFriendRelation();
             }
@@ -237,25 +237,29 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                     public void handleResult(FriendRelationResBean data) {
                         mView.dismissLoadingView();
                         int code = data.getRelationCode();
-                        if (code == 1) {
-                            //情况1：直接添加
-                            NavigationHelper.toSendVerifyRequestPage((Activity) mContext, mFriendInfo.getFriendId(), true, null, FriendDetailActivity.REQ_SEND_VERIFY_REQUEST);
-                        } else if (code == 2) {
-                            //情况2：正在等待对方确认
+                        if (code == 1) {            //是自己
+                            mView.showAlertDialog("不能添加自己为好友");
+                        } else if (code == 2) {     //直接添加，对方不需要确认就可以加为好友
+                            NavigationHelper.toSendVerifyRequestPage((Activity) mContext, mFriendInfo.getFriendId(), true, mFriendInfo, FriendDetailActivity.REQ_SEND_VERIFY_REQUEST);
+                        } else if (code == 3) {     //需要申请
+                            NavigationHelper.toSendVerifyRequestPage((Activity) mContext, mFriendInfo.getFriendId(), true, mFriendInfo, FriendDetailActivity.REQ_SEND_VERIFY_REQUEST);
+                        } else if (code == 4) {     //等待对方确认
                             NavigationHelper.toWaitProcessPage(mContext, mFriendInfo.getFriendId(),
                                     mFriendInfo.getSex(), mFriendInfo.getAvatarUrl(), data.getDesc(), data.isOverdue());
-                        } else if (code == 3) {
-                            //情况3：黑名单用户
-                            NavigationHelper.toBlackNamePage(mContext, mFriendInfo.getFriendId(), data.getDesc());
-                        } else if (code == 4) {
-                            //情况4：已经是好友
-                            mView.toastMessage("已经是好友了！");
+                        } else if (code == 5) {     //已经是好友
+                            NavigationHelper.toSessionDetail(mContext, data.getImAccid());
                             mView.closeCurrPage();
+                        } else if (code == 6) {     //被对方拉黑了
+                            NavigationHelper.toBlackNamePage(mContext, mFriendInfo.getFriendId(), data.getDesc(), true, mFriendInfo);
+                        } else if (code == 7) {     //拉黑了对方
+                            NavigationHelper.toBlackNamePage(mContext, mFriendInfo.getFriendId(), data.getDesc(), false, mFriendInfo);
+                        } else if (code == 8) {     //对方已注销
+                            NavigationHelper.toAccountClosedPage(mContext, mFriendInfo.getSex(), mFriendInfo.getAvatarUrl(), data.getDesc(), true);
                         }
                     }
 
                     @Override
-                    public void handleException(Throwable throwable, String s, String s1) {
+                    public void handleException(Throwable t, String s, String s1) {
                         mView.dismissLoadingView();
                     }
                 });
@@ -318,7 +322,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                         }
                     });
         } else {
-            MsgApi.updateApplyRemarkName(mApplyId, remark)
+            MsgApi.updateApplyRemarkName(mFriendInfo.getFriendId(), remark)
                     .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))
                     .map(RxUtil.<Object>handleResponse())
                     .subscribeWith(new CommSubscriber<Object>(mView) {

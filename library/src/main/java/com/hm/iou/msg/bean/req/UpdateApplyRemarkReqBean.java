@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class UpdateApplyRemarkReqBean {
 
-    private String applyId;
+    private String friendId;
     private String stageName;
 
 }

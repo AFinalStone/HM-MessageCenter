@@ -84,7 +84,7 @@ public interface MsgService {
     @POST("/api/news/friend/v1/addReportById")
     Flowable<BaseResponse<Object>> reportUser(@Body ReportUserReqBean data);
 
-    @POST("/api/news/friend/v1/getUserInfoById")
+    @POST("/api/news/friend/v2/getUserInfoById")
     Flowable<BaseResponse<FriendInfo>> getUserInfoById(@Body FriendDetailReqBean data);
 
     @POST("/api/news/friend/v2/addFriends")
@@ -93,7 +93,7 @@ public interface MsgService {
     @POST("/api/news/friend/v1/updateStageName")
     Flowable<BaseResponse<Object>> updateRemarkName(@Body UpdateRemarkNameReqBean data);
 
-    @POST("/api/news/friend/v1/updatetApplyMsg")
+    @POST("/api/news/friend/v1/updateApplyMsg")
     Flowable<BaseResponse<Object>> updateApplyRemarkName(@Body UpdateApplyRemarkReqBean data);
 
 
