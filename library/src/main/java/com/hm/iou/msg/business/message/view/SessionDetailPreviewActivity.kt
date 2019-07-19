@@ -24,7 +24,7 @@ class SessionDetailPreviewActivity : BaseActivity<SessionDetailPreviewPresenter>
 
 
     companion object StaticParams {
-        val EXTRA_KEY_FRIEND_IMID = "friendid_imid"
+        val EXTRA_KEY_FRIEND_IMID = "friend_im_id"
         val EXTRA_KEY_IF_CHECK_STATUS = "if_check_status"
     }
 
