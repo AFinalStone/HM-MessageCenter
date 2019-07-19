@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.github.promeg.pinyinhelper.Pinyin;
 import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
@@ -13,12 +14,14 @@ import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.FriendListBean;
 import com.hm.iou.msg.bean.req.GetFriendListReq;
+import com.hm.iou.msg.business.friendlist.view.FriendSection;
 import com.hm.iou.msg.business.friendlist.view.IFriend;
 import com.hm.iou.msg.event.AddFriendEvent;
 import com.hm.iou.msg.event.DeleteFriendEvent;
 import com.hm.iou.msg.event.UpdateFriendEvent;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
+import com.hm.iou.tools.StringUtil;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -26,7 +29,11 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -40,7 +47,9 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class FriendListPresenter extends MvpActivityPresenter<FriendListContract.View> implements FriendListContract.Presenter {
 
-    private List<FriendData> mDataList;
+    private static final String FIRST_LETTER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#";
+
+    private List<IFriend> mDataList;
 
     public FriendListPresenter(@NonNull Context context, @NonNull FriendListContract.View view) {
         super(context, view);
@@ -62,23 +71,25 @@ public class FriendListPresenter extends MvpActivityPresenter<FriendListContract
     private void loadDataFromCache(final boolean firstLoad) {
         //查询本地数据库里的数据
         Flowable.just(0)
-                .map(new Function<Integer, List<FriendData>>() {
+                .map(new Function<Integer, List<IFriend>>() {
                     @Override
-                    public List<FriendData> apply(Integer integer) throws Exception {
-                        List<FriendData> list = FriendDbUtil.getFriendList();
-                        if (list == null)
-                            list = new ArrayList<>();
+                    public List<IFriend> apply(Integer integer) throws Exception {
+                        List<FriendData> dataList = FriendDbUtil.getFriendList();
+                        if (dataList == null)
+                            dataList = new ArrayList<>();
+                        List<IFriend> list = convertData(dataList);
+                        Collections.sort(list, new PinyinComparator());
                         return list;
                     }
                 }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(getProvider().<List<FriendData>>bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(new Consumer<List<FriendData>>() {
+                .compose(getProvider().<List<IFriend>>bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(new Consumer<List<IFriend>>() {
                     @Override
-                    public void accept(List<FriendData> list) throws Exception {
+                    public void accept(List<IFriend> list) throws Exception {
                         mDataList = list;
                         if (list != null && !list.isEmpty()) {
-                            mView.showMsgList(convertData(list));
+                            mView.showMsgList(groupByPinyin(list));
                         } else {
                             mView.showMsgList(null);
                         }
@@ -196,12 +207,24 @@ public class FriendListPresenter extends MvpActivityPresenter<FriendListContract
         loadDataFromServer();
     }
 
+    /**
+     * 进行数据转换
+     *
+     * @param list
+     * @return
+     */
     private List<IFriend> convertData(List<FriendData> list) {
         if (list == null || list.isEmpty())
             return new ArrayList<>();
         List<IFriend> dataList = new ArrayList<>();
         for (final FriendData item : list) {
+            //拼音转换
+            String name = TextUtils.isEmpty(item.getStageName()) ? item.getNickName() : item.getStageName();
+            final String pinyinStr = Pinyin.toPinyin(name, "");
             dataList.add(new IFriend() {
+
+                private String pinyin = pinyinStr;
+
                 @Override
                 public String getIHeaderImg() {
                     return item.getAvatarUrl();
@@ -216,7 +239,63 @@ public class FriendListPresenter extends MvpActivityPresenter<FriendListContract
                 public String getIAccount() {
                     return item.getFriendId();
                 }
+
+                @Override
+                public String getPinyin() {
+                    return pinyin == null ? "" : pinyin;
+                }
+
             });
+        }
+        return dataList;
+    }
+
+    /**
+     * 按姓名拼音排序
+     */
+    class PinyinComparator implements Comparator<IFriend> {
+
+        @Override
+        public int compare(IFriend o1, IFriend o2) {
+            return o1.getPinyin().compareTo(o2.getPinyin());
+        }
+    }
+
+    /**
+     * 按拼音进行数据分组
+     *
+     * @param list
+     * @return
+     */
+    private List<FriendSection> groupByPinyin(List<IFriend> list) {
+        if (list == null || list.isEmpty())
+            return null;
+        Map<String, List<IFriend>> map = new LinkedHashMap<>();
+        for (IFriend friend : list) {
+            String pinyin = StringUtil.getUnnullString(friend.getPinyin());
+            String firstLetter = (pinyin.length() > 0 ? pinyin.substring(0, 1) : "").toUpperCase();
+            if (FIRST_LETTER.indexOf(firstLetter) == -1) {
+                firstLetter = "#";
+            }
+            List<IFriend> sectionList = map.get(firstLetter);
+            if (sectionList == null) {
+                sectionList = new ArrayList<>();
+                map.put(firstLetter, sectionList);
+            }
+            sectionList.add(friend);
+        }
+        List<FriendSection> dataList = new ArrayList<>();
+        for (int i = 0; i < FIRST_LETTER.length(); i++) {
+            String letter = FIRST_LETTER.substring(i, i + 1);
+            List<IFriend> friendList = map.get(letter);
+            if (friendList != null && !friendList.isEmpty()) {
+                FriendSection header = new FriendSection(true, letter);
+                dataList.add(header);
+                for (IFriend friend : friendList) {
+                    dataList.add(new FriendSection(friend));
+                }
+                header.setFriendList(friendList);
+            }
         }
         return dataList;
     }
