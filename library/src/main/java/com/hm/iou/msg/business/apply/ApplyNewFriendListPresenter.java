@@ -273,6 +273,11 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
                 public int getSexType() {
                     return item.getSex();
                 }
+
+                @Override
+                public String getStageName() {
+                    return item.getStageName();
+                }
             });
         }
         return dataList;

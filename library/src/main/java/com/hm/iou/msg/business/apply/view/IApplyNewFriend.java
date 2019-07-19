@@ -44,5 +44,7 @@ public interface IApplyNewFriend {
      * @return
      */
     int getSexType();
+
+    String getStageName();
 }
 
