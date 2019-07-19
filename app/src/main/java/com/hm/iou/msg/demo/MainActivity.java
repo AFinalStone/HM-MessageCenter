@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         reqBean.setMobile("15267163669");
 //        reqBean.setMobile("17681832816");
 //        reqBean.setMobile("15967132742");
+        reqBean.setMobile("15967132742");
 //        reqBean.setMobile("13186975702");
         reqBean.setQueryPswd(pwd);
         HttpReqManager.getInstance().getService(MsgCenterService.class)

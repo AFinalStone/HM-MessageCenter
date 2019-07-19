@@ -1,7 +1,7 @@
 package com.hm.iou.msg.business.friendlist;
 
 import com.hm.iou.base.mvp.BaseContract;
-import com.hm.iou.msg.business.friendlist.view.IFriend;
+import com.hm.iou.msg.business.friendlist.view.FriendSection;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class FriendListContract {
          *
          * @param list
          */
-        void showMsgList(List<IFriend> list);
+        void showMsgList(List<FriendSection> list);
 
 
         /**
