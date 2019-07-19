@@ -40,9 +40,30 @@ class SessionDetailPreviewPresenter(context: Activity, view: SessionDetailPrevie
                                         SexEnum.FEMALE.value -> sexIconResId = R.mipmap.uikit_ic_gender_woman
                                         SexEnum.MALE.value -> sexIconResId = R.mipmap.uikit_ic_gender_man
                                     }
-//                                    mView.showAccountHadLogout(it.avatarUrl, )
+                                    var name: String? = it.stageName
+                                    var nickName: String? = it.nickName
+                                    if (name.isNullOrEmpty()) {
+                                        name = nickName
+                                    }
+                                    var idAndName = "ID：" + it.showId + "（$nickName）"
+
+                                    mView.showAccountHadLogout(it.avatarUrl, sexIconResId, name, idAndName, it.content)
                                 }
-                                CheckIMFriendStatus.SYS_BLACK_NAME.type -> mView.toSessionDetail()
+                                CheckIMFriendStatus.SYS_BLACK_NAME.type -> {
+                                    var sexIconResId: Int? = null
+                                    when (it.sex) {
+                                        SexEnum.FEMALE.value -> sexIconResId = R.mipmap.uikit_ic_gender_woman
+                                        SexEnum.MALE.value -> sexIconResId = R.mipmap.uikit_ic_gender_man
+                                    }
+                                    var name: String? = it.stageName
+                                    var nickName: String? = it.nickName
+                                    if (name.isNullOrEmpty()) {
+                                        name = nickName
+                                    }
+                                    var idAndName = "ID：" + it.showId + "（$nickName）"
+
+                                    mView.showAccountHadInSysBlackName(it.avatarUrl, sexIconResId, name, idAndName, it.content)
+                                }
                             }
                         }
                     }
