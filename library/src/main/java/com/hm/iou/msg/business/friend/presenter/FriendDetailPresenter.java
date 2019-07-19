@@ -253,7 +253,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                             NavigationHelper.toWaitProcessPage(mContext, mFriendInfo.getFriendId(),
                                     mFriendInfo.getSex(), mFriendInfo.getAvatarUrl(), data.getDesc(), data.isOverdue());
                         } else if (code == 5) {     //已经是好友
-                            NavigationHelper.toSessionDetail(mContext, data.getImAccid(), true);
+                            NavigationHelper.toSessionDetail(mContext, data.getImAccid(), false);
                             mView.closeCurrPage();
                         } else if (code == 6) {     //被对方拉黑了
                             NavigationHelper.toBlackNamePage(mContext, mFriendInfo.getFriendId(), data.getDesc(), true, mFriendInfo);
