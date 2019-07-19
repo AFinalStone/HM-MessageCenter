@@ -88,7 +88,7 @@ public class MsgCenterFragment extends BaseFragment<MsgCenterPresenter> implemen
                 ChatMsgBean item = (ChatMsgBean) adapter.getItem(position);
                 Logger.d("会话id==" + item.getContactId());
                 if (R.id.rl_content == view.getId()) {
-                    NavigationHelper.toSessionDetail(mActivity, "", item.getContactId());
+                    NavigationHelper.toSessionDetail(mActivity, item.getContactId(), true);
                 } else if (R.id.btn_hide == view.getId()) {
                     mPresenter.deleteItemByPosition(position);
                 }

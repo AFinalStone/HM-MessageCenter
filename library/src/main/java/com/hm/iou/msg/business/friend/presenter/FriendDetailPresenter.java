@@ -217,7 +217,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
         }
         //如果是好友，则跳转到聊天页面
         if (mFriendInfo.isFriended()) {
-            NavigationHelper.toSessionDetail(mContext, mFriendInfo.getFriendId(), mFriendInfo.getFriendImAccId());
+            NavigationHelper.toSessionDetail(mContext, mFriendInfo.getFriendImAccId(), true);
         } else {
             if (FriendDetailActivity.APPLY_OVERDUE.equals(mApplyStatus)) {
                 mView.showFriendApplyOverdueDialog();
@@ -253,7 +253,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                             NavigationHelper.toWaitProcessPage(mContext, mFriendInfo.getFriendId(),
                                     mFriendInfo.getSex(), mFriendInfo.getAvatarUrl(), data.getDesc(), data.isOverdue());
                         } else if (code == 5) {     //已经是好友
-                            NavigationHelper.toSessionDetail(mContext, mFriendInfo.getFriendId(), data.getImAccid());
+                            NavigationHelper.toSessionDetail(mContext, data.getImAccid(), true);
                             mView.closeCurrPage();
                         } else if (code == 6) {     //被对方拉黑了
                             NavigationHelper.toBlackNamePage(mContext, mFriendInfo.getFriendId(), data.getDesc(), true, mFriendInfo);

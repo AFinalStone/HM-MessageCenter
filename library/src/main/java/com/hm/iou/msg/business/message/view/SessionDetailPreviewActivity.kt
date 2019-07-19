@@ -17,32 +17,37 @@ import com.netease.nim.uikit.api.NimUIKit
 import kotlinx.android.synthetic.main.msgcenter_activity_session_detail_preview.*
 
 /**
+ * IM会话的前置页面
  * Created by syl on 2019/7/18.
  */
 class SessionDetailPreviewActivity : BaseActivity<SessionDetailPreviewPresenter>(), SessionDetailPreviewContract.View {
 
 
     companion object StaticParams {
-        val EXTRA_KEY_FRIEND_ID = "friend_id"
-        val EXTRA_KEY_FRIEND_IM_ID = "friend_im_id"
+        val EXTRA_KEY_FRIEND_IMID = "friendid_imid"
+        val EXTRA_KEY_IF_CHECK_STATUS = "if_check_status"
     }
 
-    var mFriendId: String? by extraDelegate(EXTRA_KEY_FRIEND_ID, null);
-    var mFriendImId: String? by extraDelegate(EXTRA_KEY_FRIEND_IM_ID, null);
+    var mFriendImId: String? by extraDelegate(EXTRA_KEY_FRIEND_IMID, null)
+    var mIfCheckStatus: String? by extraDelegate(EXTRA_KEY_IF_CHECK_STATUS, "true")
 
 
     override fun initEventAndData(p0: Bundle?) {
         p0?.let {
-            mFriendId = p0.getValue(EXTRA_KEY_FRIEND_ID)
-            mFriendImId = p0.getValue(EXTRA_KEY_FRIEND_IM_ID)
+            mFriendImId = p0.getValue(EXTRA_KEY_FRIEND_IMID)
+            mIfCheckStatus = p0.getValue(EXTRA_KEY_IF_CHECK_STATUS)
         }
-        mPresenter.checkFriendStatus(mFriendId)
+        if ("true" == mIfCheckStatus) {
+            mPresenter.checkFriendStatus(mFriendImId)
+        } else {
+            toSessionDetail()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState?.putValue(EXTRA_KEY_FRIEND_ID, mFriendId)
-        outState?.putValue(EXTRA_KEY_FRIEND_IM_ID, mFriendImId)
+        outState?.putValue(EXTRA_KEY_FRIEND_IMID, mFriendImId)
+        outState?.putValue(EXTRA_KEY_IF_CHECK_STATUS, mIfCheckStatus)
     }
 
     override fun initPresenter(): SessionDetailPreviewPresenter = SessionDetailPreviewPresenter(mContext, this)

@@ -2,6 +2,7 @@ package com.hm.iou.msg.business;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.hm.iou.base.BaseActivity;
@@ -46,9 +47,15 @@ public class NotificationEntranceActivity extends BaseActivity {
             String sessionId = message.getSessionId();
             SessionTypeEnum type = message.getSessionType();
             if (type == SessionTypeEnum.P2P) {
+                StringBuffer sb = new StringBuffer();
+                sb.append("hmiou://m.54jietiao.com/message/session_detail")
+                        .append("?friend_im_id=")
+                        .append(Uri.encode(sessionId))
+                        .append("&if_check_status=")
+                        .append(Uri.encode("false"));
                 Router.getInstance().buildWithUrl("hmiou://m.54jietiao.com/main/index")
                         .withString("tab_type", "tag_message")
-                        .withString("session_id", sessionId)
+                        .withString("url", sb.toString())
                         .navigation(mContext);
                 finish();
                 return;

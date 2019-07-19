@@ -16,10 +16,10 @@ import com.hm.iou.msg.business.friend.view.ReportUserActivity;
 import com.hm.iou.msg.business.friend.view.SendVerifyRequestActivity;
 import com.hm.iou.msg.business.friend.view.WaitFriendProcessActivity;
 import com.hm.iou.msg.business.friendlist.view.FriendListActivity;
-import com.hm.iou.msg.business.message.view.SessionDetailPreviewActivity;
 import com.hm.iou.msg.dict.HMMsgType;
 import com.hm.iou.msg.dict.IdType;
 import com.hm.iou.router.Router;
+import com.netease.nim.uikit.api.NimUIKit;
 
 /**
  * @author syl
@@ -90,12 +90,13 @@ public class NavigationHelper {
      *
      * @param context
      */
-    public static void toSessionDetail(Context context, String friendId, String friendImId) {
-        Intent intent = new Intent(context, SessionDetailPreviewActivity.class);
-        intent.putExtra(SessionDetailPreviewActivity.StaticParams.getEXTRA_KEY_FRIEND_ID(), friendId);
-        intent.putExtra(SessionDetailPreviewActivity.StaticParams.getEXTRA_KEY_FRIEND_IM_ID(), friendImId);
-        context.startActivity(intent);
+    public static void toSessionDetail(Context context, String friendImId, boolean ifCheckStatus) {
+        Router.getInstance().buildWithUrl("hmiou://m.54jietiao.com/message/session_detail")
+                .withString("friend_im_id", friendImId)
+                .withString("if_check_status", String.valueOf(ifCheckStatus))
+                .navigation(context);
     }
+
 
     public static void toMyCardPage(Context context) {
         RouterUtil.clickMenuLink(context, "hmiou://m.54jietiao.com/qrcode/index?show_type=show_my_card");
@@ -276,7 +277,7 @@ public class NavigationHelper {
      *
      * @param context
      * @param friendInfo 好友信息
-     * @param desc 注销或拉黑原因
+     * @param desc       注销或拉黑原因
      * @param isClosed   true-表示账户注销，false-表示账户被平台拉黑
      */
     public static void toAccountClosedPage(Context context, FriendInfo friendInfo, String desc, boolean isClosed) {

@@ -246,7 +246,7 @@ public class SendVerifyRequestActivity extends BaseActivity {
             public void onRefreshComplete(boolean success) {
                 dismissLoadingView();
                 if (success) {
-                    NavigationHelper.toSessionDetail(SendVerifyRequestActivity.this, mFriendId, imAccId);
+                    NavigationHelper.toSessionDetail(SendVerifyRequestActivity.this, imAccId, true);
                 } else {
                     toastMessage("IM初始化失败");
                 }
