@@ -2,21 +2,25 @@ package com.hm.iou.msg.business.message.view
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.hm.iou.base.BaseActivity
 import com.hm.iou.msg.R
 import com.hm.iou.msg.business.message.SessionDetailPreviewContract
 import com.hm.iou.msg.business.message.presenter.SessionDetailPreviewPresenter
+import com.hm.iou.tools.ImageLoader
 import com.hm.iou.tools.kt.extraDelegate
 import com.hm.iou.tools.kt.getValue
 import com.hm.iou.tools.kt.putValue
 import com.netease.nim.uikit.api.NimUIKit
+import com.xiaomi.push.it
 import kotlinx.android.synthetic.main.msgcenter_activity_session_detail_preview.*
 
 /**
  * Created by syl on 2019/7/18.
  */
 class SessionDetailPreviewActivity : BaseActivity<SessionDetailPreviewPresenter>(), SessionDetailPreviewContract.View {
+
 
     companion object StaticParams {
         val EXTRA_KEY_FRIEND_ID = "friend_id"
@@ -32,7 +36,7 @@ class SessionDetailPreviewActivity : BaseActivity<SessionDetailPreviewPresenter>
             mFriendId = p0.getValue(EXTRA_KEY_FRIEND_ID)
             mFriendImId = p0.getValue(EXTRA_KEY_FRIEND_IM_ID)
         }
-        mFriendId?.let { mPresenter.checkFriendStatus(it) }
+        mPresenter.checkFriendStatus(mFriendId)
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -59,9 +63,14 @@ class SessionDetailPreviewActivity : BaseActivity<SessionDetailPreviewPresenter>
         }
     }
 
-    override fun showAccountHadLogout() {
+    override fun showAccountHadLogout(headerUrl: String?, sexIconResId: Int?, name: String?, idAndNickName: String?, content: String?) {
         val view: View = viewStub_account_logout_or_black.inflate()
+        ImageLoader.getInstance(mContext).displayImage(headerUrl, view.findViewById(R.id.iv_header), R.drawable.uikit_bg_pic_loading_place, R.mipmap.uikit_icon_header_unknow)
+        sexIconResId?.let {
+
+        }
     }
+
 
     override fun showAccountHadInSysBlackName() {
         val view: View = viewStub_account_logout_or_black.inflate()
@@ -69,5 +78,6 @@ class SessionDetailPreviewActivity : BaseActivity<SessionDetailPreviewPresenter>
 
     override fun toSessionDetail() {
         NimUIKit.startP2PSession(mContext, mFriendImId)
+        finish()
     }
 }

@@ -8,7 +8,7 @@ import com.hm.iou.base.mvp.BaseContract
 public class SessionDetailPreviewContract {
 
     interface Presenter : BaseContract.BasePresenter {
-        fun checkFriendStatus(friendId: String)
+        fun checkFriendStatus(friendId: String?)
     }
 
     interface View : BaseContract.BaseView {
@@ -26,8 +26,7 @@ public class SessionDetailPreviewContract {
         /**
          * 账号已经被注销了
          */
-        fun showAccountHadLogout()
-//        fun showAccountHadLogout(headerUrl: String, sexIconResId: Int, name: String, idAndNickName: String, content: String)
+        fun showAccountHadLogout(headerUrl: String?, sexIconResId: Int?, name: String?, idAndNickName: String?, content: String?)
 
         /**
          * 账号被官方拉黑了
