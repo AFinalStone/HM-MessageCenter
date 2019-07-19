@@ -69,7 +69,7 @@ public class FriendListActivity extends BaseActivity<FriendListPresenter> implem
                 IFriend data = (IFriend) adapter.getItem(position);
                 if (view.getId() == R.id.ll_friend_item) {
                     //跳转到好友详情页面
-                    NavigationHelper.toFriendDetailPage(FriendListActivity.this, data.getIAccount(), null, null);
+                    NavigationHelper.toFriendDetailPage(FriendListActivity.this, data.getIAccount());
                 }
             }
         });

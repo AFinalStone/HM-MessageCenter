@@ -96,8 +96,8 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
                     } else if (status == ApplyNewFriendStatus.HAVE_OVER.getValue()) {
                         applyStatus = FriendDetailActivity.APPLY_OVERDUE;
                     }
-                    NavigationHelper.toFriendDetailPage(ApplyNewFriendListActivity.this,
-                            data.getFriendId(), applyStatus, data.getIContent());
+                    NavigationHelper.toFriendConfirmPage(ApplyNewFriendListActivity.this,
+                            data.getFriendId(), applyStatus, data.getApplyId(), data.getIContent());
                 } else if (view.getId() == R.id.btn_delete) {
                     String applyId = data.getApplyId();
                     mPresenter.deleteApplyRecord(applyId);

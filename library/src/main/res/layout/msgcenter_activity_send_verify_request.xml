@@ -1,53 +1,56 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_verify_label"
-        style="@style/UikitTextView.Auxiliary.Normal"
-        android:text="您需要发送验证申请，等待对方通过"
-        android:layout_marginLeft="20dip"
-        android:layout_marginRight="20dip"
-        android:layout_marginTop="45dip"
-        />
+    <com.hm.iou.uikit.HMTopBarView
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/uikit_topbar_height"
+        app:bottomDividerIsShow="false"
+        app:titleBackground="@color/transparent"
+        app:titleText="告知对方我是谁" />
 
-    <EditText
-        android:id="@+id/et_verify_content"
-        style="@style/UikitEditText.Normal.TextArea"
-        android:layout_marginLeft="20dip"
-        android:layout_marginRight="20dip"
-        android:layout_marginTop="10dip"
-        android:minHeight="30dip"
-        android:maxLength="18"
-        android:hint=""
-        android:singleLine="true"
-        android:layout_below="@id/tv_verify_label"
-        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="35dp"
+        android:paddingRight="35dp">
+
+        <TextView
+            style="@style/UikitTextView"
+            android:text="我是" />
+
+        <EditText
+            android:id="@+id/et_verify_content"
+            style="@style/UikitEditText.Normal"
+            android:hint="1-10个汉字"
+            android:maxLength="10"
+            android:minHeight="50dip"
+            android:paddingLeft="20dp"
+            android:singleLine="true"
+            android:text="" />
+    </LinearLayout>
+
+    <View
+        style="@style/UikitDivider.Horizontal"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp" />
 
     <Button
         android:id="@+id/btn_verify_send"
         style="@style/UikitHMButton.Large.Main"
         android:layout_below="@id/et_verify_content"
         android:layout_marginLeft="35dip"
-        android:layout_marginRight="35dip"
         android:layout_marginTop="40dip"
-        android:text="发送"
-        />
+        android:layout_marginRight="35dip"
+        android:text="发送" />
 
-    <View
-        style="@style/UikitDivider.Horizontal"
-        android:layout_above="@+id/ll_friend_bottom" />
-
-    <com.hm.iou.uikit.HMBottomBarView
-        android:id="@+id/ll_friend_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="50dip"
-        android:layout_alignParentBottom="true"
-        app:bottomBackText="添加朋友" />
-
-
-
-</RelativeLayout>
+</LinearLayout>

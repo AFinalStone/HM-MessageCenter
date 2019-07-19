@@ -25,7 +25,6 @@ android {
     sourceSets.main {
         jniLibs.srcDirs = ['jniLibs']
     }
-    //兼容ndk,能够让ndk正常编译
     packagingOptions {
         exclude 'META-INF/library_release.kotlin_module'
     }

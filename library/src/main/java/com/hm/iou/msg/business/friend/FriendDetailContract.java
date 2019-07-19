@@ -21,7 +21,17 @@ public class FriendDetailContract {
 
         void showDetailContent(int visibility);
 
+        /**
+         * 底部显示"..."更多按钮
+         *
+         * @param isShow
+         */
+        void showBottomMore(boolean isShow);
+
         void showAvatar(String avatar);
+
+        //显示性别图标
+        void showSexImage(int sexResId);
 
         void showNickname(String nickname, String remarkName);
 
@@ -31,11 +41,22 @@ public class FriendDetailContract {
 
         void showLocation(String city);
 
-        void showBlackNameTips(int visibility);
+        void showCommentNameView(int visibility, String name);
 
-        void showApplyCommentInfo(int visibility);
+        /**
+         * 显示提交按钮上的文字
+         *
+         * @param text
+         */
+        void showSubmitButtonText(String text);
 
-        void showButtonText(String text);
+        /**
+         * 更新提交按钮的背景
+         *
+         * @param bgResId   背景
+         * @param textColor 字体颜色
+         */
+        void updateSubmitButtonStyle(int bgResId, int textColor);
 
         void showActionSheet(List<String> list);
 
@@ -44,7 +65,7 @@ public class FriendDetailContract {
         void showBlackNameConfirmDialog();
 
         /**
-         * 显示解除好友关系的确认对话框
+         * 显示删除好友关系的确认对话框
          *
          * @param msg
          */
@@ -59,11 +80,33 @@ public class FriendDetailContract {
          * 显示好友申请信息已过期的弹窗
          */
         void showFriendApplyOverdueDialog();
+
+        /**
+         * 显示拒绝并删除按钮
+         *
+         * @param visibility
+         */
+        void showRefuseBtn(int visibility);
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
 
-        void getUserInfo(String userId, int idType, String applyStatus);
+        /**
+         * 设置确认好友的状态标记
+         *
+         * @param applyStatus     "1"-表示好友申请已过期，"2"-表示等待确认好友申请，其他表示查看好友详情
+         * @param applyId         好友申请记录id
+         * @param applyRemarkName 好友申请时的备注名
+         */
+        void setFriendConfirmFlag(String applyStatus, String applyId, String applyRemarkName);
+
+        /**
+         * 获取好友详情信息
+         *
+         * @param userId 用户id
+         * @param idType 1-嘿马uid，2-云信accId
+         */
+        void getUserInfo(String userId, int idType);
 
         /**
          * 点击底部"更多"按钮
@@ -76,7 +119,6 @@ public class FriendDetailContract {
 
         /**
          * 添加黑名单
-         *
          */
         void addBlackName();
 
@@ -91,6 +133,8 @@ public class FriendDetailContract {
          * 解除好友关系
          */
         void removeFriendRelationship();
+
+        void refuseFriend(String applyId);
     }
 
 }

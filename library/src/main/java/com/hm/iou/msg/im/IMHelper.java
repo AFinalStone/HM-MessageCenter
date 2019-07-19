@@ -273,6 +273,8 @@ public class IMHelper {
      * @param account
      */
     public void deleteRecentContract(String account) {
+        if (TextUtils.isEmpty(account))
+            return;
         NIMClient.getService(MsgService.class)
                 .deleteRecentContact2(account, SessionTypeEnum.P2P);
     }
@@ -301,10 +303,32 @@ public class IMHelper {
                 });
     }
 
-    public void login() {
+    public void refreshTokenAndLogin(final OnRefreshTokenListener listener) {
+        if (mDisRefreshIMToken != null && !mDisRefreshIMToken.isDisposed()) {
+            mDisRefreshIMToken.dispose();
+        }
+        mDisRefreshIMToken = MsgApi.getOrRefreshIMToken()
+                .map(RxUtil.<GetOrRefreshIMTokenBean>handleResponse())
+                .subscribe(new Consumer<GetOrRefreshIMTokenBean>() {
+                    @Override
+                    public void accept(GetOrRefreshIMTokenBean getOrRefreshIMTokenBean) throws Exception {
+                        UserManager.getInstance(mContext).updateIMId(getOrRefreshIMTokenBean.getImAccId());
+                        UserManager.getInstance(mContext).updateIMToken(getOrRefreshIMTokenBean.getImToken());
+                        boolean flag = login();
+                        listener.onRefreshComplete(flag);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        listener.onRefreshComplete(false);
+                    }
+                });
+    }
+
+    public boolean login() {
         //为UIKIT模块保存用户账号
         if (getLoginInfo() == null) {
-            return;
+            return false;
         }
         //设置当前IM账号
         NimUIKitImpl.setAccount(getLoginInfo().getAccount());
@@ -325,6 +349,7 @@ public class IMHelper {
             public void onException(Throwable exception) {
             }
         });
+        return true;
     }
 
 
@@ -482,6 +507,11 @@ public class IMHelper {
          */
         void onFetchComplete();
 
+    }
+
+    public interface OnRefreshTokenListener {
+
+        void onRefreshComplete(boolean success);
     }
 
 }

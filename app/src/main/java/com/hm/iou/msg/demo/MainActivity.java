@@ -8,7 +8,6 @@ import android.view.View;
 import com.hm.iou.msg.MsgCenterAppLike;
 import com.hm.iou.msg.business.alipay.list.view.AliPayMsgActivity;
 import com.hm.iou.msg.business.contractmsg.view.ContractMsgActivity;
-import com.hm.iou.msg.business.friend.view.AddFriendIndexActivity;
 import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
 import com.hm.iou.msg.business.hmmsg.view.HmMsgListActivity;
 import com.hm.iou.msg.business.message.view.SessionDetailPreviewActivity;
@@ -115,7 +114,14 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_add_friend2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, AddFriendIndexActivity.class));
+//                startActivity(new Intent(MainActivity.this, AddFriendIndexActivity.class));
+
+/*                System.out.println(TimeUtil.formatContractMsgStartTime("2019-04-26 12:12:34"));
+                System.out.println(TimeUtil.formatContractMsgStartTime("2019-04-25 23:12:34"));
+                System.out.println(TimeUtil.formatContractMsgStartTime("2019-04-25 12:12:34"));
+                System.out.println(TimeUtil.formatContractMsgStartTime("2019-04-25 8:12:34"));
+                System.out.println(TimeUtil.formatContractMsgStartTime("2019-04-24 23:59:59"));*/
+
             }
         });
         findViewById(R.id.btn_get_alipay_msg).setOnClickListener(new View.OnClickListener() {
@@ -144,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         reqBean.setMobile("15267163669");
 //        reqBean.setMobile("17681832816");
 //        reqBean.setMobile("15967132742");
+        reqBean.setMobile("13186975702");
         reqBean.setQueryPswd(pwd);
         HttpReqManager.getInstance().getService(MsgCenterService.class)
                 .mobileLogin(reqBean)
@@ -165,6 +172,14 @@ public class MainActivity extends AppCompatActivity {
                         t.printStackTrace();
                     }
                 });
+    }
+
+    public void toBlackName(View v) {
+//        NavigationHelper.toBlackNamePage(this);
+    }
+
+    public void toWaitProcess(View v) {
+      //  NavigationHelper.toWaitProcessPage(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

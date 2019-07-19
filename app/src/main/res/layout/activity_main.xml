@@ -91,6 +91,18 @@
             android:text="打开浏览器" />
 
         <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="toBlackName"
+            android:text="黑名单" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="toWaitProcess"
+            android:text="等待好友处理" />
+
+        <Button
             android:id="@+id/btn_session_preview_page"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
