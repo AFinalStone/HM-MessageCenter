@@ -103,26 +103,33 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                         mView.showUserType(friendInfo.getCustomerType() == 1 ? "实名用户" : "普通用户");
 
                         mView.showRefuseBtn(View.GONE);
+                        mView.updateSubmitButtonStyle(R.drawable.uikit_selector_btn_main, mContext.getResources().getColor(R.color.uikit_selector_btn_main));
 
-                        //如果不是自己本人，并且对方是自己的好友
-                        if (!friendInfo.isOwn() && friendInfo.isFriended()) {
-                            mView.showButtonText("发消息");
+                        //如果是自己
+                        if (friendInfo.isOwn()) {
+                            mView.showSubmitButtonText("不允许添加自己");
+                            mView.updateSubmitButtonStyle(R.drawable.uikit_selector_btn_minor, mContext.getResources().getColor(R.color.uikit_text_auxiliary));
+                            mView.showBottomMore(false);
+                            mView.showCommentNameView(View.GONE, null);
+                        } else if (friendInfo.isFriended()) {
+                            //如果不是自己本人，并且对方是自己的好友
+                            mView.showSubmitButtonText("发消息");
                             //下面显示"..."icon
                             mView.showBottomMore(true);
                             mView.showCommentNameView(View.VISIBLE, friendInfo.getStageName());
                         } else {
                             if (FriendDetailActivity.APPLY_OVERDUE.equals(mApplyStatus)) {
-                                mView.showButtonText("同意并添加");
+                                mView.showSubmitButtonText("同意并添加");
                                 mView.showRefuseBtn(View.VISIBLE);
                                 mView.showCommentNameView(View.VISIBLE, friendInfo.getStageName());
                                 mView.showBottomMore(true);
                             } else if (FriendDetailActivity.APPLY_WAIT_CONFIRM.equals(mApplyStatus)) {
-                                mView.showButtonText("同意并添加");
+                                mView.showSubmitButtonText("同意并添加");
                                 mView.showRefuseBtn(View.VISIBLE);
                                 mView.showCommentNameView(View.VISIBLE, friendInfo.getStageName());
                                 mView.showBottomMore(true);
                             } else {
-                                mView.showButtonText("添加好友");
+                                mView.showSubmitButtonText("添加好友");
                                 mView.showBottomMore(false);
                                 mView.showCommentNameView(View.GONE, null);
                             }
@@ -205,13 +212,12 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
         if (mFriendInfo == null)
             return;
         if (mFriendInfo.isOwn()) {
-            mView.showAlertDialog("不能添加自己为好友");
+            mView.toastMessage("不允许添加自己");
             return;
         }
         //如果是好友，则跳转到聊天页面
         if (mFriendInfo.isFriended()) {
-            NavigationHelper.toSessionDetail(mContext, mFriendInfo.getFriendImAccId());
-            mView.closeCurrPage();
+            NavigationHelper.toSessionDetail(mContext, mFriendInfo.getFriendId(), mFriendInfo.getFriendImAccId());
         } else {
             if (FriendDetailActivity.APPLY_OVERDUE.equals(mApplyStatus)) {
                 mView.showFriendApplyOverdueDialog();
@@ -247,14 +253,14 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                             NavigationHelper.toWaitProcessPage(mContext, mFriendInfo.getFriendId(),
                                     mFriendInfo.getSex(), mFriendInfo.getAvatarUrl(), data.getDesc(), data.isOverdue());
                         } else if (code == 5) {     //已经是好友
-                            NavigationHelper.toSessionDetail(mContext, data.getImAccid());
+                            NavigationHelper.toSessionDetail(mContext, mFriendInfo.getFriendId(), data.getImAccid());
                             mView.closeCurrPage();
                         } else if (code == 6) {     //被对方拉黑了
                             NavigationHelper.toBlackNamePage(mContext, mFriendInfo.getFriendId(), data.getDesc(), true, mFriendInfo);
                         } else if (code == 7) {     //拉黑了对方
                             NavigationHelper.toBlackNamePage(mContext, mFriendInfo.getFriendId(), data.getDesc(), false, mFriendInfo);
                         } else if (code == 8) {     //对方已注销
-                            NavigationHelper.toAccountClosedPage(mContext, mFriendInfo.getSex(), mFriendInfo.getAvatarUrl(), data.getDesc(), true);
+                            NavigationHelper.toAccountClosedPage(mContext, mFriendInfo, data.getDesc(), true);
                         }
                     }
 

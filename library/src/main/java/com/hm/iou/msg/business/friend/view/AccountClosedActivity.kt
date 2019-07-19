@@ -6,6 +6,7 @@ import com.hm.iou.base.BaseActivity
 import com.hm.iou.base.mvp.BaseContract
 import com.hm.iou.base.mvp.MvpActivityPresenter
 import com.hm.iou.msg.R
+import com.hm.iou.msg.bean.FriendInfo
 import com.hm.iou.tools.ImageLoader
 import com.hm.iou.tools.kt.click
 import com.hm.iou.tools.kt.extraDelegate
@@ -21,16 +22,12 @@ import kotlinx.android.synthetic.main.msgcenter_activity_friend_wait_to_process.
 class AccountClosedActivity : BaseActivity<MvpActivityPresenter<BaseContract.BaseView>>() {
 
     companion object {
-        const val EXTRA_KEY_FRIEND_ID = "friendId"
-        const val EXTRA_KEY_SEX = "sex"
-        const val EXTRA_KEY_AVATAR = "avatar"
+        const val EXTRA_KEY_FRIEND = "friend"
         const val EXTRA_KEY_DESC = "desc"
         const val EXTRA_KEY_TITLE = "title"
     }
 
-    private var mFriendId: String? by extraDelegate(EXTRA_KEY_FRIEND_ID, null)
-    private var mSex: Int? by extraDelegate(EXTRA_KEY_SEX, 3)
-    private var mAvatar: String? by extraDelegate(EXTRA_KEY_AVATAR, null)
+    private var mFriendInfo: FriendInfo? by extraDelegate(EXTRA_KEY_FRIEND, null)
     private var mDesc: String? by extraDelegate(EXTRA_KEY_DESC, null)
     private var mTitle: String? by extraDelegate(EXTRA_KEY_TITLE, null)
 
@@ -40,18 +37,23 @@ class AccountClosedActivity : BaseActivity<MvpActivityPresenter<BaseContract.Bas
 
     override fun initEventAndData(bundle: Bundle?) {
         bundle?.let {
-            mFriendId = unPackData(bundle, EXTRA_KEY_FRIEND_ID)
-            mSex = unPackData(bundle, EXTRA_KEY_SEX)
-            mAvatar = unPackData(bundle, EXTRA_KEY_AVATAR)
+            mFriendInfo = unPackData(bundle, EXTRA_KEY_FRIEND)
             mDesc = unPackData(bundle, EXTRA_KEY_DESC)
             mTitle = unPackData(bundle, EXTRA_KEY_TITLE)
         }
 
         tv_friend_label.text = title
-        showAvatar(mAvatar)
-        showSexImage(if (mSex == 0) R.mipmap.uikit_ic_gender_woman else if (mSex == 1) R.mipmap.uikit_ic_gender_man else 0)
-        showAccountClosedDesc(mDesc)
-
+        mFriendInfo?.let {
+            showAvatar(it.avatarUrl)
+            val sex: Int = it.sex ?: 3
+            showSexImage(if (sex == 0) R.mipmap.uikit_ic_gender_woman else if (sex == 1) R.mipmap.uikit_ic_gender_man else 0)
+            val remarkName = it.stageName
+            val nickname = it.nickName
+            val showId = it.showId
+            tv_friend_name.text = if (remarkName.isNullOrEmpty()) nickname else remarkName
+            tv_friend_id.text = "ID：$showId（$nickname）"
+            showAccountClosedDesc(mDesc)
+        }
         btn_friend_known.click {
             finish()
         }
@@ -60,9 +62,7 @@ class AccountClosedActivity : BaseActivity<MvpActivityPresenter<BaseContract.Bas
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.let {
-            outState.putString(EXTRA_KEY_FRIEND_ID, mFriendId)
-            outState.putInt(EXTRA_KEY_SEX, mSex ?: 3)
-            outState.putString(EXTRA_KEY_AVATAR, mAvatar)
+            outState.putParcelable(EXTRA_KEY_FRIEND, mFriendInfo)
             outState.putString(EXTRA_KEY_DESC, mDesc)
             outState.putString(EXTRA_KEY_TITLE, mTitle)
         }

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/uikit_background"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="40dp">
+
+    <com.hm.iou.uikit.HMTopBarView
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/uikit_topbar_height"
+        app:bottomDividerIsShow="false"
+        app:titleBackground="@color/transparent"
+        app:titleText="好友关系" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2" />
+
+    <ImageView
+        android:layout_width="115dp"
+        android:layout_height="103dp"
+        android:src="@mipmap/msgcenter_ic_warn" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        style="@style/UikitTextView"
+        android:layout_marginTop="20dp"
+        android:text="友谊的小船翻了"
+        android:textColor="#ff575b62"
+        android:textSize="@dimen/textFontSize_24" />
+
+    <TextView
+        android:id="@+id/tv_content"
+        style="@style/UikitTextView.Auxiliary"
+        tools:text="在 2019.12.12 14:34 对方已经把你从好友列表删除，你是不是干坏事了？ "
+        android:layout_width="263dp"
+        android:layout_marginTop="14dp"
+        android:lineSpacingMultiplier="1.3" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4" />
+
+    <Button
+        android:id="@+id/btn_see_session_history"
+        style="@style/UikitHMButton.Large.Main"
+        android:layout_marginEnd="35dp"
+        android:layout_marginStart="35dp"
+        android:text="查看历史聊天记录" />
+
+</LinearLayout>

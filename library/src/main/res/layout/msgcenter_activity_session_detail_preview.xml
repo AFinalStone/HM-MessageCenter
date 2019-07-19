@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ViewStub
+        android:id="@+id/viewStub_black_or_delete"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout="@layout/msgcenter_layout_session_detail_preview_black_or_delete" />
+
+    <ViewStub
+        android:id="@+id/viewStub_account_logout_or_black"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout="@layout/msgcenter_layout_session_detail_preview_account_logout_or_black" />
+
+</FrameLayout>

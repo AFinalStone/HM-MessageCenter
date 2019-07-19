@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/topbar"
-        android:layout_marginTop="100dp">
+        android:layout_marginTop="10dp">
 
         <com.hm.iou.uikit.CircleImageView
             android:id="@+id/iv_friend_avatar"
@@ -36,9 +36,28 @@
             android:src="@mipmap/uikit_ic_gender_man" />
 
         <TextView
+            android:id="@+id/tv_friend_name"
+            style="@style/UikitTextView"
+            android:textSize="24dp"
+            android:layout_marginTop="22dp"
+            android:layout_below="@id/iv_friend_sex"
+            android:layout_centerHorizontal="true"
+            tools:text="张三丰"
+            />
+
+        <TextView
+            android:id="@+id/tv_friend_id"
+            style="@style/UikitTextView"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/tv_friend_name"
+            android:layout_centerHorizontal="true"
+            tools:text="张三丰"
+            />
+        
+        <TextView
             android:id="@+id/tv_friend_label"
             style="@style/UikitTextView"
-            android:layout_below="@id/iv_friend_avatar"
+            android:layout_below="@id/tv_friend_id"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
             android:text="【账户已注销】"

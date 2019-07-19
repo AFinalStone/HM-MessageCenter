@@ -1,5 +1,6 @@
 package com.hm.iou.msg.api;
 
+import com.hm.iou.msg.bean.CheckForIMChatResBean;
 import com.hm.iou.msg.bean.FriendApplyRecordListBean;
 import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.bean.FriendListBean;
@@ -329,6 +330,12 @@ public class MsgApi {
      */
     public static Flowable<BaseResponse<String>> refreshFriendApply(String friendId) {
         return getService().refreshFriendApply(friendId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Flowable<BaseResponse<CheckForIMChatResBean>> checkForIMChat(String friendId) {
+        return getService().checkForIMChat(friendId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

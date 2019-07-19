@@ -16,10 +16,10 @@ import com.hm.iou.msg.business.friend.view.ReportUserActivity;
 import com.hm.iou.msg.business.friend.view.SendVerifyRequestActivity;
 import com.hm.iou.msg.business.friend.view.WaitFriendProcessActivity;
 import com.hm.iou.msg.business.friendlist.view.FriendListActivity;
+import com.hm.iou.msg.business.message.view.SessionDetailPreviewActivity;
 import com.hm.iou.msg.dict.HMMsgType;
 import com.hm.iou.msg.dict.IdType;
 import com.hm.iou.router.Router;
-import com.netease.nim.uikit.api.NimUIKit;
 
 /**
  * @author syl
@@ -90,8 +90,11 @@ public class NavigationHelper {
      *
      * @param context
      */
-    public static void toSessionDetail(Context context, String fromAccount) {
-        NimUIKit.startP2PSession(context, fromAccount);
+    public static void toSessionDetail(Context context, String friendId, String friendImId) {
+        Intent intent = new Intent(context, SessionDetailPreviewActivity.class);
+        intent.putExtra(SessionDetailPreviewActivity.StaticParams.getEXTRA_KEY_FRIEND_ID(), friendId);
+        intent.putExtra(SessionDetailPreviewActivity.StaticParams.getEXTRA_KEY_FRIEND_IM_ID(), friendImId);
+        context.startActivity(intent);
     }
 
     public static void toMyCardPage(Context context) {
@@ -272,15 +275,13 @@ public class NavigationHelper {
      * 进入好友账号已注销或已拉黑界面
      *
      * @param context
-     * @param sex      性别
-     * @param avatar   头像
-     * @param desc     描述信息
-     * @param isClosed true-表示账户注销，false-表示账户被平台拉黑
+     * @param friendInfo 好友信息
+     * @param desc 注销或拉黑原因
+     * @param isClosed   true-表示账户注销，false-表示账户被平台拉黑
      */
-    public static void toAccountClosedPage(Context context, int sex, String avatar, String desc, boolean isClosed) {
+    public static void toAccountClosedPage(Context context, FriendInfo friendInfo, String desc, boolean isClosed) {
         Intent intent = new Intent(context, AccountClosedActivity.class);
-        intent.putExtra(AccountClosedActivity.EXTRA_KEY_SEX, sex);
-        intent.putExtra(AccountClosedActivity.EXTRA_KEY_AVATAR, avatar);
+        intent.putExtra(AccountClosedActivity.EXTRA_KEY_FRIEND, friendInfo);
         intent.putExtra(AccountClosedActivity.EXTRA_KEY_DESC, desc);
         intent.putExtra(AccountClosedActivity.EXTRA_KEY_TITLE, isClosed ? "【账号已注销】" : "【账户被拉黑】");
         context.startActivity(intent);

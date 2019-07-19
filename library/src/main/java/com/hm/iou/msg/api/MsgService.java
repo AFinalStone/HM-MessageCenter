@@ -1,5 +1,6 @@
 package com.hm.iou.msg.api;
 
+import com.hm.iou.msg.bean.CheckForIMChatResBean;
 import com.hm.iou.msg.bean.FriendApplyRecordListBean;
 import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.bean.FriendListBean;
@@ -129,5 +130,8 @@ public interface MsgService {
 
     @GET("/api/news/friend/v1/refreshFriendApply")
     Flowable<BaseResponse<String>> refreshFriendApply(@Query("friendId") String friendId);
+
+    @GET("/api/news/friend/v1/checkForIMChat")
+    Flowable<BaseResponse<CheckForIMChatResBean>> checkForIMChat(@Query("friendId") String friendId);
 
 }

@@ -216,7 +216,7 @@ public class SendVerifyRequestActivity extends BaseActivity {
                                 closePageSucc();
                             } else if (code == 8) {     //对方已注销
                                 IMHelper.getInstance(mContext).refreshTokenAndLogin();
-                                NavigationHelper.toAccountClosedPage(mContext, mFriendInfo.getSex(), mFriendInfo.getAvatarUrl(), data.getDesc(), true);
+                                NavigationHelper.toAccountClosedPage(mContext, mFriendInfo, data.getDesc(), true);
                                 closePageSucc();
                             } else {
                                 IMHelper.getInstance(mContext).refreshTokenAndLogin();
@@ -246,7 +246,7 @@ public class SendVerifyRequestActivity extends BaseActivity {
             public void onRefreshComplete(boolean success) {
                 dismissLoadingView();
                 if (success) {
-                    NavigationHelper.toSessionDetail(SendVerifyRequestActivity.this, imAccId);
+                    NavigationHelper.toSessionDetail(SendVerifyRequestActivity.this, mFriendId, imAccId);
                 } else {
                     toastMessage("IM初始化失败");
                 }

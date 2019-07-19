@@ -243,8 +243,14 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
     }
 
     @Override
-    public void showButtonText(String text) {
+    public void showSubmitButtonText(String text) {
         mBtnSubmit.setText(text);
+    }
+
+    @Override
+    public void updateSubmitButtonStyle(int bgResId, int textColor) {
+        mBtnSubmit.setBackgroundResource(bgResId);
+        mBtnSubmit.setTextColor(textColor);
     }
 
     @Override
