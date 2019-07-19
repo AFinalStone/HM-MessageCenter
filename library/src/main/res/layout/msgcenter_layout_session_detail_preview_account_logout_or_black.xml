@@ -53,11 +53,12 @@
         tools:text="ID：1001046（张嚣张）" />
 
     <TextView
+        android:id="@+id/tv_status"
         style="@style/UikitTextView"
         android:layout_marginTop="30dp"
-        android:text="【账户已注销】"
         android:textColor="#ffef5350"
-        android:textSize="@dimen/textFontSize_24" />
+        android:textSize="@dimen/textFontSize_24"
+        tools:text="【账户已注销】" />
 
     <TextView
         android:id="@+id/tv_content"
@@ -75,7 +76,7 @@
         android:layout_weight="1" />
 
     <Button
-        android:id="@+id/btn_see_session_history"
+        android:id="@+id/btn_ok"
         style="@style/UikitHMButton.Large.Main"
         android:layout_marginEnd="35dp"
         android:layout_marginStart="35dp"

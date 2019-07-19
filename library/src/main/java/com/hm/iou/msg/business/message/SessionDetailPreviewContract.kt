@@ -31,7 +31,7 @@ public class SessionDetailPreviewContract {
         /**
          * 账号被官方拉黑了
          */
-        fun showAccountHadInSysBlackName()
+        fun showAccountHadInSysBlackName(headerUrl: String?, sexIconResId: Int?, name: String?, idAndNickName: String?, content: String?)
 
         /**
          * 进入会话详情页面

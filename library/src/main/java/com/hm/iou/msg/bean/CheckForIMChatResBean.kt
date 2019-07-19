@@ -17,8 +17,8 @@ class CheckForIMChatResBean {
      * stageName : string
      */
     val result: Int? = null
-    val nickName: String? = null
-    val stageName: String? = null
+    val nickName: String? = null//昵称
+    val stageName: String? = null//备注
     val showId: String? = null
     val avatarUrl: String? = null
     val content: String? = null
