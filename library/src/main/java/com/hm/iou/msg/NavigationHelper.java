@@ -12,6 +12,7 @@ import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
 import com.hm.iou.msg.business.friend.view.ReportUserActivity;
 import com.hm.iou.msg.business.friend.view.SendVerifyRequestActivity;
 import com.hm.iou.msg.business.friendlist.view.FriendListActivity;
+import com.hm.iou.msg.business.message.view.SessionDetailPreviewActivity;
 import com.hm.iou.msg.dict.HMMsgType;
 import com.hm.iou.router.Router;
 import com.netease.nim.uikit.api.NimUIKit;
@@ -85,8 +86,11 @@ public class NavigationHelper {
      *
      * @param context
      */
-    public static void toSessionDetail(Context context, String fromAccount) {
-        NimUIKit.startP2PSession(context, fromAccount);
+    public static void toSessionDetail(Context context, String friendId, String friendImId) {
+        Intent intent = new Intent(context, SessionDetailPreviewActivity.class);
+        intent.putExtra(SessionDetailPreviewActivity.StaticParams.getEXTRA_KEY_FRIEND_ID(), friendId);
+        intent.putExtra(SessionDetailPreviewActivity.StaticParams.getEXTRA_KEY_FRIEND_IM_ID(), friendImId);
+        context.startActivity(intent);
     }
 
     public static void toMyCardPage(Context context) {

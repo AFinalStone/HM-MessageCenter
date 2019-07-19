@@ -11,6 +11,7 @@ import com.hm.iou.msg.business.contractmsg.view.ContractMsgActivity;
 import com.hm.iou.msg.business.friend.view.AddFriendIndexActivity;
 import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
 import com.hm.iou.msg.business.hmmsg.view.HmMsgListActivity;
+import com.hm.iou.msg.business.message.view.SessionDetailPreviewActivity;
 import com.hm.iou.msg.business.remindback.view.RemindBackMsgActivity;
 import com.hm.iou.msg.business.similarity.view.SimilarityContractMsgActivity;
 import com.hm.iou.network.HttpReqManager;
@@ -121,6 +122,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, AliPayMsgActivity.class));
+            }
+        });
+        findViewById(R.id.btn_session_preview_page).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SessionDetailPreviewActivity.class));
             }
         });
     }
