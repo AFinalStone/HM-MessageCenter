@@ -16,6 +16,7 @@ import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
 import com.hm.iou.msg.business.apply.view.IApplyNewFriend;
 import com.hm.iou.msg.event.AddFriendEvent;
 import com.hm.iou.msg.event.DeleteFriendEvent;
+import com.hm.iou.msg.event.UpdateFriendEvent;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.sharedata.model.BaseResponse;
 import com.trello.rxlifecycle2.android.ActivityEvent;
@@ -40,11 +41,20 @@ import io.reactivex.schedulers.Schedulers;
 public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFriendListContract.View> implements ApplyNewFriendListContract.Presenter {
 
     private List<FriendApplyRecord> mDataList;
+    private boolean mIsRefreshData = false;
 
     public ApplyNewFriendListPresenter(@NonNull Context context, @NonNull ApplyNewFriendListContract.View view) {
         super(context, view);
         EventBus.getDefault().register(this);
     }
+
+    @Override
+    public void onResume() {
+        if (mIsRefreshData) {
+            loadDataFromServer();
+        }
+    }
+
 
     @Override
     public void onDestroy() {
@@ -264,7 +274,7 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventAddFriend(AddFriendEvent event) {
         //刷新一下状态
-        loadDataFromServer();
+        mIsRefreshData = true;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -272,6 +282,12 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
         //删除数据
         FriendDbUtil.deleteFriendApplyRecordByUserId(event.friendId);
         mView.removeDataByFriendId(event.friendId);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventUpdateFriend(UpdateFriendEvent event) {
+        //刷新数据
+        mIsRefreshData = true;
     }
 
 }

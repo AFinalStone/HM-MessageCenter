@@ -15,6 +15,7 @@ public class ApplyNewFriendListContract {
 
     public interface View extends BaseContract.BaseView {
 
+
         /**
          * 显示消息数据列表
          *
@@ -60,6 +61,8 @@ public class ApplyNewFriendListContract {
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
+        
+        void onResume();
 
         /**
          * 获取消息列表

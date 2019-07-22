@@ -99,6 +99,12 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.onResume();
+    }
+
+    @Override
     public void showMsgList(List<IApplyNewFriend> list) {
         mAdapter.setNewData(list);
     }
