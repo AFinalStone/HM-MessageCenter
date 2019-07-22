@@ -31,5 +31,14 @@ public interface IFriend {
      * @return
      */
     String getPinyin();
+
+    /**
+     * 是否是分组内的最后一条数据
+     *
+     * @return
+     */
+    boolean isGroupLastItem();
+
+    void setGroupLastItem(boolean isLastItem);
 }
 

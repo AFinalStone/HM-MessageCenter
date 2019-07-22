@@ -217,6 +217,8 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                         MsgCenterDbHelper.saveOrUpdateMsg(dbData);
                         item.setHaveRead(true);
                         mView.updateData(item);
+
+                        updateCacheRedDotCount(1);
                     }
 
                     @Override
@@ -236,6 +238,11 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
         MakeMsgTypeAllHaveReadReqBean reqBean = new MakeMsgTypeAllHaveReadReqBean();
         reqBean.setLastReqDate(CacheDataUtil.getLasRemindBackPullTime(mContext));
         reqBean.setType(ModuleType.REMIND_BACK_MSG.getTypeValue());
+
+        final List<RemindBackMsgDbData> unReadList = MsgCenterDbHelper.getUnReadMsgList(RemindBackMsgDbData.class);
+        Logger.d("未读消息数 = " + (unReadList != null ? unReadList.size() : 0));
+
+        mView.showLoadingView();
         MsgApi.makeTypeMsgHaveRead(reqBean)
                 .compose(getProvider().<BaseResponse<Integer>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<Integer>handleResponse())
@@ -243,13 +250,16 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                     @Override
                     public void handleResult(Object o) {
                         Logger.d("未读消息清除完毕");
-                        List<RemindBackMsgDbData> listCache = MsgCenterDbHelper.getMsgList(RemindBackMsgDbData.class);
-                        if (listCache != null && listCache.size() > 0) {
-                            for (RemindBackMsgDbData dbData : listCache) {
-                                dbData.setHaveRead(true);
+                        mView.dismissLoadingView();
+                        if (unReadList != null && !unReadList.isEmpty()) {
+                            for (RemindBackMsgDbData data : unReadList) {
+                                data.setHaveRead(true);
                             }
+                            MsgCenterDbHelper.saveOrUpdateMsgList(unReadList);
+                            updateCacheRedDotCount(unReadList.size());
                         }
-                        MsgCenterDbHelper.saveOrUpdateMsgList(listCache);
+
+                        List<RemindBackMsgDbData> listCache = MsgCenterDbHelper.getMsgList(RemindBackMsgDbData.class);
                         List<IRemindBackMsgItem> resultList = DataChangeUtil.changeRemindBackMsgDbDataToIRemindBackMsgItem(listCache);
                         mView.showMsgList(resultList);
                         mView.showLoadMoreEnd();
@@ -257,7 +267,7 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
-
+                        mView.dismissLoadingView();
                     }
                 });
     }
@@ -278,6 +288,8 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
                             mView.dismissLoadingView();
                             MsgCenterDbHelper.deleteMsgByMsgId(RemindBackMsgDbData.class, item.getIMsgId());
                             mView.removeData(item.getIMsgId());
+
+                            updateCacheRedDotCount(1);
                         }
 
                         @Override
@@ -292,5 +304,20 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
     public void clearAllReadData() {
         MsgCenterDbHelper.deleteAllReadMsgData(RemindBackMsgDbData.class);
         getListFromCache(null);
+    }
+
+    /**
+     * 减少缓存里的红点数
+     *
+     * @param d
+     */
+    private void updateCacheRedDotCount(int d) {
+        //更新缓存红点数
+        UnReadMsgNumBean unReadMsgData = CacheDataUtil.getNoReadMsgNum(mContext);
+        if (unReadMsgData != null) {
+            int c = unReadMsgData.getWaitRepayNumber() - d;
+            unReadMsgData.setWaitRepayNumber(c < 0 ? 0 : c);
+            CacheDataUtil.setNoReadMsgNum(mContext, unReadMsgData);
+        }
     }
 }
