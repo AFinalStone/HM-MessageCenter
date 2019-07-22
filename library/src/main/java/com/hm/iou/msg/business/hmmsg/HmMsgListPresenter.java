@@ -216,6 +216,8 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                         MsgCenterDbHelper.saveOrUpdateMsg(dbData);
                         item.setHaveRead(true);
                         mView.updateData(item);
+
+                        updateCacheRedDotCount(1);
                     }
 
                     @Override
@@ -235,6 +237,11 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
         MakeMsgTypeAllHaveReadReqBean reqBean = new MakeMsgTypeAllHaveReadReqBean();
         reqBean.setLastReqDate(CacheDataUtil.getLastHMListMsgPullTime(mContext));
         reqBean.setType(ModuleType.HM_MSG.getTypeValue());
+
+        final List<HmMsgDbData> unReadList = MsgCenterDbHelper.getUnReadMsgList(HmMsgDbData.class);
+        Logger.d("未读消息数 = " + (unReadList != null ? unReadList.size() : 0));
+
+        mView.showLoadingView();
         MsgApi.makeTypeMsgHaveRead(reqBean)
                 .compose(getProvider().<BaseResponse<Integer>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<Integer>handleResponse())
@@ -242,13 +249,16 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                     @Override
                     public void handleResult(Object o) {
                         Logger.d("未读消息清除完毕");
-                        List<HmMsgDbData> listCache = MsgCenterDbHelper.getHmMsgList();
-                        if (listCache != null && listCache.size() > 0) {
-                            for (HmMsgDbData dbData : listCache) {
-                                dbData.setHaveRead(true);
+                        mView.dismissLoadingView();
+                        if (unReadList != null && !unReadList.isEmpty()) {
+                            for (HmMsgDbData data : unReadList) {
+                                data.setHaveRead(true);
                             }
+                            MsgCenterDbHelper.saveOrUpdateMsgList(unReadList);
+                            updateCacheRedDotCount(unReadList.size());
                         }
-                        MsgCenterDbHelper.saveOrUpdateMsgList(listCache);
+
+                        List<HmMsgDbData> listCache = MsgCenterDbHelper.getHmMsgList();
                         List<IHmMsgItem> resultList = DataChangeUtil.changeHmMsgDbDataToIHmMsgItem(listCache);
                         mView.showMsgList(resultList);
                         mView.showLoadMoreEnd();
@@ -256,7 +266,7 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
-
+                        mView.dismissLoadingView();
                     }
                 });
     }
@@ -270,6 +280,21 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
     public void clearAllReadData() {
         MsgCenterDbHelper.deleteAllReadMsgData(HmMsgDbData.class);
         getListFromCache(null);
+    }
+
+    /**
+     * 减少缓存里的红点数
+     *
+     * @param d
+     */
+    private void updateCacheRedDotCount(int d) {
+        //更新缓存红点数
+        UnReadMsgNumBean unReadMsgData = CacheDataUtil.getNoReadMsgNum(mContext);
+        if (unReadMsgData != null) {
+            int c = unReadMsgData.getButlerMessageNumber() - d;
+            unReadMsgData.setButlerMessageNumber(c < 0 ? 0 : c);
+            CacheDataUtil.setNoReadMsgNum(mContext, unReadMsgData);
+        }
     }
 
 }

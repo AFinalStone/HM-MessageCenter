@@ -227,6 +227,8 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
                         MsgCenterDbHelper.saveOrUpdateMsg(dbData);
                         item.setHaveRead(true);
                         mView.updateData(item);
+
+                        updateCacheRedDotCount(1);
                     }
 
                     @Override
@@ -247,6 +249,10 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
         reqBean.setLastReqDate(CacheDataUtil.getLastAliPayListMsgPullTime(mContext));
         reqBean.setType(ModuleType.ALIPAY_MSG.getTypeValue());
 
+        final List<AliPayMsgDbData> unReadList = MsgCenterDbHelper.getUnReadMsgList(AliPayMsgDbData.class);
+        Logger.d("未读消息数 = " + (unReadList != null ? unReadList.size() : 0));
+
+        mView.showLoadingView();
         MsgApi.makeTypeMsgHaveRead(reqBean)
                 .compose(getProvider().<BaseResponse<Integer>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<Integer>handleResponse())
@@ -254,13 +260,16 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
                     @Override
                     public void handleResult(Object o) {
                         Logger.d("未读消息清除完毕");
-                        List<AliPayMsgDbData> listCache = MsgCenterDbHelper.getMsgList(AliPayMsgDbData.class);
-                        if (listCache != null && listCache.size() > 0) {
-                            for (AliPayMsgDbData dbData : listCache) {
-                                dbData.setHaveRead(true);
+                        mView.dismissLoadingView();
+                        if (unReadList != null && !unReadList.isEmpty()) {
+                            for (AliPayMsgDbData data : unReadList) {
+                                data.setHaveRead(true);
                             }
+                            MsgCenterDbHelper.saveOrUpdateMsgList(unReadList);
+                            updateCacheRedDotCount(unReadList.size());
                         }
-                        MsgCenterDbHelper.saveOrUpdateMsgList(listCache);
+
+                        List<AliPayMsgDbData> listCache = MsgCenterDbHelper.getMsgList(AliPayMsgDbData.class);
                         List<IAliPayMsgItem> resultList = DataChangeUtil.changeAliPayDbDataToIAliPayItem(listCache);
                         mView.showMsgList(resultList);
                         mView.showLoadMoreEnd();
@@ -268,7 +277,7 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
-
+                        mView.dismissLoadingView();
                     }
                 });
     }
@@ -289,6 +298,8 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
                             mView.dismissLoadingView();
                             MsgCenterDbHelper.deleteMsgByMsgId(AliPayMsgDbData.class, item.getIMsgId());
                             mView.removeData(item.getIMsgId());
+
+                            updateCacheRedDotCount(1);
                         }
 
                         @Override
@@ -304,4 +315,20 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
         MsgCenterDbHelper.deleteAllReadMsgData(AliPayMsgDbData.class);
         getListFromCache(null);
     }
+
+    /**
+     * 减少缓存里的红点数
+     *
+     * @param d
+     */
+    private void updateCacheRedDotCount(int d) {
+        //更新缓存红点数
+        UnReadMsgNumBean unReadMsgData = CacheDataUtil.getNoReadMsgNum(mContext);
+        if (unReadMsgData != null) {
+            int c = unReadMsgData.getAlipayReceiptNumber() - d;
+            unReadMsgData.setAlipayReceiptNumber(c < 0 ? 0 : c);
+            CacheDataUtil.setNoReadMsgNum(mContext, unReadMsgData);
+        }
+    }
+
 }

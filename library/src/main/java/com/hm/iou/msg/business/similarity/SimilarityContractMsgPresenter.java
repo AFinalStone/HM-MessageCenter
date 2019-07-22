@@ -49,6 +49,8 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
 
     private boolean mIsFirstPullData;
 
+    private List<SimilarityContractMsgDbData> mTempUnreadList;
+
     public SimilarityContractMsgPresenter(@NonNull Context context, @NonNull SimilarityContractMsgContract.View view) {
         super(context, view);
     }
@@ -223,6 +225,8 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                         MsgCenterDbHelper.saveOrUpdateMsg(dbData);
                         item.setHaveRead(true);
                         mView.updateData(item);
+
+                        updateCacheRedDotCount(1);
                     }
 
                     @Override
@@ -262,6 +266,9 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                 .flatMap(new Function<BaseResponse<Integer>, Publisher<BaseResponse<Integer>>>() {
                     @Override
                     public Publisher<BaseResponse<Integer>> apply(BaseResponse<Integer> integerBaseResponse) throws Exception {
+                        //读取所有的未读消息列表
+                        mTempUnreadList = MsgCenterDbHelper.getUnReadMsgList(SimilarityContractMsgDbData.class);
+
                         MakeMsgTypeAllHaveReadReqBean reqBean = new MakeMsgTypeAllHaveReadReqBean();
                         reqBean.setLastReqDate(CacheDataUtil.getLastSimilarityContractListMsgPullTime(mContext));
                         reqBean.setType(ModuleType.SIMILARITY_CONTRACT_MSG.getTypeValue());
@@ -275,13 +282,14 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                     public void handleResult(Integer integer) {
                         mView.dismissLoadingView();
                         Logger.d("未读消息清除完毕");
-                        List<SimilarityContractMsgDbData> listCache = MsgCenterDbHelper.getMsgList(SimilarityContractMsgDbData.class);
-                        if (listCache != null && listCache.size() > 0) {
-                            for (SimilarityContractMsgDbData dbData : listCache) {
+                        if (mTempUnreadList != null && mTempUnreadList.size() > 0) {
+                            for (SimilarityContractMsgDbData dbData : mTempUnreadList) {
                                 dbData.setHaveRead(true);
                             }
+                            MsgCenterDbHelper.saveOrUpdateMsgList(mTempUnreadList);
                         }
-                        MsgCenterDbHelper.saveOrUpdateMsgList(listCache);
+
+                        List<SimilarityContractMsgDbData> listCache = MsgCenterDbHelper.getMsgList(SimilarityContractMsgDbData.class);
                         List<ISimilarityContractMsgItem> resultList = DataChangeUtil.changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(listCache);
                         mView.showMsgList(resultList);
                         mView.showLoadMoreEnd();
@@ -311,6 +319,8 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                             mView.dismissLoadingView();
                             MsgCenterDbHelper.deleteMsgByMsgId(SimilarityContractMsgDbData.class, item.getIMsgId());
                             mView.removeData(item.getIMsgId());
+
+                            updateCacheRedDotCount(1);
                         }
 
                         @Override
@@ -326,4 +336,20 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
         MsgCenterDbHelper.deleteAllReadMsgData(SimilarityContractMsgDbData.class);
         getListFromCache(null);
     }
+
+    /**
+     * 减少缓存里的红点数
+     *
+     * @param d
+     */
+    private void updateCacheRedDotCount(int d) {
+        //更新缓存红点数
+        UnReadMsgNumBean unReadMsgData = CacheDataUtil.getNoReadMsgNum(mContext);
+        if (unReadMsgData != null) {
+            int c = unReadMsgData.getSimilarContractNumber() - d;
+            unReadMsgData.setSimilarContractNumber(c < 0 ? 0 : c);
+            CacheDataUtil.setNoReadMsgNum(mContext, unReadMsgData);
+        }
+    }
+
 }
