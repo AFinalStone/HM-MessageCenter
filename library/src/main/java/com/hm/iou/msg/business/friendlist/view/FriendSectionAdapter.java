@@ -60,6 +60,8 @@ public class FriendSectionAdapter extends BaseSectionQuickAdapter<FriendSection,
                 R.mipmap.uikit_icon_header_unknow);
         //昵称
         helper.setText(R.id.tv_nick, item.getINick());
+        //如果是分组最后一条数据时，去掉分隔线
+        helper.setVisible(R.id.view_friend_divider, !item.isGroupLastItem());
 
         helper.addOnClickListener(R.id.ll_friend_item);
     }
