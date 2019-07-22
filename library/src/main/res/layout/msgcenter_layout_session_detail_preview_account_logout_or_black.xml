@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/uikit_background"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="40dp">
+
+    <com.hm.iou.uikit.HMTopBarView
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/uikit_topbar_height"
+        app:bottomDividerIsShow="false"
+        app:titleBackground="@color/transparent" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.hm.iou.uikit.CircleImageView
+            android:id="@+id/iv_header"
+            android:layout_width="104dp"
+            android:layout_height="104dp"
+            android:src="@mipmap/uikit_icon_header_unknow" />
+
+        <ImageView
+            android:id="@+id/iv_sex"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignBottom="@id/iv_header"
+            android:layout_alignEnd="@id/iv_header"
+            android:layout_marginBottom="-1dp"
+            android:layout_marginEnd="-1dp"
+            tools:src="@mipmap/uikit_ic_gender_man" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_name"
+        style="@style/UikitTextView"
+        android:layout_marginTop="20dp"
+        android:textSize="@dimen/textFontSize_24"
+        tools:text="张三丰" />
+
+    <TextView
+        android:id="@+id/tv_id_and_nick_name"
+        style="@style/UikitTextView"
+        android:layout_marginTop="8dp"
+        android:lineSpacingMultiplier="1.3"
+        tools:text="ID：1001046（张嚣张）" />
+
+    <TextView
+        android:id="@+id/tv_status"
+        style="@style/UikitTextView"
+        android:layout_marginTop="30dp"
+        android:textColor="#ffef5350"
+        android:textSize="@dimen/textFontSize_24"
+        tools:text="【账户已注销】" />
+
+    <TextView
+        android:id="@+id/tv_content"
+        style="@style/UikitTextView.Auxiliary"
+        android:layout_width="match_parent"
+        android:layout_marginEnd="45dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="30dp"
+        android:lineSpacingMultiplier="1.3"
+        tools:text="该账户在 2019.12.12 14:34 因为“个人原因”，选择注销， 但是已签的《吕约合同》依然有效， 如果与您存在债务纠纷，您可通过 【首页】-【仲裁维权】-进行在线维权 " />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btn_ok"
+        style="@style/UikitHMButton.Large.Main"
+        android:layout_marginEnd="35dp"
+        android:layout_marginStart="35dp"
+        android:text="知道了" />
+
+</LinearLayout>

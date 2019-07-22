@@ -1,11 +1,12 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/uikit_background"
-    android:orientation="vertical">
+    android:background="@color/white">
 
     <com.hm.iou.uikit.HMTopBarView
+        android:id="@+id/topbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/uikit_topbar_height"
         app:bottomDividerIsShow="false"
@@ -14,8 +15,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:layout_below="@id/topbar">
 
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:id="@+id/refreshLayout"
@@ -53,5 +54,28 @@
 
     </RelativeLayout>
 
-</LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_letter_overlay"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/msgcenter_bg_letter_overlay"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <com.hm.iou.msg.widget.SideLetterBar
+        android:id="@+id/side_letter_bar"
+        android:layout_width="36dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/topbar"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="40dp"
+        tools:ignore="RtlHardcoded" />
+
+</RelativeLayout>
 

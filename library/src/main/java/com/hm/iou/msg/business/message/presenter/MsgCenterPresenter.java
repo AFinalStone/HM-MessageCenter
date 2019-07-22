@@ -1,9 +1,10 @@
-package com.hm.iou.msg.business.message;
+package com.hm.iou.msg.business.message.presenter;
 
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -17,6 +18,7 @@ import com.hm.iou.msg.MsgCenterAppLike;
 import com.hm.iou.msg.bean.ChatMsgBean;
 import com.hm.iou.msg.bean.MsgListHeaderBean;
 import com.hm.iou.msg.bean.UnReadMsgNumBean;
+import com.hm.iou.msg.business.message.MsgCenterContract;
 import com.hm.iou.msg.dict.ModuleType;
 import com.hm.iou.msg.event.AddFriendEvent;
 import com.hm.iou.msg.event.DeleteFriendEvent;
@@ -390,6 +392,8 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvenDeleteFriend(DeleteFriendEvent deleteFriendEvent) {
         String account = deleteFriendEvent.imAccId;
+        if (TextUtils.isEmpty(account))
+            return;
         IMHelper.getInstance(mContext).deleteRecentContract(account);
         for (int i = 0; i < mChatList.size(); i++) {
             account.equals(mChatList.get(i).getContactId());

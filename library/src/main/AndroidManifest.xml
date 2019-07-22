@@ -88,9 +88,33 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
-        <!-- 消息推动点击入口 -->
+        <!-- 黑名单 -->
+        <activity
+            android:name=".business.friend.view.BlackNameActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+
+        <!-- 等待好友处理 -->
+        <activity
+            android:name=".business.friend.view.WaitFriendProcessActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+
+        <!-- 好友账户已注销 -->
+        <activity
+            android:name=".business.friend.view.AccountClosedActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+
+        <!-- 消息推送点击入口 -->
         <activity
             android:name=".business.NotificationEntranceActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/UikitTranslucentThemeActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+
+        <activity
+            android:name=".business.message.view.SessionDetailPreviewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/UikitTranslucentThemeActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />

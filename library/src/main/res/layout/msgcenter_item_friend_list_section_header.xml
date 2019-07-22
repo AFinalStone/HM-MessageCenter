@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_friend_section_header"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:background="#fff8f8f9"
+        android:textColor="@color/uikit_text_auxiliary"
+        android:textSize="13dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+    />
+
+
+</LinearLayout>

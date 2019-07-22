@@ -4,18 +4,20 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseSectionQuickAdapter;
 import com.hm.iou.base.BaseActivity;
+import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.friendlist.FriendListContract;
 import com.hm.iou.msg.business.friendlist.FriendListPresenter;
-import com.hm.iou.tools.StatusBarUtil;
+import com.hm.iou.msg.widget.SideLetterBar;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -28,8 +30,6 @@ import butterknife.BindView;
 
 public class FriendListActivity extends BaseActivity<FriendListPresenter> implements FriendListContract.View {
 
-    @BindView(R2.id.view_statusbar_placeholder)
-    View mViewStatusBar;
     @BindView(R2.id.iv_msg_refresh)
     PullDownRefreshImageView mIvMsgRefresh;
     @BindView(R2.id.rv_msgList)
@@ -38,8 +38,13 @@ public class FriendListActivity extends BaseActivity<FriendListPresenter> implem
     SmartRefreshLayout mRefreshLayout;
     @BindView(R2.id.loading_init)
     HMLoadingView mLoadingInit;
+    @BindView(R2.id.side_letter_bar)
+    SideLetterBar mSideLetterBar;
 
-    FriendListAdapter mAdapter;
+    FriendSectionAdapter mAdapter;
+    private LinearLayoutManager mLinearLayoutManager;
+    private boolean mMoving = false;
+    private int mIndex = 0;
 
     @Override
     protected int getLayoutId() {
@@ -53,34 +58,23 @@ public class FriendListActivity extends BaseActivity<FriendListPresenter> implem
 
     @Override
     protected void initEventAndData(Bundle bundle) {
-        int statusBarHeight = StatusBarUtil.getStatusBarHeight(mContext);
-        if (statusBarHeight > 0) {
-            ViewGroup.LayoutParams params = mViewStatusBar.getLayoutParams();
-            params.height = statusBarHeight;
-            mViewStatusBar.setLayoutParams(params);
-        }
-
-        mAdapter = new FriendListAdapter(mContext);
-        mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
+        mAdapter = new FriendSectionAdapter(mContext);
+        mLinearLayoutManager = new LinearLayoutManager(mContext);
+        mRvMsgList.setLayoutManager(mLinearLayoutManager);
         mRvMsgList.setAdapter(mAdapter);
-        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        mRvMsgList.addOnScrollListener(new RecyclerViewListener());
+        mAdapter.setOnItemChildClickListener(new BaseSectionQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                IFriend data = (IFriend) adapter.getItem(position);
-                if (view.getId() == R.id.ll_friend_item) {
+                FriendSection item = (FriendSection) adapter.getItem(position);
+                if (view.getId() == R.id.ll_friend_item && !item.isHeader) {
+                    IFriend data = item.t;
+                    Logger.d("Pinyin: " + data.getPinyin());
                     //跳转到好友详情页面
-                    NavigationHelper.toFriendDetailPage(FriendListActivity.this, data.getIAccount(), null, null);
+                    NavigationHelper.toFriendDetailPage(FriendListActivity.this, data.getIAccount());
                 }
             }
         });
-        View headerView = LayoutInflater.from(mContext).inflate(R.layout.msgcenter_item_friend_list_header, mRvMsgList, false);
-        headerView.findViewById(R.id.ll_add_new_friend).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavigationHelper.toAddNewFriend(mContext);
-            }
-        });
-        mAdapter.addHeaderView(headerView);
         //设置下拉刷新监听
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -89,11 +83,23 @@ public class FriendListActivity extends BaseActivity<FriendListPresenter> implem
             }
         });
 
+        mSideLetterBar.setOverlay((TextView) findViewById(R.id.tv_letter_overlay));
+        mSideLetterBar.setOnLetterChangedListener(new SideLetterBar.OnLetterChangedListener() {
+            @Override
+            public void onLetterChanged(String letter) {
+                Integer index = mAdapter.getHeaderIndex(letter);
+                if (index != null) {
+                    Logger.d("Scroll to index = " + index);
+                    moveToPosition(index);
+                }
+            }
+        });
+
         mPresenter.init();
     }
 
     @Override
-    public void showMsgList(List<IFriend> list) {
+    public void showMsgList(List<FriendSection> list) {
         mAdapter.setNewData(list);
     }
 
@@ -133,6 +139,51 @@ public class FriendListActivity extends BaseActivity<FriendListPresenter> implem
     public void showDataEmpty() {
         mLoadingInit.setVisibility(View.VISIBLE);
         mLoadingInit.showDataEmpty("啊哦，空空如也~");
+    }
+
+    private void moveToPosition(int n) {
+        mIndex = n;
+        mRvMsgList.stopScroll();
+        int firstItem = mLinearLayoutManager.findFirstVisibleItemPosition();
+        int lastItem = mLinearLayoutManager.findLastVisibleItemPosition();
+        if (n <= firstItem) {
+            mRvMsgList.scrollToPosition(n);
+        } else if (n <= lastItem) {
+            int top = mRvMsgList.getChildAt(n - firstItem).getTop();
+            mRvMsgList.scrollBy(0, top);
+        } else {
+            mRvMsgList.scrollToPosition(n);
+            mMoving = true;
+        }
+    }
+
+    class RecyclerViewListener extends RecyclerView.OnScrollListener {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            if (mMoving && newState == RecyclerView.SCROLL_STATE_IDLE) {
+                mMoving = false;
+                int n = mIndex - mLinearLayoutManager.findFirstVisibleItemPosition();
+                if (0 <= n && n < mRvMsgList.getChildCount()) {
+                    int top = mRvMsgList.getChildAt(n).getTop();
+                    mRvMsgList.smoothScrollBy(0, top);
+                }
+
+            }
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            if (mMoving) {
+                mMoving = false;
+                int n = mIndex - mLinearLayoutManager.findFirstVisibleItemPosition();
+                if (0 <= n && n < mRvMsgList.getChildCount()) {
+                    int top = mRvMsgList.getChildAt(n).getTop();
+                    mRvMsgList.scrollBy(0, top);
+                }
+            }
+        }
     }
 
 }

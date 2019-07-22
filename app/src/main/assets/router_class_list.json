@@ -264,6 +264,16 @@
       "url": "hmiou://m.54jietiao.com/person/user_bind_bank_info",
       "iclass": "",
       "aclass": "com.hm.iou.userinfo.business.view.UserBankCardInfoActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/person/my_coupon",
+      "iclass": "",
+      "aclass": "com.hm.iou.userinfo.business.view.CouponListActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/person/set_type_of_add_friend_by_other",
+      "iclass": "",
+      "aclass": "com.hm.iou.userinfo.business.view.SetTypeOfAddFriendByOtherActivity"
     }
   ],
   "message": [
@@ -311,6 +321,11 @@
       "url": "hmiou://m.54jietiao.com/message/firend_detail?userId=*",
       "iclass": "",
       "aclass": "com.hm.iou.msg.business.friend.view.FriendDetailActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/message/session_detail?friend_im_id=*&if_check_status",
+      "iclass": "",
+      "aclass": "com.hm.iou.msg.business.message.view.SessionDetailPreviewActivity"
     }
   ],
   "webview": [
@@ -344,6 +359,11 @@
       "url": "hmiou://m.54jietiao.com/qrcode/index?show_type=*",
       "iclass": "",
       "aclass": "com.hm.iou.qrcode.business.view.QRCodeActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/qrcode/personal_card",
+      "iclass": "",
+      "aclass": "com.hm.iou.qrcode.business.view.PersonalCardV2Activity"
     }
   ],
   "iou": [
@@ -456,6 +476,16 @@
       "url": "hmiou://m.54jietiao.com/iou/contract_evidence_pdf_detail?pdf_url=*&evidence_name=*&evidence_id=*",
       "iclass": "",
       "aclass": "com.hm.iou.jietiao.business.detailv2.elec.evidence.pdf.EvidencePdfActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/iou/contract_evidence_image_detail?iou_id=*&url=*&evidence_id=*&evidence_name=",
+      "iclass": "",
+      "aclass": "com.hm.iou.jietiao.business.detailv2.elec.evidence.image.EvidenceImageActivity"
+    },
+    {
+      "url": "hmiou://m.54jietiao.com/iou/can_arb_iou_list",
+      "iclass": "",
+      "aclass": "com.hm.iou.jietiao.business.arbitrament.CanArbIouListActivity"
     }
   ],
   "iou_create": [
@@ -470,11 +500,6 @@
       "aclass": "com.hm.iou.create.business.elecborrow.view.CreatePrepareActivity"
     },
     {
-      "url": "hmiou://m.54jietiao.com/iou_create/elec_borrow_create_or_modic_receipt?iou_id=",
-      "iclass": "",
-      "aclass": "com.hm.iou.create.business.elecborrow.view.CreateOrModicActivity"
-    },
-    {
       "url": "hmiou://m.54jietiao.com/iou_create/elec_borrow_create_or_modic_receipt_ex?iou_id=",
       "iclass": "",
       "aclass": "com.hm.iou.create.business.elecborrow.view.CreateOrModicExActivity"
@@ -483,11 +508,6 @@
       "url": "hmiou://m.54jietiao.com/iou_create/elec_borrow_pay_by_create_pdf?iou_id=",
       "iclass": "",
       "aclass": "com.hm.iou.create.business.elecborrow.view.PayByCreatePDFActivity"
-    },
-    {
-      "url": "hmiou://m.54jietiao.com/iou_create/elec_borrow_create_pdf?iou_id=*&signature_id=*&is_from_draft=",
-      "iclass": "",
-      "aclass": "com.hm.iou.create.business.elecborrow.view.CreatePDFActivity"
     },
     {
       "url": "hmiou://m.54jietiao.com/iou_create/elec_receive_create_or_modic_receipt?iou_id=",
@@ -742,6 +762,13 @@
       "url": "hmiou://m.54jietiao.com/game_credit_life/index",
       "iclass": "",
       "aclass": "com.hm.iou.game.business.launch.IndexActivity"
+    }
+  ],
+  "arbitrament": [
+    {
+      "url": "hmiou://m.54jietiao.com/arbitrament/index?iou_id=*&just_id=*&arb_no=",
+      "iclass": "",
+      "aclass": "com.hm.arbitrament.business.index.IndexActivity"
     }
   ]
 }

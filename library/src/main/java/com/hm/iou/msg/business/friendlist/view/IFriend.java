@@ -25,5 +25,11 @@ public interface IFriend {
      */
     String getIAccount();
 
+    /**
+     * 获取拼音
+     *
+     * @return
+     */
+    String getPinyin();
 }
 

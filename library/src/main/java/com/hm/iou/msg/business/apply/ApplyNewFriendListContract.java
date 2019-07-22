@@ -1,5 +1,7 @@
 package com.hm.iou.msg.business.apply;
 
+import android.graphics.Bitmap;
+
 import com.hm.iou.base.mvp.BaseContract;
 import com.hm.iou.msg.business.apply.view.IApplyNewFriend;
 
@@ -34,30 +36,25 @@ public class ApplyNewFriendListContract {
          */
         void hidePullDownRefresh();
 
-        /**
-         * 显示初始化动画
-         */
-        void showInitLoading();
-
-        /**
-         * 初始化失败
-         */
-        void showInitFailed();
-
-        /**
-         * 关闭初始化动画
-         */
-        void hideInitLoading();
-
-        /**
-         * 显示数据为空
-         */
-        void showDataEmpty();
-
-
         void removeData(String applyId);
 
         void removeDataByFriendId(String friendId);
+
+        /**
+         * 显示用户头部数据
+         *
+         * @param headerUrl
+         * @param nickName
+         * @param showId
+         */
+        void showHeaderData(String headerUrl, String nickName, String showId);
+
+        /**
+         * 显示个人名片二维码
+         *
+         * @param bitmap
+         */
+        void showQRCodeImage(Bitmap bitmap);
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
