@@ -119,6 +119,9 @@ public interface MsgService {
     @GET("/api/news/friend/v1/delApplyRecord")
     Flowable<BaseResponse<Object>> deleteApplyRecord(@Query("applyId") String applyId);
 
+    @GET("api/news/friend/v1/refuseAndDelApplyRecord")
+    Flowable<BaseResponse<Object>> refuseAndDelApplyRecord(@Query("applyId") String applyId);
+
     @GET("/api/news/friend/v1/getOrRefreshToken")
     Flowable<BaseResponse<GetOrRefreshIMTokenBean>> getOrRefreshIMToken();
 

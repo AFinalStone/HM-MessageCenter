@@ -293,8 +293,26 @@ public class MsgApi {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 仅仅只是删除对方的好友申请，相当于忽略了，对方48小时之内无法重复发起申请
+     *
+     * @param applyId
+     * @return
+     */
     public static Flowable<BaseResponse<Object>> deleteApplyRecord(String applyId) {
         return getService().deleteApplyRecord(applyId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 删除并拒绝了对方，对方可以重新发起申请
+     *
+     * @param applyId
+     * @return
+     */
+    public static Flowable<BaseResponse<Object>> refuseAndDelApplyRecord(String applyId) {
+        return getService().refuseAndDelApplyRecord(applyId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

@@ -160,7 +160,9 @@ public class CacheDataUtil {
         //未读消息数量缓存
         ACache cache = ACache.get(context.getApplicationContext());
         cache.remove(MsgCenterConstants.KEY_UN_READ_MSG_NUM);
+        //好友申请增量更新最后一次拉取的时间
         cache.remove(MsgCenterConstants.KEY_LAST_FRIEND_APPLY_RECORD_TIME);
+        //
         cache.remove(MsgCenterConstants.KEY_LAST_FRIEND_UPDATE_TIME);
         cache.remove(MsgCenterConstants.KEY_LAST_PULL_ALIPAY_LIST_MSG_RECORD_TIME);
         cache.remove(MsgCenterConstants.KEY_LAST_PULL_CONTRACT_LIST_MSG_RECORD_TIME);

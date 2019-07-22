@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <!-- 填充颜色 -->
+            <solid android:color="#73cd1f"></solid>
+            <!-- 矩形的圆角半径 -->
+            <corners android:radius="@dimen/uikit_shape_common_btn_corners_radius_small" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <!-- 填充颜色 -->
+            <solid android:color="#73cd1f"></solid>
+            <!-- 矩形的圆角半径 -->
+            <corners android:radius="@dimen/uikit_shape_common_btn_corners_radius_small" />
+        </shape>
+    </item>
+</selector>

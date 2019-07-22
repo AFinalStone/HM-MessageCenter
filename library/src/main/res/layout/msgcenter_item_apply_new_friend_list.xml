@@ -32,13 +32,16 @@
             tools:src="@mipmap/uikit_ic_gender_man" />
 
         <Button
-            android:id="@+id/btn_see"
-            style="@style/UikitHMButton.Small.Main"
+            android:id="@+id/btn_waite_query"
+            style="@style/UikitHMButton"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:background="@drawable/msgcenter_selector_btn_wait_query"
             android:minHeight="30dp"
-            android:minWidth="52dp"
-            android:text="查看" />
+            android:minWidth="68dp"
+            android:text="待确认"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textFontSize_14" />
 
         <TextView
             android:id="@+id/tv_status"
@@ -55,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="46dp"
-            android:layout_toStartOf="@id/btn_see"
+            android:layout_toStartOf="@id/btn_waite_query"
             android:orientation="vertical">
 
             <TextView

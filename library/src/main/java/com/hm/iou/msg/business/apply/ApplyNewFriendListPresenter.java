@@ -36,6 +36,7 @@ import java.util.List;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -48,6 +49,7 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
 
     private List<FriendApplyRecord> mDataList;
     private boolean mIsRefreshData = false;
+    private Disposable mDisposable;
 
     public ApplyNewFriendListPresenter(@NonNull Context context, @NonNull ApplyNewFriendListContract.View view) {
         super(context, view);
@@ -57,6 +59,7 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
     @Override
     public void onResume() {
         if (mIsRefreshData) {
+            mIsRefreshData = false;
             loadDataFromServer();
         }
     }
@@ -140,10 +143,13 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
      * 进入本页面之后，第一次从服务端加载数据
      */
     private void loadDataFromServer() {
+        if (mDisposable != null && !mDisposable.isDisposed()) {
+            mDisposable.dispose();
+        }
         GetApplyNewFriendListReq req = new GetApplyNewFriendListReq();
         String lastPullDate = CacheDataUtil.getLastApplyRecordPullDate(mContext);
         req.setLastReqDate(lastPullDate);
-        MsgApi.getApplyNewFriendList(req)
+        mDisposable = MsgApi.getApplyNewFriendList(req)
                 .compose(getProvider().<BaseResponse<FriendApplyRecordListBean>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<FriendApplyRecordListBean>handleResponse())
                 .map(new Function<FriendApplyRecordListBean, List<FriendApplyRecord>>() {
@@ -296,7 +302,7 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventAddFriend(AddFriendEvent event) {
         //刷新一下状态
-        mIsRefreshData = true;
+        loadDataFromServer();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

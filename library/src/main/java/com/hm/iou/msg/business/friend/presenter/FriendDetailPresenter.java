@@ -380,7 +380,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
     @Override
     public void refuseFriend(final String applyId) {
         mView.showLoadingView();
-        MsgApi.deleteApplyRecord(applyId)
+        MsgApi.refuseAndDelApplyRecord(applyId)
                 .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<Object>handleResponse())
                 .subscribeWith(new CommSubscriber<Object>(mView) {

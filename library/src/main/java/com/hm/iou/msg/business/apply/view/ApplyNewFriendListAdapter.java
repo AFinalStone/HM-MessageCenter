@@ -80,16 +80,16 @@ public class ApplyNewFriendListAdapter extends BaseQuickAdapter<IApplyNewFriend,
         int status = item.getIStatus();
         if (ApplyNewFriendStatus.HAVE_AGREE.getValue() == status
                 || ApplyNewFriendStatus.HAVE_OVER.getValue() == status) {
-            helper.setVisible(R.id.btn_see, false);
+            helper.setVisible(R.id.btn_waite_query, false);
             helper.setVisible(R.id.tv_status, true);
             helper.setText(R.id.tv_status, ApplyNewFriendStatus.getDescByValue(status));
         } else {
-            helper.setVisible(R.id.btn_see, true);
+            helper.setVisible(R.id.btn_waite_query, true);
             helper.setVisible(R.id.tv_status, false);
-            helper.addOnClickListener(R.id.btn_see);
+            helper.addOnClickListener(R.id.btn_waite_query);
         }
         helper.addOnClickListener(R.id.btn_delete);
         helper.addOnClickListener(R.id.rl_content);
-        helper.addOnClickListener(R.id.btn_see);
+        helper.addOnClickListener(R.id.btn_waite_query);
     }
 }
