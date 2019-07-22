@@ -224,6 +224,7 @@ public class FriendListPresenter extends MvpActivityPresenter<FriendListContract
             dataList.add(new IFriend() {
 
                 private String pinyin = pinyinStr;
+                private boolean groupLastItem = false;
 
                 @Override
                 public String getIHeaderImg() {
@@ -245,6 +246,15 @@ public class FriendListPresenter extends MvpActivityPresenter<FriendListContract
                     return pinyin == null ? "" : pinyin;
                 }
 
+                @Override
+                public boolean isGroupLastItem() {
+                    return groupLastItem;
+                }
+
+                @Override
+                public void setGroupLastItem(boolean isLastItem) {
+                    groupLastItem = isLastItem;
+                }
             });
         }
         return dataList;
@@ -291,8 +301,16 @@ public class FriendListPresenter extends MvpActivityPresenter<FriendListContract
             if (friendList != null && !friendList.isEmpty()) {
                 FriendSection header = new FriendSection(true, letter);
                 dataList.add(header);
+                int c = 0;
+                int size = friendList.size();
                 for (IFriend friend : friendList) {
+                    if (c < size -1) {
+                        friend.setGroupLastItem(false);
+                    } else {
+                        friend.setGroupLastItem(true);
+                    }
                     dataList.add(new FriendSection(friend));
+                    c++;
                 }
                 header.setFriendList(friendList);
             }

@@ -26,6 +26,7 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/view_friend_divider"
         style="@style/UikitDivider.Horizontal"
         android:layout_marginStart="64dp" />
 

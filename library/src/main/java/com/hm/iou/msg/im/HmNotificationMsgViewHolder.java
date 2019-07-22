@@ -1,7 +1,5 @@
 package com.hm.iou.msg.im;
 
-import android.content.Intent;
-import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -11,21 +9,11 @@ import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.TextView;
 
-import com.hm.iou.base.utils.CommSubscriber;
-import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
-import com.hm.iou.msg.api.MsgApi;
-import com.hm.iou.msg.business.friend.view.SendVerifyRequestActivity;
-import com.hm.iou.tools.ToastUtil;
 import com.netease.nim.uikit.business.session.emoji.MoonUtil;
 import com.netease.nim.uikit.business.session.viewholder.MsgViewHolderBase;
 import com.netease.nim.uikit.common.ui.recyclerview.adapter.BaseMultiItemFetchLoadAdapter;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import io.reactivex.disposables.Disposable;
 
 /**
  * @author syl
@@ -58,7 +46,8 @@ public class HmNotificationMsgViewHolder extends MsgViewHolderBase {
             @Override
             public void onClick(View v) {
                 if (mIsNoFriendFlag) {
-                    NavigationHelper.toSendVerifyRequestPage(view.getContext(), message.getSessionId());
+                    //跳转到详情页
+                    NavigationHelper.toFriendDetailPageFromSession(view.getContext(), message.getSessionId());
                 }
             }
         });

@@ -129,8 +129,11 @@ public class MsgCenterPresenter extends MvpFragmentPresenter<MsgCenterContract.V
 
     @Override
     public void onResume() {
-        //获取未读消息
+        //先刷新缓存
+        MsgCenterMsgUtil.getMsgCenterNoReadNumFromCache(mContext);
+        //再从接口里刷新获取
         MsgCenterMsgUtil.getMsgCenterNoReadNumFromServer(mContext);
+
         //头像未读消息数量
         getRedFlagCount();
         //刷新好友用户信息

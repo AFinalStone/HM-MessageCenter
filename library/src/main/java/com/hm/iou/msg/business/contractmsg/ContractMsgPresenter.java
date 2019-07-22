@@ -217,6 +217,8 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                         MsgCenterDbHelper.saveOrUpdateMsg(dbData);
                         item.setHaveRead(true);
                         mView.updateData(item);
+
+                        updateCacheRedDotCount(1);
                     }
 
                     @Override
@@ -235,6 +237,11 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
         MakeMsgTypeAllHaveReadReqBean reqBean = new MakeMsgTypeAllHaveReadReqBean();
         reqBean.setLastReqDate(CacheDataUtil.getLastContractMsgPullTime(mContext));
         reqBean.setType(ModuleType.CONTRACT_MSG.getTypeValue());
+
+        final List<ContractMsgDbData> unReadList = MsgCenterDbHelper.getUnReadMsgList(ContractMsgDbData.class);
+        Logger.d("未读消息数 = " + (unReadList != null ? unReadList.size() : 0));
+
+        mView.showLoadingView();
         MsgApi.makeTypeMsgHaveRead(reqBean)
                 .compose(getProvider().<BaseResponse<Integer>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<Integer>handleResponse())
@@ -242,13 +249,16 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                     @Override
                     public void handleResult(Object o) {
                         Logger.d("未读消息清除完毕");
-                        List<ContractMsgDbData> listCache = MsgCenterDbHelper.getMsgList(ContractMsgDbData.class);
-                        if (listCache != null && listCache.size() > 0) {
-                            for (ContractMsgDbData dbData : listCache) {
-                                dbData.setHaveRead(true);
+                        mView.dismissLoadingView();
+                        if (unReadList != null && !unReadList.isEmpty()) {
+                            for (ContractMsgDbData data : unReadList) {
+                                data.setHaveRead(true);
                             }
+                            MsgCenterDbHelper.saveOrUpdateMsgList(unReadList);
+                            updateCacheRedDotCount(unReadList.size());
                         }
-                        MsgCenterDbHelper.saveOrUpdateMsgList(listCache);
+
+                        List<ContractMsgDbData> listCache = MsgCenterDbHelper.getMsgList(ContractMsgDbData.class);
                         List<IContractMsgItem> resultList = DataChangeUtil.changeContractMsgDbDataToIContractMsgItem(listCache);
                         mView.showMsgList(resultList);
                         mView.showLoadMoreEnd();
@@ -257,7 +267,7 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
 
                     @Override
                     public void handleException(Throwable throwable, String s, String s1) {
-
+                        mView.dismissLoadingView();
                     }
                 });
     }
@@ -278,6 +288,8 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                             mView.dismissLoadingView();
                             MsgCenterDbHelper.deleteMsgByMsgId(ContractMsgDbData.class, item.getIMsgId());
                             mView.removeData(item.getIMsgId());
+
+                            updateCacheRedDotCount(1);
                         }
 
                         @Override
@@ -293,4 +305,20 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
         MsgCenterDbHelper.deleteAllReadMsgData(ContractMsgDbData.class);
         getListFromCache(null);
     }
+
+    /**
+     * 减少缓存里的红点数
+     *
+     * @param d
+     */
+    private void updateCacheRedDotCount(int d) {
+        //更新缓存红点数
+        UnReadMsgNumBean unReadMsgData = CacheDataUtil.getNoReadMsgNum(mContext);
+        if (unReadMsgData != null) {
+            int c = unReadMsgData.getContractNumber() - d;
+            unReadMsgData.setContractNumber(c < 0 ? 0 : c);
+            CacheDataUtil.setNoReadMsgNum(mContext, unReadMsgData);
+        }
+    }
+
 }
