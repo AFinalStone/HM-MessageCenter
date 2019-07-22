@@ -18,13 +18,14 @@ import com.trello.rxlifecycle2.android.ActivityEvent
  */
 class SessionDetailPreviewPresenter(context: Activity, view: SessionDetailPreviewContract.View) : MvpActivityPresenter<SessionDetailPreviewContract.View>(context, view), SessionDetailPreviewContract.Presenter {
     override fun checkFriendStatus(friendId: String?) {
-
+        mView.showLoadingView()
         MsgApi.checkForIMChat(friendId)
                 .compose(provider.bindUntilEvent<BaseResponse<CheckForIMChatResBean>>(ActivityEvent.DESTROY))
                 .map(RxUtil.handleResponse<CheckForIMChatResBean>())
                 .subscribeWith(object : CommSubscriber<CheckForIMChatResBean>(mView) {
 
                     override fun handleResult(p0: CheckForIMChatResBean?) {
+                        mView.dismissLoadingView()
                         if (p0 == null) {
                             mView.closeCurrPage()
                             return@handleResult
@@ -69,6 +70,7 @@ class SessionDetailPreviewPresenter(context: Activity, view: SessionDetailPrevie
                     }
 
                     override fun handleException(p0: Throwable?, p1: String?, p2: String?) {
+                        mView.dismissLoadingView()
                         mView.closeCurrPage()
                     }
 
