@@ -33,6 +33,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.hm.iou.msg.R2.id.iv_qr_code;
+
 public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListPresenter> implements ApplyNewFriendListContract.View {
 
     @BindView(R2.id.iv_msg_refresh)
@@ -47,7 +49,7 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
     TextView mTvNickname;
     @BindView(R2.id.tv_show_id)
     TextView mTvShowId;
-    @BindView(R2.id.iv_qr_code)
+    @BindView(iv_qr_code)
     ImageView mIvQrCode;
     @BindView(R2.id.bottomBar)
     HMBottomBarView mBottomBar;
@@ -75,6 +77,7 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
                         .navigation(mContext);
             }
         });
+
         mAdapter = new ApplyNewFriendListAdapter(mContext);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
@@ -116,7 +119,7 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
     }
 
 
-    @OnClick({R2.id.ll_search, R2.id.ll_mobile_contract, R2.id.ll_sweep_qr_code, R2.id.ll_add_my_self})
+    @OnClick({R2.id.iv_qr_code, R2.id.ll_search, R2.id.ll_mobile_contract, R2.id.ll_sweep_qr_code, R2.id.ll_add_my_self})
     public void onClick(View view) {
         int id = view.getId();
         if (R.id.ll_search == id) {
@@ -128,7 +131,7 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
                     .buildWithUrl("hmiou://m.54jietiao.com/qrcode/index")
                     .withString("show_type", "show_scan_code")
                     .navigation(mContext);
-        } else if (R.id.ll_add_my_self == id) {
+        } else if (R.id.ll_add_my_self == id || R.id.iv_qr_code == id) {
             NavigationHelper.toAddMySelf(mContext);
         }
 
