@@ -53,10 +53,6 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
     public static final String APPLY_OVERDUE = "1";
     public static final String APPLY_WAIT_CONFIRM = "2";
 
-    //发送好友请求
-    public static final int REQ_SEND_VERIFY_REQUEST = 100;
-    public static final int REQ_AGREE_ADD_FRIEND = 101;
-
     @BindView(R2.id.ll_friend_bottom)
     HMBottomBarView mBottomBarView;
     @BindView(R2.id.iv_friend_avatar)
@@ -91,8 +87,6 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
     private String mApplyStatus;        //好友申请状态，确认好友时，需要传此参数，其他状态不考虑
     private String mApplyId;            //好友申请记录id
     private String mApplyRemarkName;    //好友申请时的备注名
-
-    private AddRemarkNameDialog mAddRemarkDialog;
 
     @Override
     protected int getLayoutId() {
@@ -141,26 +135,12 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
         outState.putString(EXTRA_KEY_REMARK_NAME, mApplyRemarkName);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_SEND_VERIFY_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                mPresenter.getUserInfo(mUserId, mIdType);
-            }
-        } else if (requestCode == REQ_AGREE_ADD_FRIEND) {
-            if (resultCode == RESULT_OK) {
-                mPresenter.getUserInfo(mUserId, mIdType);
-            }
-        }
-    }
-
     @OnClick(value = {R2.id.btn_friend_submit, R2.id.rl_friend_comment, R2.id.btn_friend_refuse})
     void onClick(View v) {
         if (v.getId() == R.id.btn_friend_submit) {
             mPresenter.clickSubmitButton();
         } else if (v.getId() == R.id.rl_friend_comment) {
-            showAddRemarkNameDialog();
+            mPresenter.updateRemarkName();
         } else if (v.getId() == R.id.btn_friend_refuse) {
             mPresenter.refuseFriend(mApplyId);
         }
@@ -315,20 +295,6 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
     }
 
     @Override
-    public void showAddRemarkNameDialog() {
-        if (mAddRemarkDialog == null) {
-            mAddRemarkDialog = new AddRemarkNameDialog(this);
-            mAddRemarkDialog.setOnModifyNameListener(new AddRemarkNameDialog.OnModifyNameListener() {
-                @Override
-                public void onClickSend(String content) {
-                    mPresenter.updateRemarkName(content);
-                }
-            });
-        }
-        mAddRemarkDialog.show();
-    }
-
-    @Override
     public void showFriendApplyOverdueDialog() {
         new HMAlertDialog.Builder(this)
                 .setMessage("朋友信息已过期，请主动添加为好友")
@@ -337,7 +303,7 @@ public class FriendDetailActivity extends BaseActivity<FriendDetailPresenter> im
                 .setOnClickListener(new HMAlertDialog.OnClickListener() {
                     @Override
                     public void onPosClick() {
-                        NavigationHelper.toSendVerifyRequestPage(FriendDetailActivity.this, mUserId, true, null, REQ_SEND_VERIFY_REQUEST);
+                        NavigationHelper.toSendVerifyRequestPage(FriendDetailActivity.this, mUserId, true, null);
                     }
 
                     @Override

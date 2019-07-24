@@ -18,6 +18,7 @@ import com.hm.iou.msg.bean.FriendInfo;
 import com.hm.iou.msg.bean.FriendRelationResBean;
 import com.hm.iou.msg.business.friend.FriendDetailContract;
 import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
+import com.hm.iou.msg.event.AddFriendEvent;
 import com.hm.iou.msg.event.DeleteFriendEvent;
 import com.hm.iou.msg.event.UpdateFriendEvent;
 import com.hm.iou.sharedata.event.CommBizEvent;
@@ -30,8 +31,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.hm.iou.msg.business.friend.view.FriendDetailActivity.REQ_AGREE_ADD_FRIEND;
 
 /**
  * Created by hjy on 2019/4/11.
@@ -46,6 +45,9 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
     private String mApplyStatus;    //只有确认好友请求时，才有数据
     private String mApplyId;
     private String mApplyRemarkName;
+
+    private String mUserId;
+    private int mIdType;
 
     private FriendInfo mFriendInfo;
 
@@ -69,6 +71,9 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
 
     @Override
     public void getUserInfo(String userId, int idType) {
+        mUserId = userId;
+        mIdType = idType;
+
         mView.showDetailLoading();
         mView.showDetailContent(View.GONE);
         MsgApi.getUserInfoById(userId, idType)
@@ -223,7 +228,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                 mView.showFriendApplyOverdueDialog();
             } else if (FriendDetailActivity.APPLY_WAIT_CONFIRM.equals(mApplyStatus)) {
                 //同意添加好友
-                NavigationHelper.toSendVerifyRequestPage((Activity) mContext, mFriendInfo.getFriendId(), false, mFriendInfo, REQ_AGREE_ADD_FRIEND);
+                NavigationHelper.toSendVerifyRequestPage((Activity) mContext, mFriendInfo.getFriendId(), false, mFriendInfo);
             } else {
                 checkFriendRelation();
             }
@@ -246,9 +251,9 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                         if (code == 1) {            //是自己
                             mView.showAlertDialog("不能添加自己为好友");
                         } else if (code == 2) {     //直接添加，对方不需要确认就可以加为好友
-                            NavigationHelper.toSendVerifyRequestPage((Activity) mContext, mFriendInfo.getFriendId(), true, mFriendInfo, FriendDetailActivity.REQ_SEND_VERIFY_REQUEST);
+                            NavigationHelper.toSendVerifyRequestPage((Activity) mContext, mFriendInfo.getFriendId(), true, mFriendInfo);
                         } else if (code == 3) {     //需要申请
-                            NavigationHelper.toSendVerifyRequestPage((Activity) mContext, mFriendInfo.getFriendId(), true, mFriendInfo, FriendDetailActivity.REQ_SEND_VERIFY_REQUEST);
+                            NavigationHelper.toSendVerifyRequestPage((Activity) mContext, mFriendInfo.getFriendId(), true, mFriendInfo);
                         } else if (code == 4) {     //等待对方确认
                             NavigationHelper.toWaitProcessPage(mContext, mFriendInfo.getFriendId(),
                                     mFriendInfo.getSex(), mFriendInfo.getAvatarUrl(), data.getDesc(), data.isOverdue());
@@ -299,56 +304,10 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
     }
 
     @Override
-    public void updateRemarkName(final String remark) {
+    public void updateRemarkName() {
         if (mFriendInfo == null)
             return;
-        if (TextUtils.isEmpty(remark))
-            return;
-        mView.showLoadingView();
-
-        if (mFriendInfo.isFriended()) {
-            MsgApi.updateRemarkName(mFriendInfo.getFriendId(), remark)
-                    .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))
-                    .map(RxUtil.<Object>handleResponse())
-                    .subscribeWith(new CommSubscriber<Object>(mView) {
-                        @Override
-                        public void handleResult(Object o) {
-                            mView.dismissLoadingView();
-                            //备注名修改成功
-                            mFriendInfo.setStageName(remark);
-                            mView.showNickname(mFriendInfo.getNickName(), remark);
-                            mView.showCommentNameView(View.VISIBLE, remark);
-
-                            EventBus.getDefault().post(new UpdateFriendEvent());
-                        }
-
-                        @Override
-                        public void handleException(Throwable throwable, String s, String s1) {
-                            mView.dismissLoadingView();
-                        }
-                    });
-        } else {
-            MsgApi.updateApplyRemarkName(mFriendInfo.getFriendId(), remark)
-                    .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))
-                    .map(RxUtil.<Object>handleResponse())
-                    .subscribeWith(new CommSubscriber<Object>(mView) {
-                        @Override
-                        public void handleResult(Object o) {
-                            mView.dismissLoadingView();
-                            //备注名修改成功
-                            mFriendInfo.setStageName(remark);
-                            mView.showNickname(mFriendInfo.getNickName(), remark);
-                            mView.showCommentNameView(View.VISIBLE, remark);
-
-                            EventBus.getDefault().post(new UpdateFriendEvent());
-                        }
-
-                        @Override
-                        public void handleException(Throwable throwable, String s, String s1) {
-                            mView.dismissLoadingView();
-                        }
-                    });
-        }
+        NavigationHelper.toUpdateRemarkName(mContext, mFriendInfo.getFriendId(), mFriendInfo.isFriended(), mFriendInfo.getStageName());
     }
 
     @Override
@@ -404,6 +363,22 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventDeleteFriend(DeleteFriendEvent event) {
         mView.closeCurrPage();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventAddFriend(AddFriendEvent event) {
+        getUserInfo(mUserId, mIdType);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventUpdateFriend(UpdateFriendEvent event) {
+        //备注名修改成功
+        if (TextUtils.isEmpty(event.reamrkName))
+            return;
+        String remark = event.reamrkName;
+        mFriendInfo.setStageName(remark);
+        mView.showNickname(mFriendInfo.getNickName(), remark);
+        mView.showCommentNameView(View.VISIBLE, remark);
     }
 
 }

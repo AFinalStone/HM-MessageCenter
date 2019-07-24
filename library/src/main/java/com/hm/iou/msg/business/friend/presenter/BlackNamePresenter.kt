@@ -33,4 +33,20 @@ class BlackNamePresenter : MvpActivityPresenter<BlackNameContract.View>, BlackNa
                 })
     }
 
+    override fun removeBlackNameAndAddFriend(friendId: String?) {
+        mView.showLoadingView()
+        MsgApi.removeBlackName(friendId)
+                .compose(provider.bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.handleResponse())
+                .subscribeWith(object : CommSubscriber<Any>(mView) {
+                    override fun handleResult(p0: Any?) {
+                        mView.dismissLoadingView()
+                        mView.toAddFriend()
+                    }
+
+                    override fun handleException(p0: Throwable?, p1: String?, p2: String?) {
+                        mView.dismissLoadingView()
+                    }
+                })
+    }
 }

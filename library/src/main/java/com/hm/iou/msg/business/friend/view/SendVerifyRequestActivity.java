@@ -83,19 +83,10 @@ public class SendVerifyRequestActivity extends BaseActivity {
             mIsAddFriend = bundle.getBoolean(EXTRA_KEY_IS_ADD_FRIEND, true);
             mFriendInfo = bundle.getParcelable(EXTRA_KEY_FRIEND_INFO);
         }
-        RxTextView.textChanges(mEtContent).subscribe(new Consumer<CharSequence>() {
-            @Override
-            public void accept(CharSequence sequence) throws Exception {
-                mBtnSend.setEnabled(TextUtils.isEmpty(sequence) ? false : true);
-            }
-        });
+
         if (!mIsAddFriend) {
             mBtnSend.setText("提交");
         }
-
-        UserInfo userInfo = UserManager.getInstance(this).getUserInfo();
-        mEtContent.setText(StringUtil.getUnnullString(userInfo.getNickName()));
-        mEtContent.setSelection(mEtContent.length());
     }
 
     @Override
@@ -117,14 +108,16 @@ public class SendVerifyRequestActivity extends BaseActivity {
     @OnClick(value = {R2.id.btn_verify_send})
     void onClick(View v) {
         if (v.getId() == R.id.btn_verify_send) {
-            String content = mEtContent.getText().toString();
+            String content = mEtContent.getText().toString().trim();
             if (TextUtils.isEmpty(content)) {
-                return;
+                //如果为空，就默认用自己的昵称
+                UserInfo userInfo = UserManager.getInstance(this).getUserInfo();
+                content = StringUtil.getUnnullString(userInfo.getNickName());
             }
             if (mIsAddFriend) {
                 sendVerifyRequest(content);
             } else {
-                agreeApplyNewFriend();
+                agreeApplyNewFriend(content);
             }
         }
     }
@@ -167,9 +160,9 @@ public class SendVerifyRequestActivity extends BaseActivity {
     /**
      * 同意添加为好友
      */
-    private void agreeApplyNewFriend() {
+    private void agreeApplyNewFriend(String content) {
         showLoadingView();
-        mAgreeReq = MsgApi.agreeApply(mFriendId, mEtContent.getText().toString().trim())
+        mAgreeReq = MsgApi.agreeApply(mFriendId, content)
                 .map(RxUtil.<Object>handleResponse())
                 .subscribeWith(new CommSubscriber<Object>(this) {
                     @Override

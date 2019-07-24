@@ -12,6 +12,7 @@ import com.hm.iou.msg.business.friend.view.AccountClosedActivity;
 import com.hm.iou.msg.business.friend.view.AddFriendIndexActivity;
 import com.hm.iou.msg.business.friend.view.BlackNameActivity;
 import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
+import com.hm.iou.msg.business.friend.view.RemarkFriendNameActivity;
 import com.hm.iou.msg.business.friend.view.ReportUserActivity;
 import com.hm.iou.msg.business.friend.view.SendVerifyRequestActivity;
 import com.hm.iou.msg.business.friend.view.WaitFriendProcessActivity;
@@ -19,7 +20,6 @@ import com.hm.iou.msg.business.friendlist.view.FriendListActivity;
 import com.hm.iou.msg.dict.HMMsgType;
 import com.hm.iou.msg.dict.IdType;
 import com.hm.iou.router.Router;
-import com.netease.nim.uikit.api.NimUIKit;
 
 /**
  * @author syl
@@ -125,15 +125,14 @@ public class NavigationHelper {
      * @param userId
      * @param isAddFriend true-表示添加好友，false-表示确认好友申请
      * @param friendInfo  好友信息，从添加好友界面进来，需传此参数
-     * @param reqCode
      */
-    public static void toSendVerifyRequestPage(Activity context, String userId, boolean isAddFriend, FriendInfo friendInfo, int reqCode) {
+    public static void toSendVerifyRequestPage(Activity context, String userId, boolean isAddFriend, FriendInfo friendInfo) {
         Intent intent = new Intent(context, SendVerifyRequestActivity.class);
         intent.putExtra(SendVerifyRequestActivity.EXTRA_KEY_FRIEND_ID, userId);
         intent.putExtra(SendVerifyRequestActivity.EXTRA_KEY_ID_TYPE, IdType.COMM.type);
         intent.putExtra(SendVerifyRequestActivity.EXTRA_KEY_IS_ADD_FRIEND, isAddFriend);
         intent.putExtra(SendVerifyRequestActivity.EXTRA_KEY_FRIEND_INFO, friendInfo);
-        context.startActivityForResult(intent, reqCode);
+        context.startActivity(intent);
     }
 
     /**
@@ -285,6 +284,22 @@ public class NavigationHelper {
         intent.putExtra(AccountClosedActivity.EXTRA_KEY_FRIEND, friendInfo);
         intent.putExtra(AccountClosedActivity.EXTRA_KEY_DESC, desc);
         intent.putExtra(AccountClosedActivity.EXTRA_KEY_TITLE, isClosed ? "【账号已注销】" : "【账户被拉黑】");
+        context.startActivity(intent);
+    }
+
+    /**
+     * 进入更新备注名页面
+     *
+     * @param context
+     * @param friendId      好友id
+     * @param isFriend      是否好友
+     * @param defRemarkName 默认备注名
+     */
+    public static void toUpdateRemarkName(Context context, String friendId, boolean isFriend, String defRemarkName) {
+        Intent intent = new Intent(context, RemarkFriendNameActivity.class);
+        intent.putExtra(RemarkFriendNameActivity.EXTRA_FRIEND_ID, friendId);
+        intent.putExtra(RemarkFriendNameActivity.EXTRA_IS_FRIEND, isFriend);
+        intent.putExtra(RemarkFriendNameActivity.EXTRA_DEF_REMARK_NAME, defRemarkName);
         context.startActivity(intent);
     }
 

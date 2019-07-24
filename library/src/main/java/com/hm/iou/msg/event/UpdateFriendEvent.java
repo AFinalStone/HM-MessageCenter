@@ -5,4 +5,7 @@ package com.hm.iou.msg.event;
  */
 
 public class UpdateFriendEvent {
+
+    public String reamrkName;
+
 }

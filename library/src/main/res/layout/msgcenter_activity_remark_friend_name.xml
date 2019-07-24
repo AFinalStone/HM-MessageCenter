@@ -12,7 +12,7 @@
         android:layout_height="@dimen/uikit_topbar_height"
         app:bottomDividerIsShow="false"
         app:titleBackground="@color/transparent"
-        app:titleText="告知对方我是谁" />
+        app:titleText="备注对方名字" />
 
 
     <LinearLayout
@@ -26,7 +26,7 @@
 
         <TextView
             style="@style/UikitTextView"
-            android:text="我是" />
+            android:text="TA是" />
 
         <com.hm.iou.uikit.ClearEditText
             android:id="@+id/et_verify_content"
@@ -51,6 +51,6 @@
         android:layout_marginLeft="35dip"
         android:layout_marginTop="40dip"
         android:layout_marginRight="35dip"
-        android:text="发送" />
+        android:text="保存" />
 
 </LinearLayout>

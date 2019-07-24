@@ -35,7 +35,7 @@
     "redMsgNum": 0
   },
   {
-    "name": "新的朋友",
+    "name": "添加好友",
     "moduleId": "msg_center_msg_list_new_apply_friend",
     "image": "hmiou://mipmap/msgcenter_ic_msg_list_new_friend",
     "url": "hmiou://m.54jietiao.com/message/new_friend_list",

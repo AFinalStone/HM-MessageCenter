@@ -10,6 +10,8 @@ interface BlackNameContract {
          * 显示黑名单描述说明
          */
         fun showBlackNameDesc(desc: String?)
+
+        fun toAddFriend()
     }
 
 
@@ -21,6 +23,13 @@ interface BlackNameContract {
          * @param friendId 好友userId
          */
         fun removeBlackName(friendId: String?)
+
+        /**
+         * 解除黑名单并添加好友
+         *
+         * @param friendId 好友userId
+         */
+        fun removeBlackNameAndAddFriend(friendId: String?)
 
     }
 

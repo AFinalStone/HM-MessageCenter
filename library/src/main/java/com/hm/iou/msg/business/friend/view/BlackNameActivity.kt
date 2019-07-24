@@ -1,7 +1,5 @@
 package com.hm.iou.msg.business.friend.view
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.hm.iou.base.BaseActivity
@@ -27,7 +25,6 @@ class BlackNameActivity : BaseActivity<BlackNamePresenter>(), BlackNameContract.
         const val EXTRA_KEY_BLOCKED_BY_OTHER = "blocked_by_other"
         const val EXTRA_KEY_FRIEND_INFO = "friend_info"       //好友详情信息
 
-        private const val REQ_ADD_FRIEND = 100
     }
 
     private var mFriendId: String? by extraDelegate(EXTRA_KEY_FRIEND_ID, null)
@@ -59,7 +56,7 @@ class BlackNameActivity : BaseActivity<BlackNamePresenter>(), BlackNameContract.
             mPresenter.removeBlackName(mFriendId)
         }
         btn_back_add.click {
-            NavigationHelper.toSendVerifyRequestPage(this, mFriendId, true, mFriendInfo, REQ_ADD_FRIEND)
+            mPresenter.removeBlackNameAndAddFriend(mFriendId)
         }
     }
 
@@ -73,17 +70,13 @@ class BlackNameActivity : BaseActivity<BlackNamePresenter>(), BlackNameContract.
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQ_ADD_FRIEND) {
-            if (resultCode == Activity.RESULT_OK) {
-                finish()
-            }
-        }
-    }
-
     override fun showBlackNameDesc(desc: String?) {
         tv_black_desc.text = desc
+    }
+
+    override fun toAddFriend() {
+        NavigationHelper.toSendVerifyRequestPage(this, mFriendId, true, mFriendInfo)
+        finish()
     }
 
 }

@@ -72,11 +72,6 @@ public class FriendDetailContract {
         void showUnbindFriendRelationConfirmDialog(String msg);
 
         /**
-         * 显示添加备注名对话框
-         */
-        void showAddRemarkNameDialog();
-
-        /**
          * 显示好友申请信息已过期的弹窗
          */
         void showFriendApplyOverdueDialog();
@@ -125,9 +120,8 @@ public class FriendDetailContract {
         /**
          * 更新备注名
          *
-         * @param remark
          */
-        void updateRemarkName(String remark);
+        void updateRemarkName();
 
         /**
          * 解除好友关系
