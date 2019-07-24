@@ -266,6 +266,8 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                             NavigationHelper.toBlackNamePage(mContext, mFriendInfo.getFriendId(), data.getDesc(), false, mFriendInfo);
                         } else if (code == 8) {     //对方已注销
                             NavigationHelper.toAccountClosedPage(mContext, mFriendInfo, data.getDesc(), true);
+                        } else if (code == 9) {     //账户被系统拉黑
+                            NavigationHelper.toAccountClosedPage(mContext, mFriendInfo, data.getDesc(), false);
                         }
                     }
 
