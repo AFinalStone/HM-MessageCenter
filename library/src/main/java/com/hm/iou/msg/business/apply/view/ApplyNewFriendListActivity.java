@@ -102,9 +102,7 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
     public void onClick(View view) {
         int id = view.getId();
         if (R.id.ll_search == id) {
-            Router.getInstance()
-                    .buildWithUrl("hmiou://m.54jietiao.com/iou_search/search")
-                    .navigation(mContext);
+            NavigationHelper.toAddNewFriend(this);
         } else if (R.id.ll_sweep_qr_code == id) {
             Router.getInstance()
                     .buildWithUrl("hmiou://m.54jietiao.com/qrcode/index")

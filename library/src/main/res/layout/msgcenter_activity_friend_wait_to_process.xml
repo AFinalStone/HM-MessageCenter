@@ -65,7 +65,7 @@
     <Button
         android:id="@+id/btn_friend_return"
         style="@style/UikitHMButton.Large.Bordered"
-        android:text="返回“消息中心”"
+        android:text="退回“消息中心”"
         android:layout_margin="40dp"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
