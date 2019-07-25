@@ -26,16 +26,6 @@ public class ApplyNewFriendListContract {
         void showMsgList(List<IApplyNewFriend> list);
 
 
-        /**
-         * 允许刷新
-         */
-        void enableRefresh(boolean enabled);
-
-        /**
-         * 隐藏下拉刷新View
-         */
-        void hidePullDownRefresh();
-
         void removeData(String applyId);
 
         void removeDataByFriendId(String friendId);
@@ -44,7 +34,6 @@ public class ApplyNewFriendListContract {
          * 显示用户头部数据
          *
          * @param headerUrl
-         * @param sexImageResId
          * @param nickName
          * @param showId
          */

@@ -36,12 +36,8 @@ import static com.hm.iou.msg.R2.id.iv_qr_code;
 
 public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListPresenter> implements ApplyNewFriendListContract.View {
 
-    @BindView(R2.id.iv_msg_refresh)
-    PullDownRefreshImageView mIvMsgRefresh;
     @BindView(R2.id.rv_msgList)
     RecyclerView mRvMsgList;
-    @BindView(R2.id.refreshLayout)
-    SmartRefreshLayout mRefreshLayout;
     @BindView(R2.id.iv_header)
     CircleImageView mIvHeader;
     @BindView(R2.id.iv_sex)
@@ -96,13 +92,6 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
                 }
             }
         });
-        //设置下拉刷新监听
-        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mPresenter.getMsgList();
-            }
-        });
 
         mPresenter.init();
     }
@@ -145,15 +134,6 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
         mAdapter.setNewData(list);
     }
 
-    @Override
-    public void enableRefresh(boolean enabled) {
-        mRefreshLayout.setEnableRefresh(enabled);
-    }
-
-    @Override
-    public void hidePullDownRefresh() {
-        mRefreshLayout.finishRefresh();
-    }
 
     @Override
     public void removeData(String applyId) {

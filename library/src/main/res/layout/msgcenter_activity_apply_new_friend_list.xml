@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/uikit_background"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -26,80 +26,66 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/refreshLayout"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_msgList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:srlAccentColor="@android:color/white"
-        app:srlEnableLoadMore="false"
-        app:srlEnablePreviewInEditMode="true"
-        app:srlEnableRefresh="false">
+        android:overScrollMode="never"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dip"
-            android:gravity="center">
-
-            <com.hm.iou.uikit.PullDownRefreshImageView
-                android:id="@+id/iv_msg_refresh"
-                android:layout_width="40dip"
-                android:layout_height="40dip" />
-        </LinearLayout>
-
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_msgList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:overScrollMode="never" />
-
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="bottom">
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#EEFFFFFF"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/ll_bottom_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="18dp"
-            android:paddingRight="18dp">
+        <View style="@style/UikitDivider.Horizontal" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <LinearLayout
+                android:id="@+id/ll_bottom_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/uikit_ic_arrow_left_black" />
+
+                <com.hm.iou.uikit.HMDotTextView
+                    android:id="@+id/dot_red_msg_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:visibility="gone"
+                    app:dotBackgroundColor="@color/uikit_function_exception"
+                    app:dotText="0"
+                    app:dotTextColor="@color/white"
+                    app:dotTextSize="@dimen/textFontSize_12" />
+            </LinearLayout>
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/uikit_ic_arrow_left_black" />
+                android:id="@+id/iv_bottom_more"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:scaleType="centerInside"
+                android:src="@mipmap/uikit_ic_more_black" />
 
-            <com.hm.iou.uikit.HMDotTextView
-                android:id="@+id/dot_red_msg_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:visibility="gone"
-                app:dotBackgroundColor="@color/uikit_function_exception"
-                app:dotText="0"
-                app:dotTextColor="@color/white"
-                app:dotTextSize="@dimen/textFontSize_12" />
-        </LinearLayout>
+        </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/iv_bottom_more"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:background="?android:attr/selectableItemBackground"
-            android:scaleType="centerInside"
-            android:src="@mipmap/uikit_ic_more_black" />
+    </LinearLayout>
 
-    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
 

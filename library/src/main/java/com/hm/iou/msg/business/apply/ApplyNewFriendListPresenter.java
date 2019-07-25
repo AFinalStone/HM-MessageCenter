@@ -140,8 +140,6 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
                         }
                         if (firstLoad) {
                             loadDataFromServer();
-                        } else {
-                            resetRefreshState(null);
                         }
                     }
                 }, new Consumer<Throwable>() {
@@ -150,8 +148,6 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
                         //理论从缓存里加载数据，不会出现异常
                         if (firstLoad) {
                             loadDataFromServer();
-                        } else {
-                            resetRefreshState("数据加载出错");
                         }
                     }
                 });
@@ -195,11 +191,7 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
                 .subscribeWith(new CommSubscriber<List<FriendApplyRecord>>(mView) {
                     @Override
                     public void handleResult(List<FriendApplyRecord> list) {
-                        if (list == null || list.isEmpty()) {
-                            //说明没有新增数据
-                            mView.hidePullDownRefresh();
-                            mView.enableRefresh(true);
-                        } else {
+                        if (list != null && !list.isEmpty()) {
                             //刷新新的数据
                             loadDataFromCache(false);
                         }
@@ -207,7 +199,6 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
 
                     @Override
                     public void handleException(Throwable throwable, String code, String msg) {
-                        resetRefreshState(msg);
                     }
 
                     @Override
@@ -222,24 +213,6 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
                 });
     }
 
-    private void resetRefreshState(String errMsg) {
-        if (mDataList == null || mDataList.isEmpty()) {
-            //显示数据加载失败，重试
-            if (TextUtils.isEmpty(errMsg)) {
-                mView.enableRefresh(true);
-            } else {
-                mView.enableRefresh(false);
-            }
-            mView.hidePullDownRefresh();
-        } else {
-            mView.enableRefresh(true);
-            mView.hidePullDownRefresh();
-            if (!TextUtils.isEmpty(errMsg)) {
-                mView.toastErrorMessage(errMsg);
-            }
-        }
-    }
-
     /**
      * 获取未读消息数量
      */
@@ -248,6 +221,7 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
         int numNoRead = 0;
         if (unReadMsgNumBean != null) {
             numNoRead = unReadMsgNumBean.getButlerMessageNumber()
+                    + unReadMsgNumBean.getContractNumber()
                     + unReadMsgNumBean.getSimilarContractNumber()
                     + unReadMsgNumBean.getWaitRepayNumber()
                     + unReadMsgNumBean.getAlipayReceiptNumber()
