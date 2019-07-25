@@ -148,6 +148,7 @@
                 android:visibility="visible">
 
                 <TextView
+                    android:id="@+id/tv_friend_comment_label"
                     style="@style/UikitTextView"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
@@ -170,10 +171,13 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="8dp"
                     android:layout_toLeftOf="@id/iv_friend_comment_arr"
+                    android:layout_toRightOf="@id/tv_friend_comment_label"
+                    android:layout_marginLeft="20dp"
                     android:textColor="@color/uikit_text_auxiliary"
                     android:textSize="16dip"
-                    tools:text="我是小管家" />
-
+                    android:singleLine="true"
+                    android:gravity="right"
+                    tools:text="" />
 
                 <View
                     style="@style/UikitDivider.Horizontal"
