@@ -29,7 +29,7 @@
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:srlAccentColor="@android:color/white"
@@ -57,11 +57,49 @@
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
-    <com.hm.iou.uikit.HMBottomBarView
-        android:id="@+id/bottomBar"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dip"
-        android:layout_gravity="bottom"
-        app:bottomTitleIcon="@mipmap/uikit_ic_more_black" />
+        android:layout_height="50dp"
+        android:layout_gravity="bottom">
+
+        <LinearLayout
+            android:id="@+id/ll_bottom_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/uikit_ic_arrow_left_black" />
+
+            <com.hm.iou.uikit.HMDotTextView
+                android:id="@+id/dot_red_msg_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:visibility="gone"
+                app:dotBackgroundColor="@color/uikit_function_exception"
+                app:dotText="0"
+                app:dotTextColor="@color/white"
+                app:dotTextSize="@dimen/textFontSize_12" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_bottom_more"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:scaleType="centerInside"
+            android:src="@mipmap/uikit_ic_more_black" />
+
+    </RelativeLayout>
+
 </android.support.design.widget.CoordinatorLayout>
 

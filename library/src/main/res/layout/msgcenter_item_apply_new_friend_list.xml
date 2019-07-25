@@ -33,14 +33,12 @@
 
         <Button
             android:id="@+id/btn_waite_query"
-            style="@style/UikitHMButton"
+            style="@style/UikitHMButton.Small.Main"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/msgcenter_selector_btn_wait_query"
             android:minHeight="30dp"
             android:minWidth="68dp"
             android:text="待确认"
-            android:textColor="@color/white"
             android:textSize="@dimen/textFontSize_14" />
 
         <TextView
