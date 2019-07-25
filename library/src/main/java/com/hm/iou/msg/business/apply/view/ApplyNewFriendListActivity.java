@@ -21,8 +21,7 @@ import com.hm.iou.msg.dict.ApplyNewFriendStatus;
 import com.hm.iou.router.Router;
 import com.hm.iou.tools.ImageLoader;
 import com.hm.iou.uikit.CircleImageView;
-import com.hm.iou.uikit.HMBottomBarView;
-import com.hm.iou.uikit.HMLoadingView;
+import com.hm.iou.uikit.HMDotTextView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -45,14 +44,16 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
     SmartRefreshLayout mRefreshLayout;
     @BindView(R2.id.iv_header)
     CircleImageView mIvHeader;
+    @BindView(R2.id.iv_sex)
+    ImageView mIvSex;
     @BindView(R2.id.tv_nickname)
     TextView mTvNickname;
     @BindView(R2.id.tv_show_id)
     TextView mTvShowId;
     @BindView(iv_qr_code)
     ImageView mIvQrCode;
-    @BindView(R2.id.bottomBar)
-    HMBottomBarView mBottomBar;
+    @BindView(R2.id.dot_red_msg_num)
+    HMDotTextView mTvRedDot;
 
     ApplyNewFriendListAdapter mAdapter;
 
@@ -69,22 +70,10 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
 
     @Override
     protected void initEventAndData(Bundle bundle) {
-        mBottomBar.setOnTitleClickListener(new HMBottomBarView.OnTitleClickListener() {
-            @Override
-            public void onClickTitle() {
-                Router.getInstance()
-                        .buildWithUrl("hmiou://m.54jietiao.com/person/set_type_of_add_friend_by_other")
-                        .navigation(mContext);
-            }
-        });
-
         mAdapter = new ApplyNewFriendListAdapter(mContext);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
 
-        HMLoadingView load = new HMLoadingView(mContext);
-        load.showDataEmpty("");
-        mAdapter.setEmptyView(load);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -119,7 +108,8 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
     }
 
 
-    @OnClick({R2.id.iv_qr_code, R2.id.ll_search, R2.id.ll_mobile_contract, R2.id.ll_sweep_qr_code, R2.id.ll_add_my_self})
+    @OnClick({R2.id.iv_qr_code, R2.id.ll_search, R2.id.ll_mobile_contract, R2.id.ll_sweep_qr_code
+            , R2.id.ll_add_my_self, R2.id.iv_bottom_more, R2.id.ll_bottom_back})
     public void onClick(View view) {
         int id = view.getId();
         if (R.id.ll_search == id) {
@@ -129,10 +119,17 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
                     .buildWithUrl("hmiou://m.54jietiao.com/qrcode/index")
                     .withString("show_type", "show_scan_code")
                     .navigation(mContext);
-        } else if (R.id.ll_add_my_self == id || R.id.iv_qr_code == id) {
+        } else if (R.id.ll_add_my_self == id) {
             NavigationHelper.toAddMySelf(mContext);
+        } else if (R.id.iv_qr_code == id) {
+            NavigationHelper.toMyCardPage(mContext);
+        } else if (R.id.iv_bottom_more == id) {
+            Router.getInstance()
+                    .buildWithUrl("hmiou://m.54jietiao.com/person/set_type_of_add_friend_by_other")
+                    .navigation(mContext);
+        } else if (R.id.ll_bottom_back == id) {
+            onBackPressed();
         }
-
     }
 
     @Override
@@ -178,8 +175,24 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
     }
 
     @Override
+    public void showSex(int sexImageResId) {
+        mIvSex.setImageResource(sexImageResId);
+    }
+
+
+    @Override
     public void showQRCodeImage(Bitmap bitmap) {
         mIvQrCode.setImageBitmap(bitmap);
+    }
+
+    @Override
+    public void showRedDot(int c) {
+        if (c > 0) {
+            mTvRedDot.setText(c > 99 ? "···" : c + "");
+            mTvRedDot.setVisibility(View.VISIBLE);
+        } else {
+            mTvRedDot.setVisibility(View.GONE);
+        }
     }
 
 }

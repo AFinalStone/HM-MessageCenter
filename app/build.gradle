@@ -40,6 +40,10 @@ dependencies {
     compile 'com.heima.iou:hmselectpiclocal:1.0.0'
     //首页、借条创建、编辑、展示等相关功能
     compile 'com.heima.iou:hmjietiaolocal:1.0.0'
+    //个人名片和扫码
+    compile 'com.heima.iou:hmqrcodelocal:1.0.0'
+    //个人中心
+    compile 'com.heima.iou:hmuserinfolocal:1.0.0'
     compile project(':library')
     compile 'com.android.support:multidex:1.0.0'
 }

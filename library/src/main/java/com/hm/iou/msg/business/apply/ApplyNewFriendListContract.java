@@ -44,10 +44,13 @@ public class ApplyNewFriendListContract {
          * 显示用户头部数据
          *
          * @param headerUrl
+         * @param sexImageResId
          * @param nickName
          * @param showId
          */
         void showHeaderData(String headerUrl, String nickName, String showId);
+
+        void showSex(int sexImageResId);
 
         /**
          * 显示个人名片二维码
@@ -55,10 +58,17 @@ public class ApplyNewFriendListContract {
          * @param bitmap
          */
         void showQRCodeImage(Bitmap bitmap);
+
+        /**
+         * 显示红点数
+         *
+         * @param c
+         */
+        void showRedDot(int c);
     }
 
     public interface Presenter extends BaseContract.BasePresenter {
-        
+
         void onResume();
 
         /**

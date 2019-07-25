@@ -12,17 +12,21 @@ import com.hm.iou.base.utils.RxUtil;
 import com.hm.iou.database.FriendDbUtil;
 import com.hm.iou.database.table.FriendApplyRecord;
 import com.hm.iou.logger.Logger;
+import com.hm.iou.msg.R;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.FriendApplyRecordListBean;
+import com.hm.iou.msg.bean.UnReadMsgNumBean;
 import com.hm.iou.msg.bean.req.GetApplyNewFriendListReq;
 import com.hm.iou.msg.business.apply.view.IApplyNewFriend;
 import com.hm.iou.msg.event.AddFriendEvent;
 import com.hm.iou.msg.event.DeleteFriendEvent;
 import com.hm.iou.msg.event.UpdateFriendEvent;
+import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.msg.util.CacheDataUtil;
 import com.hm.iou.scancode.CodeUtils;
 import com.hm.iou.sharedata.UserManager;
 import com.hm.iou.sharedata.model.BaseResponse;
+import com.hm.iou.sharedata.model.SexEnum;
 import com.hm.iou.sharedata.model.UserInfo;
 import com.hm.iou.tools.DensityUtil;
 import com.trello.rxlifecycle2.android.ActivityEvent;
@@ -79,8 +83,20 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
             //头像，昵称，id
             String headerUrl = userInfo.getAvatarUrl();
             String nickName = userInfo.getNickName();
+            String realName = userInfo.getName();
             String showId = userInfo.getShowId();
-            mView.showHeaderData(headerUrl, TextUtils.isEmpty(nickName) ? "无" : nickName, showId);
+            String showName = TextUtils.isEmpty(nickName) ? "无" : nickName;
+            if (!TextUtils.isEmpty(realName)) {
+                showName = realName + "(" + showName + ")";
+            }
+            mView.showHeaderData(headerUrl, showName, showId);
+            //性别
+            int sex = userInfo.getSex();
+            if (sex == SexEnum.FEMALE.getValue()) {
+                mView.showSex(R.mipmap.uikit_ic_gender_woman);
+            } else if (sex == SexEnum.MALE.getValue()) {
+                mView.showSex(R.mipmap.uikit_ic_gender_man);
+            }
             //个人二维码
             int length = DensityUtil.dip2px(mContext, 60);
             String qrCodeUrl = String.format("%s/userQrcode/index.html?showId=%s", BaseBizAppLike.getInstance().getH5Server(), showId);
@@ -89,6 +105,8 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
             mView.showQRCodeImage(bitmap);
         }
         loadDataFromCache(true);
+        //获取未读消息数量
+        getUnReadMsgNum();
     }
 
     /**
@@ -220,6 +238,22 @@ public class ApplyNewFriendListPresenter extends MvpActivityPresenter<ApplyNewFr
                 mView.toastErrorMessage(errMsg);
             }
         }
+    }
+
+    /**
+     * 获取未读消息数量
+     */
+    private void getUnReadMsgNum() {
+        UnReadMsgNumBean unReadMsgNumBean = CacheDataUtil.getNoReadMsgNum(mContext);
+        int numNoRead = 0;
+        if (unReadMsgNumBean != null) {
+            numNoRead = unReadMsgNumBean.getButlerMessageNumber()
+                    + unReadMsgNumBean.getSimilarContractNumber()
+                    + unReadMsgNumBean.getWaitRepayNumber()
+                    + unReadMsgNumBean.getAlipayReceiptNumber()
+                    + IMHelper.getInstance(mContext).getTotalUnReadMsgCount();
+        }
+        mView.showRedDot(numNoRead);
     }
 
     @Override
