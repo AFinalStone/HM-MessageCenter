@@ -66,6 +66,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
+                android:paddingEnd="5dp"
+                android:singleLine="true"
                 android:textColor="@color/uikit_text_main_content"
                 android:textSize="16dip"
                 tools:text="红烧茄子" />
@@ -77,6 +79,7 @@
                 android:layout_marginTop="2dp"
                 android:ellipsize="end"
                 android:maxLength="30"
+                android:singleLine="true"
                 tools:text="我有一个律师函订单请您接单" />
 
         </LinearLayout>
