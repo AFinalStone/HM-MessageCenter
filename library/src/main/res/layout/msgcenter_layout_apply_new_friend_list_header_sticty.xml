@@ -3,7 +3,6 @@
     style="@style/UikitTextView.Auxiliary"
     android:layout_width="match_parent"
     android:layout_height="24dp"
-    android:background="@color/uikit_background"
     android:gravity="center_vertical"
     android:paddingStart="18dp"
     android:text="等待确认"

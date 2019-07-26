@@ -1,13 +1,12 @@
 package com.hm.iou.msg.business.apply.view;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hm.iou.base.BaseActivity;
@@ -19,40 +18,25 @@ import com.hm.iou.msg.business.apply.ApplyNewFriendListPresenter;
 import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
 import com.hm.iou.msg.dict.ApplyNewFriendStatus;
 import com.hm.iou.router.Router;
-import com.hm.iou.tools.ImageLoader;
-import com.hm.iou.uikit.CircleImageView;
+import com.hm.iou.tools.DensityUtil;
 import com.hm.iou.uikit.HMDotTextView;
-import com.hm.iou.uikit.PullDownRefreshImageView;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.hm.iou.uikit.decoration.listener.PowerGroupListener;
+import com.hm.iou.uikit.decoration.view.PowerfulStickyDecoration;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.hm.iou.msg.R2.id.iv_qr_code;
-
 public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListPresenter> implements ApplyNewFriendListContract.View {
 
     @BindView(R2.id.rv_msgList)
     RecyclerView mRvMsgList;
-    @BindView(R2.id.iv_header)
-    CircleImageView mIvHeader;
-    @BindView(R2.id.iv_sex)
-    ImageView mIvSex;
-    @BindView(R2.id.tv_nickname)
-    TextView mTvNickname;
-    @BindView(R2.id.tv_show_id)
-    TextView mTvShowId;
-    @BindView(iv_qr_code)
-    ImageView mIvQrCode;
     @BindView(R2.id.dot_red_msg_num)
     HMDotTextView mTvRedDot;
 
     ApplyNewFriendListAdapter mAdapter;
-
+    HeaderHelper mHeaderHelper;
 
     @Override
     protected int getLayoutId() {
@@ -69,7 +53,28 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
         mAdapter = new ApplyNewFriendListAdapter(mContext);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
+        //头部
+        View viewHeader = LayoutInflater.from(mContext).inflate(R.layout.msgcenter_layout_apply_new_friend_list_header, null);
+        mHeaderHelper = new HeaderHelper(mContext, viewHeader);
+        mAdapter.addHeaderView(viewHeader);
 
+        //悬浮条目
+        PowerfulStickyDecoration pfd = PowerfulStickyDecoration.Builder.init(new PowerGroupListener() {
+            @Override
+            public View getGroupTitleView(int position) {
+                View view = LayoutInflater.from(mContext).inflate(R.layout.msgcenter_layout_apply_new_friend_list_header_sticty, null);
+                return view;
+            }
+
+            @Override
+            public String getGroupName(int position) {
+                return "";
+            }
+        }).setHeaderCount(mAdapter.getHeaderLayoutCount())
+                .setGroupTitleHeight(DensityUtil.dip2px(mContext, 24))
+                .setGroupTitleBackground(Color.parseColor("#FFF8F8F9"))
+                .build();
+        mRvMsgList.addItemDecoration(pfd);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -97,22 +102,10 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
     }
 
 
-    @OnClick({R2.id.iv_qr_code, R2.id.ll_search, R2.id.ll_mobile_contract, R2.id.ll_sweep_qr_code
-            , R2.id.ll_add_my_self, R2.id.iv_bottom_more, R2.id.ll_bottom_back})
+    @OnClick({R2.id.iv_bottom_more, R2.id.ll_bottom_back})
     public void onClick(View view) {
         int id = view.getId();
-        if (R.id.ll_search == id) {
-            NavigationHelper.toAddNewFriend(this);
-        } else if (R.id.ll_sweep_qr_code == id) {
-            Router.getInstance()
-                    .buildWithUrl("hmiou://m.54jietiao.com/qrcode/index")
-                    .withString("show_type", "show_scan_code")
-                    .navigation(mContext);
-        } else if (R.id.ll_add_my_self == id) {
-            NavigationHelper.toAddMySelf(mContext);
-        } else if (R.id.iv_qr_code == id) {
-            NavigationHelper.toMyCardPage(mContext);
-        } else if (R.id.iv_bottom_more == id) {
+        if (R.id.iv_bottom_more == id) {
             Router.getInstance()
                     .buildWithUrl("hmiou://m.54jietiao.com/person/set_type_of_add_friend_by_other")
                     .navigation(mContext);
@@ -149,20 +142,24 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
 
     @Override
     public void showHeaderData(String headerUrl, String nickName, String showId) {
-        ImageLoader.getInstance(mContext).displayImage(headerUrl, mIvHeader, R.drawable.uikit_bg_pic_loading_place, R.mipmap.uikit_icon_header_unknow);
-        mTvNickname.setText(nickName);
-        mTvShowId.setText("ID：" + showId);
+        if (mHeaderHelper != null) {
+            mHeaderHelper.showHeaderData(headerUrl, nickName, showId);
+        }
     }
 
     @Override
     public void showSex(int sexImageResId) {
-        mIvSex.setImageResource(sexImageResId);
+        if (mHeaderHelper != null) {
+            mHeaderHelper.showSex(sexImageResId);
+        }
     }
 
 
     @Override
     public void showQRCodeImage(Bitmap bitmap) {
-        mIvQrCode.setImageBitmap(bitmap);
+        if (mHeaderHelper != null) {
+            mHeaderHelper.showQRCodeImage(bitmap);
+        }
     }
 
     @Override
