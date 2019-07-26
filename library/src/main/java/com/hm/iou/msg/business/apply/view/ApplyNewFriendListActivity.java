@@ -1,12 +1,12 @@
 package com.hm.iou.msg.business.apply.view;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hm.iou.base.BaseActivity;
@@ -18,10 +18,7 @@ import com.hm.iou.msg.business.apply.ApplyNewFriendListPresenter;
 import com.hm.iou.msg.business.friend.view.FriendDetailActivity;
 import com.hm.iou.msg.dict.ApplyNewFriendStatus;
 import com.hm.iou.router.Router;
-import com.hm.iou.tools.DensityUtil;
 import com.hm.iou.uikit.HMDotTextView;
-import com.hm.iou.uikit.decoration.listener.PowerGroupListener;
-import com.hm.iou.uikit.decoration.view.PowerfulStickyDecoration;
 
 import java.util.List;
 
@@ -34,9 +31,12 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
     RecyclerView mRvMsgList;
     @BindView(R2.id.dot_red_msg_num)
     HMDotTextView mTvRedDot;
+    @BindView(R2.id.tv_sticky)
+    TextView mTvSticky;
 
     ApplyNewFriendListAdapter mAdapter;
     HeaderHelper mHeaderHelper;
+    View mViewHeader;
 
     @Override
     protected int getLayoutId() {
@@ -53,28 +53,23 @@ public class ApplyNewFriendListActivity extends BaseActivity<ApplyNewFriendListP
         mAdapter = new ApplyNewFriendListAdapter(mContext);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
+        mRvMsgList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int position = ((LinearLayoutManager) mRvMsgList.getLayoutManager()).findFirstVisibleItemPosition();
+                if (position > 0) {
+                    mTvSticky.setVisibility(View.VISIBLE);
+                } else {
+                    mTvSticky.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
         //头部
-        View viewHeader = LayoutInflater.from(mContext).inflate(R.layout.msgcenter_layout_apply_new_friend_list_header, null);
-        mHeaderHelper = new HeaderHelper(mContext, viewHeader);
-        mAdapter.addHeaderView(viewHeader);
-
-        //悬浮条目
-        PowerfulStickyDecoration pfd = PowerfulStickyDecoration.Builder.init(new PowerGroupListener() {
-            @Override
-            public View getGroupTitleView(int position) {
-                View view = LayoutInflater.from(mContext).inflate(R.layout.msgcenter_layout_apply_new_friend_list_header_sticty, null);
-                return view;
-            }
-
-            @Override
-            public String getGroupName(int position) {
-                return "";
-            }
-        }).setHeaderCount(mAdapter.getHeaderLayoutCount())
-                .setGroupTitleHeight(DensityUtil.dip2px(mContext, 24))
-                .setGroupTitleBackground(Color.parseColor("#FFF8F8F9"))
-                .build();
-        mRvMsgList.addItemDecoration(pfd);
+        mViewHeader = LayoutInflater.from(mContext).inflate(R.layout.msgcenter_layout_apply_new_friend_list_header, null);
+        mHeaderHelper = new HeaderHelper(mContext, mViewHeader);
+        mAdapter.addHeaderView(mViewHeader);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
