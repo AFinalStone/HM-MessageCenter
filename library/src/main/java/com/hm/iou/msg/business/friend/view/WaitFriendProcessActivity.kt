@@ -99,7 +99,7 @@ class WaitFriendProcessActivity : BaseActivity<WaitFriendProcessPresenter>(), Wa
     }
 
     override fun showReturnBtnStyle() {
-        btn_friend_return.text = "返回“消息中心”"
+        btn_friend_return.text = "退回“消息中心”"
         btn_friend_return.setBackgroundResource(R.drawable.uikit_selector_btn_bordered)
         btn_friend_return.setTextColor(resources.getColor(R.color.uikit_selector_btn_main))
     }
