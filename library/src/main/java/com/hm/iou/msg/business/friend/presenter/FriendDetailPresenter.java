@@ -136,7 +136,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                                 mView.showBottomMore(true);
                             } else {
                                 mView.showSubmitButtonText("添加好友");
-                                mView.showBottomMore(false);
+                                mView.showBottomMore(true);
                                 mView.showCommentNameView(View.GONE, null);
                             }
                         }
