@@ -59,12 +59,14 @@
             android:id="@+id/tv_from_nick"
             android:layout_width="match_parent"
             android:layout_height="35dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginStart="46dp"
             android:layout_marginTop="12dp"
             android:layout_toStartOf="@id/tv_time"
+            android:singleLine="true"
             android:textColor="@color/uikit_text_main_content"
             android:textSize="@dimen/uikit_main_content_text_size"
-            tools:text="红烧茄子" />
+            tools:text="红烧茄子红烧茄子红烧茄子红烧茄子红烧茄子红烧茄子红烧茄子" />
 
         <LinearLayout
             android:layout_width="match_parent"
