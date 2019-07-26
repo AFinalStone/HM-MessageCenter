@@ -41,6 +41,7 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
     public static final String ACTION_REMOVE_FRIEND = "删除好友";
     public static final String ACTION_REPORT = "举报";
     public static final String ACTION_ADD_BLACK_NAME = "加入黑名单";
+    public static final String ACTION_REMOVE_BLACK_NAME = "移出黑名单";
 
     private String mApplyStatus;    //只有确认好友请求时，才有数据
     private String mApplyId;
@@ -173,7 +174,12 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
         //如果已经是好友
         list.add(ACTION_REMOVE_FRIEND);
         list.add(ACTION_REPORT);
-        list.add(ACTION_ADD_BLACK_NAME);
+        if (mFriendInfo.isBlackStatus()) {
+            list.add(ACTION_REMOVE_BLACK_NAME);
+        } else {
+            list.add(ACTION_ADD_BLACK_NAME);
+        }
+
         mView.showActionSheet(list);
     }
 
@@ -183,6 +189,8 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
             return;
         if (ACTION_ADD_BLACK_NAME.equals(action)) {             //加为黑名单
             mView.showBlackNameConfirmDialog();
+        } else if (ACTION_REMOVE_BLACK_NAME.equals(action)) {   //移除黑名单
+            removeBlackName();
         } else if (ACTION_REPORT.equals(action)) {              //举报
             NavigationHelper.toFriendReportPage(mContext, mFriendInfo.getFriendId());
         } else if (ACTION_REMOVE_FRIEND.equals(action)) {       //移除好友关系
@@ -356,6 +364,31 @@ public class FriendDetailPresenter extends MvpActivityPresenter<FriendDetailCont
                         mView.closeCurrPage();
                     }
 
+                    public void handleException(Throwable throwable, String s, String s1) {
+                        mView.dismissLoadingView();
+                    }
+                });
+    }
+
+    /**
+     * 移除黑名单
+     */
+    private void removeBlackName() {
+        if (mFriendInfo == null)
+            return;
+        mView.showLoadingView();
+        MsgApi.removeBlackName(mFriendInfo.getFriendId())
+                .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.handleResponse())
+                .subscribeWith(new CommSubscriber<Object>(mView) {
+                    @Override
+                    public void handleResult(Object o) {
+                        mView.toastMessage("移除成功");
+                        mView.dismissLoadingView();
+                        mFriendInfo.setBlackStatus(false);
+                    }
+
+                    @Override
                     public void handleException(Throwable throwable, String s, String s1) {
                         mView.dismissLoadingView();
                     }
