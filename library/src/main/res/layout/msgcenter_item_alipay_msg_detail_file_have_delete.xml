@@ -19,7 +19,7 @@
         <ImageView
             android:layout_width="115dp"
             android:layout_height="103dp"
-            android:src="@mipmap/msgcenter_ic_warn" />
+            android:src="@mipmap/uikit_ic_yellow_warn" />
 
         <TextView
             android:id="@+id/tv_title"
