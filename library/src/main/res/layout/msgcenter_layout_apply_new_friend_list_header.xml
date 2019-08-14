@@ -80,7 +80,7 @@
         <ImageView
             android:layout_width="27dp"
             android:layout_height="27dp"
-            android:src="@mipmap/msgcenter_ic_mobile" />
+            android:src="@mipmap/msgcenter_ic_search" />
 
         <TextView
             style="@style/UikitTextView.Large"
