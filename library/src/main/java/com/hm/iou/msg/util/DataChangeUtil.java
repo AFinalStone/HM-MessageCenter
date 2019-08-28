@@ -327,6 +327,14 @@ public class DataChangeUtil {
                     }
 
                     @Override
+                    public int getILogoResId() {
+                        if (dbData.getIouKind() == IOUKindEnum.Qiantiao.getValue()) {
+                            return R.mipmap.jietiao_ic_cover_elec_qiantiao_money;
+                        }
+                        return R.mipmap.jietiao_ic_cover_elec_borrow_money;
+                    }
+
+                    @Override
                     public String getILender() {
                         if (dbData.getIouKind() == IOUKindEnum.Qiantiao.getValue()) {
                             return "债权人";

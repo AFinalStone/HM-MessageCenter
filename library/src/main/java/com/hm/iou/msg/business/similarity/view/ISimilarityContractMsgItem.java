@@ -14,6 +14,13 @@ public interface ISimilarityContractMsgItem {
     String getITitle();
 
     /**
+     * 合同logo资源id
+     *
+     * @return
+     */
+    int getILogoResId();
+
+    /**
      * 出借人或者债权人
      *
      * @return
