@@ -14,11 +14,25 @@ public interface ISimilarityContractMsgItem {
     String getITitle();
 
     /**
+     * 出借人或者债权人
+     *
+     * @return
+     */
+    String getILender();
+
+    /**
      * 出借人姓名
      *
      * @return
      */
     String getILenderName();
+
+    /**
+     * 借款人或者债务人
+     *
+     * @return
+     */
+    String getIBorrower();
 
     /**
      * 借款人姓名

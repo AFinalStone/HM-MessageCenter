@@ -327,8 +327,24 @@ public class DataChangeUtil {
                     }
 
                     @Override
+                    public String getILender() {
+                        if (dbData.getIouKind() == IOUKindEnum.Qiantiao.getValue()) {
+                            return "债权人";
+                        }
+                        return "出借方";
+                    }
+
+                    @Override
                     public String getILenderName() {
                         return dbData.getLoanerName();
+                    }
+
+                    @Override
+                    public String getIBorrower() {
+                        if (dbData.getIouKind() == IOUKindEnum.Qiantiao.getValue()) {
+                            return "债务人";
+                        }
+                        return "借到方";
                     }
 
                     @Override

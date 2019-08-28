@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.hm.iou.msg.R;
-import com.hm.iou.msg.business.alipay.list.view.IAliPayMsgItem;
 
 import java.util.List;
 
@@ -73,7 +72,9 @@ public class SimilarityContractListAdapter extends BaseQuickAdapter<ISimilarityC
         helper.setText(R.id.tv_time, item.getITime());
         helper.setGone(R.id.tv_time, item.ifIShowTime());
         helper.setText(R.id.tv_title, item.getITitle());
+        helper.setText(R.id.tv_lender, item.getILender());
         helper.setText(R.id.tv_lender_name, item.getILenderName());
+        helper.setText(R.id.tv_borrower, item.getIBorrower());
         helper.setText(R.id.tv_borrower_name, item.getIBorrowerName());
         helper.setText(R.id.tv_back_time, item.getIBackTime());
         helper.setText(R.id.tv_back_type, item.getIBackType());

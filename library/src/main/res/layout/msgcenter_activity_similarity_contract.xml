@@ -12,7 +12,7 @@
         app:backIconIsShow="false"
         app:bottomDividerIsShow="false"
         app:rightText="规则"
-        app:titleText="疑似合同"></com.hm.iou.uikit.HMTopBarView>
+        app:titleText="疑似合同" />
 
     <RelativeLayout
         android:layout_width="match_parent"
