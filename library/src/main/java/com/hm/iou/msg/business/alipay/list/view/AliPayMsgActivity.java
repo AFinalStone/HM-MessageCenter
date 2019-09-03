@@ -90,7 +90,7 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
                     return;
                 if (view.getId() == R.id.btn_delete) {
                     mPresenter.deleteMsg(item);
-                } else if(view.getId() == R.id.rl_content) {
+                } else if (view.getId() == R.id.rl_content) {
                     if (!item.isHaveRead()) {
                         mPresenter.makeSingleMsgHaveRead(item, position);
                     }
@@ -265,7 +265,7 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
         index = str.indexOf("app@54hima.com");
         spanStr.setSpan(new ForegroundColorSpan(0xFF2782E2), index, index + 14, 0);
         new HMAlertDialog.Builder(this)
-                .setTitle(R.string.messagecenter_remind_rule)
+                .setTitle("如何上传支付宝回单？")
                 .setMessage(spanStr)
                 .setPositiveButton(R.string.messagecenter_i_know)
                 .create().show();

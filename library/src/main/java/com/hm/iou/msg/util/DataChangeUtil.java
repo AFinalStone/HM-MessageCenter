@@ -367,7 +367,7 @@ public class DataChangeUtil {
 
                     @Override
                     public String getIBackTime() {
-                        return "归还时间：" + TimeUtil.formatSimilarityContractBackTime(dbData.getReturnDate());
+                        return "最近归还：" + TimeUtil.formatSimilarityContractBackTime(dbData.getReturnDate());
                     }
 
                     @Override

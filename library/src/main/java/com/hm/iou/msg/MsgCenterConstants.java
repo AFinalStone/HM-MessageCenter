@@ -48,7 +48,8 @@ public class MsgCenterConstants {
 
     public static final String KEY_DELTE_IM_FRIEND = "msgcenter_delelte_friend";
 
-    // 通过邮箱上传（电子）凭证
-    public static final String H5_URL_UPLOAD_PDF_BY_MEAIL = "/apph5/iou-case/alipay-receipt.html";
+    public static final String H5_URL_UPLOAD_ELEC_BORROW_PDF_BY_MEAIL = "/apph5/iou-case/alipay-receipt.html";      // 通过邮箱上传吕约借条凭证
+
+    public static final String H5_URL_UPLOAD_ELEC_RECEIVE_PDF_BY_MEAIL = "/apph5/iou-case/alipay-debt-receipt.html";      // 通过邮箱上传吕约欠条凭证
 
 }

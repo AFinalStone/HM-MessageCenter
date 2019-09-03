@@ -7,9 +7,7 @@ import android.view.ViewStub;
 import android.widget.TextView;
 
 import com.hm.iou.base.BaseActivity;
-import com.hm.iou.base.BaseBizAppLike;
 import com.hm.iou.logger.Logger;
-import com.hm.iou.msg.MsgCenterConstants;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.router.Router;
@@ -116,22 +114,15 @@ public class AliPayMsgDetailActivity extends BaseActivity<AliPayMsgDetailPresent
     }
 
     @Override
-    public void showHelpBtn(final String email, final String contractId) {
+    public void showHelpBtn(final String helpUrl) {
         mBottomBar.setTitleVisible(true);
         mBottomBar.updateTitle("  帮助  ");
         mBottomBar.setTitleBackgournd(R.drawable.uikit_selector_btn_bordered_minor_small);
         mBottomBar.setOnTitleClickListener(new HMBottomBarView.OnTitleClickListener() {
             @Override
             public void onClickTitle() {
-                StringBuffer sb = new StringBuffer();
-                sb.append(BaseBizAppLike.getInstance().getH5Server())
-                        .append(MsgCenterConstants.H5_URL_UPLOAD_PDF_BY_MEAIL)
-                        .append("?email=")
-                        .append(email)
-                        .append("&contractId=")
-                        .append(contractId);
                 Router.getInstance().buildWithUrl("hmiou://m.54jietiao.com/webview/index")
-                        .withString("url", sb.toString())
+                        .withString("url", helpUrl)
                         .navigation(mContext);
             }
         });

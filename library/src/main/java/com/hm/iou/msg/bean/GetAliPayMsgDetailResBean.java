@@ -1,5 +1,7 @@
 package com.hm.iou.msg.bean;
 
+import com.hm.iou.sharedata.model.IOUKindEnum;
+
 import lombok.Data;
 
 /**
@@ -24,6 +26,7 @@ public class GetAliPayMsgDetailResBean {
 
     private int appliyReceiptStatus;// 1、成功 2、没有发现附件 3、附件不合规 4、非关联回单 ,
     private String name;
+    private int iouKind;//合同类型
     private String createTime;
     private boolean deleted;
     private String justiceId;

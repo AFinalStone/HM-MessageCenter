@@ -282,6 +282,7 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
                     public void handleResult(Integer integer) {
                         mView.dismissLoadingView();
                         Logger.d("未读消息清除完毕");
+                        mView.toastMessage("全部收录成功");
                         if (mTempUnreadList != null && mTempUnreadList.size() > 0) {
                             for (SimilarityContractMsgDbData dbData : mTempUnreadList) {
                                 dbData.setHaveRead(true);

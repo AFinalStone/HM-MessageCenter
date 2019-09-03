@@ -4,14 +4,17 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.hm.iou.base.BaseBizAppLike;
 import com.hm.iou.base.mvp.MvpActivityPresenter;
 import com.hm.iou.base.utils.CommSubscriber;
 import com.hm.iou.base.utils.RxUtil;
+import com.hm.iou.msg.MsgCenterConstants;
 import com.hm.iou.msg.api.MsgApi;
 import com.hm.iou.msg.bean.GetAliPayMsgDetailResBean;
 import com.hm.iou.msg.bean.req.GetAliPayMsgDetailReqBean;
 import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.model.BaseResponse;
+import com.hm.iou.sharedata.model.IOUKindEnum;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -100,13 +103,46 @@ public class AliPayMsgDetailPresenter extends MvpActivityPresenter<AliPayMsgDeta
                             mView.showSeeBtn(detail.getPdfUrl(), detail.getExEvidenceId(), detail.getName());
                         } else if (2 == detail.getAppliyReceiptStatus()) {
                             mView.showTitle("没有发现附件", 0xFFBD0400);
-                            mView.showHelpBtn(email, contractId);
+                            sb = new StringBuffer();
+                            sb.append(BaseBizAppLike.getInstance().getH5Server());
+                            if (IOUKindEnum.Qiantiao.getValue() == detail.getIouKind()) {
+                                sb.append(MsgCenterConstants.H5_URL_UPLOAD_ELEC_RECEIVE_PDF_BY_MEAIL);
+                            } else {
+                                sb.append(MsgCenterConstants.H5_URL_UPLOAD_ELEC_BORROW_PDF_BY_MEAIL);
+                            }
+                            sb.append("?email=")
+                                    .append(email)
+                                    .append("&contractId=")
+                                    .append(contractId);
+                            mView.showHelpBtn(sb.toString());
                         } else if (3 == detail.getAppliyReceiptStatus()) {
                             mView.showTitle("附件不合规", 0xFFBD0400);
-                            mView.showHelpBtn(email, contractId);
+                            sb = new StringBuffer();
+                            sb.append(BaseBizAppLike.getInstance().getH5Server());
+                            if (IOUKindEnum.Qiantiao.getValue() == detail.getIouKind()) {
+                                sb.append(MsgCenterConstants.H5_URL_UPLOAD_ELEC_RECEIVE_PDF_BY_MEAIL);
+                            } else {
+                                sb.append(MsgCenterConstants.H5_URL_UPLOAD_ELEC_BORROW_PDF_BY_MEAIL);
+                            }
+                            sb.append("?email=")
+                                    .append(email)
+                                    .append("&contractId=")
+                                    .append(contractId);
+                            mView.showHelpBtn(sb.toString());
                         } else if (4 == detail.getAppliyReceiptStatus()) {
                             mView.showTitle("非关联回单", 0xFFBD0400);
-                            mView.showHelpBtn(email, contractId);
+                            sb = new StringBuffer();
+                            sb.append(BaseBizAppLike.getInstance().getH5Server());
+                            if (IOUKindEnum.Qiantiao.getValue() == detail.getIouKind()) {
+                                sb.append(MsgCenterConstants.H5_URL_UPLOAD_ELEC_RECEIVE_PDF_BY_MEAIL);
+                            } else {
+                                sb.append(MsgCenterConstants.H5_URL_UPLOAD_ELEC_BORROW_PDF_BY_MEAIL);
+                            }
+                            sb.append("?email=")
+                                    .append(email)
+                                    .append("&contractId=")
+                                    .append(contractId);
+                            mView.showHelpBtn(sb.toString());
                         }
                     }
 

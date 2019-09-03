@@ -57,10 +57,9 @@ public class AliPayMsgDetailContract {
         /**
          * 显示帮助按钮
          *
-         * @param email
-         * @param contractId
+         * @param helpUrl
          */
-        void showHelpBtn(String email, String contractId);
+        void showHelpBtn(String helpUrl);
 
         /**
          * 显示名称
