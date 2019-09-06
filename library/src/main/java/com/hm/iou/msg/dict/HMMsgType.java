@@ -8,7 +8,8 @@ public enum HMMsgType {
 
     Sport(10, "活动"),
     News(20, "头条"),
-    FeedBack(30, "您有新的意见反馈结果"),
+    FeedbackByCustomer(30, "意见反馈【客户】"),
+    FeedbackByInnerStaff(31, "意见反馈【客服】"),
     Advertisement(40, "广告"),
     CommuniqueIntro(100, "官方公告");
 

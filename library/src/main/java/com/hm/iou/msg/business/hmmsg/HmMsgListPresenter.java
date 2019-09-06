@@ -129,6 +129,11 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                         String pullTime = resBean == null ? "" : resBean.getLastReqDate();
                         CacheDataUtil.saveLastHMListMsgPullTime(mContext, pullTime);
                         List<HmMsgDbData> list = resBean == null ? null : resBean.getList();
+                        if (list != null) {
+                            for (HmMsgDbData data : list) {
+                                data.convertImgListToString();
+                            }
+                        }
                         getListFromCache(list);
                     }
 
@@ -162,6 +167,11 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
                         Flowable.create(new FlowableOnSubscribe<List<IHmMsgItem>>() {
                             @Override
                             public void subscribe(FlowableEmitter<List<IHmMsgItem>> e) throws Exception {
+                                if (list != null) {
+                                    for (HmMsgDbData data : list) {
+                                        data.convertImgListToString();
+                                    }
+                                }
                                 MsgCenterDbHelper.saveOrUpdateMsgList(list);
                                 List<HmMsgDbData> listCache = MsgCenterDbHelper.getHmMsgList();
                                 List<IHmMsgItem> resultList = DataChangeUtil.changeHmMsgDbDataToIHmMsgItem(listCache);

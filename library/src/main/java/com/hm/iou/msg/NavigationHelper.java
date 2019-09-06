@@ -48,6 +48,14 @@ public class NavigationHelper {
                     .navigation(context);
             return;
         }
+        if (HMMsgType.FeedbackByCustomer.getValue() == msgType || HMMsgType.FeedbackByInnerStaff.getValue() == msgType) {
+            Router.getInstance()
+                    .buildWithUrl("hmiou://m.54jietiao.com/webview/index")
+                    .withString("url", url)
+                    .withString("showtitlebar", "false")
+                    .navigation(context);
+            return;
+        }
         Router.getInstance()
                 .buildWithUrl("hmiou://m.54jietiao.com/webview/index")
                 .withString("url", url)

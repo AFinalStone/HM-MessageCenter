@@ -462,6 +462,12 @@ public class DataChangeUtil {
                         if (HMMsgType.News.getValue() == dbData.getSourceBizType()) {
                             return R.mipmap.msgcenter_ic_toutiao;
                         }
+                        if (HMMsgType.FeedbackByCustomer.getValue() == dbData.getSourceBizType()) {
+                            return R.mipmap.msgcenter_ic_feedback;
+                        }
+                        if (HMMsgType.FeedbackByInnerStaff.getValue() == dbData.getSourceBizType()) {
+                            return R.mipmap.msgcenter_ic_feedback;
+                        }
                         return R.mipmap.msgcenter_ic_official_notice;
                     }
 
@@ -469,6 +475,12 @@ public class DataChangeUtil {
                     public String getMsgTitle() {
                         if (TextUtils.isEmpty(dbData.getTitle())) {
                             return HMMsgType.getDescByValue(dbData.getSourceBizType()) + "：";
+                        }
+                        if (dbData.getSourceBizType() == HMMsgType.FeedbackByCustomer.getValue()) {
+                            return dbData.getTitle();
+                        }
+                        if (dbData.getSourceBizType() == HMMsgType.FeedbackByInnerStaff.getValue()) {
+                            return dbData.getTitle();
                         }
                         return HMMsgType.getDescByValue(dbData.getSourceBizType()) + "：" + dbData.getTitle();
                     }
@@ -532,7 +544,23 @@ public class DataChangeUtil {
                         if (HMMsgType.CommuniqueIntro.getValue() == dbData.getSourceBizType()) {
                             return TYPE_COMMUNIQUE;
                         }
+                        if (HMMsgType.FeedbackByCustomer.getValue() == dbData.getSourceBizType()) {
+                            return TYPE_FEEDBACK_CUSTOMER;
+                        }
+                        if (HMMsgType.FeedbackByInnerStaff.getValue() == dbData.getSourceBizType()) {
+                            return TYPE_FEEDBACK_STAFF;
+                        }
                         return TYPE_ADVERTISEMENT_NEWS_SPORT;
+                    }
+
+                    @Override
+                    public String getContent() {
+                        return dbData.getContent();
+                    }
+
+                    @Override
+                    public List<String> getImgs() {
+                        return dbData.getImgListFromDb();
                     }
                 };
                 msgItem.setHaveRead(dbData.isHaveRead());

@@ -4,6 +4,8 @@ import android.support.annotation.DrawableRes;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
+import java.util.List;
+
 /**
  * @author syl
  * @time 2018/5/30 上午11:51
@@ -11,7 +13,10 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 public interface IHmMsgItem extends MultiItemEntity {
 
     int TYPE_ADVERTISEMENT_NEWS_SPORT = 1;      //广告, 头条，活动
-    int TYPE_COMMUNIQUE = 2;         //官方公告
+    int TYPE_COMMUNIQUE = 2;                    //官方公告
+    int TYPE_FEEDBACK_CUSTOMER = 3;             //用户能看到的客服反馈消息
+    int TYPE_FEEDBACK_STAFF = 4;                //嘿马员工能看到的客服反馈消息
+
 
     /**
      * 获取消息的icon
@@ -98,4 +103,7 @@ public interface IHmMsgItem extends MultiItemEntity {
      */
     void setHaveRead(boolean isHaveRead);
 
+    String getContent();
+
+    List<String> getImgs();
 }
