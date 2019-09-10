@@ -26,7 +26,7 @@ public class HmMsgListAdapter extends BaseMultiItemQuickAdapter<IHmMsgItem, Base
         addItemType(IHmMsgItem.TYPE_ADVERTISEMENT_NEWS_SPORT, R.layout.msgcenter_item_hm_msg_list_ad_or_sport);
         addItemType(IHmMsgItem.TYPE_COMMUNIQUE, R.layout.msgcenter_item_hm_msg_list_notice);
         addItemType(IHmMsgItem.TYPE_FEEDBACK_CUSTOMER, R.layout.msgcenter_item_hm_msg_feedback_customer);
-        addItemType(IHmMsgItem.TYPE_FEEDBACK_STAFF, R.layout.msgcenter_item_hm_msg_feedback_starff);
+        addItemType(IHmMsgItem.TYPE_FEEDBACK_STAFF, R.layout.msgcenter_item_hm_msg_feedback_staff);
     }
 
     public void removeDataByMsgId(String msgId) {
@@ -143,12 +143,13 @@ public class HmMsgListAdapter extends BaseMultiItemQuickAdapter<IHmMsgItem, Base
             if (imgList == null || imgList.isEmpty()) {
                 helper.setGone(R.id.ll_feedback_imgs, false);
             } else {
-                helper.setVisible(R.id.ll_feedback_imgs, false);
+                helper.setVisible(R.id.ll_feedback_imgs, true);
                 LinearLayout imgLayout = helper.getView(R.id.ll_feedback_imgs);
                 imgLayout.removeAllViews();
 
                 for (String url : imgList) {
                     ImageView imageView = new ImageView(mContext);
+                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     int imgWidth = DensityUtil.dip2px(mContext, 74);
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(imgWidth, imgWidth);
                     params.rightMargin = DensityUtil.dip2px(mContext, 15);
