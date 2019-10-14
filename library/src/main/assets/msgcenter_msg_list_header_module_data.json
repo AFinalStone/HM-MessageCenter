@@ -1,9 +1,9 @@
 [
   {
-    "name": "合同消息",
-    "moduleId": "msg_center_msg_list_header_contract_msg",
-    "image": "hmiou://mipmap/msgcenter_ic_msg_list_contract_msg",
-    "url": "hmiou://m.54jietiao.com/message/contract_msg",
+    "name": "疑似合同",
+    "moduleId": "msg_center_msg_list_header_similarity_contract",
+    "image": "hmiou://mipmap/msgcenter_ic_msg_list_similarity_contract",
+    "url": "hmiou://m.54jietiao.com/message/similarity_contract",
     "redMsgNum": 0
   },
   {
@@ -14,10 +14,10 @@
     "redMsgNum": 0
   },
   {
-    "name": "疑似合同",
-    "moduleId": "msg_center_msg_list_header_similarity_contract",
-    "image": "hmiou://mipmap/msgcenter_ic_msg_list_similarity_contract",
-    "url": "hmiou://m.54jietiao.com/message/similarity_contract",
+    "name": "合同消息",
+    "moduleId": "msg_center_msg_list_header_contract_msg",
+    "image": "hmiou://mipmap/msgcenter_ic_msg_list_contract_msg",
+    "url": "hmiou://m.54jietiao.com/message/contract_msg",
     "redMsgNum": 0
   },
   {

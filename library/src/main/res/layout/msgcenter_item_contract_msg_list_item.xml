@@ -45,6 +45,8 @@
                 android:scaleType="fitXY"
                 android:src="@mipmap/msgcenter_ic_contract_flag" />
 
+
+
             <TextView
                 android:id="@+id/tv_title"
                 style="@style/UikitTextView"

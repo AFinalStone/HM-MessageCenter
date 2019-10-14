@@ -32,7 +32,6 @@ public class MsgCenterApplication extends Application {
                 "http://192.168.1.107:3000");
 //        appLike.initServer("http://re.54jietiao.com", "http://re.54jietiao.com",
 //                "http://re.54jietiao.com");
-        initNetwork();
         //数据库缓存
         SugarContext.init(this);
         //消息中心
@@ -49,21 +48,5 @@ public class MsgCenterApplication extends Application {
         super.attachBaseContext(context);
         MultiDex.install(this);
     }
-
-
-    private void initNetwork() {
-        System.out.println("init-----------");
-        HttpRequestConfig config = new HttpRequestConfig.Builder(this)
-                .setDebug(true)
-                .setAppChannel("guanfang")
-                .setAppVersion("1.0.2")
-                .setDeviceId("123abc123")
-                .setBaseUrl(BaseBizAppLike.getInstance().getApiServer())
-                .setUserId(UserManager.getInstance(this).getUserId())
-                .setToken(UserManager.getInstance(this).getToken())
-                .build();
-        HttpReqManager.init(config);
-    }
-
 
 }

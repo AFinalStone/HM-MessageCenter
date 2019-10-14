@@ -9,6 +9,7 @@ import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hm.iou.base.BaseActivity;
@@ -46,8 +47,8 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
     SmartRefreshLayout mRefreshLayout;
     @BindView(R2.id.loading_init)
     HMLoadingView mLoadingInit;
-    @BindView(R2.id.iv_bottom_more)
-    ImageView mIvMore;
+    @BindView(R2.id.tv_bottom_more)
+    TextView mTvMore;
     @BindView(R2.id.dot_chat_red_msg_num)
     HMDotTextView mTvRedDot;
 
@@ -115,9 +116,9 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
         mPresenter.init();
     }
 
-    @OnClick(value = {R2.id.iv_bottom_more, R2.id.ll_bottom_back})
+    @OnClick(value = {R2.id.tv_bottom_more, R2.id.ll_bottom_back})
     void onClick(View v) {
-        if (v.getId() == R.id.iv_bottom_more) {
+        if (v.getId() == R.id.tv_bottom_more) {
             List<String> list = new ArrayList<>();
             list.add("全部标为已读");
             list.add("清空已读数据");
@@ -162,7 +163,7 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
     @Override
     public void showMsgList(List<IAliPayMsgItem> list) {
         mAdapter.setNewData(list);
-        if (mAdapter.getData() != null && !mAdapter.getData().isEmpty()) {
+        if (!mAdapter.getData().isEmpty()) {
             hideInitLoading();
         }
     }
@@ -223,7 +224,7 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
 
     @Override
     public void setBottomMoreIconVisible(boolean isShow) {
-        mIvMore.setVisibility(isShow ? View.VISIBLE : View.GONE);
+        mTvMore.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
 
     @Override

@@ -91,17 +91,16 @@
                 />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/iv_bottom_more"
+        <TextView
+            android:id="@+id/tv_bottom_more"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:background="?android:attr/selectableItemBackground"
-            android:src="@mipmap/uikit_ic_more_black"
             android:layout_alignParentRight="true"
-            android:scaleType="centerInside"
-            android:visibility="gone"
-            />
-
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="@string/messagecenter_have_read"
+            android:textColor="#FF888888"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>

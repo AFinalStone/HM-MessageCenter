@@ -11,4 +11,6 @@
     <string name="messagecenter_rule_hm_msg">场景适用“全体用户”和“指定人群”：\n\n 1）公共消息：[官方公告]、[官方活动]、[头条资讯]、[个性化推荐]。\n\n2）私密消息：[反馈回复]、[升级提醒]、[增值服务]、[免费特权]。</string>
     <string name="messagecenter_rule_alipay">场景适用《吕约借条》及《吕约欠条》的电子凭证上传\n\n方法1:通过PC网页上传PDF文件：\n①登录官网www.54hima.com; \n②选择顶部导航 “文件上传”频道上传。 \n\n方法2:通过邮箱上传 \n①登陆与条管家绑定的邮箱发送 \n②收件人“app@54hima.com” \n③邮件名称“合同+18位合同编号” \n举例：合同123456789123456789\n\n详细操作可在已签署完成的《吕约借条》及《吕约欠条》详情页查看。</string>
 
+    <string name="messagecenter_have_read">已读</string>
+
 </resources>
