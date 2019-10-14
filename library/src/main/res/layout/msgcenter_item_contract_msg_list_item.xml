@@ -8,10 +8,10 @@
     android:focusable="true"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingStart="12dp"
-    android:paddingTop="3dp"
+    android:paddingBottom="3dp"
     android:paddingEnd="12dp"
-    android:paddingBottom="3dp">
+    android:paddingStart="12dp"
+    android:paddingTop="3dp">
 
     <TextView
         android:id="@+id/tv_time"
@@ -33,8 +33,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/jietiao_bg_message_list_item"
             android:minHeight="85dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="5dp">
+            android:paddingBottom="5dp"
+            android:paddingEnd="10dp">
 
             <ImageView
                 android:id="@+id/iv_logo"
@@ -45,7 +45,15 @@
                 android:scaleType="fitXY"
                 android:src="@mipmap/msgcenter_ic_contract_flag" />
 
-
+            <View
+                android:id="@+id/view_dot"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_alignEnd="@+id/iv_logo"
+                android:layout_alignTop="@+id/iv_logo"
+                android:layout_marginEnd="-2dp"
+                android:layout_marginTop="-2dp"
+                android:background="@drawable/uikit_bg_dot_num_red" />
 
             <TextView
                 android:id="@+id/tv_title"

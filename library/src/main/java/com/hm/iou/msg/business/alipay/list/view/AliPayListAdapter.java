@@ -70,7 +70,7 @@ public class AliPayListAdapter extends BaseQuickAdapter<IAliPayMsgItem, BaseView
     @Override
     protected void convert(BaseViewHolder helper, IAliPayMsgItem item) {
         //时间
-        helper.setText(R.id.tv_time, item.getITime());
+        helper.setText(R.id.tv_time, item.getITime() + "  (↓)");
         helper.setGone(R.id.tv_time, item.ifIShowTime());
         //标题
         helper.setText(R.id.tv_title, item.getITitle());
@@ -80,6 +80,7 @@ public class AliPayListAdapter extends BaseQuickAdapter<IAliPayMsgItem, BaseView
         helper.addOnClickListener(R.id.rl_content);
         helper.addOnClickListener(R.id.btn_delete);
 
+        helper.setVisible(R.id.view_dot, !item.isHaveRead());
         if (item.isHaveRead()) {
             helper.setAlpha(R.id.iv_logo, 0.618f);
             helper.setTextColor(R.id.tv_title, mContext.getResources().getColor(R.color.uikit_text_auxiliary));

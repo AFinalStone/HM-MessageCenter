@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:focusable="true"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingStart="12dp"
-    android:paddingTop="3dp"
+    android:paddingBottom="3dp"
     android:paddingEnd="12dp"
-    android:paddingBottom="3dp">
+    android:paddingStart="12dp"
+    android:paddingTop="3dp">
 
     <TextView
         android:id="@+id/tv_time"
@@ -22,10 +22,10 @@
         tools:text="星期六 上午 10:00" />
 
     <com.hm.iou.uikit.sidemenu.SideMenuLayout
-        app:contentView="@+id/rl_content"
-        app:rightMenuView="@+id/btn_delete"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:contentView="@+id/rl_content"
+        app:rightMenuView="@+id/btn_delete">
 
         <RelativeLayout
             android:id="@+id/rl_content"
@@ -33,8 +33,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/jietiao_bg_message_list_item"
             android:minHeight="85dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="5dp">
+            android:paddingBottom="5dp"
+            android:paddingEnd="10dp">
 
             <ImageView
                 android:id="@+id/iv_logo"
@@ -44,6 +44,16 @@
                 android:layout_marginTop="22dp"
                 android:scaleType="fitXY"
                 android:src="@mipmap/msgcenter_ic_msg_list_alipay_flag" />
+
+            <View
+                android:id="@+id/view_dot"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_alignEnd="@+id/iv_logo"
+                android:layout_alignTop="@+id/iv_logo"
+                android:layout_marginEnd="-2dp"
+                android:layout_marginTop="-2dp"
+                android:background="@drawable/uikit_bg_dot_num_red" />
 
             <TextView
                 android:id="@+id/tv_title"
@@ -66,9 +76,9 @@
             android:id="@+id/btn_delete"
             style="@style/UikitHMButton.Large.Red.Minor"
             android:layout_width="70dp"
-            android:textSize="@dimen/textFontSize_16"
             android:layout_height="match_parent"
-            android:text="删除" />
+            android:text="删除"
+            android:textSize="@dimen/textFontSize_16" />
 
     </com.hm.iou.uikit.sidemenu.SideMenuLayout>
 </LinearLayout>

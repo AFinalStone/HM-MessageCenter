@@ -212,6 +212,60 @@ public class SimilarityContractMsgPresenter extends MvpActivityPresenter<Similar
     }
 
     @Override
+    public void getMoreMsgList() {
+        GetSimilarContractMessageReqBean req = new GetSimilarContractMessageReqBean();
+        req.setLastReqDate(CacheDataUtil.getLastSimilarityContractListMsgPullTime(mContext));
+        MsgApi.getSimilarityContractList(req)
+                .compose(getProvider().<BaseResponse<GetSimilarityContractListResBean>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<GetSimilarityContractListResBean>handleResponse())
+                .subscribeWith(new CommSubscriber<GetSimilarityContractListResBean>(mView) {
+                    @Override
+                    public void handleResult(GetSimilarityContractListResBean resBean) {
+                        String pullTime = resBean == null ? "" : resBean.getLastReqDate();
+                        CacheDataUtil.saveLastSimilarityContractListMsgPullTime(mContext, pullTime);
+                        final List<SimilarityContractMsgDbData> list = resBean == null ? null : resBean.getList();
+                        Flowable.create(new FlowableOnSubscribe<List<ISimilarityContractMsgItem>>() {
+                            @Override
+                            public void subscribe(FlowableEmitter<List<ISimilarityContractMsgItem>> e) throws Exception {
+                                MsgCenterDbHelper.saveOrUpdateMsgList(list);
+                                List<SimilarityContractMsgDbData> listCache = MsgCenterDbHelper.getMsgList(SimilarityContractMsgDbData.class);
+                                List<ISimilarityContractMsgItem> resultList = DataChangeUtil.changeSimilarityContractMsgDbDataToISimilarityContractMsgItem(listCache);
+                                e.onNext(resultList);
+                            }
+                        }, BackpressureStrategy.ERROR)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .compose(getProvider().<List<ISimilarityContractMsgItem>>bindUntilEvent(ActivityEvent.DESTROY))
+                                .subscribe(new Consumer<List<ISimilarityContractMsgItem>>() {
+                                    @Override
+                                    public void accept(List<ISimilarityContractMsgItem> resultList) throws Exception {
+                                        if (resultList == null || resultList.size() == 0) {
+                                            mView.showDataEmpty();
+                                            mView.setBottomMoreIconVisible(false);
+                                        } else {
+                                            mView.showMsgList(resultList);
+                                            mView.setBottomMoreIconVisible(true);
+                                        }
+                                        mView.showLoadMoreEnd();
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        mView.hidePullDownRefresh();
+                                        mView.showDataEmpty();
+                                        mView.setBottomMoreIconVisible(false);
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String s, String s1) {
+                        mView.showLoadMoreFailed();
+                    }
+                });
+    }
+
+    @Override
     public void makeSingleMsgHaveRead(final ISimilarityContractMsgItem item, final int position) {
         MsgApi.makeSingleMsgHaveRead(item.getIMsgId(), item.getIMsgType())
                 .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))

@@ -214,6 +214,60 @@ public class AliPayMsgPresenter extends MvpActivityPresenter<AliPayMsgContract.V
     }
 
     @Override
+    public void getMoreMsgList() {
+        GetAliPayMsgListReq req = new GetAliPayMsgListReq();
+        req.setLastReqDate(CacheDataUtil.getLastAliPayListMsgPullTime(mContext));
+        MsgApi.getAliPayMsgList(req)
+                .compose(getProvider().<BaseResponse<GetAliPayListMsgResBean>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<GetAliPayListMsgResBean>handleResponse())
+                .subscribeWith(new CommSubscriber<GetAliPayListMsgResBean>(mView) {
+                    @Override
+                    public void handleResult(GetAliPayListMsgResBean resBean) {
+                        String pullTime = resBean == null ? "" : resBean.getLastReqDate();
+                        CacheDataUtil.saveLastAliPayListMsgPullTime(mContext, pullTime);
+                        final List<AliPayMsgDbData> list = resBean == null ? null : resBean.getList();
+                        Flowable.create(new FlowableOnSubscribe<List<IAliPayMsgItem>>() {
+                            @Override
+                            public void subscribe(FlowableEmitter<List<IAliPayMsgItem>> e) throws Exception {
+                                MsgCenterDbHelper.saveOrUpdateMsgList(list);
+                                List<AliPayMsgDbData> listCache = MsgCenterDbHelper.getMsgList(AliPayMsgDbData.class);
+                                List<IAliPayMsgItem> resultList = DataChangeUtil.changeAliPayDbDataToIAliPayItem(listCache);
+                                e.onNext(resultList);
+                            }
+                        }, BackpressureStrategy.ERROR)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .compose(getProvider().<List<IAliPayMsgItem>>bindUntilEvent(ActivityEvent.DESTROY))
+                                .subscribe(new Consumer<List<IAliPayMsgItem>>() {
+                                    @Override
+                                    public void accept(List<IAliPayMsgItem> resultList) throws Exception {
+                                        if (resultList == null || resultList.size() == 0) {
+                                            mView.showDataEmpty();
+                                            mView.setBottomMoreIconVisible(false);
+                                        } else {
+                                            mView.showMsgList(resultList);
+                                            mView.setBottomMoreIconVisible(true);
+                                        }
+                                        mView.showLoadMoreEnd();
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        mView.hidePullDownRefresh();
+                                        mView.showDataEmpty();
+                                        mView.setBottomMoreIconVisible(false);
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String s, String s1) {
+                        mView.showLoadMoreFailed();
+                    }
+                });
+    }
+
+    @Override
     public void makeSingleMsgHaveRead(final IAliPayMsgItem item, final int position) {
         MsgApi.makeSingleMsgHaveRead(item.getIMsgId(), item.getIMsgType())
                 .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))

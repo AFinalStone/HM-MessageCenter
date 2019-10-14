@@ -11,11 +11,13 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hm.iou.base.BaseActivity;
+import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.contractmsg.ContractMsgContract;
 import com.hm.iou.msg.business.contractmsg.ContractMsgPresenter;
+import com.hm.iou.msg.widget.MsgCenterLoadMoreView;
 import com.hm.iou.uikit.HMDotTextView;
 import com.hm.iou.uikit.HMLoadMoreView;
 import com.hm.iou.uikit.HMLoadingView;
@@ -77,7 +79,7 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
         });
 
         mAdapter = new ContractMsgListAdapter(mContext);
-        mAdapter.setLoadMoreView(new HMLoadMoreView());
+        mAdapter.setLoadMoreView(new MsgCenterLoadMoreView());
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -96,6 +98,7 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
                 }
             }
         });
+
         //设置下拉刷新监听
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -103,10 +106,11 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
                 mPresenter.getMsgList();
             }
         });
+        mAdapter.enableLoadMoreEndClick(true);
         mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-
+                mPresenter.getMoreMsgList();
             }
         }, mRvMsgList);
         mPresenter.init();
@@ -216,6 +220,11 @@ public class ContractMsgActivity extends BaseActivity<ContractMsgPresenter> impl
     @Override
     public void showLoadMoreEnd() {
         mAdapter.loadMoreEnd();
+    }
+
+    @Override
+    public void showLoadMoreFailed() {
+        mAdapter.loadMoreFail();
     }
 
     @Override

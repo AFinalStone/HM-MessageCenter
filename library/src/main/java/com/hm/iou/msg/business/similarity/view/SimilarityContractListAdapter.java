@@ -70,7 +70,7 @@ public class SimilarityContractListAdapter extends BaseQuickAdapter<ISimilarityC
     @Override
     protected void convert(BaseViewHolder helper, ISimilarityContractMsgItem item) {
         helper.setImageResource(R.id.iv_iou, item.getILogoResId());
-        helper.setText(R.id.tv_time, item.getITime());
+        helper.setText(R.id.tv_time, item.getITime() + "  (↓)");
         helper.setGone(R.id.tv_time, item.ifIShowTime());
         helper.setText(R.id.tv_title, item.getITitle());
         helper.setText(R.id.tv_lender, item.getILender());

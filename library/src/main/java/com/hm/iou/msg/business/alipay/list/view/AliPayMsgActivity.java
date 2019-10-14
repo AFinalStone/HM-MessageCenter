@@ -8,7 +8,6 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -18,8 +17,8 @@ import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.alipay.list.AliPayMsgContract;
 import com.hm.iou.msg.business.alipay.list.AliPayMsgPresenter;
+import com.hm.iou.msg.widget.MsgCenterLoadMoreView;
 import com.hm.iou.uikit.HMDotTextView;
-import com.hm.iou.uikit.HMLoadMoreView;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.HMTopBarView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
@@ -79,7 +78,7 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
         });
 
         mAdapter = new AliPayListAdapter(mContext);
-        mAdapter.setLoadMoreView(new HMLoadMoreView());
+        mAdapter.setLoadMoreView(new MsgCenterLoadMoreView());
         mAdapter.setHeaderAndEmpty(true);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
@@ -107,10 +106,11 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
             }
         });
         //设置底部刷新,这里不设置不会出现底部底线的文案
+        mAdapter.enableLoadMoreEndClick(true);
         mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-
+                mPresenter.getMoreMsgList();
             }
         }, mRvMsgList);
         mPresenter.init();
@@ -220,6 +220,11 @@ public class AliPayMsgActivity extends BaseActivity<AliPayMsgPresenter> implemen
     @Override
     public void showLoadMoreEnd() {
         mAdapter.loadMoreEnd();
+    }
+
+    @Override
+    public void showLoadMoreFailed() {
+        mAdapter.loadMoreFail();
     }
 
     @Override

@@ -61,6 +61,8 @@ public class SimilarityContractMsgContract {
          */
         void showLoadMoreEnd();
 
+        void showLoadMoreFailed();
+
         /**
          * 设置是否显示底部清空icon
          *
@@ -76,6 +78,7 @@ public class SimilarityContractMsgContract {
         void showRedDot(int c);
 
         void removeData(String msgId);
+
         void updateData(ISimilarityContractMsgItem msgItem);
     }
 
@@ -91,6 +94,8 @@ public class SimilarityContractMsgContract {
          * 获取消息列表
          */
         void getMsgList();
+
+        void getMoreMsgList();
 
 
         /**

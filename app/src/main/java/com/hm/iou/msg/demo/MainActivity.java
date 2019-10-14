@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.MsgCenterAppLike;
 import com.hm.iou.msg.business.alipay.list.view.AliPayMsgActivity;
 import com.hm.iou.msg.business.contractmsg.view.ContractMsgActivity;
@@ -136,6 +137,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, SessionDetailPreviewActivity.class));
             }
         });
+
+        float adviseInterest = 50000l * 3832 * 36 / 36500;
+        Logger.d("adviseInterest===" + adviseInterest);
     }
 
     @Override
@@ -180,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void toWaitProcess(View v) {
-      //  NavigationHelper.toWaitProcessPage(this);
+        //  NavigationHelper.toWaitProcessPage(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

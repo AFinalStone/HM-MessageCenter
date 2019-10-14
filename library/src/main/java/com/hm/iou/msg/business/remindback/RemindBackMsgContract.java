@@ -61,6 +61,8 @@ public class RemindBackMsgContract {
          */
         void showLoadMoreEnd();
 
+        void showLoadMoreFailed();
+
         /**
          * 设置是否显示底部清空icon
          *
@@ -76,6 +78,7 @@ public class RemindBackMsgContract {
         void showRedDot(int c);
 
         void removeData(String msgId);
+
         void updateData(IRemindBackMsgItem msgItem);
     }
 
@@ -91,6 +94,9 @@ public class RemindBackMsgContract {
          * 获取消息列表
          */
         void getMsgList();
+
+
+        void getMoreMsgList();
 
 
         /**

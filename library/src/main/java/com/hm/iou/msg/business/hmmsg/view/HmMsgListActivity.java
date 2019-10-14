@@ -11,11 +11,13 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hm.iou.base.BaseActivity;
+import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.hmmsg.HmMsgListContract;
 import com.hm.iou.msg.business.hmmsg.HmMsgListPresenter;
+import com.hm.iou.msg.widget.MsgCenterLoadMoreView;
 import com.hm.iou.uikit.HMDotTextView;
 import com.hm.iou.uikit.HMLoadMoreView;
 import com.hm.iou.uikit.HMLoadingView;
@@ -77,7 +79,7 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
         });
 
         mAdapter = new HmMsgListAdapter(mContext);
-        mAdapter.setLoadMoreView(new HMLoadMoreView());
+        mAdapter.setLoadMoreView(new MsgCenterLoadMoreView());
         mAdapter.setHeaderAndEmpty(true);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
@@ -103,10 +105,11 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
             }
         });
         //设置底部刷新
+        mAdapter.enableLoadMoreEndClick(true);
         mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-
+                mPresenter.getMsgList();
             }
         }, mRvMsgList);
         mPresenter.init();
@@ -216,6 +219,11 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
     @Override
     public void showLoadMoreEnd() {
         mAdapter.loadMoreEnd();
+    }
+
+    @Override
+    public void showLoadMoreFailed() {
+        mAdapter.loadMoreFail();
     }
 
     @Override

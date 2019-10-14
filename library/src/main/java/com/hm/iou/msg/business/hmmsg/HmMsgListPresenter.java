@@ -213,6 +213,66 @@ public class HmMsgListPresenter extends MvpActivityPresenter<HmMsgListContract.V
     }
 
     @Override
+    public void getMoreMsgList() {
+        GetHMMsgListReq req = new GetHMMsgListReq();
+        req.setLastReqDate(CacheDataUtil.getLastHMListMsgPullTime(mContext));
+        MsgApi.getHmMsgList(req)
+                .compose(getProvider().<BaseResponse<GetHMMsgListResBean>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<GetHMMsgListResBean>handleResponse())
+                .subscribeWith(new CommSubscriber<GetHMMsgListResBean>(mView) {
+                    @Override
+                    public void handleResult(GetHMMsgListResBean resBean) {
+                        String pullTime = resBean == null ? "" : resBean.getLastReqDate();
+                        CacheDataUtil.saveLastHMListMsgPullTime(mContext, pullTime);
+                        final List<HmMsgDbData> list = resBean == null ? null : resBean.getList();
+                        Flowable.create(new FlowableOnSubscribe<List<IHmMsgItem>>() {
+                            @Override
+                            public void subscribe(FlowableEmitter<List<IHmMsgItem>> e) throws Exception {
+                                if (list != null) {
+                                    for (HmMsgDbData data : list) {
+                                        data.convertImgListToString();
+                                    }
+                                }
+                                MsgCenterDbHelper.saveOrUpdateMsgList(list);
+                                List<HmMsgDbData> listCache = MsgCenterDbHelper.getHmMsgList();
+                                List<IHmMsgItem> resultList = DataChangeUtil.changeHmMsgDbDataToIHmMsgItem(listCache);
+                                e.onNext(resultList);
+                            }
+                        }, BackpressureStrategy.ERROR)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .compose(getProvider().<List<IHmMsgItem>>bindUntilEvent(ActivityEvent.DESTROY))
+                                .subscribe(new Consumer<List<IHmMsgItem>>() {
+                                    @Override
+                                    public void accept(List<IHmMsgItem> resultList) throws Exception {
+                                        //关闭动画
+                                        if (resultList == null || resultList.size() == 0) {
+                                            mView.showDataEmpty();
+                                            mView.setBottomMoreIconVisible(false);
+                                        } else {
+                                            mView.showMsgList(resultList);
+                                            mView.setBottomMoreIconVisible(true);
+                                        }
+                                        mView.showLoadMoreEnd();
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        mView.hidePullDownRefresh();
+                                        mView.showDataEmpty();
+                                        mView.setBottomMoreIconVisible(false);
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String s, String s1) {
+                        mView.showLoadMoreFailed();
+                    }
+                });
+    }
+
+    @Override
     public void makeSingleMsgHaveRead(final IHmMsgItem item, final int position) {
         MsgApi.makeSingleMsgHaveRead(item.getIMsgId(), item.getIMsgType())
                 .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))

@@ -62,6 +62,8 @@ public class HmMsgListContract {
          */
         void showLoadMoreEnd();
 
+        void showLoadMoreFailed();
+
         /**
          * 设置是否显示底部清空icon
          *
@@ -77,6 +79,7 @@ public class HmMsgListContract {
         void showRedDot(int c);
 
         void removeData(String msgId);
+
         void updateData(IHmMsgItem msgItem);
     }
 
@@ -90,6 +93,8 @@ public class HmMsgListContract {
          * 获取消息列表
          */
         void getMsgList();
+
+        void getMoreMsgList();
 
         /**
          * 设置消息为已读

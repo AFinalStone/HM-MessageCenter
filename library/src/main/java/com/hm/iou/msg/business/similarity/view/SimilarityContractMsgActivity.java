@@ -13,11 +13,13 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hm.iou.base.BaseActivity;
+import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
 import com.hm.iou.msg.business.similarity.SimilarityContractMsgContract;
 import com.hm.iou.msg.business.similarity.SimilarityContractMsgPresenter;
+import com.hm.iou.msg.widget.MsgCenterLoadMoreView;
 import com.hm.iou.uikit.HMDotTextView;
 import com.hm.iou.uikit.HMLoadMoreView;
 import com.hm.iou.uikit.HMLoadingView;
@@ -79,7 +81,7 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
         });
 
         mAdapter = new SimilarityContractListAdapter(mContext);
-        mAdapter.setLoadMoreView(new HMLoadMoreView());
+        mAdapter.setLoadMoreView(new MsgCenterLoadMoreView());
         mAdapter.setHeaderAndEmpty(true);
         mRvMsgList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvMsgList.setAdapter(mAdapter);
@@ -107,9 +109,11 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
             }
         });
         //加载更多
+        mAdapter.enableLoadMoreEndClick(true);
         mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
+                mPresenter.getMsgList();
             }
         }, mRvMsgList);
         mPresenter.init();
@@ -219,6 +223,11 @@ public class SimilarityContractMsgActivity extends BaseActivity<SimilarityContra
     @Override
     public void showLoadMoreEnd() {
         mAdapter.loadMoreEnd();
+    }
+
+    @Override
+    public void showLoadMoreFailed() {
+        mAdapter.loadMoreFail();
     }
 
     @Override

@@ -61,6 +61,7 @@ public class ContractMsgContract {
          */
         void showLoadMoreEnd();
 
+        void showLoadMoreFailed();
         /**
          * 设置是否显示底部清空icon
          *
@@ -90,7 +91,7 @@ public class ContractMsgContract {
          * 获取消息列表
          */
         void getMsgList();
-
+        void getMoreMsgList();
         /**
          * 设置消息为已读
          *

@@ -61,6 +61,8 @@ public class AliPayMsgContract {
          */
         void showLoadMoreEnd();
 
+        void showLoadMoreFailed();
+
         /**
          * 设置是否显示底部清空icon
          *
@@ -76,6 +78,7 @@ public class AliPayMsgContract {
         void showRedDot(int c);
 
         void removeData(String msgId);
+
         void updateData(IAliPayMsgItem msgItem);
     }
 
@@ -85,6 +88,9 @@ public class AliPayMsgContract {
          * 获取消息列表
          */
         void getMsgList();
+
+
+        void getMoreMsgList();
 
         /**
          * 初始化

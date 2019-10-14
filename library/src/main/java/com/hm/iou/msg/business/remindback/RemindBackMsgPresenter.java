@@ -204,6 +204,61 @@ public class RemindBackMsgPresenter extends MvpActivityPresenter<RemindBackMsgCo
     }
 
     @Override
+    public void getMoreMsgList() {
+        GetRemindBackListReq req = new GetRemindBackListReq();
+        req.setLastReqDate(CacheDataUtil.getLasRemindBackPullTime(mContext));
+        MsgApi.getRemindBackList(req)
+                .compose(getProvider().<BaseResponse<GetRemindBackListMsgResBean>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<GetRemindBackListMsgResBean>handleResponse())
+                .subscribeWith(new CommSubscriber<GetRemindBackListMsgResBean>(mView) {
+                    @Override
+                    public void handleResult(GetRemindBackListMsgResBean resBean) {
+                        String pullTime = resBean == null ? "" : resBean.getLastReqDate();
+                        CacheDataUtil.saveLastRemindBackPullTime(mContext, pullTime);
+                        final List<RemindBackMsgDbData> list = resBean == null ? null : resBean.getList();
+                        Flowable.create(new FlowableOnSubscribe<List<IRemindBackMsgItem>>() {
+                            @Override
+                            public void subscribe(FlowableEmitter<List<IRemindBackMsgItem>> e) throws Exception {
+                                MsgCenterDbHelper.saveOrUpdateMsgList(list);
+                                List<RemindBackMsgDbData> listCache = MsgCenterDbHelper.getMsgList(RemindBackMsgDbData.class);
+                                List<IRemindBackMsgItem> resultList = DataChangeUtil.changeRemindBackMsgDbDataToIRemindBackMsgItem(listCache);
+                                e.onNext(resultList);
+                            }
+                        }, BackpressureStrategy.ERROR)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .compose(getProvider().<List<IRemindBackMsgItem>>bindUntilEvent(ActivityEvent.DESTROY))
+                                .subscribe(new Consumer<List<IRemindBackMsgItem>>() {
+                                    @Override
+                                    public void accept(List<IRemindBackMsgItem> resultList) throws Exception {
+                                        if (resultList == null || resultList.size() == 0) {
+                                            mView.showDataEmpty();
+                                            mView.setBottomMoreIconVisible(false);
+                                        } else {
+                                            mView.showMsgList(resultList);
+                                            mView.setBottomMoreIconVisible(true);
+                                        }
+                                        mView.showLoadMoreEnd();
+
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        mView.hidePullDownRefresh();
+                                        mView.showDataEmpty();
+                                        mView.setBottomMoreIconVisible(false);
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String s, String s1) {
+                        mView.showLoadMoreFailed();
+                    }
+                });
+    }
+
+    @Override
     public void makeSingleMsgHaveRead(final IRemindBackMsgItem item, final int position) {
         MsgApi.makeSingleMsgHaveRead(item.getIMsgId(), item.getIMsgType())
                 .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))

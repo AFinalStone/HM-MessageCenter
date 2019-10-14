@@ -204,6 +204,60 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
     }
 
     @Override
+    public void getMoreMsgList() {
+        GetContractMsgListReq req = new GetContractMsgListReq();
+        req.setLastReqDate(CacheDataUtil.getLastContractMsgPullTime(mContext));
+        MsgApi.getContractMsgList(req)
+                .compose(getProvider().<BaseResponse<GetContractMsgListResBean>>bindUntilEvent(ActivityEvent.DESTROY))
+                .map(RxUtil.<GetContractMsgListResBean>handleResponse())
+                .subscribeWith(new CommSubscriber<GetContractMsgListResBean>(mView) {
+                    @Override
+                    public void handleResult(GetContractMsgListResBean resBean) {
+                        String pullTime = resBean == null ? "" : resBean.getLastReqDate();
+                        CacheDataUtil.saveLastContractMsgPullTime(mContext, pullTime);
+                        final List<ContractMsgDbData> list = resBean == null ? null : resBean.getList();
+                        Flowable.create(new FlowableOnSubscribe<List<IContractMsgItem>>() {
+                            @Override
+                            public void subscribe(FlowableEmitter<List<IContractMsgItem>> e) throws Exception {
+                                MsgCenterDbHelper.saveOrUpdateMsgList(list);
+                                List<ContractMsgDbData> listCache = MsgCenterDbHelper.getMsgList(ContractMsgDbData.class);
+                                List<IContractMsgItem> resultList = DataChangeUtil.changeContractMsgDbDataToIContractMsgItem(listCache);
+                                e.onNext(resultList);
+                            }
+                        }, BackpressureStrategy.ERROR)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .compose(getProvider().<List<IContractMsgItem>>bindUntilEvent(ActivityEvent.DESTROY))
+                                .subscribe(new Consumer<List<IContractMsgItem>>() {
+                                    @Override
+                                    public void accept(List<IContractMsgItem> resultList) throws Exception {
+                                        if (resultList == null || resultList.size() == 0) {
+                                            mView.showDataEmpty();
+                                            mView.setBottomMoreIconVisible(false);
+                                        } else {
+                                            mView.showMsgList(resultList);
+                                            mView.setBottomMoreIconVisible(true);
+                                        }
+                                        mView.showLoadMoreEnd();
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        mView.hidePullDownRefresh();
+                                        mView.showDataEmpty();
+                                        mView.setBottomMoreIconVisible(false);
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void handleException(Throwable throwable, String s, String s1) {
+                        mView.showLoadMoreFailed();
+                    }
+                });
+    }
+
+    @Override
     public void makeSingleMsgHaveRead(final IContractMsgItem item, final int position) {
         MsgApi.makeSingleMsgHaveRead(item.getIMsgId(), item.getIMsgType())
                 .compose(getProvider().<BaseResponse<Object>>bindUntilEvent(ActivityEvent.DESTROY))
@@ -225,6 +279,7 @@ public class ContractMsgPresenter extends MvpActivityPresenter<ContractMsgContra
                     public void handleException(Throwable throwable, String s, String s1) {
 
                     }
+
                     @Override
                     public boolean isShowBusinessError() {
                         return false;

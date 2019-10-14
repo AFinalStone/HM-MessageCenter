@@ -71,7 +71,7 @@ public class HmMsgListAdapter extends BaseMultiItemQuickAdapter<IHmMsgItem, Base
     protected void convert(BaseViewHolder helper, IHmMsgItem item) {
         helper.setText(R.id.tv_title, item.getMsgTitle());
         String time = item.getMsgTime();
-        helper.setText(R.id.tv_time, time);
+        helper.setText(R.id.tv_time, time + "  (↓)");
         if (helper.getItemViewType() == IHmMsgItem.TYPE_ADVERTISEMENT_NEWS_SPORT) {
             String msgImage = item.getMsgImage();
             if (TextUtils.isEmpty(msgImage)) {
