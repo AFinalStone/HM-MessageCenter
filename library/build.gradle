@@ -5,11 +5,10 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.hm.plugin.commconfig'
 
 android {
-    compileSdkVersion 26
-
+    compileSdkVersion 28
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 26
+        minSdkVersion 21
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
@@ -30,7 +29,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
 
     //lombok插件
@@ -42,14 +41,14 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-    compile 'com.heima.iou:hmbasebizlocal:1.0.0'
-    compile 'com.heima.iou:hmdbcenterlocal:1.0.0'
-    compile 'com.heima.iou:nimessagelocal:1.0.0'
-    compile 'com.heima.iou:hmscancodelocal:1.0.0'
+    api 'com.heima.iou:hmbasebizlocal:1.0.0'
+    api 'com.heima.iou:hmdbcenterlocal:1.0.0'
+    api 'com.heima.iou:nimessagelocal:1.0.0'
+    api 'com.heima.iou:hmscancodelocal:1.0.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    compile 'com.github.promeg:tinypinyin:2.0.3' // TinyPinyin核心包，约80KB
-    compile 'com.github.promeg:tinypinyin-lexicons-android-cncity:2.0.3' // 可选，适用于Android的中国地区词典
+    api 'com.github.promeg:tinypinyin:2.0.3' // TinyPinyin核心包，约80KB
+    api 'com.github.promeg:tinypinyin-lexicons-android-cncity:2.0.3' // 可选，适用于Android的中国地区词典
 }
 apply from: './maven_local.gradle'

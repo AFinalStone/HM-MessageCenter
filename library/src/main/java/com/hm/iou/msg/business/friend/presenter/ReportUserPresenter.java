@@ -107,7 +107,7 @@ public class ReportUserPresenter extends MvpActivityPresenter<ReportUserContract
 
     private void uploadImage(final File file) {
         mView.showLoadingView("图片上传中...");
-        FileApi.uploadImage(file, FileBizType.UserReport)
+        FileApi.INSTANCE.uploadImage(file, FileBizType.UserReport)
                 .compose(getProvider().<BaseResponse<FileUploadResult>>bindUntilEvent(ActivityEvent.DESTROY))
                 .map(RxUtil.<FileUploadResult>handleResponse())
                 .subscribeWith(new CommSubscriber<FileUploadResult>(mView) {
