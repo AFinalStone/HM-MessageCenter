@@ -39,6 +39,7 @@ class RemarkFriendNameActivity : BaseActivity<MvpActivityPresenter<BaseContract.
             mIsFriend = bundle.getBoolean(EXTRA_IS_FRIEND, false)
             mDefRemarkName = bundle.getString(EXTRA_DEF_REMARK_NAME)
         }
+        et_verify_content.requestFocus()
         et_verify_content.setText(mDefRemarkName ?: "")
         et_verify_content.setSelection(et_verify_content.length())
 

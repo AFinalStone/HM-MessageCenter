@@ -1,6 +1,5 @@
 package com.hm.iou.msg.business.friend.view;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -22,19 +21,15 @@ import com.hm.iou.msg.dict.IdType;
 import com.hm.iou.msg.event.AddFriendEvent;
 import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.sharedata.UserManager;
-import com.hm.iou.sharedata.model.BaseResponse;
 import com.hm.iou.sharedata.model.UserInfo;
 import com.hm.iou.tools.StringUtil;
 import com.hm.iou.tools.ToastUtil;
-import com.jakewharton.rxbinding2.widget.RxTextView;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 /**
  * Created by hjy on 2019/4/12.
@@ -87,6 +82,7 @@ public class SendVerifyRequestActivity extends BaseActivity {
         if (!mIsAddFriend) {
             mBtnSend.setText("提交");
         }
+        mEtContent.requestFocus();
     }
 
     @Override
