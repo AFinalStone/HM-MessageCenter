@@ -21,6 +21,7 @@ import com.hm.iou.msg.dict.IdType;
 import com.hm.iou.msg.event.AddFriendEvent;
 import com.hm.iou.msg.im.IMHelper;
 import com.hm.iou.sharedata.UserManager;
+import com.hm.iou.sharedata.event.CommBizEvent;
 import com.hm.iou.sharedata.model.UserInfo;
 import com.hm.iou.tools.StringUtil;
 import com.hm.iou.tools.ToastUtil;
@@ -49,8 +50,8 @@ public class SendVerifyRequestActivity extends BaseActivity {
 
     private String mFriendId;
     private int mIdType;
-    private boolean mIsAddFriend;
-    private FriendInfo mFriendInfo;
+    private boolean mIsAddFriend;//true-表示添加好友，false-表示确认好友申请
+    private FriendInfo mFriendInfo;//好友信息，从添加好友界面进来，需传此参数
 
     private Disposable mAddFriendReq;
     private Disposable mAgreeReq;
@@ -139,6 +140,7 @@ public class SendVerifyRequestActivity extends BaseActivity {
                         dismissLoadingView();
                         ToastUtil.showStatusView(SendVerifyRequestActivity.this, "申请已发送");
                         EventBus.getDefault().post(new AddFriendEvent());
+                        EventBus.getDefault().post(new CommBizEvent("msgcenter_add_friend", "添加好友"));
                         if (result != null && result) {
                             checkFriendRelation();
                         } else {

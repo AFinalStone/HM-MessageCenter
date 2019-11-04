@@ -1,12 +1,9 @@
 package com.hm.iou.msg.bean.req;
 
-import lombok.Data;
-
 /**
  * @author syl
  * @time 2019/5/21 10:47 AM
  */
-@Data
 public class MakeMsgHaveReadReqBean {
 
     /**
@@ -17,5 +14,19 @@ public class MakeMsgHaveReadReqBean {
     private String msgId;
     private String type;
 
+    public String getMsgId() {
+        return msgId;
+    }
 
+    public void setMsgId(String msgId) {
+        this.msgId = msgId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }
