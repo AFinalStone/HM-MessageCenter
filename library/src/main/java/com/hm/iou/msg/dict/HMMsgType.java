@@ -11,6 +11,8 @@ public enum HMMsgType {
     FeedbackByCustomer(30, "意见反馈【客户】"),
     FeedbackByInnerStaff(31, "意见反馈【客服】"),
     Advertisement(40, "广告"),
+    LawyerServiceByLawyer(50, "律师服务-律师认证"),
+    LawyerServiceByUser(51, "律师服务-律师函"),
     CommuniqueIntro(100, "官方公告");
 
     private int value;

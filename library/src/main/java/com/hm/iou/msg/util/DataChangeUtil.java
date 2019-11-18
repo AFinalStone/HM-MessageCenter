@@ -482,6 +482,12 @@ public class DataChangeUtil {
                         if (dbData.getSourceBizType() == HMMsgType.FeedbackByInnerStaff.getValue()) {
                             return dbData.getTitle();
                         }
+                        if (HMMsgType.LawyerServiceByLawyer.getValue() == dbData.getSourceBizType()) {
+                            return dbData.getTitle();
+                        }
+                        if (HMMsgType.LawyerServiceByUser.getValue() == dbData.getSourceBizType()) {
+                            return dbData.getTitle();
+                        }
                         return HMMsgType.getDescByValue(dbData.getSourceBizType()) + "：" + dbData.getTitle();
                     }
 
@@ -549,6 +555,12 @@ public class DataChangeUtil {
                         }
                         if (HMMsgType.FeedbackByInnerStaff.getValue() == dbData.getSourceBizType()) {
                             return TYPE_FEEDBACK_STAFF;
+                        }
+                        if (HMMsgType.LawyerServiceByLawyer.getValue() == dbData.getSourceBizType()) {
+                            return TYPE_LAWYER;
+                        }
+                        if (HMMsgType.LawyerServiceByUser.getValue() == dbData.getSourceBizType()) {
+                            return TYPE_LAWYER;
                         }
                         return TYPE_ADVERTISEMENT_NEWS_SPORT;
                     }

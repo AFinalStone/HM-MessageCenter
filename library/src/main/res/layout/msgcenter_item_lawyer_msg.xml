@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingStart="12dp"
+    android:paddingTop="3dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="3dp">
+
+    <TextView
+        android:id="@+id/tv_time"
+        style="@style/UikitTextView.Auxiliary.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:textColor="@color/uikit_text_hint"
+        tools:text="星期六 上午 10:00" />
+
+
+    <RelativeLayout
+        android:id="@+id/rl_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/jietiao_bg_message_list_item"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp">
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="26dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="18dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/msgcenter_ic_official_notice" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/UikitTextView"
+            android:layout_marginStart="62dp"
+            android:layout_marginTop="15dp"
+            tools:text="律师认证消息 " />
+
+        <TextView
+            android:id="@+id/tv_content"
+            style="@style/UikitTextView.Auxiliary.Small"
+            android:layout_below="@id/tv_title"
+            android:layout_marginStart="62dp"
+            android:layout_marginTop="6dp"
+            tools:text="您的律师认证消息已成功" />
+    </RelativeLayout>
+
+</LinearLayout>

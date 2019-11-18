@@ -16,7 +16,7 @@ public interface IHmMsgItem extends MultiItemEntity {
     int TYPE_COMMUNIQUE = 2;                    //官方公告
     int TYPE_FEEDBACK_CUSTOMER = 3;             //用户能看到的客服反馈消息
     int TYPE_FEEDBACK_STAFF = 4;                //嘿马员工能看到的客服反馈消息
-
+    int TYPE_LAWYER = 5;                        //律师服务相关信息
 
     /**
      * 获取消息的icon

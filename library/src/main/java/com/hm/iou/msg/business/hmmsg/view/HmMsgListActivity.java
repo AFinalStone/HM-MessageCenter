@@ -6,12 +6,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hm.iou.base.BaseActivity;
-import com.hm.iou.logger.Logger;
 import com.hm.iou.msg.NavigationHelper;
 import com.hm.iou.msg.R;
 import com.hm.iou.msg.R2;
@@ -19,7 +17,6 @@ import com.hm.iou.msg.business.hmmsg.HmMsgListContract;
 import com.hm.iou.msg.business.hmmsg.HmMsgListPresenter;
 import com.hm.iou.msg.widget.MsgCenterLoadMoreView;
 import com.hm.iou.uikit.HMDotTextView;
-import com.hm.iou.uikit.HMLoadMoreView;
 import com.hm.iou.uikit.HMLoadingView;
 import com.hm.iou.uikit.HMTopBarView;
 import com.hm.iou.uikit.PullDownRefreshImageView;
@@ -86,14 +83,12 @@ public class HmMsgListActivity extends BaseActivity<HmMsgListPresenter> implemen
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                if (R.id.ll_content == view.getId()) {
-                    IHmMsgItem item = (IHmMsgItem) adapter.getItem(position);
-                    if (item != null) {
-                        if (!item.isHaveRead()) {
-                            mPresenter.makeSingleMsgHaveRead(item, position);
-                        }
-                        NavigationHelper.toHMMsgDetail(mContext, item.getMsgDetailLinkUrl(), item.getMsgAutoId(), item.getHMMsgType());
+                IHmMsgItem item = (IHmMsgItem) adapter.getItem(position);
+                if (item != null) {
+                    if (!item.isHaveRead()) {
+                        mPresenter.makeSingleMsgHaveRead(item, position);
                     }
+                    NavigationHelper.toHMMsgDetail(mContext, item.getMsgDetailLinkUrl(), item.getMsgAutoId(), item.getHMMsgType());
                 }
             }
         });

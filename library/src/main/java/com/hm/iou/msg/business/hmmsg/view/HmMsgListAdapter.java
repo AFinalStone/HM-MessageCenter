@@ -27,6 +27,7 @@ public class HmMsgListAdapter extends BaseMultiItemQuickAdapter<IHmMsgItem, Base
         addItemType(IHmMsgItem.TYPE_COMMUNIQUE, R.layout.msgcenter_item_hm_msg_list_notice);
         addItemType(IHmMsgItem.TYPE_FEEDBACK_CUSTOMER, R.layout.msgcenter_item_hm_msg_feedback_customer);
         addItemType(IHmMsgItem.TYPE_FEEDBACK_STAFF, R.layout.msgcenter_item_hm_msg_feedback_staff);
+        addItemType(IHmMsgItem.TYPE_LAWYER, R.layout.msgcenter_item_lawyer_msg);
     }
 
     public void removeDataByMsgId(String msgId) {
@@ -160,6 +161,22 @@ public class HmMsgListAdapter extends BaseMultiItemQuickAdapter<IHmMsgItem, Base
             }
             helper.addOnClickListener(R.id.ll_content);
             return;
+        }
+
+        if (helper.getItemViewType() == IHmMsgItem.TYPE_LAWYER) {
+            helper.setText(R.id.tv_content, item.getContent());
+            helper.setImageResource(R.id.iv_icon, item.getMsgIcon());
+
+            if (item.isHaveRead()) {
+                helper.setAlpha(R.id.iv_icon, 0.618f);
+                helper.setTextColor(R.id.tv_title, mContext.getResources().getColor(R.color.uikit_text_auxiliary));
+                helper.setTextColor(R.id.tv_content, mContext.getResources().getColor(R.color.uikit_text_hint));
+            } else {
+                helper.setAlpha(R.id.iv_icon, 1.0f);
+                helper.setTextColor(R.id.tv_title, mContext.getResources().getColor(R.color.uikit_text_main_content));
+                helper.setTextColor(R.id.tv_content, mContext.getResources().getColor(R.color.uikit_text_auxiliary));
+            }
+            helper.addOnClickListener(R.id.rl_content);
         }
     }
 
