@@ -174,7 +174,7 @@ public class HmMsgListAdapter extends BaseMultiItemQuickAdapter<IHmMsgItem, Base
             } else {
                 helper.setAlpha(R.id.iv_icon, 1.0f);
                 helper.setTextColor(R.id.tv_title, mContext.getResources().getColor(R.color.uikit_text_main_content));
-                helper.setTextColor(R.id.tv_content, mContext.getResources().getColor(R.color.uikit_text_auxiliary));
+                helper.setTextColor(R.id.tv_content, mContext.getResources().getColor(R.color.uikit_text_sub_content));
             }
             helper.addOnClickListener(R.id.rl_content);
         }
