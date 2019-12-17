@@ -41,14 +41,14 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-    api 'com.heima.iou:hmbasebizlocal:1.0.0'
-    api 'com.heima.iou:hmdbcenterlocal:1.0.0'
-    api 'com.heima.iou:nimessagelocal:1.0.0'
-    api 'com.heima.iou:hmscancodelocal:1.0.0'
+    implementation 'com.heima.iou:hmbasebizlocal:1.0.0'
+    implementation 'com.heima.iou:hmdbcenterlocal:1.0.0'
+    implementation 'com.heima.iou:nimessagelocal:1.0.0'
+    implementation 'com.heima.iou:hmscancodelocal:1.0.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    api 'com.github.promeg:tinypinyin:2.0.3' // TinyPinyin核心包，约80KB
-    api 'com.github.promeg:tinypinyin-lexicons-android-cncity:2.0.3' // 可选，适用于Android的中国地区词典
+    implementation 'com.github.promeg:tinypinyin:2.0.3' // TinyPinyin核心包，约80KB
+    implementation 'com.github.promeg:tinypinyin-lexicons-android-cncity:2.0.3' // 可选，适用于Android的中国地区词典
 }
 apply from: './maven_local.gradle'

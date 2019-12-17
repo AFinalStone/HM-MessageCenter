@@ -31,20 +31,20 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+    implementation fileTree(dir: 'libs', include: '*.jar')
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:26.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     //图片选择
-    compile 'com.heima.iou:hmselectpiclocal:1.0.0'
+//    compile 'com.heima.iou:hmselectpiclocal:1.0.0'
     //首页、借条创建、编辑、展示等相关功能
-    compile 'com.heima.iou:hmjietiaolocal:1.0.0'
+//    compile 'com.heima.iou:hmjietiaolocal:1.0.0'
     //个人名片和扫码
-    compile 'com.heima.iou:hmqrcodelocal:1.0.0'
+//    compile 'com.heima.iou:hmqrcodelocal:1.0.0'
     //个人中心
-    compile 'com.heima.iou:hmuserinfolocal:1.0.0'
-    compile project(':library')
-    compile 'com.android.support:multidex:1.0.0'
+//    compile 'com.heima.iou:hmuserinfolocal:1.0.0'
+    implementation project(':library')
+    implementation 'com.android.support:multidex:1.0.0'
 }
